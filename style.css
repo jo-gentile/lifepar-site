@@ -492,7 +492,7 @@ html, body {
 
 .banner-lateral {
   width: 350px;
-  background-image: url('fondo.jpg'); /* Cambiá el nombre si tu imagen se llama distinto */
+  background-image: url('fondo.jpg');
   background-size: contain;
   background-position: border;
   background-repeat: no-repeat;
@@ -508,24 +508,4 @@ html, body {
   background-color: white;
   padding: 2rem;
   overflow-y: auto;
-}
-
-.bloque {
-  background: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  border-radius: 10px;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
-}
-
-.bloque h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.bloque p,
-.bloque ul {
-  font-size: 1rem;
-  line-height: 1.6;
 }
