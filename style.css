@@ -6,7 +6,10 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden; 
 }
+
 
 header {
   background-color: #222;
@@ -16,6 +19,8 @@ header {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
 }
 
 .logo {
@@ -82,6 +87,8 @@ nav ul li a:hover {
   flex: 1;
   min-height: 100vh;
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 
 .banner-lateral {
@@ -90,6 +97,8 @@ nav ul li a:hover {
   background-size: cover;
   background-position: border;
   background-repeat: no-repeat;
+  position: relative;
+  z-index: 1;
 }
 
 .contenido-principal {
@@ -97,6 +106,8 @@ nav ul li a:hover {
   padding: 20px;
   background-color: white;
   overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .info {
@@ -168,6 +179,8 @@ footer {
   color: white;
   text-align: center;
   padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 footer .contacto {
@@ -180,3 +193,37 @@ footer .contacto a {
   color: white;
   text-decoration: none;
 }
+
+.fondo-animado {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -9999;
+  background: radial-gradient(circle at 10% 20%, rgba(255,0,0,0.4), transparent),
+              radial-gradient(circle at 80% 80%, rgba(0,255,0,0.4), transparent),
+              radial-gradient(circle at 50% 50%, rgba(0,0,255,0.4), transparent);
+  background-repeat: no-repeat;
+  background-size: 200% 200%, 200% 200%, 200% 200%;
+  animation: moverLuces 3s ease-in-out infinite alternate;
+  pointer-events: none;
+  @keyframes moverLuces {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+  100% {
+    background-position: 100% 100%, 0% 0%, 60% 40%;
+  }
+}
+
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -10000;
+  background: #fff;
+}
+
