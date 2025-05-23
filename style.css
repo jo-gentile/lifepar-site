@@ -47,7 +47,7 @@ nav ul {
 
 nav ul li a {
   text-decoration: none;
-  color: #333;
+  color: #FFFFFF;
   font-weight: 500;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -194,30 +194,37 @@ footer .contacto a {
   text-decoration: none;
 }
 
-.fondo-animado {
-  position: fixed;
+.encabezado {
+  background: #000;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.encabezado::after {
+  content: "";
+  position: absolute;
   top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -9999;
-  background: radial-gradient(circle at 10% 20%, rgba(255,0,0,0.4), transparent),
-              radial-gradient(circle at 80% 80%, rgba(0,255,0,0.4), transparent),
-              radial-gradient(circle at 50% 50%, rgba(0,0,255,0.4), transparent);
-  background-repeat: no-repeat;
-  background-size: 200% 200%, 200% 200%, 200% 200%;
-  animation: moverLuces 3s ease-in-out infinite alternate;
-  pointer-events: none;
-  @keyframes moverLuces {
-  0% {
-    background-position: 0% 0%, 100% 100%, 50% 50%;
-  }
-  100% {
-    background-position: 100% 100%, 0% 0%, 60% 40%;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  to {
+    left: 125%;
   }
 }
 
-}
 
 body::before {
   content: "";
@@ -225,5 +232,163 @@ body::before {
   inset: 0;
   z-index: -10000;
   background: #fff;
+}
+
+header {
+  position: relative;
+  overflow: hidden;
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  100% {
+    left: 125%;
+  }
+}
+@media (max-width: 768px) {
+  .contenedor {
+    flex-direction: column;
+  }
+
+  .banner-lateral {
+  width: 100%;
+  height: 120px;
+  background-position: boder;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+
+  .contenido-principal {
+    padding: 10px;
+  }
+
+nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 10px 0;
+}
+
+nav ul li {
+  list-style: none;
+}
+
+nav ul li a {
+  display: block;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  background-color: #eee;
+  font-weight: 500;
+}
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .logo {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .admin-btn {
+    align-self: center;
+    margin-top: 10px;
+  }
+}
+
+.detalle-zona {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.dirigente-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dirigente-foto {
+  width: 150px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background: white;
+}
+
+.datos-dirigente p {
+  margin: 5px 0;
+}
+
+.oculto {
+  display: none;
+}
+@keyframes brilloMulticolorZona {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.zona-expandida {
+  background: linear-gradient(270deg, #ffffff, #f0faff, #ffeef5, #ffffff);
+  background-size: 400% 400%;
+  animation: brilloMulticolorZona 20s ease infinite;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+@keyframes zonaBrillante {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.efecto-zona {
+  background: linear-gradient(270deg, #ffffff, #e0e0e0, #ffffff, #e0e0e0);
+  background-size: 400% 400%;
+  animation: zonaBrillante 8s ease infinite;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+  transition: all 0.5s ease-in-out;
 }
 
