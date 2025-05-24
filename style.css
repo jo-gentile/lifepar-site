@@ -29,7 +29,7 @@ header {
 }
 
 .logo-img {
-  height: 60px;
+  height: 120px;
   margin-right: 10px;
 }
 
@@ -62,24 +62,29 @@ nav ul li a:hover {
 }
 
 
-.admin-btn {
-  background-color: #007BFF;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: all 0.3s ease;
+.admin-button {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  padding: 4px 10px;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #c0c0c0; /* plateado claro */
+  border: 1.8px solid #c0c0c0;
   cursor: pointer;
-  display: inline-block;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  align-self: center; /* para alinear verticalmente en flex container */
+  margin-left: 20px;
+  margin-bottom: -2;
+  box-shadow: 0 0 6px #c0c0c0aa; /* brillo suave metálico */
 }
 
-.admin-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+.admin-button:hover {
+  background-color: #c0c0c0;
+  color: #222;
+  box-shadow: 0 0 10px #e0e0e0dd; /* brillo más intenso al pasar el mouse */
+  transform: scale(1.05);
 }
+
 
 
 .contenedor {
@@ -265,18 +270,27 @@ header::after {
     flex-direction: column;
   }
 
-  .banner-lateral {
+ .banner-lateral {
   width: 100%;
-  height: 120px;
-  background-position: boder;
-  background-size: contain;
+  max-height: 120px;
+  background-position: center; /* corregido de "boder" a "center" */
+  background-size: cover; /* mejor opción para que se adapte */
   background-repeat: no-repeat;
+  background-image: url('ruta/a/tu/banner.jpg'); /* agregá esto si no lo definiste en HTML */
+  display: block;
 }
 
-
-  .contenido-principal {
-    padding: 10px;
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  .banner-lateral {
+    max-height: 100px; /* opcional: ajustá la altura en móvil si querés */
+    background-size: contain; /* mejor para móviles si querés que se vea completo */
   }
+}
+
+.contenido-principal {
+  padding: 10px;
+}
 
 nav {
   width: 100%;
@@ -391,4 +405,127 @@ nav ul li a {
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
   transition: all 0.5s ease-in-out;
 }
+h4 {
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+  background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
+  background-size: 300% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-move 5s linear infinite;
+}
 
+h4::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(120deg, #ccc, #fff, #ccc);
+  background-size: 200% auto;
+  animation: shine 2s linear infinite;
+  border-radius: 2px;
+}
+
+/* Animación para el texto multicolor */
+@keyframes text-gradient-move {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
+}
+
+/* Animación para el subrayado metálico */
+@keyframes shine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 4rem;
+  letter-spacing: 2px;
+  text-align: center;
+  background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
+  background-size: 300% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-move 5s linear infinite;
+  margin: 0;
+}
+
+/* Animación para el fondo degradado del texto */
+@keyframes text-gradient-move {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 300% center;
+  }
+}
+.encabezado {
+  background: #000;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.encabezado::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: shine 2s infinite;
+}
+
+@keyframes shine {
+  to {
+    left: 125%;
+  }
+}
+.slogan {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.7rem;
+  color: #f0f0f0;
+  text-align: center;
+  display: block;
+  margin-top: -10px;
+  margin-bottom: 20px;
+}
+nav li a {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+nav li a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #ffd700;
+  transform: scale(1.05);
+}
