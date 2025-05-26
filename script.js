@@ -25,4 +25,42 @@ zonas.forEach((zona, index) => {
   });
 });
 
+// --- LOGIN POR EMAIL DESDE GOOGLE SHEETS ---
+const API_URL = "https://script.google.com/macros/s/AKfycbypTVFkumXv_Opv9E6SL3lXdDS2nn-bqNW3qp8ho86LJ07vLzMIw5ITUPu1aylXPStgw/exec";
+
+function mostrarLogin() {
+  const form = document.getElementById("loginForm");
+  form.style.display = form.style.display === "block" ? "none" : "block";
+}
+
+async function verificarEmail() {
+  const email = document.getElementById("emailInput").value.trim().toLowerCase();
+
+  try {
+    const res = await fetch(`${API_URL}?email=${encodeURIComponent(email)}`);
+    const data = await res.json();
+
+    if (data.autorizado) {
+      window.location.href = "admin.html";
+    } else {
+      alert("Email no autorizado");
+    }
+  } catch (error) {
+    console.error("Error consultando la API", error);
+    alert("Error al verificar. Intentalo más tarde.");
+  }
+}
+
+// Habilita ENTER para enviar
+document.addEventListener("DOMContentLoaded", function () {
+  const emailInput = document.getElementById("emailInput");
+  if (emailInput) {
+    emailInput.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        verificarEmail();
+      }
+    });
+  }
+});
 

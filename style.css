@@ -143,6 +143,31 @@ nav ul li a:hover {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+.menu-zona {
+  background: #f8f8f8;
+  padding: 0 15px;
+  margin-top: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: all 0.3s ease;
+  margin-bottom: 0;
+}
+
+.menu-zona.visible {
+  max-height: 500px;
+  opacity: 1;
+  transform: scaleY(1);
+  margin-top: 15px;
+  margin-bottom: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
 
 .calendario table {
   width: 100%;

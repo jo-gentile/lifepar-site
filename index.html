@@ -224,6 +224,9 @@
   const emailsAutorizados = [
     "jose.gen86@gmail.com",
     "daniela.chiaramoni847@gmail.com"
+    "giglifabio0@gmail.com"
+    "realenatalia362@gmail.com"
+    "leosanchezz102@gmail.com"
   ];
 
   function mostrarLogin() {
@@ -231,27 +234,26 @@
     form.style.display = form.style.display === 'block' ? 'none' : 'block';
   }
 
-  function verificarEmail() {
-    const email = document.getElementById('emailInput').value.trim().toLowerCase();
+  <script>
+  async function verificarEmail() {
+    const email = document.getElementById("emailInput").value.trim().toLowerCase();
 
-    if (emailsAutorizados.includes(email)) {
-      window.location.href = "admin.html";
-    } else {
-      alert("Email no autorizado");
+    try {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbypTVFkumXv_Opv9E6SL3IXdDS2nn-bqNW3qp8ho86LJ07VLzMIIw5lTUPu1ayIXPStgw/exec" + encodeURIComponent(email));
+      const data = await response.json();
+
+      if (data.autorizado === true) {
+        window.location.href = "admin.html";
+      } else {
+        alert("Email no autorizado");
+      }
+    } catch (error) {
+      console.error("Error consultando el acceso:", error);
+      alert("Error al verificar el acceso.");
     }
   }
-  document.addEventListener("DOMContentLoaded", function () {
-  const emailInput = document.getElementById("emailInput");
-
-  emailInput.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      verificarEmail(); // Llama a la función directamente
-    }
-  });
-});
-
 </script>
+
 
 </body>
 </html>
