@@ -41,6 +41,7 @@ async function verificarEmail() {
     const data = await res.json();
 
     if (data.autorizado) {
+      sessionStorage.setItem("emailAutenticado", email);
       window.location.href = "admin.html";
     } else {
       alert("Email no autorizado");
@@ -63,4 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 });
-
+function abrirVistaFiltrada(baseUrl) {
+  const email = sessionStorage.getItem("emailAutenticado");
+  if (!email) {
+    alert("No se encontró el email del usuario");
+    return;
+  }
+  const finalUrl = `${baseUrl}?email=${encodeURIComponent(email)}`;
+  window.open(finalUrl, "_blank");
+}
