@@ -8,7 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
-<script src="script.js"></script>
 <body>
   
   <header>
@@ -34,17 +33,19 @@
 </nav>
 <div id="loginForm" style="
   display: none;
-  position: absolute;
-  top: 100px;
-  right: 30px;
+  position: fixed;
+  top: 80px;
+  right: 10px;
+  max-width: 90vw;
   background: #ffffff;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   z-index: 9999;
-  width: 240px;
+  overflow: auto;
 ">
+
   <input type="email" id="emailInput" placeholder="Ingresá tu email" required style="
     padding: 8px;
     margin-bottom: 10px;
@@ -62,36 +63,9 @@
   ">Ingresar</button>
 </div>
 
+
   </header>
-<div id="loginForm" style="
-  display: none;
-  position: absolute;
-  top: 100px; 
-  right: 30px;
-  background: #ffffff;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  z-index: 9999;
-  width: 240px;
-">
-  <input type="email" id="emailInput" placeholder="Ingresá tu email" required style="
-    padding: 8px;
-    margin-bottom: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  " />
-  <button onclick="verificarEmail()" style="
-    padding: 8px;
-    width: 100%;
-    background-color: #222;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  ">Ingresar</button>
-</div>
+
   <div class="contenedor">
     <aside class="banner-lateral"></aside>
     <main class="contenido-principal">
@@ -252,42 +226,28 @@
     </div>
   </footer>
 
+
+  
+
   <script src="script.js"></script>
-<script>
-  const emailsAutorizados = [
-    "jose.gen86@gmail.com",
-    "daniela.chiaramoni847@gmail.com"
-    "giglifabio0@gmail.com"
-    "realenatalia362@gmail.com"
-    "leosanchezz102@gmail.com"
-  ];
-
-  function mostrarLogin() {
-    const form = document.getElementById('loginForm');
-    form.style.display = form.style.display === 'block' ? 'none' : 'block';
-  }
-
   <script>
-  async function verificarEmail() {
-    const email = document.getElementById("emailInput").value.trim().toLowerCase();
-
-    try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbypTVFkumXv_Opv9E6SL3IXdDS2nn-bqNW3qp8ho86LJ07VLzMIIw5lTUPu1ayIXPStgw/exec" + encodeURIComponent(email));
-      const data = await response.json();
-
-      if (data.autorizado === true) {
-        window.location.href = "admin.html";
-      } else {
-        alert("Email no autorizado");
-      }
-    } catch (error) {
-      console.error("Error consultando el acceso:", error);
-      alert("Error al verificar el acceso.");
+    function mostrarLogin() {
+      const form = document.getElementById("loginForm");
+      form.style.display = form.style.display === "block" ? "none" : "block";
     }
-  }
-</script>
 
-<script src="script.js"></script>
-
+    document.addEventListener("DOMContentLoaded", function () {
+      const emailInput = document.getElementById("emailInput");
+      if (emailInput) {
+        emailInput.addEventListener("keypress", function (event) {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            verificarEmail();
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
+

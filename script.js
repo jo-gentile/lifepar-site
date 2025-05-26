@@ -26,7 +26,7 @@ zonas.forEach((zona, index) => {
 });
 
 // --- LOGIN POR EMAIL DESDE GOOGLE SHEETS ---
-const API_URL = https://script.google.com/macros/s/AKfycbxCT2fQW1h7vE02ai2BpGqfQ_PTAhCP8H4StFjL-zne5tlKovf1vdWo7EWguwjodmJkqA/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxCT2fQW1h7vE02ai2BpGqfQ_PTAhCP8H4StFjL-zne5tlKovf1vdWo7EWguwjodmJkqA/exec";
 
 function mostrarLogin() {
   const form = document.getElementById("loginForm");

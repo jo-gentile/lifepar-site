@@ -303,7 +303,7 @@ header::after {
   background-position: center; /* corregido de "boder" a "center" */
   background-size: cover; /* mejor opción para que se adapte */
   background-repeat: no-repeat;
-  background-image: url('ruta/a/tu/banner.jpg'); /* agregá esto si no lo definiste en HTML */
+  background-image: url('ruta/a/tu/banner-lateral.jpg'); /* agregá esto si no lo definiste en HTML */
   display: block;
 }
 
