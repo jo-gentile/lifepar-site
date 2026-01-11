@@ -305,27 +305,40 @@
       alert("No hay formulario asignado para esta fecha.");
     }
   }
-</script>
-<script src="script.js"></script>
-</body>
-</html>
 <script>
-  function toggleMenuZona(nro) {
-    for (let i = 1; i <= 6; i++) {
-      const menu = document.getElementById(`menu-zona${i}`);
-      if (menu) {
-        if (i === nro) {
-          const isVisible = menu.dataset.visible === "true";
-          menu.classList.toggle("visible", !isVisible);
-          menu.dataset.visible = !isVisible;
-        } else {
-          menu.classList.remove("visible");
-          menu.dataset.visible = "false";
+    function toggleMenuZona(nro) {
+      for (let i = 1; i <= 6; i++) {
+        const menu = document.getElementById(`menu-zona${i}`);
+        if (menu) {
+          if (i === nro) {
+            const isVisible = menu.dataset.visible === "true";
+            menu.classList.toggle("visible", !isVisible);
+            menu.dataset.visible = !isVisible;
+          } else {
+            menu.classList.remove("visible");
+            menu.dataset.visible = "false";
+          }
         }
       }
     }
-  }
-</script>
+
+    // 2. El "cerebro" que atrapa el nombre y saluda
+    const nombreGuardado = localStorage.getItem("nombreUsuario");
+    const elementoSaludo = document.getElementById("userGreeting"); // Asegurate de tener un id="userGreeting" arriba
+
+    if (nombreGuardado && elementoSaludo) {
+      elementoSaludo.innerText = "HOLA " + nombreGuardado.toUpperCase();
+    } else if (!nombreGuardado) {
+      // Seguridad: Si no hay nombre, rebota al inicio
+      window.location.href = "index.html";
+    }
+  </script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
+
 
 
 
