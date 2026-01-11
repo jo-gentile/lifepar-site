@@ -168,24 +168,49 @@
       }
     }
 
-    // 2. BIENVENIDA (NOMBRE Y FOTO)
+ // --- LÓGICA DE BIENVENIDA Y SEGURIDAD CON SHEETS ---
+    const email = localStorage.getItem("emailUsuario"); // Sacamos el mail de la mochila
     const nombre = localStorage.getItem("nombreUsuario");
     const foto = localStorage.getItem("fotoUsuario");
     const elementoSaludo = document.getElementById("userGreeting");
     const elementoFoto = document.getElementById("userPhoto");
 
-    if (nombre && elementoSaludo) {
-      elementoSaludo.innerText = "HOLA " + nombre.toUpperCase();
-      if (foto) {
-        elementoFoto.src = foto;
-        elementoFoto.style.display = "block";
-      }
+    if (email && nombre && elementoSaludo) {
+      // TU URL DE APPS SCRIPT
+      const urlScript = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec"; 
+      
+      // El sistema le pregunta al Sheets: "¿Este mail puede entrar?"
+      fetch(urlScript + "?email=" + encodeURIComponent(email))
+        .then(response => response.text())
+        .then(resultado => {
+          if (resultado === "SI") {
+            // ✅ ACCESO PERMITIDO: Está en tu lista de Sheets
+            elementoSaludo.innerText = "HOLA " + nombre.toUpperCase();
+            if (foto) {
+              elementoFoto.src = foto;
+              elementoFoto.style.display = "block";
+            }
+          } else {
+            // ❌ ACCESO DENEGADO: No figura en el Sheets
+            alert("ACCESO DENEGADO: El correo " + email + " no está autorizado como entrenador de LIFEPAR.");
+            // Limpiamos todo por seguridad
+            localStorage.clear();
+            window.location.href = "index.html"; 
+          }
+        })
+        .catch(err => {
+          console.error("Error al validar con Sheets:", err);
+          // Si el Sheets falla (por internet o saturación), 
+          // lo dejamos pasar igual por esta vez para no trabar el trabajo.
+          elementoSaludo.innerText = "HOLA " + nombre.toUpperCase();
+        });
     } else {
+      // Si no hay datos, lo mandamos al login
       window.location.href = "index.html";
     }
-  </script>
 </body>
 </html>
+
 
 
 
