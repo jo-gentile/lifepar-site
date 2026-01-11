@@ -167,47 +167,46 @@
         }
       }
     }
-// --- SEGURIDAD BLINDADA LIFEPAR ---
+// --- CERROJO ESTRICTO LIFEPAR ---
   const emailLogueado = localStorage.getItem("emailUsuario");
   const nombreLogueado = localStorage.getItem("nombreUsuario");
-  const fotoLogueada = localStorage.getItem("fotoUsuario");
 
   if (emailLogueado && nombreLogueado) {
-      // Usamos un "puente" para que Google no bloquee la conexión
       const urlScript = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec"; 
-      const proxyUrl = "https://api.allorigins.win/get?url=" + encodeURIComponent(urlScript + "?email=" + emailLogueado);
 
-      document.getElementById("userGreeting").innerText = "VALIDANDO ACCESO...";
+      document.getElementById("userGreeting").innerText = "VALIDANDO...";
 
-      fetch(proxyUrl)
-        .then(res => res.json())
-        .then(data => {
-          const autorizado = data.contents.trim(); // Aquí llega el "SI" o "NO" del Sheets
-          
-          if (autorizado === "SI") {
-            // ✅ ADENTRO
+      fetch(urlScript + "?email=" + encodeURIComponent(emailLogueado))
+        .then(res => res.text())
+        .then(resultado => {
+          // SI NO DICE "SI" EXACTAMENTE, SE VA AFUERA
+          if (resultado.trim() === "SI") {
             document.getElementById("userGreeting").innerText = "HOLA " + nombreLogueado.toUpperCase();
-            if (fotoLogueada) {
-              document.getElementById("userPhoto").src = fotoLogueada;
+            const foto = localStorage.getItem("fotoUsuario");
+            if (foto) {
+              document.getElementById("userPhoto").src = foto;
               document.getElementById("userPhoto").style.display = "block";
             }
           } else {
-            // ❌ AFUERA
-            alert("ACCESO DENEGADO: El correo " + emailLogueado + " no está autorizado.");
+            // SI EL SHEETS DICE "NO" O CUALQUIER OTRA COSA
+            alert("ACCESO DENEGADO: NO SOS ENTRENADOR AUTORIZADO");
             localStorage.clear();
             window.location.href = "index.html";
           }
         })
         .catch(err => {
-          // Si el puente falla, te dejo pasar a VOS que sos el admin
-          console.error("Error de conexión");
-          document.getElementById("userGreeting").innerText = "HOLA " + nombreLogueado.toUpperCase();
+          // SI HAY ERROR DE INTERNET O DE GOOGLE, TAMBIÉN SE VA AFUERA
+          alert("ERROR DE VALIDACIÓN: ACCESO DENEGADO POR SEGURIDAD");
+          localStorage.clear();
+          window.location.href = "index.html";
         });
   } else {
+    // Si ni siquiera hay mail guardado
     window.location.href = "index.html";
   }
 </body>
 </html>
+
 
 
 
