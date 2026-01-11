@@ -219,9 +219,23 @@
       alert("Error al ingresar: " + err.message);
     });
   });
+  // ESTO REVISA SI YA ESTÁS LOGUEADO APENAS ENTRÁS AL INICIO
+  auth.onAuthStateChanged((user) => {
+    const btnAcceso = document.querySelector(".btn-acceso"); // El botón que abre el login
+    
+    if (user && btnAcceso) {
+      // Si ya hay sesión, cambiamos el texto del botón para que sea un pase directo
+      btnAcceso.innerText = "VOLVER AL PANEL";
+      btnAcceso.style.backgroundColor = "#28a745"; // Un verde para que sepa que está activo
+      
+      // Al hacer clic, en lugar de abrir el login, lo manda directo al admin
+      btnAcceso.onclick = () => { window.location.href = "admin.html"; };
+    }
+  });
 </script>
 </body>
 </html>
+
 
 
 
