@@ -162,9 +162,15 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { 
+    getAuth, 
+    GoogleAuthProvider, 
+    signInWithPopup, 
+    setPersistence, 
+    browserLocalPersistence,
+    onAuthStateChanged 
+  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // TU CONFIGURACIÓN (Verificada con tus capturas anteriores)
   const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
@@ -178,22 +184,27 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // FUNCIÓN PARA MOSTRAR EL CARTEL DE LOGIN (TU FUNCIÓN ORIGINAL)
+  // 1. FUNCIÓN PARA ABRIR EL CARTEL (Aseguramos que siempre ande)
   window.mostrarLogin = () => {
     const form = document.getElementById("loginForm");
     const overlay = document.getElementById("loginOverlay");
-    if (form && overlay) {
-      const isVisible = form.style.display === "block";
-      form.style.display = isVisible ? "none" : "block";
-      overlay.style.display = isVisible ? "none" : "block";
-    }
+    if (form) form.style.display = "block";
+    if (overlay) overlay.style.display = "block";
   };
 
-  // BOTÓN DE GOOGLE CON MEMORIA
- document.getElementById('btn-google').addEventListener('click', () => {
+  // 2. DETECTOR DE SESIÓN ACTIVA (Para no loguearse dos veces)
+  onAuthStateChanged(auth, (user) => {
+    const btnGoogle = document.getElementById('btn-google');
+    if (user && btnGoogle) {
+      btnGoogle.innerText = "CONTINUAR COMO " + user.displayName.toUpperCase();
+      btnGoogle.style.backgroundColor = "#28a745";
+    }
+  });
+
+  // 3. BOTÓN DE GOOGLE
+  document.getElementById('btn-google').addEventListener('click', () => {
     const provider = new GoogleAuthProvider();
     
-    // ESTO ES LO NUEVO: Obliga a Firebase a recordar al usuario aunque cierre el navegador
     setPersistence(auth, browserLocalPersistence)
       .then(() => {
         return signInWithPopup(auth, provider);
@@ -203,38 +214,20 @@
         localStorage.setItem("fotoUsuario", result.user.photoURL);
         window.location.href = "admin.html"; 
       })
-      .catch(err => alert("Error: " + err.message));
-  });
-    
-    // Si ya hay una sesión en Chrome, esto ayudará a que entre más rápido
-    signInWithPopup(auth, provider).then((result) => {
-      // Guardamos los datos para el Admin
-      localStorage.setItem("nombreUsuario", result.user.displayName);
-      localStorage.setItem("fotoUsuario", result.user.photoURL);
-      
-      // Viajamos al panel
-      window.location.href = "admin.html"; 
-    }).catch(err => {
-      console.error(err);
-      alert("Error al ingresar: " + err.message);
-    });
-  });
-  // ESTO REVISA SI YA ESTÁS LOGUEADO APENAS ENTRÁS AL INICIO
-  auth.onAuthStateChanged((user) => {
-    const btnAcceso = document.querySelector(".btn-acceso"); // El botón que abre el login
-    
-    if (user && btnAcceso) {
-      // Si ya hay sesión, cambiamos el texto del botón para que sea un pase directo
-      btnAcceso.innerText = "VOLVER AL PANEL";
-      btnAcceso.style.backgroundColor = "#28a745"; // Un verde para que sepa que está activo
-      
-      // Al hacer clic, en lugar de abrir el login, lo manda directo al admin
-      btnAcceso.onclick = () => { window.location.href = "admin.html"; };
-    }
+      .catch((error) => {
+        console.error("Error:", error);
+        // Si hay error, intentamos login directo por las dudas
+        signInWithPopup(auth, provider).then((res) => {
+          localStorage.setItem("nombreUsuario", res.user.displayName);
+          localStorage.setItem("fotoUsuario", res.user.photoURL);
+          window.location.href = "admin.html";
+        });
+      });
   });
 </script>
 </body>
 </html>
+
 
 
 
