@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -10,15 +10,10 @@
 </head>
 <body>
   <header>
-  <div style="margin: 20px;">
-    <button 
-      style="padding: 12px 24px; font-size: 16px; background-color: #222; color: white; border: none; border-radius: 8px; cursor: pointer;"
-      onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby1D2jdFtnENk06QZqLwqAErRor5M4siyze9DRVtgKquH0liUzfoVwmkum4Y48slxeO/exec')"
-    >
-    <h2 id="userGreeting" style="font-family: 'Anton', sans-serif; color: #222; text-align: center; margin-top: 20px;">Cargando...</h2>
-  </div>
-
-  <!-- resto del contenido -->
+    <div style="display: flex; flex-direction: column; align-items: center; padding: 20px; background: #f9f9f9; border-bottom: 1px solid #ddd;">
+       <img id="userPhoto" src="" alt="Perfil" style="width: 60px; height: 60px; border-radius: 50%; border: 2px solid #222; display: none; margin-bottom: 10px;">
+       <h2 id="userGreeting" style="font-family: 'Anton', sans-serif; color: #222; margin: 0;">CARGANDO...</h2>
+    </div>
 
     <div class="logo">
       <img src="img/logo.png" alt="Logo LIFEPAR" class="logo-img" />
@@ -31,6 +26,7 @@
     <nav>
       <ul>
         <li><a href="index.html">Inicio</a></li>
+        <li><a href="#" onclick="localStorage.clear(); window.location.href='index.html';" style="color: #ff4d4d; font-weight: bold;">Cerrar Sesión</a></li>
       </ul>
     </nav>
   </header>
@@ -43,7 +39,6 @@
         <p>Gestión de zonas y seguros</p>
       </div>
 
-      <!-- Sección Zonas -->
       <section class="info">
         <h3>Zonas de trabajo</h3>
         <p>Seleccioná tu zona para acceder a su contenido:</p>
@@ -55,257 +50,108 @@
           <div class="zona-card" onclick="toggleMenuZona(5)">Zona 5</div>
           <div class="zona-card" onclick="toggleMenuZona(6)">Zona 6</div>
         </div>
-<div class="menu-zona" id="menu-zona1" data-visible="false">
-  <h4>Acciones para Zona 1</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-    <li>
-  📝 
-  <button onclick="redirigirFormulario('zona1')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
-  </li>
-  <li>
-    ✅ 
-  <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwRqwgBcnDMjqDwTLaqcedo7lf7CUfcv7G3l6AkxbQ6l1uU6cR0fNUZBVLaLJaD3gKd/exec')">
-    Altas próxima fecha
-  </a>
-</li>
-      <li>
-      👁️ 
-      <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby0hOm1BG7mcu74uH6_7cUmdo2qRfrrWoX3tPECHc2WyBc4PPdMAeAB0isw7YcQkYGLGQ/exec')">
-        Ver datos cargados
-      </a>
-    </li>
-  </ul>
-</div>
-<div class="menu-zona" id="menu-zona2" data-visible="false">
-  <h4>Acciones para Zona 2</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-   <li>
-  📝 
-  <button onclick="redirigirFormulario('zona2')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
- </li>
-    ✅ 
-  <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwUNxBhdxXbTtY3aTJK8z4OLRhZTn1ChXzisiN7F366DG0_Mc9hHqvGQH8vxix6ticM/exec')">
-    Altas próxima fecha
-  </a>
-</li>
-    <li>
-      👁️ 
-      <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby8JHx-2wRF1VBenmZzLNlstfFcmtISJU5O5godZR18ghrKZ6dTeRi_2HxmS6S7qMQW/exec')">
-        Ver datos cargados
-      </a>
-    </li>
-  </ul>
-</div>
-<div class="menu-zona" id="menu-zona3" data-visible="false">
-  <h4>Acciones para Zona 3</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-    <li>
-  📝 
-  <button onclick="redirigirFormulario('zona3')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
-</li>
-    <li>❌ <a href="#">Dar de baja patinadores</a></li>
-  </ul>
-</div>      
-<div class="menu-zona" id="menu-zona4" data-visible="false">
-  <h4>Acciones para Zona 4</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-    <li>
-  📝 
-  <button onclick="redirigirFormulario('zona4')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
-</li>
-    ✅ 
-  <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbxqpnvYavegXSktj2Oo0RJ8RkpWZtcr9RoJg_z8Qx31LrXDQoPdk1lN1EX-6cJ83T8IyA/exec')">
-    Altas próxima fecha
-  </a>
-</li>
-      <li>
-      👁️ 
-      <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyYnD6a60a8cXAHrhdWr2ibVFU91_KpJgtGYAwQoLFVhs3MsxrLDOXVuYbSeTv_iqfB/exec')">
-        Ver datos cargados
-      </a>
-    </li>
-  </ul>
-</div>
-<div class="menu-zona" id="menu-zona5" data-visible="false">
-  <h4>Acciones para Zona 5</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-  <li>
-  📝 
-  <button onclick="redirigirFormulario('zona5')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
-</li>
-    ✅ 
-  <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzT1T6DtWx7uL4EkcLjpLadE9bTbvVO4Qn5SBTE1XqNqZANdGRASva1lZsnMT_JklvZJg/exec')">
-    Altas próxima fecha
-  </a>
-</li>
-      <li>
-      👁️ 
-      <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyNcUtcLejXvEC89398LW0pGR1bLylTQuqYwI-R51pSeIhiuDi472vnMdtXZMHgASMk/exec')">
-        Ver datos cargados
-      </a>
-    </li>
-  </ul>
-</div>
-<div class="menu-zona" id="menu-zona6" data-visible="false">
-  <h4>Acciones para Zona 6</h4>
-  <ul>
-    <li>
-      📅 Elegir Fecha:
-      <select>
-        <option>Fecha 1</option>
-        <option>Fecha 2</option>
-        <option>Fecha 3</option>
-        <option>Fecha 4</option>
-      </select>
-    </li>
-    <li>
-  📝 
-  <button onclick="redirigirFormulario('zona6')" style="cursor:pointer;">
-    Cargar patinadoras/es
-  </button>
-</li>
-    ✅ 
-  <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzkXSFNmpuPaRVJA7uvQJfZHC5eqPpvKocvTN4H_c3oDXu1qjpghEfpg3AOsgeIFpER/exec')">
-    Altas próxima fecha
-  </a>
-</li>
-      <li>
-      👁️ 
-      <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyjrTOGkwvHBAj20iwGnLQ58Te_LpAlFhjTk_6iWOgSDYWSrVcX-3RFKPElnK4Ez3O4/exec')">
-        Ver datos cargados
-      </a>
-    </li>
-  </ul>
-</div>
-<!-- Sección Seguros -->
+
+        <div class="menu-zona" id="menu-zona1" data-visible="false">
+          <h4>Acciones para Zona 1</h4>
+          <ul>
+            <li>📅 Fecha: <select><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
+            <li>📝 <button onclick="redirigirFormulario('zona1')">Cargar patinadoras/es</button></li>
+            <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwRqwgBcnDMjqDwTLaqcedo7lf7CUfcv7G3l6AkxbQ6l1uU6cR0fNUZBVLaLJaD3gKd/exec')">Altas próxima fecha</a></li>
+            <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby0hOm1BG7mcu74uH6_7cUmdo2qRfrrWoX3tPECHc2WyBc4PPdMAeAB0isw7YcQkYGLGQ/exec')">Ver datos cargados</a></li>
+          </ul>
+        </div>
+
+        <div class="menu-zona" id="menu-zona2" data-visible="false">
+          <h4>Acciones para Zona 2</h4>
+          <ul>
+            <li>📅 Fecha: <select><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
+            <li>📝 <button onclick="redirigirFormulario('zona2')">Cargar patinadoras/es</button></li>
+            <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwUNxBhdxXbTtY3aTJK8z4OLRhZTn1ChXzisiN7F366DG0_Mc9hHqvGQH8vxix6ticM/exec')">Altas próxima fecha</a></li>
+            <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby8JHx-2wRF1VBenmZzLNlstfFcmtISJU5O5godZR18ghrKZ6dTeRi_2HxmS6S7qMQW/exec')">Ver datos cargados</a></li>
+          </ul>
+        </div>
+
+        <div class="menu-zona" id="menu-zona3" data-visible="false">
+          <h4>Acciones para Zona 3</h4>
+          <ul>
+            <li>📝 <button onclick="redirigirFormulario('zona3')">Cargar patinadoras/es</button></li>
+          </ul>
+        </div>
+
+        <div class="menu-zona" id="menu-zona4" data-visible="false">
+          <h4>Acciones para Zona 4</h4>
+          <ul>
+            <li>📅 Fecha: <select><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
+            <li>📝 <button onclick="redirigirFormulario('zona4')">Cargar patinadoras/es</button></li>
+            <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbxqpnvYavegXSktj2Oo0RJ8RkpWZtcr9RoJg_z8Qx31LrXDQoPdk1lN1EX-6cJ83T8IyA/exec')">Altas próxima fecha</a></li>
+            <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyYnD6a60a8cXAHrhdWr2ibVFU91_KpJgtGYAwQoLFVhs3MsxrLDOXVuYbSeTv_iqfB/exec')">Ver datos cargados</a></li>
+          </ul>
+        </div>
+
+        <div class="menu-zona" id="menu-zona5" data-visible="false">
+          <h4>Acciones para Zona 5</h4>
+          <ul>
+            <li>📅 Fecha: <select><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
+            <li>📝 <button onclick="redirigirFormulario('zona5')">Cargar patinadoras/es</button></li>
+            <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzT1T6DtWx7uL4EkcLjpLadE9bTbvVO4Qn5SBTE1XqNqZANdGRASva1lZsnMT_JklvZJg/exec')">Altas próxima fecha</a></li>
+            <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyNcUtcLejXvEC89398LW0pGR1bLylTQuqYwI-R51pSeIhiuDi472vnMdtXZMHgASMk/exec')">Ver datos cargados</a></li>
+          </ul>
+        </div>
+
+        <div class="menu-zona" id="menu-zona6" data-visible="false">
+          <h4>Acciones para Zona 6</h4>
+          <ul>
+            <li>📅 Fecha: <select><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
+            <li>📝 <button onclick="redirigirFormulario('zona6')">Cargar patinadoras/es</button></li>
+            <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzkXSFNmpuPaRVJA7uvQJfZHC5eqPpvKocvTN4H_c3oDXu1qjpghEfpg3AOsgeIFpER/exec')">Altas próxima fecha</a></li>
+            <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyjrTOGkwvHBAj20iwGnLQ58Te_LpAlFhjTk_6iWOgSDYWSrVcX-3RFKPElnK4Ez3O4/exec')">Ver datos cargados</a></li>
+          </ul>
+        </div>
+      </section>
+
       <section class="info">
         <h3>Gestión de Seguros</h3>
         <ul>
-          <li><a href="https://forms.gle/qZJS945CVCF6spgA9" target="_blank">➕ Cargar seguro nuevo (Google Form)</a></li>
-          <li><a href="docs/declaracion_jurada.pdf" target="_blank">📄 Descargar declaración jurada de seguro</a></li>
-          <li><a href="docs/info_seguro.pdf" target="_blank">📘 Ver información general del seguro</a></li>
+          <li><a href="https://forms.gle/qZJS945CVCF6spgA9" target="_blank">➕ Cargar seguro nuevo</a></li>
+          <li><a href="docs/declaracion_jurada.pdf" target="_blank">📄 Descargar declaración jurada</a></li>
+          <li><a href="docs/info_seguro.pdf" target="_blank">📘 Ver información del seguro</a></li>
         </ul>
       </section>
 
-    <section class="info">
-  <h3>OPEN COPA FEDERAL</h3>
-  <p>Información del evento y acceso a inscripción:</p>
-
-  <ul>
-    <li>📄 <a href="docs/open_copa_federal.pdf" target="_blank">Ver PDF del evento</a></li>
-    <li>📥 <a href="docs/open_copa_federal.pdf" download>Descargar PDF</a></li>
-    <li>📝 <a href="https://forms.gle/JADqX7TJ18L6itmR6" target="_blank">Ir al formulario de inscripción</a></li>
-  </ul>
-</section>
-
- </main>
-</div>
+      <section class="info">
+        <h3>OPEN COPA FEDERAL</h3>
+        <ul>
+          <li>📄 <a href="docs/open_copa_federal.pdf" target="_blank">Ver PDF</a></li>
+          <li>📝 <a href="https://forms.gle/JADqX7TJ18L6itmR6" target="_blank">Inscripción</a></li>
+        </ul>
+      </section>
+    </main>
+  </div>
 
   <footer>
     <p>© 2025 LIFEPAR - Panel de entrenadores</p>
   </footer>
-<script>
-  const formularios = {
-    zona1: {
-      "Fecha 1": "",
-      "Fecha 2": "https://forms.gle/kfLc9fKG6d5jkY2N7",
-      "Fecha 3": "https://forms.gle/g9L7LY5SjBu2EyRQ8",
-      "Fecha 4": "https://forms.gle/47ZhySBimn6h4frR9"
-    },
-    zona2: {
-      "Fecha 1": "",
-      "Fecha 2": "https://forms.gle/jzjajX279eQPXnh3A",
-      "Fecha 3": "https://forms.gle/dWpvZwtN68gfZrqg8",
-      "Fecha 4": "https://forms.gle/qpGuxCag7DUQE7pMA"
-    },
-    zona4: {
-      "Fecha 1": "",
-      "Fecha 2": "https://forms.gle/QUV7Gr6ZxnEJdTeH8",
-      "Fecha 3": "https://forms.gle/N1rJT9cYzfqzAtwz7",
-      "Fecha 4": "https://forms.gle/wnvZaqnzEKJSjd2F8"
-    },
-    zona5: {
-      "Fecha 1": "",
-      "Fecha 2": "https://forms.gle/7kPYhxdQuRBuVg7P8",
-      "Fecha 3": "https://forms.gle/mE28K16gSmY5aetJ7",
-      "Fecha 4": "https://forms.gle/UBM19kRChBkENJsN7"
-    },
-    zona6: {
-      "Fecha 1": "",
-      "Fecha 2": "https://forms.gle/8fS8bg1pj8V6pE7V9",
-      "Fecha 3": "https://forms.gle/gUCZx3PdjHBPHwiG9",
-      "Fecha 4": "https://forms.gle/Sx29VVjFe2NHARbi8"
-    }
-  };
 
-  function redirigirFormulario(zona) {
-    const menu = document.querySelector(`#menu-${zona}`);
-    const select = menu.querySelector("select");
-    const fechaSeleccionada = select.value;
-    const url = formularios[zona][fechaSeleccionada];
+  <script>
+    // 1. BASE DE DATOS DE FORMULARIOS
+    const formularios = {
+      zona1: { "Fecha 2": "https://forms.gle/kfLc9fKG6d5jkY2N7", "Fecha 3": "https://forms.gle/g9L7LY5SjBu2EyRQ8", "Fecha 4": "https://forms.gle/47ZhySBimn6h4frR9" },
+      zona2: { "Fecha 2": "https://forms.gle/jzjajX279eQPXnh3A", "Fecha 3": "https://forms.gle/dWpvZwtN68gfZrqg8", "Fecha 4": "https://forms.gle/qpGuxCag7DUQE7pMA" },
+      zona4: { "Fecha 2": "https://forms.gle/QUV7Gr6ZxnEJdTeH8", "Fecha 3": "https://forms.gle/N1rJT9cYzfqzAtwz7", "Fecha 4": "https://forms.gle/wnvZaqnzEKJSjd2F8" },
+      zona5: { "Fecha 2": "https://forms.gle/7kPYhxdQuRBuVg7P8", "Fecha 3": "https://forms.gle/mE28K16gSmY5aetJ7", "Fecha 4": "https://forms.gle/UBM19kRChBkENJsN7" },
+      zona6: { "Fecha 2": "https://forms.gle/8fS8bg1pj8V6pE7V9", "Fecha 3": "https://forms.gle/gUCZx3PdjHBPHwiG9", "Fecha 4": "https://forms.gle/Sx29VVjFe2NHARbi8" }
+    };
 
-    if (url) {
-      window.open(url, '_blank');
-    } else {
-      alert("No hay formulario asignado para esta fecha.");
+    function redirigirFormulario(zona) {
+      const menu = document.getElementById(`menu-${zona}`);
+      const select = menu.querySelector("select");
+      const url = formularios[zona][select.value];
+      if (url) window.open(url, '_blank');
+      else alert("No hay formulario para esta fecha.");
     }
-  }
-<script>
+
+    function abrirVistaFiltrada(url) { window.open(url, '_blank'); }
+
     function toggleMenuZona(nro) {
       for (let i = 1; i <= 6; i++) {
         const menu = document.getElementById(`menu-zona${i}`);
@@ -322,37 +168,24 @@
       }
     }
 
-    // 2. El "cerebro" que atrapa el nombre y saluda
-    const nombreGuardado = localStorage.getItem("nombreUsuario");
-    const elementoSaludo = document.getElementById("userGreeting"); // Asegurate de tener un id="userGreeting" arriba
+    // 2. BIENVENIDA (NOMBRE Y FOTO)
+    const nombre = localStorage.getItem("nombreUsuario");
+    const foto = localStorage.getItem("fotoUsuario");
+    const elementoSaludo = document.getElementById("userGreeting");
+    const elementoFoto = document.getElementById("userPhoto");
 
-    if (nombreGuardado && elementoSaludo) {
-      elementoSaludo.innerText = "HOLA " + nombreGuardado.toUpperCase();
-    } else if (!nombreGuardado) {
-      // Seguridad: Si no hay nombre, rebota al inicio
+    if (nombre && elementoSaludo) {
+      elementoSaludo.innerText = "HOLA " + nombre.toUpperCase();
+      if (foto) {
+        elementoFoto.src = foto;
+        elementoFoto.style.display = "block";
+      }
+    } else {
       window.location.href = "index.html";
     }
   </script>
-
-  <script src="script.js"></script>
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
