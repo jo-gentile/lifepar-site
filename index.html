@@ -160,11 +160,11 @@
     <button onclick="mostrarLogin()" style="margin-top: 20px; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 0.8em;">[ Cerrar ]</button>
   </div>
 
- <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // TU CONFIGURACIÓN (Mantené la que ya tenés funcionando)
+  // TU CONFIGURACIÓN (Verificada con tus capturas anteriores)
   const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
@@ -178,29 +178,38 @@
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
-  // BOTÓN DE GOOGLE INTELIGENTE
-  document.getElementById('btn-google').addEventListener('click', () => {
-    // 1. Revisamos si ya hay un usuario activo en este navegador
-    const user = auth.currentUser;
-
-    if (user) {
-      // Si ya está logueado, lo mandamos directo sin preguntar nada
-      localStorage.setItem("nombreUsuario", user.displayName);
-      localStorage.setItem("fotoUsuario", user.photoURL);
-      window.location.href = "admin.html";
-    } else {
-      // Si no hay nadie o cerró sesión, abrimos el cartel de Google normal
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider).then((result) => {
-        localStorage.setItem("nombreUsuario", result.user.displayName);
-        localStorage.setItem("fotoUsuario", result.user.photoURL);
-        window.location.href = "admin.html"; 
-      }).catch(err => alert("Error: " + err.message));
+  // FUNCIÓN PARA MOSTRAR EL CARTEL DE LOGIN (TU FUNCIÓN ORIGINAL)
+  window.mostrarLogin = () => {
+    const form = document.getElementById("loginForm");
+    const overlay = document.getElementById("loginOverlay");
+    if (form && overlay) {
+      const isVisible = form.style.display === "block";
+      form.style.display = isVisible ? "none" : "block";
+      overlay.style.display = isVisible ? "none" : "block";
     }
+  };
+
+  // BOTÓN DE GOOGLE CON MEMORIA
+  document.getElementById('btn-google').addEventListener('click', () => {
+    const provider = new GoogleAuthProvider();
+    
+    // Si ya hay una sesión en Chrome, esto ayudará a que entre más rápido
+    signInWithPopup(auth, provider).then((result) => {
+      // Guardamos los datos para el Admin
+      localStorage.setItem("nombreUsuario", result.user.displayName);
+      localStorage.setItem("fotoUsuario", result.user.photoURL);
+      
+      // Viajamos al panel
+      window.location.href = "admin.html"; 
+    }).catch(err => {
+      console.error(err);
+      alert("Error al ingresar: " + err.message);
+    });
   });
 </script>
 </body>
 </html>
+
 
 
 
