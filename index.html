@@ -191,25 +191,31 @@
     overlay.style.display = isVisible ? "none" : "block";
   };
 
+ // BOTÓN DE GOOGLE
   document.getElementById('btn-google').addEventListener('click', () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then((result) => {
-      alert("¡Hola " + result.user.displayName + "!");
-      location.reload();
+      // Guardamos el nombre en la "mochila" del navegador
+      localStorage.setItem("nombreUsuario", result.user.displayName);
+      // Viajamos al admin
+      window.location.href = "admin.html"; 
     }).catch(err => alert("Error en Google: " + err.message));
   });
 
+  // BOTÓN DE LOGIN MANUAL (MAIL Y CLAVE)
   document.getElementById('btn-login').addEventListener('click', () => {
     const email = document.getElementById('emailInput').value;
     const pass = document.getElementById('passwordInput').value;
-    signInWithEmailAndPassword(auth, email, pass).then(() => {
-      alert("Ingreso exitoso");
-      location.reload();
+    signInWithEmailAndPassword(auth, email, pass).then((result) => {
+      // Si el mail es el tuyo o de un profe, también guardamos el nombre si existe
+      localStorage.setItem("nombreUsuario", result.user.displayName || email);
+      window.location.href = "admin.html";
     }).catch(err => alert("Datos incorrectos"));
   });
 </script>
 </body>
 </html>
+
 
 
 
