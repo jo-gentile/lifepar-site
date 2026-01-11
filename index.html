@@ -160,13 +160,11 @@
     <button onclick="mostrarLogin()" style="margin-top: 20px; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 0.8em;">[ Cerrar ]</button>
   </div>
 
-  <script type="module">
-  // 1. IMPORTACIONES (Traemos las herramientas de Google)
+ <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js"; // ESTA ES LA QUE AGREGASTE
+  import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // 2. CONFIGURACIÓN (El motor)
+  // TU CONFIGURACIÓN (Mantené la que ya tenés funcionando)
   const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
@@ -177,46 +175,33 @@
     measurementId: "G-MF0RNRQL92"
   };
 
-  // 3. INICIALIZACIÓN (Encendido)
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app); 
   const auth = getAuth(app);
 
-  // 4. FUNCIONES (Lo que hace que los botones respondan)
-  window.mostrarLogin = () => {
-    const form = document.getElementById("loginForm");
-    const overlay = document.getElementById("loginOverlay");
-    const isVisible = form.style.display === "block";
-    form.style.display = isVisible ? "none" : "block";
-    overlay.style.display = isVisible ? "none" : "block";
-  };
-
- // BOTÓN DE GOOGLE
+  // BOTÓN DE GOOGLE INTELIGENTE
   document.getElementById('btn-google').addEventListener('click', () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider).then((result) => {
-      // 1. Guardamos Nombre y Foto en la mochila (localStorage)
-      localStorage.setItem("nombreUsuario", result.user.displayName);
-      localStorage.setItem("fotoUsuario", result.user.photoURL); 
-      
-      // 2. Viajamos al panel de administración
-      window.location.href = "admin.html"; 
-    }).catch(err => alert("Error en Google: " + err.message));
-  });
+    // 1. Revisamos si ya hay un usuario activo en este navegador
+    const user = auth.currentUser;
 
-  // BOTÓN DE LOGIN MANUAL (MAIL Y CLAVE)
-  document.getElementById('btn-login').addEventListener('click', () => {
-    const email = document.getElementById('emailInput').value;
-    const pass = document.getElementById('passwordInput').value;
-    signInWithEmailAndPassword(auth, email, pass).then((result) => {
-      // Si el mail es el tuyo o de un profe, también guardamos el nombre si existe
-      localStorage.setItem("nombreUsuario", result.user.displayName || email);
+    if (user) {
+      // Si ya está logueado, lo mandamos directo sin preguntar nada
+      localStorage.setItem("nombreUsuario", user.displayName);
+      localStorage.setItem("fotoUsuario", user.photoURL);
       window.location.href = "admin.html";
-    }).catch(err => alert("Datos incorrectos"));
+    } else {
+      // Si no hay nadie o cerró sesión, abrimos el cartel de Google normal
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then((result) => {
+        localStorage.setItem("nombreUsuario", result.user.displayName);
+        localStorage.setItem("fotoUsuario", result.user.photoURL);
+        window.location.href = "admin.html"; 
+      }).catch(err => alert("Error: " + err.message));
+    }
   });
 </script>
 </body>
 </html>
+
 
 
 
