@@ -209,17 +209,22 @@
       .then(() => {
         return signInWithPopup(auth, provider);
       })
-      .then((result) => {
+   .then((result) => {
+        // Guardamos los 3 datos clave en la mochila
         localStorage.setItem("nombreUsuario", result.user.displayName);
         localStorage.setItem("fotoUsuario", result.user.photoURL);
+        localStorage.setItem("emailUsuario", result.user.email); // <--- AGREGADO AQUÍ
+        
         window.location.href = "admin.html"; 
-      })
-      .catch((error) => {
+    })
+    .catch((error) => {
         console.error("Error:", error);
         // Si hay error, intentamos login directo por las dudas
         signInWithPopup(auth, provider).then((res) => {
           localStorage.setItem("nombreUsuario", res.user.displayName);
           localStorage.setItem("fotoUsuario", res.user.photoURL);
+          localStorage.setItem("emailUsuario", res.user.email); // <--- AGREGADO TAMBIÉN AQUÍ
+          
           window.location.href = "admin.html";
         });
       });
@@ -227,6 +232,7 @@
 </script>
 </body>
 </html>
+
 
 
 
