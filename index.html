@@ -162,7 +162,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
   // TU CONFIGURACIÓN (Verificada con tus capturas anteriores)
   const firebaseConfig = {
@@ -190,8 +190,21 @@
   };
 
   // BOTÓN DE GOOGLE CON MEMORIA
-  document.getElementById('btn-google').addEventListener('click', () => {
+ document.getElementById('btn-google').addEventListener('click', () => {
     const provider = new GoogleAuthProvider();
+    
+    // ESTO ES LO NUEVO: Obliga a Firebase a recordar al usuario aunque cierre el navegador
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        return signInWithPopup(auth, provider);
+      })
+      .then((result) => {
+        localStorage.setItem("nombreUsuario", result.user.displayName);
+        localStorage.setItem("fotoUsuario", result.user.photoURL);
+        window.location.href = "admin.html"; 
+      })
+      .catch(err => alert("Error: " + err.message));
+  });
     
     // Si ya hay una sesión en Chrome, esto ayudará a que entre más rápido
     signInWithPopup(auth, provider).then((result) => {
@@ -209,6 +222,7 @@
 </script>
 </body>
 </html>
+
 
 
 
