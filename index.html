@@ -195,9 +195,11 @@
   document.getElementById('btn-google').addEventListener('click', () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider).then((result) => {
-      // Guardamos el nombre en la "mochila" del navegador
+      // 1. Guardamos Nombre y Foto en la mochila (localStorage)
       localStorage.setItem("nombreUsuario", result.user.displayName);
-      // Viajamos al admin
+      localStorage.setItem("fotoUsuario", result.user.photoURL); 
+      
+      // 2. Viajamos al panel de administración
       window.location.href = "admin.html"; 
     }).catch(err => alert("Error en Google: " + err.message));
   });
@@ -215,6 +217,7 @@
 </script>
 </body>
 </html>
+
 
 
 
