@@ -1,12 +1,12 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LIFEPAR</title>
- <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   
@@ -25,45 +25,10 @@
         <li><a href="#calendario">Calendario</a></li>
         <li><a href="#contacto">Contacto</a></li>
         <li>
-  <button onclick="mostrarLogin()" class="admin-button" type="button">Admin</button>
-</li>
-
+          <button onclick="mostrarLogin()" class="admin-button" type="button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer;">Acceso Entrenadores</button>
         </li>
-    <ul>
-</nav>
-<div id="loginForm" style="
-  display: none;
-  position: fixed;
-  top: 80px;
-  right: 10px;
-  max-width: 90vw;
-  background: #ffffff;
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  z-index: 9999;
-  overflow: auto;
-">
-
-  <input type="email" id="emailInput" placeholder="Ingresá tu email" required style="
-    padding: 8px;
-    margin-bottom: 10px;
-    width: 100%;
-    box-sizing: border-box;
-  " />
-  <button onclick="verificarEmail()" style="
-    padding: 8px;
-    width: 100%;
-    background-color: #222;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  ">Ingresar</button>
-</div>
-
-
+      </ul>
+    </nav>
   </header>
 
   <div class="contenedor">
@@ -84,75 +49,34 @@
           <div class="zona-card zona5">Zona 5</div>
           <div class="zona-card zona6">Zona 6</div>
         </div>
-           <div id="detalle-zona1" class="detalle-zona oculto">
-  <h4>ZONA 1 (zona sur del Gran buenos Aires)</h4>
-  <div class="dirigente-info">
-    <img src="img/dirigente1.png" alt="Dirigente Zona 1" class="dirigente-foto">
-    <div class="datos-dirigente">
-      <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
-      <p><strong>Cargo:</strong> Coordinadora General ZONA 1</p>
-      <p><strong>Contacto:</strong> 11-5323-9629</p>
-      <p><strong>Ubicación:</strong> Turdera; Lomas de Zamora, Monte Grande, Longchamps, Glew, Guernica, etc...</p>
-      <p><strong>Torneos:</strong> Colegio Santa Inés , Turdera.</p>
-    </div>
-  </div>
-</div>
-            <div id="detalle-zona2" class="detalle-zona oculto">
-  <h4>ZONA 2 (zona La Matanza)</h4>
-  <div class="dirigente-info">
-    <img src="img/dirigente2.png" alt="Dirigente Zona 2" class="dirigente-foto">
-    <div class="datos-dirigente">
-      <p><strong>Nombre:</strong> Fabio Gigli</p>
-      <p><strong>Cargo:</strong> Coordinador General ZONA 2</p>
-      <p><strong>Contacto:</strong> 11-3069-2456</p>
-      <p><strong>Ubicación:</strong> La Matanza</p>
-      <p><strong>Torneos:</strong> Colegio San Carlos Borromeo, Villa Madero.</p>
-    </div>
-  </div>
-</div>
+        
+        <div id="detalle-zona1" class="detalle-zona oculto">
+          <h4>ZONA 1 (zona sur del Gran buenos Aires)</h4>
+          <div class="dirigente-info">
+            <img src="img/dirigente1.png" alt="Dirigente Zona 1" class="dirigente-foto">
+            <div class="datos-dirigente">
+              <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
+              <p><strong>Cargo:</strong> Coordinadora General ZONA 1</p>
+              <p><strong>Contacto:</strong> 11-5323-9629</p>
+              <p><strong>Ubicación:</strong> Turdera; Lomas de Zamora, Monte Grande, Longchamps, Glew, Guernica, etc...</p>
+              <p><strong>Torneos:</strong> Colegio Santa Inés , Turdera.</p>
+            </div>
+          </div>
+        </div>
 
-<div id="detalle-zona4" class="detalle-zona oculto">
-  <h4>ZONA 4 (zona oeste del Gran Buenos Aires)</h4>
-  <div class="dirigente-info">
-    <img src="img/dirigente4.png" alt="Dirigente Zona 4" class="dirigente-foto">
-    <div class="datos-dirigente">
-      <p><strong>Nombre:</strong> Natalia Reale</p>
-      <p><strong>Cargo:</strong> Coordinadora General Zona 4</p>
-      <p><strong>Contacto:</strong> 11-4960-5313</p>
-<p><strong>Ubicación:</strong> Castelar, Ituzaingó, Hurlingham, Moreno, San Miguel, Jose C Paz, Etc</p>
-      <p><strong>Torneos:</strong> Club La Catedral</p>
-    </div>
-  </div>
-</div>
-
-<div id="detalle-zona5" class="detalle-zona oculto">
-  <h4>ZONA 5 (zona C.A.B.A.)</h4>
-  <div class="dirigente-info">
-    <img src="img/dirigente5.png" alt="Dirigente Zona 5" class="dirigente-foto">
-    <div class="datos-dirigente">
-      <p><strong>Nombre:</strong> Leonel Sanchez</p>
-      <p><strong>Cargo:</strong> Coordinador General zona 5</p>
-      <p><strong>Contacto:</strong> 11-3178-9679</p>
-<p><strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires</p>
-      <p><strong>Torneos:</strong> Club Flores Sur</p>
-    </div>
-  </div>
-</div>
-
-<div id="detalle-zona6" class="detalle-zona oculto">
-  <h4>ZONA 6 (zona sur del Gran Buenos Aires)</h4>
-  <div class="dirigente-info">
-    <img src="img/dirigente6.png" alt="Dirigente Zona 6" class="dirigente-foto">
-    <div class="datos-dirigente">
-      <p><strong>Nombre:</strong> Paola Montenegro</p>
-      <p><strong>Cargo:</strong> Coordinadora General zona 6</p>
-      <p><strong>Contacto:</strong> 11-3668-9794</p>
-<p><strong>Ubicación:</strong> Quilmes, Avellaneda, Florencio Varela, Berazategui, Solano, Lanus, Etc</p>
-      <p><strong>Torneos:</strong> Sociedad de fomento Barrio La Carne</p>
-    </div>
-  </div>
-</div>
-
+        <div id="detalle-zona2" class="detalle-zona oculto">
+          <h4>ZONA 2 (zona La Matanza)</h4>
+          <div class="dirigente-info">
+            <img src="img/dirigente2.png" alt="Dirigente Zona 2" class="dirigente-foto">
+            <div class="datos-dirigente">
+              <p><strong>Nombre:</strong> Fabio Gigli</p>
+              <p><strong>Cargo:</strong> Coordinador General ZONA 2</p>
+              <p><strong>Contacto:</strong> 11-3069-2456</p>
+              <p><strong>Ubicación:</strong> Villa Madero</p>
+              <p><strong>Torneos:</strong> Colegio San Carlos Borromeo.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="calendario" class="calendario">
@@ -176,28 +100,8 @@
               <td>2 de NOVIEMBRE</td>
               <td>Colegio San Carlos Borromeo</td>
             </tr>
-            <tr class="zona4">
-              <td>Zona 4</td>
-              <td>9 de NOVIEMBRE</td>
-              <td>Club La Catedral</td>
-            </tr>
-            <tr class="zona5">
-              <td>Zona 5</td>
-              <td>30 de NOVIEMBRE</td>
-              <td>Club PINTITAS</td>
-            </tr>
-            <tr class="zona6">
-              <td>Zona 6</td>
-              <td>6 de julio</td>
-              <td>Sociedad de Fomento Barrio La Carne</td>
-            </tr>
           </tbody>
         </table>
-      </section>
-
-      <section id="resultados" class="info">
-        <h3>Resultados Recientes</h3>
-        <ul></ul>
       </section>
 
       <div class="contacto-form">
@@ -213,42 +117,112 @@
 
   <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
-    <div class="contacto">
-      <a href="https://www.instagram.com/ligalifepar" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/24/174/174855.png" alt="Instagram" /> @ligalifepar
-      </a>
-      <a href="https://www.facebook.com/LigaLifepar" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/24/733/733547.png" alt="Facebook" /> Liga Lifepar
-      </a>
-      <a href="https://wa.me/541158512121" target="_blank">
-        <img src="https://cdn-icons-png.flaticon.com/24/733/733585.png" alt="WhatsApp" /> 11-5851-2121
-      </a>
-    </div>
   </footer>
 
+  <div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999998;"></div>
 
-  
+  <div id="loginForm" style="
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 350px;
+    max-width: 90vw;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 50px rgba(0,0,0,1);
+    z-index: 999999;
+    text-align: center;
+  ">
+    <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
+    <h2 style="margin: 0 0 20px 0; font-family: 'Anton', sans-serif; color: #222;">ACCESO PERSONAL</h2>
+    
+    <button id="btn-google" style="width: 100%; padding: 12px; background: #fff; color: #757575; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+      <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20">
+      Entrar con Google
+    </button>
 
-  <script src="script.js"></script>
-  <script>
-    function mostrarLogin() {
+    <div style="margin-bottom: 20px; color: #999; font-size: 0.9em;">— o usa tu correo —</div>
+
+    <input type="text" id="userName" placeholder="Nombre completo" style="padding: 12px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
+    <input type="email" id="emailInput" placeholder="Email" style="padding: 12px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
+    <input type="password" id="passwordInput" placeholder="Contraseña" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
+    
+    <button id="btn-login" style="padding: 12px; width: 100%; background-color: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR</button>
+    
+    <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 0.85em;">
+      <button id="btn-register" style="background:none; border:none; color:#007bff; cursor:pointer; text-decoration: underline;">Crear cuenta</button>
+      <button id="btn-recover" style="background:none; border:none; color:#666; cursor:pointer;">Olvidé mi clave</button>
+    </div>
+    
+    <button onclick="mostrarLogin()" style="margin-top: 20px; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 0.8em;">[ Cerrar ]</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, updateProfile } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0wn0QlyqdU3fDBEsPFuvPmzs4ylqMuQ8",
+      authDomain: "web-lifepar.firebaseapp.com",
+      projectId: "web-lifepar",
+      storageBucket: "web-lifepar.firebasestorage.app",
+      messagingSenderId: "140850288146",
+      appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    window.mostrarLogin = () => {
       const form = document.getElementById("loginForm");
-      form.style.display = form.style.display === "block" ? "none" : "block";
-    }
+      const overlay = document.getElementById("loginOverlay");
+      const isVisible = form.style.display === "block";
+      form.style.display = isVisible ? "none" : "block";
+      overlay.style.display = isVisible ? "none" : "block";
+    };
 
-    document.addEventListener("DOMContentLoaded", function () {
-      const emailInput = document.getElementById("emailInput");
-      if (emailInput) {
-        emailInput.addEventListener("keypress", function (event) {
-          if (event.key === "Enter") {
-            event.preventDefault();
-            verificarEmail();
-          }
-        });
-      }
+    document.getElementById('btn-register').addEventListener('click', async () => {
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('emailInput').value;
+      const pass = document.getElementById('passwordInput').value;
+      if(!name || !email || !pass) return alert("Completá todos los campos");
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(userCredential.user, { displayName: name });
+        await sendEmailVerification(auth.currentUser);
+        alert("¡Registro exitoso! Verificá tu mail.");
+      } catch (error) { alert(error.message); }
+    });
+
+    document.getElementById('btn-google').addEventListener('click', () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider).then((result) => {
+        alert("Hola " + result.user.displayName);
+        location.reload();
+      });
+    });
+
+    document.getElementById('btn-login').addEventListener('click', () => {
+      const email = document.getElementById('emailInput').value;
+      const pass = document.getElementById('passwordInput').value;
+      signInWithEmailAndPassword(auth, email, pass).then(() => {
+        if(auth.currentUser.emailVerified) {
+          alert("Ingreso exitoso.");
+          location.reload();
+        } else {
+          alert("Verificá tu mail primero.");
+        }
+      }).catch(err => alert("Datos incorrectos"));
+    });
+
+    document.getElementById('btn-recover').addEventListener('click', () => {
+      const email = document.getElementById('emailInput').value;
+      if(!email) return alert("Poné tu mail arriba.");
+      sendPasswordResetEmail(auth, email).then(() => alert("Mail enviado."));
     });
   </script>
 </body>
 </html>
-
-
