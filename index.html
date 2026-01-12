@@ -7,19 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    .detalle-zona { display: none; padding: 20px; background: #fff; border-radius: 10px; margin-top: 15px; border-left: 5px solid #222; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .detalle-zona.visible { display: block; }
+    .detalle-zona { display: none; padding: 20px; background: #fff; border-radius: 10px; margin-top: 15px; border-left: 5px solid #222; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; box-sizing: border-box; }
+    .detalle-zona.visible { display: block !important; }
     .dirigente-info { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-    .dirigente-foto { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
-    .zona-card { cursor: pointer; transition: 0.2s; }
-    .zona-card:hover { transform: scale(1.03); }
+    .dirigente-foto { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
+    .zonas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin: 20px 0; }
+    .zona-card { cursor: pointer; padding: 20px; text-align: center; background: #f0f0f0; border-radius: 10px; font-weight: bold; transition: 0.3s; border: 1px solid #ddd; }
+    .zona-card:hover { background: #e0e0e0; transform: translateY(-3px); }
   </style>
 </head>
 <body>
   
   <header>
     <div class="logo">
-      <img src="img/logo.png" alt="Logo" class="logo-img" />
+      <img src="img/logo.png" alt="Logo LIFEPAR" class="logo-img" />
       <div class="texto-logo">
         <h1>LIFEPAR</h1>
         <span class="slogan">es una realidad</span>
@@ -29,13 +30,20 @@
       <ul>
         <li><a href="#zonas">Zonas</a></li>
         <li><a href="#calendario">Calendario</a></li>
-        <li><button onclick="mostrarLogin()" class="admin-button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer;">Acceso Entrenadores</button></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li><button onclick="mostrarLogin()" class="admin-button" style="background: #222; color: white; border-radius: 20px; padding: 10px 20px; cursor: pointer; border: none; font-family: 'Quicksand'; font-weight: bold;">Acceso Entrenadores</button></li>
       </ul>
     </nav>
   </header>
 
   <div class="contenedor">
+    <aside class="banner-lateral"></aside>
     <main class="contenido-principal">
+      <div class="info">
+        <h2>Competencia sana y alto nivel</h2>
+        <p>Una comunidad deportiva donde el esfuerzo, el juego limpio y la excelencia se encuentran</p>
+      </div>
+
       <section id="zonas" class="info">
         <h3>Zonas de Competencia</h3>
         <div class="zonas-grid">
@@ -54,7 +62,6 @@
             <div><p><strong>Daniela Chiaramoni</strong> (Coordinadora)</p><p>Contacto: 11-5323-9629</p></div>
           </div>
         </div>
-
         <div id="detalle-zona2" class="detalle-zona">
           <h4>ZONA 2 (La Matanza)</h4>
           <div class="dirigente-info">
@@ -62,7 +69,6 @@
             <div><p><strong>Fabio Gigli</strong> (Coordinador)</p><p>Contacto: 11-3069-2456</p></div>
           </div>
         </div>
-
         <div id="detalle-zona4" class="detalle-zona">
           <h4>ZONA 4 (Oeste GBA)</h4>
           <div class="dirigente-info">
@@ -70,7 +76,6 @@
             <div><p><strong>Natalia Reale</strong> (Coordinadora)</p><p>Contacto: 11-4960-5313</p></div>
           </div>
         </div>
-
         <div id="detalle-zona5" class="detalle-zona">
           <h4>ZONA 5 (C.A.B.A.)</h4>
           <div class="dirigente-info">
@@ -78,7 +83,6 @@
             <div><p><strong>Leonel Sanchez</strong> (Coordinador)</p><p>Contacto: 11-3178-9679</p></div>
           </div>
         </div>
-
         <div id="detalle-zona6" class="detalle-zona">
           <h4>ZONA 6 (Sur GBA)</h4>
           <div class="dirigente-info">
@@ -87,18 +91,51 @@
           </div>
         </div>
       </section>
+
+      <section id="calendario" class="calendario">
+        <h2>🗕️ Calendario por Zonas</h2>
+        <table>
+          <thead><tr><th>Zona</th><th>Fecha</th><th>Lugar</th></tr></thead>
+          <tbody>
+            <tr class="zona1"><td>Zona 1</td><td>29 y 30 de NOVIEMBRE</td><td>Colegio Santa Inés</td></tr>
+            <tr class="zona2"><td>Zona 2</td><td>2 de NOVIEMBRE</td><td>Colegio San Carlos Borromeo</td></tr>
+            <tr class="zona4"><td>Zona 4</td><td>9 de NOVIEMBRE</td><td>Club La Catedral</td></tr>
+            <tr class="zona5"><td>Zona 5</td><td>30 de NOVIEMBRE</td><td>Club PINTITAS</td></tr>
+            <tr class="zona6"><td>Zona 6</td><td>6 de julio</td><td>B° La Carne</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <div class="contacto-form">
+        <form id="contacto">
+          <input type="text" placeholder="Tu nombre" />
+          <input type="email" placeholder="Tu correo" />
+          <textarea placeholder="Tu mensaje"></textarea>
+          <button type="submit">Enviar</button>
+        </form>
+      </div>
     </main>
   </div>
 
+  <footer>
+    <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
+    <div class="contacto">
+      <a href="https://www.instagram.com/ligalifepar" target="_blank"><img src="https://cdn-icons-png.flaticon.com/24/174/174855.png"> @ligalifepar</a>
+      <a href="https://wa.me/541158512121" target="_blank"><img src="https://cdn-icons-png.flaticon.com/24/733/733585.png"> 11-5851-2121</a>
+    </div>
+  </footer>
+
   <div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;"></div>
-  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: white; padding: 25px; border-radius: 15px; z-index: 1001; text-align: center;">
+  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center;">
     <h2 style="font-family: 'Anton';">ACCESO</h2>
-    <button id="btn-google" style="width: 100%; padding: 10px; margin-bottom: 15px; cursor: pointer;">Entrar con Google</button>
-    <hr>
-    <input type="email" id="emailManual" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0;">
-    <input type="password" id="passManual" placeholder="Contraseña" style="width: 100%; padding: 10px; margin-bottom: 15px;">
-    <button onclick="verificarManual()" style="width: 100%; padding: 10px; background: #222; color: white; border: none; cursor: pointer;">INGRESAR</button>
-    <button onclick="mostrarLogin()" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer;">Cerrar</button>
+    <button id="btn-google" style="width: 100%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ccc; background: white; border-radius: 5px;">
+      <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Google
+    </button>
+    <div style="margin: 10px 0;">— o —</div>
+    <input type="email" id="emailManual" placeholder="Email" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+    <input type="password" id="passManual" placeholder="Clave" style="width: 100%; padding: 10px; margin-bottom: 10px;">
+    <button onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; cursor: pointer;">Ingresar</button>
+    <button onclick="mostrarLogin()" style="margin-top: 15px; color: red; background: none; border: none; cursor: pointer;">Cerrar</button>
   </div>
 
   <script type="module">
@@ -107,25 +144,21 @@
     const firebaseConfig = { apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8", authDomain: "web-lifepar.firebaseapp.com", projectId: "web-lifepar", storageBucket: "web-lifepar.firebasestorage.app", messagingSenderId: "140850288146", appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-
     window.mostrarLogin = () => {
-      const f = document.getElementById("loginForm");
-      const o = document.getElementById("loginOverlay");
-      f.style.display = f.style.display === "block" ? "none" : "block";
-      o.style.display = o.style.display === "block" ? "none" : "block";
+      const f = document.getElementById("loginForm"), o = document.getElementById("loginOverlay");
+      const isVisible = f.style.display === "block";
+      f.style.display = isVisible ? "none" : "block";
+      o.style.display = isVisible ? "none" : "block";
     };
-
     document.getElementById('btn-google').addEventListener('click', () => {
       const p = new GoogleAuthProvider();
-      setPersistence(auth, browserLocalPersistence).then(() => {
-        return signInWithPopup(auth, p);
-      }).then((res) => {
+      setPersistence(auth, browserLocalPersistence).then(() => signInWithPopup(auth, p)).then((res) => {
         localStorage.setItem("nombreUsuario", res.user.displayName);
         localStorage.setItem("emailUsuario", res.user.email);
+        localStorage.setItem("fotoUsuario", res.user.photoURL);
         window.location.href = "admin.html";
       });
     });
-
     window.verificarManual = () => {
       const email = document.getElementById("emailManual").value;
       if (email.includes("@")) {
@@ -135,7 +168,6 @@
       } else { alert("Email no válido"); }
     };
   </script>
-
   <script>
     function toggleZona(nro) {
       document.querySelectorAll('.detalle-zona').forEach(d => d.classList.remove('visible'));
