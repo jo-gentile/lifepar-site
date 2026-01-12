@@ -196,7 +196,7 @@
     <button onclick="verificarManual()" style="padding: 12px; width: 100%; background-color: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR</button>
     
     <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 0.85em;">
-      <button onclick="alert('Registro habilitado pronto')" style="background:none; border:none; color:#007bff; cursor:pointer; text-decoration: underline;">Crear cuenta</button>
+      <button onclick="registrarNuevoUsuario()" style="background:none; border:none; color:#007bff; cursor:pointer; text-decoration: underline;">Crear cuenta</button>
       <button style="background:none; border:none; color:#666; cursor:pointer;">Olvidé mi clave</button>
     </div>
     
@@ -260,6 +260,32 @@
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
+    window.registrarNuevoUsuario = () => {
+  const email = document.getElementById("emailManual").value;
+  const pass = document.getElementById("passManual").value;
+
+  if (email.includes("@") && pass.length >= 6) {
+    // Usamos la configuración de Firebase que ya tenés arriba
+    import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
+      .then(({ getAuth, createUserWithEmailAndPassword }) => {
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, email, pass)
+          .then(() => {
+            alert("¡Cuenta creada con éxito! Ya podés darle al botón Ingresar.");
+          })
+          .catch((error) => {
+            if (error.code === 'auth/email-already-in-use') {
+              alert("Este mail ya está registrado.");
+            } else {
+              alert("Error: " + error.message);
+            }
+          });
+      });
+  } else {
+    alert("Para registrarte, poné un mail válido y una clave de al menos 6 letras o números.");
+  }
+};
   </script>
 </body>
 </html>
+
