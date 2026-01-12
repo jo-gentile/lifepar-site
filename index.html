@@ -178,38 +178,32 @@
     </div>
   </footer>
 
-<div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;"></div>
-  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
+<div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
     <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
     <h2 id="loginTitle" style="font-family: 'Anton'; margin-bottom: 20px;">ACCESO PERSONAL</h2>
     
     <input type="email" id="emailManual" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
 
-<div id="seccionPassword" style="display: none;">
-  <div style="position: relative; margin-bottom: 10px;">
-    <input type="password" id="passManual" placeholder="Elegí tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-    <span onclick="toggleVerClave('passManual')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
-  </div>
+    <div id="seccionPassword" style="display: none;">
+      <div style="position: relative; margin-bottom: 10px;">
+        <input type="password" id="passManual" placeholder="Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+        <span onclick="toggleVerClave('passManual')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
+      </div>
 
-  <div style="position: relative; margin-bottom: 5px;">
-    <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-    <span onclick="toggleVerClave('passConfirm')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
-  </div>
+      <div id="seccionConfirmarPass" style="display: none; position: relative; margin-bottom: 10px;">
+        <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+        <span onclick="toggleVerClave('passConfirm')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
+      </div>
+      
+      <button type="button" onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 15px;">INGRESAR</button>
+      
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <span onclick="recuperarClave()" style="color: #007bff; cursor: pointer; font-size: 0.85em; text-decoration: underline;">Olvide mi contraseña</span>
+        <span onclick="verificarAutorizacion()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
+      </div>
+    </div>
 
-  <p style="font-size: 0.75em; color: #666; margin-bottom: 15px; text-align: left;">
-    * Mínimo 6 caracteres (letras o números).
-  </p>
-  
-  <div id="botonesRegistro" style="display: none;">
-    <button type="button" onclick="finalizarRegistro()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CREAR MI CUENTA</button>
-  </div>
-  
-  <div id="botonesIngreso">
-    <button type="button" onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR</button>
-  </div>
-</div>
-
-    <button id="btnContinuar" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CONTINUAR</button>
+    <button id="btnContinuar" onclick="document.getElementById('seccionPassword').style.display='block'; this.style.display='none';" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CONTINUAR</button>
     
     <div id="btnGoogleSeccion" style="margin-top: 15px;">
         <div style="margin-bottom: 15px; color: #999;">— o —</div>
@@ -218,7 +212,7 @@
         </button>
     </div>
 
-    <button onclick="mostrarLogin()" style="margin-top: 20px; color: red; background: none; border: none; cursor: pointer;">Cerrar</button>
+    <button onclick="mostrarLogin()" style="margin-top: 20px; color: red; background: none; border: none; cursor: pointer; font-weight: bold;">Cerrar</button>
   </div>
 
   <script type="module">
@@ -336,10 +330,31 @@ window.finalizarRegistro = () => {
   } else {
     input.type = "password";
   }
-};   
+};  
+  window.recuperarClave = () => {
+  const email = document.getElementById("emailManual").value;
+  if (!email.includes("@")) { alert("Por favor, ingresá tu mail primero."); return; }
+
+  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
+    .then(({ getAuth, sendPasswordResetEmail }) => {
+      const auth = getAuth();
+      sendPasswordResetEmail(auth, email)
+        .then(() => alert("¡Listo! Revisá tu mail para cambiar la contraseña."))
+        .catch(err => alert("Error: " + err.message));
+    });
+};
+
+// Modificamos levemente tu verificarAutorizacion para que muestre el campo de confirmar clave al registrar
+const originalVerificar = window.verificarAutorizacion;
+window.verificarAutorizacion = () => {
+    document.getElementById('seccionConfirmarPass').style.display = 'block';
+    // Aquí el resto de tu lógica de Sheets que ya funciona
+    originalVerificar(); 
+};
   </script>
 </body>
 </html>
+
 
 
 
