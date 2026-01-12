@@ -178,29 +178,36 @@
     </div>
   </footer>
 
-  <div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999998;"></div>
-
-  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; max-width: 90vw; background: #ffffff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 50px rgba(0,0,0,1); z-index: 999999; text-align: center;">
+<div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;"></div>
+  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
     <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
-    <h2 style="margin: 0 0 20px 0; font-family: 'Anton', sans-serif; color: #222;">ACCESO PERSONAL</h2>
+    <h2 id="loginTitle" style="font-family: 'Anton'; margin-bottom: 20px;">ACCESO PERSONAL</h2>
     
-    <button id="btn-google" style="width: 100%; padding: 12px; background: #fff; color: #757575; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; margin-bottom: 20px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px;">
-      <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Entrar con Google
-    </button>
+    <input type="email" id="emailManual" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
 
-    <div style="margin-bottom: 20px; color: #999; font-size: 0.9em;">— o usa tu correo —</div>
-
-    <input type="email" id="emailManual" placeholder="Email" style="padding: 12px; margin-bottom: 10px; width: 100%; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
-    <input type="password" id="passManual" placeholder="Contraseña" style="padding: 12px; margin-bottom: 15px; width: 100%; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box;" />
-    
-    <button onclick="verificarManual()" style="padding: 12px; width: 100%; background-color: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR</button>
-    
-    <div style="margin-top: 15px; display: flex; justify-content: space-between; font-size: 0.85em;">
-      <button onclick="registrarNuevoUsuario()" style="background:none; border:none; color:#007bff; cursor:pointer; text-decoration: underline;">Crear cuenta</button>
-      <button style="background:none; border:none; color:#666; cursor:pointer;">Olvidé mi clave</button>
+    <div id="seccionPassword" style="display: none;">
+      <input type="password" id="passManual" placeholder="Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+      <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+      
+      <div id="botonesRegistro" style="display: none;">
+        <button onclick="finalizarRegistro()" style="width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CREAR MI CUENTA</button>
+      </div>
+      
+      <div id="botonesIngreso">
+        <button onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR</button>
+      </div>
     </div>
+
+    <button id="btnContinuar" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CONTINUAR</button>
     
-    <button onclick="mostrarLogin()" style="margin-top: 20px; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 0.8em;">[ Cerrar ]</button>
+    <div id="btnGoogleSeccion" style="margin-top: 15px;">
+        <div style="margin-bottom: 15px; color: #999;">— o —</div>
+        <button id="btn-google" style="width: 100%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ccc; background: white; border-radius: 5px; font-weight: bold;">
+          <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Google
+        </button>
+    </div>
+
+    <button onclick="mostrarLogin()" style="margin-top: 20px; color: red; background: none; border: none; cursor: pointer;">Cerrar</button>
   </div>
 
   <script type="module">
@@ -260,32 +267,59 @@
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
-    window.registrarNuevoUsuario = () => {
+window.verificarAutorizacion = () => {
+  const email = document.getElementById("emailManual").value;
+  const urlValidacion = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
+
+  if (!email.includes("@")) { alert("Ingresá un mail válido."); return; }
+
+  alert("Verificando en LIFEPAR...");
+
+  fetch(urlValidacion + "?email=" + encodeURIComponent(email))
+    .then(res => res.text())
+    .then(respuesta => {
+      if (respuesta.trim() === "SI") {
+        // EXITO: Abrimos la sección de claves
+        document.getElementById("seccionPassword").style.display = "block";
+        document.getElementById("btnContinuar").style.display = "none";
+        document.getElementById("btnGoogleSeccion").style.display = "none";
+        document.getElementById("emailManual").readOnly = true;
+        document.getElementById("emailManual").style.background = "#f0f0f0";
+        
+        // Decidimos si mostramos botón de "Ingresar" o "Crear cuenta"
+        // Por ahora dejamos ambos o podés alternar. Para simplificar, 
+        // habilitamos el botón de registro por si no tiene cuenta.
+        document.getElementById("botonesRegistro").style.display = "block";
+      } else {
+        alert("ACCESO DENEGADO: Tu email no figura en la lista de entrenadores.");
+      }
+    });
+};
+
+window.finalizarRegistro = () => {
   const email = document.getElementById("emailManual").value;
   const pass = document.getElementById("passManual").value;
+  const pass2 = document.getElementById("passConfirm").value;
 
-  if (email.includes("@") && pass.length >= 6) {
-    // Usamos la configuración de Firebase que ya tenés arriba
-    import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
-      .then(({ getAuth, createUserWithEmailAndPassword }) => {
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, email, pass)
-          .then(() => {
-            alert("¡Cuenta creada con éxito! Ya podés darle al botón Ingresar.");
-          })
-          .catch((error) => {
-            if (error.code === 'auth/email-already-in-use') {
-              alert("Este mail ya está registrado.");
-            } else {
-              alert("Error: " + error.message);
-            }
-          });
-      });
-  } else {
-    alert("Para registrarte, poné un mail válido y una clave de al menos 6 letras o números.");
-  }
+  if (pass !== pass2) { alert("Las contraseñas no coinciden."); return; }
+  if (pass.length < 6) { alert("La clave debe tener al menos 6 caracteres."); return; }
+
+  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
+    .then(({ getAuth, createUserWithEmailAndPassword }) => {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, email, pass)
+        .then(() => {
+          alert("¡Cuenta creada! Ya podés ingresar.");
+          location.reload(); 
+        })
+        .catch(err => {
+          if(err.code === 'auth/email-already-in-use') alert("Ya tenés cuenta, solo poné tu clave e Ingresá.");
+          else alert("Error: " + err.message);
+        });
+    });
 };
   </script>
 </body>
 </html>
+
 
