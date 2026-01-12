@@ -184,28 +184,24 @@
     
     <input type="email" id="emailManual" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
 
-    <div id="seccionPassword" style="display: none;">
-      <div style="position: relative; margin-bottom: 10px;">
-        <input type="password" id="passManual" placeholder="Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-        <span onclick="toggleVerClave('passManual')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
-      </div>
-
-      <div id="seccionConfirmarPass" style="display: none; position: relative; margin-bottom: 10px;">
-        <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-        <span onclick="toggleVerClave('passConfirm')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
-      </div>
-      
-      <button type="button" onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 15px;">INGRESAR</button>
-      
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-        <span onclick="recuperarClave()" style="color: #007bff; cursor: pointer; font-size: 0.85em; text-decoration: underline;">Olvide mi contraseña</span>
-        <span onclick="verificarAutorizacion()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
-      </div>
+    <div style="position: relative; margin-bottom: 10px;">
+      <input type="password" id="passManual" placeholder="Tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+      <span onclick="toggleVerClave('passManual')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
     </div>
 
-    <button id="btnContinuar" onclick="document.getElementById('seccionPassword').style.display='block'; this.style.display='none';" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CONTINUAR</button>
+    <button type="button" onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 15px;">INGRESAR</button>
     
-    <div id="btnGoogleSeccion" style="margin-top: 15px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
+      <span onclick="recuperarClave()" style="color: #007bff; cursor: pointer; font-size: 0.85em; text-decoration: underline;">Olvidé mi contraseña</span>
+      <span onclick="abrirRegistro()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
+    </div>
+
+    <div id="seccionRegistroExtra" style="display: none; margin-top: 10px; border-top: 1px solid #eee; pt-10px;">
+      <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+      <button type="button" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; margin-top: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CREAR MI CUENTA</button>
+    </div>
+
+    <div id="btnGoogleSeccion" style="margin-top: 10px;">
         <div style="margin-bottom: 15px; color: #999;">— o —</div>
         <button id="btn-google" style="width: 100%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ccc; background: white; border-radius: 5px; font-weight: bold;">
           <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Google
@@ -351,9 +347,26 @@ window.verificarAutorizacion = () => {
     // Aquí el resto de tu lógica de Sheets que ya funciona
     originalVerificar(); 
 };
+ window.abrirRegistro = () => {
+  const extra = document.getElementById('seccionRegistroExtra');
+  extra.style.display = extra.style.display === 'none' ? 'block' : 'none';
+};
+
+window.recuperarClave = () => {
+  const email = document.getElementById("emailManual").value;
+  if (!email.includes("@")) { alert("Escribí tu mail para enviarte el link."); return; }
+  
+  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
+    .then(({ getAuth, sendPasswordResetEmail }) => {
+      sendPasswordResetEmail(getAuth(), email)
+        .then(() => alert("Mail de recuperación enviado."))
+        .catch(err => alert("Error: " + err.message));
+    });
+};
   </script>
 </body>
 </html>
+
 
 
 
