@@ -4,23 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LIFEPAR</title>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Estilo para asegurar que los detalles se vean bien */
-    .detalle-zona { display: none; padding: 20px; background: #f9f9f9; border-radius: 10px; margin-top: 15px; border-left: 5px solid #222; }
+    .detalle-zona { display: none; padding: 20px; background: #fff; border-radius: 10px; margin-top: 15px; border-left: 5px solid #222; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
     .detalle-zona.visible { display: block; }
-    .dirigente-info { display: flex; align-items: center; gap: 20px; }
-    .dirigente-foto { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
-    .zona-card { cursor: pointer; transition: transform 0.2s; }
-    .zona-card:hover { transform: scale(1.05); }
+    .dirigente-info { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+    .dirigente-foto { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
+    .zona-card { cursor: pointer; transition: 0.2s; }
+    .zona-card:hover { transform: scale(1.03); }
   </style>
 </head>
 <body>
   
   <header>
     <div class="logo">
-      <img src="img/logo.png" alt="Logo LIFEPAR" class="logo-img" />
+      <img src="img/logo.png" alt="Logo" class="logo-img" />
       <div class="texto-logo">
         <h1>LIFEPAR</h1>
         <span class="slogan">es una realidad</span>
@@ -30,25 +29,15 @@
       <ul>
         <li><a href="#zonas">Zonas</a></li>
         <li><a href="#calendario">Calendario</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li>
-          <button onclick="mostrarLogin()" class="admin-button" type="button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer;">Acceso Entrenadores</button>
-        </li>
+        <li><button onclick="mostrarLogin()" class="admin-button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer;">Acceso Entrenadores</button></li>
       </ul>
     </nav>
   </header>
 
   <div class="contenedor">
-    <aside class="banner-lateral"></aside>
     <main class="contenido-principal">
-      <div class="info">
-        <h2>Competencia sana y alto nivel</h2>
-        <p>Una comunidad deportiva donde el esfuerzo, el juego limpio y la excelencia se encuentran</p>
-      </div>
-
       <section id="zonas" class="info">
         <h3>Zonas de Competencia</h3>
-        <p>Hacé clic en una zona para ver los datos del coordinador:</p>
         <div class="zonas-grid">
           <div class="zona-card" onclick="toggleZona(1)">Zona 1</div>
           <div class="zona-card" onclick="toggleZona(2)">Zona 2</div>
@@ -57,92 +46,62 @@
           <div class="zona-card" onclick="toggleZona(5)">Zona 5</div>
           <div class="zona-card" onclick="toggleZona(6)">Zona 6</div>
         </div>
-        
+
         <div id="detalle-zona1" class="detalle-zona">
           <h4>ZONA 1 (Zona Sur GBA)</h4>
           <div class="dirigente-info">
-            <img src="img/dirigente1.png" alt="Daniela" class="dirigente-foto">
-            <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
-              <p><strong>Contacto:</strong> 11-5323-9629</p>
-              <p><strong>Ubicación:</strong> Turdera, Lomas, Monte Grande, etc.</p>
-            </div>
+            <img src="img/dirigente1.png" class="dirigente-foto">
+            <div><p><strong>Daniela Chiaramoni</strong> (Coordinadora)</p><p>Contacto: 11-5323-9629</p></div>
           </div>
         </div>
 
         <div id="detalle-zona2" class="detalle-zona">
           <h4>ZONA 2 (La Matanza)</h4>
           <div class="dirigente-info">
-            <img src="img/dirigente2.png" alt="Fabio" class="dirigente-foto">
-            <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Fabio Gigli</p>
-              <p><strong>Contacto:</strong> 11-3069-2456</p>
-              <p><strong>Ubicación:</strong> Villa Madero, La Matanza.</p>
-            </div>
+            <img src="img/dirigente2.png" class="dirigente-foto">
+            <div><p><strong>Fabio Gigli</strong> (Coordinador)</p><p>Contacto: 11-3069-2456</p></div>
           </div>
         </div>
 
         <div id="detalle-zona4" class="detalle-zona">
           <h4>ZONA 4 (Oeste GBA)</h4>
           <div class="dirigente-info">
-            <img src="img/dirigente4.png" alt="Natalia" class="dirigente-foto">
-            <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Natalia Reale</p>
-              <p><strong>Contacto:</strong> 11-4960-5313</p>
-              <p><strong>Ubicación:</strong> Castelar, Ituzaingó, Moreno, etc.</p>
-            </div>
+            <img src="img/dirigente4.png" class="dirigente-foto">
+            <div><p><strong>Natalia Reale</strong> (Coordinadora)</p><p>Contacto: 11-4960-5313</p></div>
           </div>
         </div>
 
         <div id="detalle-zona5" class="detalle-zona">
           <h4>ZONA 5 (C.A.B.A.)</h4>
           <div class="dirigente-info">
-            <img src="img/dirigente5.png" alt="Leonel" class="dirigente-foto">
-            <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Leonel Sanchez</p>
-              <p><strong>Contacto:</strong> 11-3178-9679</p>
-              <p><strong>Torneos:</strong> Club Flores Sur</p>
-            </div>
+            <img src="img/dirigente5.png" class="dirigente-foto">
+            <div><p><strong>Leonel Sanchez</strong> (Coordinador)</p><p>Contacto: 11-3178-9679</p></div>
           </div>
         </div>
 
         <div id="detalle-zona6" class="detalle-zona">
           <h4>ZONA 6 (Sur GBA)</h4>
           <div class="dirigente-info">
-            <img src="img/dirigente6.png" alt="Paola" class="dirigente-foto">
-            <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Paola Montenegro</p>
-              <p><strong>Contacto:</strong> 11-3668-9794</p>
-              <p><strong>Ubicación:</strong> Quilmes, Avellaneda, Lanús, etc.</p>
-            </div>
+            <img src="img/dirigente6.png" class="dirigente-foto">
+            <div><p><strong>Paola Montenegro</strong> (Coordinadora)</p><p>Contacto: 11-3668-9794</p></div>
           </div>
         </div>
-      </section>
-
-      <section id="calendario" class="calendario">
-        <h2>Calendario</h2>
-        <table>
-          <thead><tr><th>Zona</th><th>Fecha</th><th>Lugar</th></tr></thead>
-          <tbody>
-            <tr><td>Zona 1</td><td>29/30 Nov</td><td>Santa Inés</td></tr>
-            <tr><td>Zona 2</td><td>2 Nov</td><td>San Carlos Borromeo</td></tr>
-          </tbody>
-        </table>
       </section>
     </main>
   </div>
 
-  <div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 999998;"></div>
-  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: #fff; padding: 30px; border-radius: 15px; z-index: 999999; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
-    <h2 style="font-family: 'Anton';">ACCESO PERSONAL</h2>
-    <button id="btn-google" style="width: 100%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-      <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Entrar con Google
-    </button>
-    <button onclick="mostrarLogin()" style="margin-top: 20px; color: red; background: none; border: none; cursor: pointer;">[ Cerrar ]</button>
+  <div id="loginOverlay" onclick="mostrarLogin()" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000;"></div>
+  <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 320px; background: white; padding: 25px; border-radius: 15px; z-index: 1001; text-align: center;">
+    <h2 style="font-family: 'Anton';">ACCESO</h2>
+    <button id="btn-google" style="width: 100%; padding: 10px; margin-bottom: 15px; cursor: pointer;">Entrar con Google</button>
+    <hr>
+    <input type="email" id="emailManual" placeholder="Email" style="width: 100%; padding: 10px; margin: 10px 0;">
+    <input type="password" id="passManual" placeholder="Contraseña" style="width: 100%; padding: 10px; margin-bottom: 15px;">
+    <button onclick="verificarManual()" style="width: 100%; padding: 10px; background: #222; color: white; border: none; cursor: pointer;">INGRESAR</button>
+    <button onclick="mostrarLogin()" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer;">Cerrar</button>
   </div>
 
   <script type="module">
-    // Lógica de Firebase (la que ya tenías funcionando)
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
     import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
     const firebaseConfig = { apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8", authDomain: "web-lifepar.firebaseapp.com", projectId: "web-lifepar", storageBucket: "web-lifepar.firebasestorage.app", messagingSenderId: "140850288146", appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb" };
@@ -162,31 +121,27 @@
         return signInWithPopup(auth, p);
       }).then((res) => {
         localStorage.setItem("nombreUsuario", res.user.displayName);
-        localStorage.setItem("fotoUsuario", res.user.photoURL);
         localStorage.setItem("emailUsuario", res.user.email);
         window.location.href = "admin.html";
       });
     });
+
+    window.verificarManual = () => {
+      const email = document.getElementById("emailManual").value;
+      if (email.includes("@")) {
+        localStorage.setItem("emailUsuario", email);
+        localStorage.setItem("nombreUsuario", "Entrenador");
+        window.location.href = "admin.html";
+      } else { alert("Email no válido"); }
+    };
   </script>
 
   <script>
-    // LÓGICA PARA QUE LAS ZONAS SE ABRAN (La que te faltaba)
     function toggleZona(nro) {
-      // Escondemos todos los detalles primero
-      const todos = document.querySelectorAll('.detalle-zona');
-      todos.forEach(d => d.classList.remove('visible'));
-      
-      // Mostramos el que elegiste
-      const elegido = document.getElementById('detalle-zona' + nro);
-      if (elegido) {
-        elegido.classList.add('visible');
-        elegido.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      document.querySelectorAll('.detalle-zona').forEach(d => d.classList.remove('visible'));
+      const el = document.getElementById('detalle-zona' + nro);
+      if (el) el.classList.add('visible');
     }
   </script>
 </body>
 </html>
-
-
-
-
