@@ -216,10 +216,17 @@
       <span onclick="abrirRegistro()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
     </div>
 
-    <div id="seccionRegistroExtra" style="display: none; margin-top: 10px; border-top: 1px solid #eee; pt-10px;">
-      <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-      <button type="button" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; margin-top: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CREAR MI CUENTA</button>
-    </div>
+    <input type="email" id="emailManual" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+
+<button id="btnVerificar" type="button" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">VERIFICAR MAIL</button>
+
+<div id="seccionRegistroExtra" style="display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;">
+    <input type="password" id="passManual" placeholder="Elegí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    
+    <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    
+    <button type="button" onclick="finalizarRegistro()" style="width: 100%; padding: 12px; margin-top: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">CREAR MI CUENTA</button>
+</div>
 
     <div id="btnGoogleSeccion" style="margin-top: 10px;">
         <div style="margin-bottom: 15px; color: #999;">— o —</div>
@@ -336,19 +343,23 @@ window.finalizarRegistro = () => {
   const pass = document.getElementById("passManual").value;
   const pass2 = document.getElementById("passConfirm").value;
 
+  // 1. Validaciones de seguridad
   if (pass !== pass2) { alert("Las contraseñas no coinciden."); return; }
   if (pass.length < 6) { alert("La clave debe tener al menos 6 caracteres."); return; }
 
+  // 2. Registro en Firebase
   import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
     .then(({ getAuth, createUserWithEmailAndPassword }) => {
       const auth = getAuth();
       createUserWithEmailAndPassword(auth, email, pass)
         .then(() => {
-          alert("¡Cuenta creada! Ya podés ingresar.");
-          location.reload(); 
+          // 3. ÉXITO: Guardamos el mail con el nombre correcto y entramos
+          localStorage.setItem("userEmail", email); 
+          alert("¡Cuenta creada con éxito! Entrando al panel...");
+          window.location.href = "admin.html";
         })
         .catch(err => {
-          if(err.code === 'auth/email-already-in-use') alert("Ya tenés cuenta, solo poné tu clave e Ingresá.");
+          if(err.code === 'auth/email-already-in-use') alert("Este mail ya tiene cuenta, probá ingresar directamente.");
           else alert("Error: " + err.message);
         });
     });
