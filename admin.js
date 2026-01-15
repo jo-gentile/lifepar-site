@@ -1,10 +1,18 @@
-let userEmail = sessionStorage.getItem('userEmail') || "esperando_login@test.com";
-let userName = sessionStorage.getItem('userName') || "Entrenador LIFEPAR";
+// 1. Recogemos los datos reales de la sesión
+let userEmail = sessionStorage.getItem('userEmail') || "Email no detectado";
+let userName = sessionStorage.getItem('userName') || "Usuario";
+let userApellido = sessionStorage.getItem('userApellido') || "";
 
-// ESTO ES LO QUE HACE QUE APAREZCAN:
-document.getElementById('display-email').innerText = userEmail;
-document.getElementById('display-name').innerText = userName;
+// 2. Los imprimimos en el HTML apenas carga el script
+// Usamos el ID que ya tenés en el HTML para el mail
+if(document.getElementById('display-email')) {
+    document.getElementById('display-email').innerText = userEmail;
+}
 
+// Usamos el ID que ya tenés para el nombre, sumando el apellido
+if(document.getElementById('display-name')) {
+    document.getElementById('display-name').innerText = userName + " " + userApellido;
+}
 // 1. Salir de la oficina
 function logout() {
     localStorage.clear();
