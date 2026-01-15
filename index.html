@@ -315,29 +315,6 @@
     });
 };
 
-<script>
-window.verZona = function(numero) {
-    // Buscamos el vidrio central y la info en el depósito
-    const panel = document.getElementById('panel-cristal');
-    const info = document.getElementById('detalle-zona' + numero);
-
-    if (panel && info) {
-        // Vaciamos el centro (adiós mensaje guía)
-        panel.innerHTML = ""; 
-        
-        // Copiamos el contenido del depósito al panel
-        // Usamos innerHTML para que sea una copia limpia
-        panel.innerHTML = info.innerHTML;
-        
-        // OPCIONAL: Si querés que la página se asegure de estar ARRIBA
-        // pero sin saltar a lo loco, usamos esto:
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        
-        console.log("Zona " + numero + " cargada en el centro.");
-    } else {
-        console.error("No se encontró el panel o la info de zona " + numero);
-    }
-}
 window.verificarAutorizacion = () => {
   const email = document.getElementById("emailManual").value;
   const urlValidacion = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
@@ -430,9 +407,7 @@ window.recuperarClave = () => {
         .catch(err => alert("Error: " + err.message));
     });
 };
-  </script>
-
-<script>
+</script> <script>
     const btnToggle = document.getElementById('toggle-bg');
 
     if (btnToggle) {
@@ -449,6 +424,5 @@ window.recuperarClave = () => {
             }
         });
     }
-</script>
-</body>
+</script> <script src="script.js"></script> </body>
 </html>
