@@ -1,17 +1,14 @@
-// 1. Recogemos los datos reales de la sesión
-let userEmail = sessionStorage.getItem('userEmail') || "Email no detectado";
-let userName = sessionStorage.getItem('userName') || "Usuario";
-let userApellido = sessionStorage.getItem('userApellido') || "";
+// Buscamos en Session y en Local por las dudas
+let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
+let userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
 
-// 2. Los imprimimos en el HTML apenas carga el script
-// Usamos el ID que ya tenés en el HTML para el mail
+// Los imprimimos
 if(document.getElementById('display-email')) {
     document.getElementById('display-email').innerText = userEmail;
 }
 
-// Usamos el ID que ya tenés para el nombre, sumando el apellido
 if(document.getElementById('display-name')) {
-    document.getElementById('display-name').innerText = userName + " " + userApellido;
+    document.getElementById('display-name').innerText = userName;
 }
 // 1. Salir de la oficina
 function logout() {
