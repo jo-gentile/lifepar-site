@@ -316,6 +316,7 @@ body {
     
     /* Un degradado sutil para que no sea un blanco aburrido */
     background: linear-gradient(to bottom, #ffd700, #ffb800);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     
@@ -428,8 +429,8 @@ body {
     background-color: #121212 !important; 
     color: white !important;
     padding: 10px;
-    border-radius: 20px
-    backdrop-filter: blur(15px)
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
     background: rgba(255, 255, 255, 0.1);
 }
 /* Hover: Cuando pasas el mouse */

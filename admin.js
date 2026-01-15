@@ -141,7 +141,6 @@ function calcularEdadDeportiva(fechaNac, targetId) {
     document.getElementById(targetId).value = (anioActual - anioNac) + " AÑOS";
 }
 modal.style.display = 'flex';
-}
 
 function cerrarModalClubes() {
     document.getElementById('modal-clubes').style.display = 'none';
@@ -183,5 +182,4 @@ async function guardarNuevoClub() {
         // Esto es lo que verás ahora que estás offline
         console.log("Modo Offline: El dato se procesó pero no pudo viajar.");
     }
-};
 
