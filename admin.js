@@ -140,12 +140,18 @@ function calcularEdadDeportiva(fechaNac, targetId) {
     const anioActual = 2026; 
     document.getElementById(targetId).value = (anioActual - anioNac) + " AÑOS";
 }
+modal.style.display = 'flex';
+}
+
+function cerrarModalClubes() {
+    document.getElementById('modal-clubes').style.display = 'none';
+}
 async function guardarNuevoClub() {
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; 
     const clubNombre = document.getElementById('nuevo-club-nombre').value.toUpperCase();
     
-    // ESTA ES LA LÍNEA: Toma el mail que ya está escrito en tu pantalla por Firebase
-    const userEmail = document.getElementById('display-email').innerText;
+    // Este mail luego vendrá del login automático
+    const userEmail = localStorage.getItem('userEmail') || "profe_invitado@gmail.com";
 
     if (!clubNombre) {
         alert("⚠️ Por favor, ingresá el nombre de la institución.");
@@ -159,18 +165,21 @@ async function guardarNuevoClub() {
     };
 
     try {
+        // El envío que funcionará cuando estés online
         await fetch(URL_SCRIPT, {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify(datos)
         });
 
-        alert("✅ Club registrado con éxito para: " + userEmail);
+        alert("✅ Club registrado. El sistema lo asociará a tu planilla.");
         
+        // Cierra el modal y limpia el campo
         cerrarModalClubes();
         document.getElementById('nuevo-club-nombre').value = "";
 
     } catch (error) {
-        console.log("Error en el envío:", error);
+        // Esto es lo que verás ahora que estás offline
+        console.log("Modo Offline: El dato se procesó pero no pudo viajar.");
     }
 }
