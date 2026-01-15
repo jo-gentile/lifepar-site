@@ -156,8 +156,7 @@ async function guardarNuevoClub() {
         alert("⚠️ Por favor, ingresá el nombre de la institución.");
         return;
     }
- };   
-
+ 
     const datos = {
         tipo: "REGISTRO_CLUB",
         mail: userEmail,
@@ -182,4 +181,4 @@ async function guardarNuevoClub() {
         // Esto es lo que verás ahora que estás offline
         console.log("Modo Offline: El dato se procesó pero no pudo viajar.");
     }
-
+}
