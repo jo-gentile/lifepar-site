@@ -1,41 +1,40 @@
+// Usamos window. para que el HTML "vea" la función desde afuera
 window.verZona = function(numero) {
-    // 1. Buscamos el DESTINO
     const contenedorCentro = document.getElementById('panel-cristal');
-    
-    // 2. Buscamos el ORIGEN
     const infoABuscar = document.getElementById('detalle-zona' + numero);
     
-    if (contenedorCentro && infoABuscar) {
-        // 3. Vaciamos el centro
+   if (contenedorCentro && infoABuscar) {
         contenedorCentro.innerHTML = ''; 
-
-        // 4. Clonamos la info
+        
+        // Clonamos la info
         const clon = infoABuscar.cloneNode(true);
         
-        // 5. Visibilidad
-        clon.style.display = 'flex'; 
+        // --- AQUÍ ESTÁ EL TRUCO ---
+        // En lugar de forzar 'flex' por código, solo le quitamos la clase que lo oculta
         clon.classList.remove('oculto'); 
+        clon.classList.add('visible'); // Asegurate de tener .visible { display: flex !important; } en tu CSS
         
-        // 6. ¡Al cristal!
+        // Limpiamos cualquier estilo manual que pueda arruinar la transparencia
+        clon.style.backgroundColor = "transparent"; 
+        
         contenedorCentro.appendChild(clon);
         
-        console.log("Éxito: Se cargó la info de la Zona " + numero);
+        console.log("Éxito: Zona " + numero + " cargada con transparencia.");
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-        if(!contenedorCentro) console.error("Error: No encontré el ID 'panel-cristal'");
-        if(!infoABuscar) console.error("Error: No encontré el ID 'detalle-zona" + numero + "'");
+        console.error("No se encontró el panel o la info.");
     }
 };
 
-function abrirSeccion(seccion) {
-  // Escondemos todo lo que haya en el centro
-  document.querySelectorAll('.detalle-zona').forEach(det => {
-    det.classList.remove('visible');
-  });
-  
-  console.log("Abriendo sección: " + seccion);
-  const guia = document.getElementById('mensaje-guia');
-  if(guia) guia.innerHTML = "<h3>Cargando " + seccion.toUpperCase() + "...</h3>";
-  }
+window.abrirSeccion = function(seccion) {
+    document.querySelectorAll('.detalle-zona').forEach(det => {
+        det.classList.remove('visible');
+    });
+    console.log("Abriendo sección: " + seccion);
+    const guia = document.getElementById('mensaje-guia');
+    if(guia) {
+        guia.innerHTML = "<h3>Cargando " + seccion.toUpperCase() + "...</h3>";
+    }
 };
 // Control del fondo
 const btn = document.getElementById('toggle-bg');
