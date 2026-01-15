@@ -172,12 +172,13 @@ nav li a:hover {
   align-items: center;    /* Centra los textos y botones horizontalmente */
   padding-top: 20px !important; /* Esto empuja las letras y botones hacia abajo */
   margin-top: 0;    /* Quitamos el margen para que el fondo blanco no se separe */
-  background: transparent !important; /* Fondo blanco casi transparente */     border: none !important; /* Un borde finito como de cristal 
-    border-radius: 20px;                /* Bordes redondeados para que sea suave */
-    padding: 0 40px;
-    margin: 20px auto;
-    max-width: none;
-  box-shadow: none !important;
+  background: transparent !important; /* Fondo blanco casi transparente */     
+  border: none !important; /* Un borde finito como de cristal 
+  border-radius: 20px;                /* Bordes redondeados para que sea suave */
+  padding: 0 40px;
+  margin: 20px auto;
+  max-width: none;
+  box-shadow: none
 }
 /* --- ESTILO PARA EL NUEVO LOGO DEL CUERPO --- */
 .logo-seccion {
@@ -234,6 +235,7 @@ nav li a:hover {
   transition: all 0.4s ease !important;
   overflow: hidden;
   position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 60);
 }
 
 .zona-card::after {
