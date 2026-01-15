@@ -24,7 +24,7 @@ window.verZona = function(numero) {
         if(!contenedorCentro) console.error("Error: No encontré el ID 'panel-cristal'");
         if(!infoABuscar) console.error("Error: No encontré el ID 'detalle-zona" + numero + "'");
     }
-}
+};
 
 function abrirSeccion(seccion) {
   // Escondemos todo lo que haya en el centro
@@ -35,8 +35,8 @@ function abrirSeccion(seccion) {
   console.log("Abriendo sección: " + seccion);
   const guia = document.getElementById('mensaje-guia');
   if(guia) guia.innerHTML = "<h3>Cargando " + seccion.toUpperCase() + "...</h3>";
-}
-
+  }
+};
 // Control del fondo
 const btn = document.getElementById('toggle-bg');
 if (btn) {
