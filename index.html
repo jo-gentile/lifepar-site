@@ -309,6 +309,8 @@ const firebaseConfig = {
     const pass = document.getElementById('passLogin').value;
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      sessionStorage.setItem('userEmail', email);
+      sessionStorage.setItem('userName', "Entrenador Lifepar");
       alert("Ingreso exitoso.");
       loginForm.style.display = 'none';
       window.location.href = "admin.html";
@@ -328,6 +330,8 @@ const firebaseConfig = {
       const data = await response.json();
 
       if(data.autorizado) {
+        sessionStorage.setItem('userEmail', email);
+        sessionStorage.setItem('userName', nombre);
         alert("Bienvenido entrenador: " + email);
         window.location.href = "admin.html";
       } else {
