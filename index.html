@@ -270,7 +270,7 @@ const firebaseConfig = {
 
     alert("Consultando base de datos...");
     try {
-      const response = await fetch(`${URL_SHEET}?email=${email}`);
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=${email}`);
       const data = await response.json();
       
       if(data.autorizado) {
