@@ -110,8 +110,8 @@ nav ul {
 list-style: none; 
 display: flex; 
 gap: 0.5rem; 
-margin: 0; p
-adding: 0; 
+margin: 0; 
+padding: 0; 
 }
 nav li a {
   font-family: 'Baloo 2', sans-serif;
@@ -164,7 +164,7 @@ nav li a:hover {
 
 .contenedor-competencia {
   position: center;
-  width: 100;
+  width: 100%;
   min-height: 100px;
   display: flex;
   flex-direction: row; /* Para que los bloques se apilen uno debajo de otro */
@@ -419,10 +419,6 @@ footer p {
         padding: 0 !important;
     }
 }
-/* Esta clase se la agregaremos al body con JavaScript */
-body.no-background .background-slider {
-    display: none !important; /* Esconde el carrusel de un saque */
-}
 
 body.no-background {
     background-color: #0a0a0a; /* Un color oscuro elegante de reemplazo */
@@ -443,17 +439,38 @@ body.no-background {
     font-size: 1.5rem;
     transition: 0.3s;
 }
-/* 1. Apaga el slider cuando el body tiene la clase 'no-background' */
-body.no-background .background-slider {
-    display: none !important;
+/* ESTO VA AL FINAL DEL ARCHIVO CSS */
+.btn-flotante {
+    position: fixed !important;
+    bottom: 30px !important;
+    left: 30px !important; /* Valor positivo para que entre en pantalla */
+    width: 60px !important;
+    height: 60px !important;
+    z-index: 999999 !important; /* Más alto que el z-index 1000 del header */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer !important;
+    font-size: 1.8rem !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+    
+    /* Reseteo total para que no herede nada del header */
+    transform: none !important;
+    top: auto !important;
+    right: auto !important;
+    margin: 0 !important;
 }
 
-/* 2. Cambia el color de fondo para que no quede todo negro */
-body.no-background {
-    background: radial-gradient(circle, #2c3e50, #000000) !important;
+/* Animación para que no se pegue al pasar el mouse */
+.btn-flotante:hover {
+    transform: scale(1.1) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
 }
-/* 3. Asegura que el panel de cristal se siga viendo bien sin las fotos */
-body.no-background #panel-cristal {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.btn-flotante:active {
+    transform: scale(0.9);
 }

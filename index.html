@@ -7,15 +7,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <style>
-    .detalle-zona { display: none; padding: 20px; background: #ffffff; border-radius: 10px; margin-top: 15px; border-left: 5px solid #222; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-    .detalle-zona.visible { display: block !important; }
-    .dirigente-info { display: flex; align-items: center; justify-content: flex-start; gap: 20px; flex-wrap: wrap; }
-    .dirigente-foto { width: 100px; height: 100px; border-radius: 50%; border: 2px solid #222; object-fit: cover; }
-    .datos-dirigente p { margin: 5px 0; font-family: 'Quicksand', sans-serif; color: #333; }
-    .zona-card { cursor: pointer; transition: all 0.3s ease; }
-    .zona-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-  </style>
 </head>
 <body>
   <div class="background-slider">
@@ -48,11 +39,7 @@
                 </button>
             </li>
         </ul>
-        
-        <button id="toggle-bg" class="btn-flotante" title="Activar/Desactivar fondo">
-            <span class="icono-bg">🖼️</span>
-        </button>
-    </nav> 
+     </nav> 
 </header>
 
 <div class="header-spacer"></div>
@@ -63,7 +50,6 @@
     <p>Las nuevas tendencias, fechas y eventos actualizados. Enterate todo acá!</p>
   </div>
 
-<main class="contenido-principal">
   <section class="contenedor-competencia">
     
     <div class="columna-zonas izquierda">
@@ -77,7 +63,7 @@
     <div class="centro-informacion" id="panel-cristal">
         <div id="mensaje-guia">
             <img src="img/logonuevo.png" class="logo-seccion" style="max-height: 100px; display: block; margin: 0 auto 15px;">
-            <h3>Seleccioná una opción</h3>
+            <h3></h3>
         </div>
     </div>
 
@@ -186,7 +172,7 @@
         </div>
       </section>
     </main>
-  </div>
+ 
 
 <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
@@ -196,271 +182,211 @@
     </div>
 </footer>
 
-</script>
 <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
     <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
     <h2 id="loginTitle" style="font-family: 'Anton'; margin-bottom: 20px;">ACCESO PERSONAL</h2>
     
-    <input type="email" id="emailLogin" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
+    <div id="bloqueLogin">
+        <input type="email" id="emailLogin" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <input type="password" id="passLogin" placeholder="Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <button id="btnEntrar" style="width: 100%; background: #000; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">INGRESAR</button>
+        
+        <p style="margin: 15px 0; font-size: 0.9rem;">O también podés</p>
+       <button id="btnGoogle" style="width: 100%; background: white; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Quicksand'; font-weight: bold; margin-top: 10px;">
+    <svg width="18" height="18" viewBox="0 0 18 18">
+        <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.49h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.8.54-1.83.86-3.05.86-2.34 0-4.32-1.58-5.03-3.71H.95v2.3A8.99 8.99 0 0 0 9 18z" fill="#34A853"/>
+        <path d="M3.97 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V4.99H.95A8.99 8.99 0 0 0 0 9c0 1.45.35 2.82.95 4.01l3.02-2.3z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.47.89 11.43 0 9 0 5.48 0 2.44 2.02.95 4.99l3.02 2.31c.71-2.13 2.69-3.72 5.03-3.72z" fill="#EA4335"/>
+    </svg>
+    Continuar con Google
+</button>
+    </div>
 
-<div style="position: relative; margin-bottom: 10px;">
-  <input type="password" id="passLogin" placeholder="Tu Contraseña" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box;">
-  <span onclick="toggleVerClave('passLogin')" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 0.8em; color: #666;">👁️</span>
-</div>
+    <div id="bloqueRegistro" style="display: none; margin-top: 10px;">
+        <input type="email" id="emailManual" placeholder="Ingresa tu email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <button id="btnVerificarSheet" style="width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">VERIFICAR ENTRENADOR</button>
+        
+        <div id="seccionConfirmarPass" style="display: none; margin-top: 10px;">
+            <input type="password" id="passNuevo" placeholder="Elegí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="password" id="passConfirmar" placeholder="Repetí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <button id="btnFinalizarRegistro" style="width: 100%; background: #000; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">REGISTRARME</button>
+        </div>
+    </div>
 
-<button type="button" onclick="verificarManual()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-bottom: 15px;">INGRESAR</button>
+    <div style="margin-top: 20px; font-size: 0.8rem;">
+        <a href="javascript:void(0)" id="linkRegistrarse" style="color: #666; text-decoration: none; margin-right: 15px;">Registrarse</a>
+        <a href="javascript:void(0)" id="linkRecuperar" style="color: #666; text-decoration: none;">Olvidé mi clave</a>
+    </div>
+    <button id="btnCerrarLogin" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer; font-size: 0.8rem;">[ CERRAR ]</button>
 
-<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
-  <span onclick="recuperarClave()" style="color: #007bff; cursor: pointer; font-size: 0.85em; text-decoration: underline;">Olvidé mi contraseña</span>
-  <span onclick="window.abrirRegistro()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
-</div>
-
-<div id="bloqueRegistroTotal" style="display: none; border-top: 1px solid #ccc; padding-top: 15px;">
-    <p style="font-size: 13px; font-weight: bold; color: #555;">NUEVO REGISTRO:</p>
+    <div id="bloqueRegistro" style="display: none; margin-top: 10px;">
+    <input type="email" id="emailManual" placeholder="Email para verificar" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+    <button id="btnVerificarSheet" style="width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">VERIFICAR LISTA BLANCA</button>
     
-    <input type="email" id="emailManual" placeholder="Email para validar en lista" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
-
-    <button id="btnVerificar" type="button" onclick="verificarAutorizacion()" style="width: 100%; padding: 12px; background: #222; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;">VERIFICAR MAIL</button>
-
-    <div id="seccionRegistroExtra" style="display: none; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;">
-        <input type="password" id="passManual" placeholder="Elegí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;">
-        
-        <input type="password" id="passConfirm" placeholder="Repetí tu Contraseña" style="width: 100%; padding: 12px; margin-top: 10px; border: 1px solid #ccc; border-radius: 5px;">
-        
-        <button type="button" onclick="finalizarRegistro()" style="width: 100%; padding: 12px; margin-top: 10px; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%;">CREAR MI CUENTA</button>
+    <div style="margin-top: 15px;">
+        <a href="javascript:void(0)" id="linkVolverLogin" style="color: #007bff; text-decoration: none; font-size: 0.8rem;">← Volver al inicio de sesión</a>
     </div>
+
+    <div id="seccionConfirmarPass" style="display: none; margin-top: 10px;">
+        </div>
 </div>
+ 
+<script type="module">
+  // 1. IMPORTACIÓN DE MÓDULOS
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    <div id="btnGoogleSeccion" style="margin-top: 10px;">
-        <div style="margin-bottom: 15px; color: #999;">— o —</div>
-        <button id="btn-google" style="width: 100%; padding: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; border: 1px solid #ccc; background: white; border-radius: 5px; font-weight: bold;">
-          <img src="https://cdn-icons-png.flaticon.com/24/300/300221.png" width="20"> Google
-        </button>
-    </div>
-
-    <button onclick="mostrarLogin()" style="margin-top: 20px; color: red; background: none; border: none; cursor: pointer; font-weight: bold;">Cerrar</button>
-  </div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
-      authDomain: "web-lifepar.firebaseapp.com",
-      projectId: "web-lifepar",
-      storageBucket: "web-lifepar.firebasestorage.app",
-      messagingSenderId: "140850288146",
-      appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-window.mostrarLogin = () => {
-        const form = document.getElementById("loginForm");
-        const overlay = document.getElementById("loginOverlay");
-        
-        // Agregamos esta seguridad para que no tire error si no los encuentra
-        if (!form) return; 
-
-        const isVisible = form.style.display === "block";
-        form.style.display = isVisible ? "none" : "block";
-        if (overlay) overlay.style.display = isVisible ? "none" : "block";
-    };
-
-    // BOTÓN GOOGLE
-    const btnGoogle = document.getElementById('btn-google');
-    if (btnGoogle) {
-        btnGoogle.addEventListener('click', () => {
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider).then((result) => {
-                const email = result.user.email;
-                fetch("https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=" + encodeURIComponent(email))
-                .then(res => res.text())
-                .then(respuesta => {
-                    if (respuesta.trim() === "SI") {
-                        localStorage.setItem("userEmail", email);
-                        window.location.href = "admin.html";
-                    } else {
-                        alert("ACCESO DENEGADO: Tu mail no está autorizado.");
-                        auth.signOut(); 
-                    }
-                });
-            }).catch(error => console.error("Error Google:", error));
-        });
-    }
-
- window.verificarManual = () => {
-  const email = document.getElementById("emailLogin").value.trim();
-  const pass = document.getElementById("passLogin").value;
-
-  if (!email.includes("@")) { 
-    alert("Por favor, ingresá un email válido."); 
-    return; 
-  }
-
-  // 1. IMPORTAMOS FIREBASE (Para validar mail y clave)
-  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
-    .then(({ getAuth, signInWithEmailAndPassword }) => {
-      const auth = getAuth();
-      
-      // 2. INTENTAMOS LOGUEAR
-      signInWithEmailAndPassword(auth, email, pass)
-        .then(() => {
-          // Si la clave es correcta, guardamos y entramos
-          localStorage.setItem("userEmail", email);
-          localStorage.setItem("nombreUsuario", "Entrenador"); // Esto lo podés personalizar luego
-          window.location.href = "admin.html";
-        })
-        .catch(error => {
-          // Si la clave está mal o el usuario no existe
-          console.error("Error de login:", error.code);
-          alert("Email o contraseña incorrectos. Si no tenés cuenta, registrate primero.");
-        });
-    });
-};
-
-window.verificarAutorizacion = () => {
-  const email = document.getElementById("emailManual").value;
-  const urlValidacion = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
-
-  if (!email.includes("@")) { alert("Ingresá un mail válido."); return; }
-  alert("Verificando en LIFEPAR...");
-
-  fetch(urlValidacion + "?email=" + encodeURIComponent(email))
-    .then(res => res.text())
-    .then(respuesta => {
-      if (respuesta.trim() === "SI") {
-        // Usamos el ID que SÍ tenés en tu HTML
-        document.getElementById("seccionRegistroExtra").style.display = "block";
-        document.getElementById("emailManual").readOnly = true;
-        document.getElementById("emailManual").style.background = "#f0f0f0";
-        alert("Mail autorizado. Ahora creá tu contraseña.");
-      } else {
-        alert("ACCESO DENEGADO: Tu email no figura en la lista de entrenadores.");
-      }
-    });
-};
-
-window.finalizarRegistro = () => {
-  const email = document.getElementById("emailManual").value;
-  const pass = document.getElementById("passManual").value;
-  const pass2 = document.getElementById("passConfirm").value;
-
-  // 1. Validaciones de seguridad
-  if (pass !== pass2) { alert("Las contraseñas no coinciden."); return; }
-  if (pass.length < 6) { alert("La clave debe tener al menos 6 caracteres."); return; }
-
-  // 2. Registro en Firebase
-  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
-    .then(({ getAuth, createUserWithEmailAndPassword }) => {
-      const auth = getAuth();
-      createUserWithEmailAndPassword(auth, email, pass)
-        .then(() => {
-          // 3. ÉXITO: Guardamos el mail con el nombre correcto y entramos
-          localStorage.setItem("userEmail", email); 
-          alert("¡Cuenta creada con éxito! Entrando al panel...");
-          window.location.href = "admin.html";
-        })
-        .catch(err => {
-          if(err.code === 'auth/email-already-in-use') alert("Este mail ya tiene cuenta, probá ingresar directamente.");
-          else alert("Error: " + err.message);
-        });
-    });
-};
- window.toggleVerClave = (id) => {
-  const input = document.getElementById(id);
-  if (input.type === "password") {
-    input.type = "text";
-  } else {
-    input.type = "password";
-  }
-};  
-  window.recuperarClave = () => {
-  const email = document.getElementById("emailManual").value;
-  if (!email.includes("@")) { alert("Por favor, ingresá tu mail primero."); return; }
-
-  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
-    .then(({ getAuth, sendPasswordResetEmail }) => {
-      const auth = getAuth();
-      sendPasswordResetEmail(auth, email)
-        .then(() => alert("¡Listo! Revisá tu mail para cambiar la contraseña."))
-        .catch(err => alert("Error: " + err.message));
-    });
-};
-
-// Modificamos levemente tu verificarAutorizacion para que muestre el campo de confirmar clave al registrar
-const originalVerificar = window.verificarAutorizacion;
-window.verificarAutorizacion = () => {
-    document.getElementById('seccionConfirmarPass').style.display = 'block';
-    // Aquí el resto de tu lógica de Sheets que ya funciona
-    originalVerificar(); 
-};
-window.abrirRegistro = () => {
-  // Mostramos el campo de email y el botón de verificar si estaban ocultos
-  const btnVerificar = document.getElementById('btnVerificar');
-  const emailInput = document.getElementById('emailManual');
-  
-  if(btnVerificar) btnVerificar.style.display = 'block';
-  if(emailInput) emailInput.style.display = 'block';
-
-  // Y también mostramos el div de las contraseñas que me pasaste antes
-  const extra = document.getElementById('seccionRegistroExtra');
-  if (extra) {
-    extra.style.display = 'block';
-  }
-};
-
-window.recuperarClave = () => {
-  const email = document.getElementById("emailManual").value;
-  if (!email.includes("@")) { alert("Escribí tu mail para enviarte el link."); return; }
-  
-  import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js")
-    .then(({ getAuth, sendPasswordResetEmail }) => {
-      sendPasswordResetEmail(getAuth(), email)
-        .then(() => alert("Mail de recuperación enviado."))
-        .catch(err => alert("Error: " + err.message));
-    });
-};
-
-  // ESTO VA A RESUCITAR LAS ZONAS SÍ O SÍ
-  window.verZona = function(numero) {
-      console.log("Cargando zona número:", numero);
-      const contenedorCentro = document.getElementById('panel-cristal');
-      const infoABuscar = document.getElementById('detalle-zona' + numero);
-      
-      if (contenedorCentro && infoABuscar) {
-          contenedorCentro.innerHTML = ''; 
-          const clon = infoABuscar.cloneNode(true);
-          clon.classList.remove('oculto'); 
-          clon.classList.add('visible'); 
-          contenedorCentro.appendChild(clon);
-          
-          // Efecto de subida suave
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-          console.error("Error: No encontré el panel-cristal o la zona " + numero);
-      }
+  // 2. CONFIGURACIÓN (Extraída de tus archivos)
+  const firebaseConfig = {
+    apiKey: "AIzaSyC76V6P77f72205566f7f69902677",
+    authDomain: "lifepar-d352b.firebaseapp.com",
+    projectId: "lifepar-d352b",
+    storageBucket: "lifepar-d352b.appspot.com",
+    messagingSenderId: "367340056972",
+    appId: "1:367340056972:web:77f72205566f7f69902677"
   };
 
-  const btnToggle = document.getElementById('toggle-bg');
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+  const URL_SHEET = "https://script.google.com/macros/s/AKfycbyC-9U8tU3YpL2m2uE-m6YI_w0pE-u0k3m3z_U5z7V9qE3p4u-Wz/exec";
 
-    if (btnToggle) {
-        btnToggle.addEventListener('click', () => {
-            // Esto le avisa al body que cambie de estado
-            document.body.classList.toggle('no-background');
-            
-            // Cambiamos el ícono para que sepas que funcionó
-            const icono = btnToggle.querySelector('.icono-bg');
-            if (document.body.classList.contains('no-background')) {
-                icono.innerText = '✨'; // Fondo desactivado
-            } else {
-                icono.innerText = '🖼️'; // Fondo activado
-            }
-        });
+  // 3. FUNCIONES DE INTERFAZ (DOM)
+  const loginForm = document.getElementById('loginForm');
+  const bloqueLogin = document.getElementById('bloqueLogin');
+  const bloqueRegistro = document.getElementById('bloqueRegistro');
+  const title = document.getElementById('loginTitle');
+
+  window.mostrarLogin = () => { loginForm.style.display = 'block'; };
+  document.getElementById('btnCerrarLogin').onclick = () => { loginForm.style.display = 'none'; };
+
+  // Abrir modo registro
+  document.getElementById('linkRegistrarse').onclick = () => {
+    bloqueLogin.style.display = 'none';
+    bloqueRegistro.style.display = 'block';
+    title.innerText = "NUEVO ENTRENADOR";
+  };
+
+  // 4. LÓGICA DE NEGOCIO (SHEETS + FIREBASE)
+
+  // A. Verificar en Lista Blanca (Sheets)
+  document.getElementById('btnVerificarSheet').onclick = async () => {
+    const email = document.getElementById('emailManual').value;
+    if(!email.includes("@")) return alert("Ingresá un mail válido.");
+
+    alert("Consultando base de datos...");
+    try {
+      const response = await fetch(`${URL_SHEET}?email=${email}`);
+      const data = await response.json();
+      
+      if(data.autorizado) {
+        alert("¡Autorizado! Configurá tu contraseña.");
+        document.getElementById('btnVerificarSheet').style.display = 'none';
+        document.getElementById('seccionConfirmarPass').style.display = 'block';
+      } else {
+        alert("Error: Tu mail no figura en la lista blanca de entrenadores.");
+      }
+    } catch (err) {
+      alert("Error de conexión. Revisá tu internet.");
     }
-</script>
+  };
 
-<script src="script.js"></script> </body>
+  // B. Registro Final en Firebase
+  document.getElementById('btnFinalizarRegistro').onclick = async () => {
+    const email = document.getElementById('emailManual').value;
+    const p1 = document.getElementById('passNuevo').value;
+    const p2 = document.getElementById('passConfirmar').value;
+
+    if(p1.length < 6) return alert("La clave debe tener al menos 6 caracteres.");
+    if(p1 !== p2) return alert("Las claves no coinciden.");
+
+    try {
+      await createUserWithEmailAndPassword(auth, email, p1);
+      alert("¡Cuenta creada con éxito!");
+      location.reload();
+    } catch (err) {
+      alert("Error al crear cuenta: " + err.message);
+    }
+  };
+
+  // C. Ingreso con Email y Clave
+  document.getElementById('btnEntrar').onclick = async () => {
+    const email = document.getElementById('emailLogin').value;
+    const pass = document.getElementById('passLogin').value;
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      alert("Ingreso exitoso.");
+      loginForm.style.display = 'none';
+    } catch (err) {
+      alert("Credenciales incorrectas.");
+    }
+  };
+
+  // D. Ingreso con Google + Check de Lista Blanca
+  document.getElementById('btnGoogle').onclick = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const email = result.user.email;
+
+      // Check obligatorio contra el Sheet
+      const response = await fetch(`${URL_SHEET}?email=${email}`);
+      const data = await response.json();
+
+      if(data.autorizado) {
+        alert("Bienvenido entrenador: " + email);
+      } else {
+        alert("Acceso denegado: Tu cuenta de Google no está autorizada.");
+        await signOut(auth);
+      }
+    } catch (err) {
+      alert("Error con Google.");
+    }
+  };
+
+  // E. Recuperar Clave
+  document.getElementById('linkRecuperar').onclick = async () => {
+    const email = document.getElementById('emailLogin').value || document.getElementById('emailManual').value;
+    if(!email) return alert("Escribí tu email primero.");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      alert("Te enviamos un link a tu correo.");
+    } catch (err) {
+      alert("Error al enviar: " + err.message);
+    }
+  };
+  // --- FUNCIONES DE INTERFAZ ---
+
+// Función para volver todo al estado inicial (Login)
+const resetFormulario = () => {
+    bloqueLogin.style.display = 'block';
+    bloqueRegistro.style.display = 'none';
+    document.getElementById('seccionConfirmarPass').style.display = 'none';
+    document.getElementById('btnVerificarSheet').style.display = 'block';
+    title.innerText = "ACCESO PERSONAL";
+    // Limpiamos los inputs
+    document.getElementById('emailLogin').value = "";
+    document.getElementById('passLogin').value = "";
+    document.getElementById('emailManual').value = "";
+};
+
+// Al abrir desde el botón del Header, siempre reseteamos primero
+window.mostrarLogin = () => { 
+    resetFormulario();
+    loginForm.style.display = 'block'; 
+};
+
+// Al cerrar, también reseteamos para que no quede "sucio"
+document.getElementById('btnCerrarLogin').onclick = () => { 
+    loginForm.style.display = 'none';
+    resetFormulario();
+};
+
+// El nuevo botón de "Atrás" dentro del registro
+document.getElementById('linkVolverLogin').onclick = () => {
+    resetFormulario();
+};
+</script>
+<script src="script.js"></script> 
+</body>
 </html>
