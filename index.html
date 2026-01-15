@@ -313,6 +313,7 @@ const firebaseConfig = {
       loginForm.style.display = 'none';
     } catch (err) {
       alert("Credenciales incorrectas.");
+      window.location.href = "admin.html";
     }
   };
 
@@ -331,6 +332,7 @@ const firebaseConfig = {
       } else {
         alert("Acceso denegado: Tu cuenta de Google no está autorizada.");
         await signOut(auth);
+        window.location.href = "admin.html";
       }
     } catch (err) {
       alert("Error con Google.");
