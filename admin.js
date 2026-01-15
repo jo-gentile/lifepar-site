@@ -157,6 +157,7 @@ async function guardarNuevoClub() {
         alert("⚠️ Por favor, ingresá el nombre de la institución.");
         return;
     }
+ };   
 
     const datos = {
         tipo: "REGISTRO_CLUB",
@@ -166,7 +167,7 @@ async function guardarNuevoClub() {
 
     try {
         // El envío que funcionará cuando estés online
-        await fetch(URL_SCRIPT, {
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify(datos)
@@ -182,4 +183,5 @@ async function guardarNuevoClub() {
         // Esto es lo que verás ahora que estás offline
         console.log("Modo Offline: El dato se procesó pero no pudo viajar.");
     }
-}
+};
+
