@@ -49,7 +49,7 @@
             </li>
         </ul>
         
-        <button id="toggle-bg" class="btn-accesibilidad" title="Activar/Desactivar fondo">
+        <button id="toggle-bg" class="btn-flotante" title="Activar/Desactivar fondo">
             <span class="icono-bg">🖼️</span>
         </button>
     </nav> 
@@ -212,7 +212,7 @@
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 0 5px;">
   <span onclick="recuperarClave()" style="color: #007bff; cursor: pointer; font-size: 0.85em; text-decoration: underline;">Olvidé mi contraseña</span>
-  <span onclick="abrirRegistro()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
+  <span onclick="window.abrirRegistro()" style="color: #28a745; cursor: pointer; font-size: 0.85em; font-weight: bold; text-decoration: underline;">Registrarme</span>
 </div>
 
 <div id="bloqueRegistroTotal" style="display: none; border-top: 1px solid #ccc; padding-top: 15px;">
@@ -397,9 +397,19 @@ window.verificarAutorizacion = () => {
     // Aquí el resto de tu lógica de Sheets que ya funciona
     originalVerificar(); 
 };
- window.abrirRegistro = () => {
+window.abrirRegistro = () => {
+  // Mostramos el campo de email y el botón de verificar si estaban ocultos
+  const btnVerificar = document.getElementById('btnVerificar');
+  const emailInput = document.getElementById('emailManual');
+  
+  if(btnVerificar) btnVerificar.style.display = 'block';
+  if(emailInput) emailInput.style.display = 'block';
+
+  // Y también mostramos el div de las contraseñas que me pasaste antes
   const extra = document.getElementById('seccionRegistroExtra');
-  extra.style.display = extra.style.display === 'none' ? 'block' : 'none';
+  if (extra) {
+    extra.style.display = 'block';
+  }
 };
 
 window.recuperarClave = () => {

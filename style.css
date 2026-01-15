@@ -443,3 +443,17 @@ body.no-background {
     font-size: 1.5rem;
     transition: 0.3s;
 }
+/* 1. Apaga el slider cuando el body tiene la clase 'no-background' */
+body.no-background .background-slider {
+    display: none !important;
+}
+
+/* 2. Cambia el color de fondo para que no quede todo negro */
+body.no-background {
+    background: radial-gradient(circle, #2c3e50, #000000) !important;
+}
+/* 3. Asegura que el panel de cristal se siga viendo bien sin las fotos */
+body.no-background #panel-cristal {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}

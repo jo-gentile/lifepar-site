@@ -36,12 +36,38 @@ window.abrirSeccion = function(seccion) {
         guia.innerHTML = "<h3>Cargando " + seccion.toUpperCase() + "...</h3>";
     }
 };
-// Control del fondo
-const btn = document.getElementById('toggle-bg');
-if (btn) {
-    btn.addEventListener('click', () => {
+const btnToggle = document.getElementById('toggle-bg');
+
+if (btnToggle) {
+    btnToggle.addEventListener('click', () => {
+        console.log("Botón presionado!"); // Esto nos dirá si funciona
         document.body.classList.toggle('no-background');
-        const estado = document.body.classList.contains('no-background');
-        localStorage.setItem('fondo-desactivado', estado);
+        
+        const icono = btnToggle.querySelector('.icono-bg');
+        if (icono) {
+            icono.innerText = document.body.classList.contains('no-background') ? '✨' : '🖼️';
+        }
     });
-} // <--- Asegurate que acá también cierre bien.
+} else {
+    console.error("No encontré el botón con ID toggle-bg");
+}
+// --- FUNCIÓN PARA EL BOTÓN DE REGISTRARME ---
+window.abrirRegistro = function() {
+    console.log("Botón Registrarme clickeado");
+    
+    // Buscamos los elementos por su ID
+    const extra = document.getElementById('seccionRegistroExtra');
+    const emailInput = document.getElementById('emailManual');
+    const btnVerificar = document.getElementById('btnVerificar');
+
+    // Los mostramos
+    if (extra) {
+        extra.style.display = 'block';
+    }
+    if (emailInput) {
+        emailInput.style.display = 'block';
+    }
+    if (btnVerificar) {
+        btnVerificar.style.display = 'block';
+    }
+};
