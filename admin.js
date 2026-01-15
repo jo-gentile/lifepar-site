@@ -1,6 +1,9 @@
-// Esta variable será la identidad del profe en toda la sesión
 let userEmail = sessionStorage.getItem('userEmail') || "esperando_login@test.com";
-/* --- LÓGICA DE LA OFICINA VIRTUAL (admin.js) --- */
+let userName = sessionStorage.getItem('userName') || "Entrenador LIFEPAR";
+
+// ESTO ES LO QUE HACE QUE APAREZCAN:
+document.getElementById('display-email').innerText = userEmail;
+document.getElementById('display-name').innerText = userName;
 
 // 1. Salir de la oficina
 function logout() {
