@@ -311,9 +311,9 @@ const firebaseConfig = {
       await signInWithEmailAndPassword(auth, email, pass);
       alert("Ingreso exitoso.");
       loginForm.style.display = 'none';
+      window.location.href = "admin.html";
     } catch (err) {
       alert("Credenciales incorrectas.");
-      window.location.href = "admin.html";
     }
   };
 
@@ -329,10 +329,10 @@ const firebaseConfig = {
 
       if(data.autorizado) {
         alert("Bienvenido entrenador: " + email);
+        window.location.href = "admin.html";
       } else {
         alert("Acceso denegado: Tu cuenta de Google no está autorizada.");
         await signOut(auth);
-        window.location.href = "admin.html";
       }
     } catch (err) {
       alert("Error con Google.");
