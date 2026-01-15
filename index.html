@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -18,143 +18,162 @@
   </style>
 </head>
 <body>
-  
+  <div class="background-slider">
+  <div class="slide" style="background-image: url('img/foto1.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto2.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto3.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto4.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto5.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto6.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto7.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto8.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto9.jpg');"></div>
+</div>
   <header>
     <div class="logo">
-      <img src="img/logo.png" alt="Logo LIFEPAR" class="logo-img" />
-      <div class="texto-logo">
-        <h1>LIFEPAR</h1>
-        <span class="slogan">es una realidad</span>
-      </div>
+        <img src="img/logo.png" class="logo-img">
+        <div class="textos-col"> 
+            <h1>LIFEPAR</h1>
+            <span class="slogan">es una realidad</span>
+        </div>
     </div>
 
     <nav>
-      <ul>
-        <li><a href="#zonas">Zonas</a></li>
-        <li><a href="#calendario">Calendario</a></li>
-        <li><a href="#contacto">Contacto</a></li>
-        <li>
-          <button onclick="mostrarLogin()" class="admin-button" type="button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer; border: none; font-family: 'Quicksand'; font-weight: bold;">Acceso Entrenadores</button>
-        </li>
-      </ul>
-    </nav>
-  </header>
+        <ul>
+            <li><a href="#zonas">Zonas</a></li>
+            <li><a href="#calendario">Calendario</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+            <li>
+                <button onclick="mostrarLogin()" class="admin-button" type="button" style="background: #222; color: white; border-radius: 20px; padding: 8px 15px; cursor: pointer; border: none; font-family: 'Quicksand'; font-weight: bold;">
+                    Acceso Entrenadores
+                </button>
+            </li>
+        </ul>
+        
+        <button id="toggle-bg" class="btn-accesibilidad" title="Activar/Desactivar fondo">
+            <span class="icono-bg">🖼️</span>
+        </button>
+    </nav> 
+</header>
 
-  <div class="contenedor">
-    <aside class="banner-lateral"></aside>
+<div class="header-spacer"></div>
     
     <main class="contenido-principal">
-      <div class="info">
-        <h2>Competencia sana y alto nivel</h2>
-        <p>Una comunidad deportiva donde el esfuerzo, el juego limpio y la excelencia se encuentran</p>
+  <div class="info">
+    <img src="img/logonuevo.png" class="logo-seccion" alt="Lifepar Competencia">
+    <p>Las nuevas tendencias, fechas y eventos actualizados. Enterate todo acá!</p>
+  </div>
+
+<main class="contenido-principal">
+  <section class="contenedor-competencia">
+    
+    <div class="columna-zonas izquierda">
+        <div class="zona-card roja" onclick="verZona(1)">ZONA 1</div>
+        <div class="zona-card azul" onclick="verZona(2)">ZONA 2</div>
+        <div class="zona-card roja" onclick="verZona(3)">ZONA 3</div>
+        <div class="zona-card dorada">FECHAS</div>
+        <div class="zona-card plata">FOTOS</div>
+    </div>
+
+    <div class="centro-informacion" id="panel-cristal">
+        <div id="mensaje-guia">
+            <img src="img/logonuevo.png" class="logo-seccion" style="max-height: 100px; display: block; margin: 0 auto 15px;">
+            <h3>Seleccioná una opción</h3>
+        </div>
+    </div>
+
+    <div class="columna-zonas derecha">
+        <div class="zona-card roja" onclick="verZona(4)">ZONA 4</div>
+        <div class="zona-card azul" onclick="verZona(5)">ZONA 5</div>
+        <div class="zona-card roja" onclick="verZona(6)">ZONA 6</div>
+        <div class="zona-card plata">COPA OPEN</div>
+        <div class="zona-card dorada">LIFEPAR SPORTS</div>
+    </div>
+
+</section> <div id="deposito-detalles" style="display: none;">
+      <div id="detalle-zona1" class="detalle-zona">
+         <div class="dirigente-info">
+             <img src="img/dirigente1.png" alt="Daniela Chiaramoni" class="dirigente-foto">
+             <div class="datos-dirigente">
+                  <h4>ZONA 1 (zona sur del Gran Buenos Aires)</h4>
+                  <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
+                  <p><strong>Cargo:</strong> Coordinadora General ZONA 1</p>
+                  <p><strong>Contacto:</strong> 11-5323-9629</p>
+                  <p><strong>Ubicación:</strong> Turdera; Lomas de Zamora, Monte Grande, Longchamps, Glew, Guernica, etc...</p>
+                  <p><strong>Torneos:</strong> Colegio Santa Inés, Turdera.</p>
+                             </div>
+          </div>
       </div>
 
-      <section id="zonas" class="info">
-        <h3>Zonas de Competencia</h3>
-        <div class="zonas-grid">
-          <div class="zona-card zona1" onclick="toggleZona(1)">Zona 1</div>
-          <div class="zona-card zona2" onclick="toggleZona(2)">Zona 2</div>
-          <div class="zona-card zona3" onclick="toggleZona(3)">Zona 3</div>
-          <div class="zona-card zona4" onclick="toggleZona(4)">Zona 4</div>
-          <div class="zona-card zona5" onclick="toggleZona(5)">Zona 5</div>
-          <div class="zona-card zona6" onclick="toggleZona(6)">Zona 6</div>
-        </div>
-
-        <div id="detalle-zona1" class="detalle-zona">
-          <h4>ZONA 1 (zona sur del Gran buenos Aires)</h4>
-          <div class="dirigente-info">
-            <img src="img/dirigente1.png" alt="Dirigente Zona 1" class="dirigente-foto">
+    <div id="detalle-zona2" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente2.png" alt="Fabio Gigli" class="dirigente-foto">
             <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
-              <p><strong>Cargo:</strong> Coordinadora General ZONA 1</p>
-              <p><strong>Contacto:</strong> 11-5323-9629</p>
-              <p><strong>Ubicación:</strong> Turdera; Lomas de Zamora, Monte Grande, Longchamps, Glew, Guernica, etc...</p>
-              <p><strong>Torneos:</strong> Colegio Santa Inés, Turdera.</p>
+                <h4>ZONA 2 (zona La Matanza)</h4>
+                <p><strong>Nombre:</strong> Fabio Gigli</p>
+                <p><strong>Cargo:</strong> Coordinador General ZONA 2</p>
+                <p><strong>Contacto:</strong> 11-3069-2456</p>
+                <p><strong>Ubicación:</strong> La Matanza</p>
+                <p><strong>Torneos:</strong> Colegio San Carlos Borromeo, Villa Madero.</p>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div id="detalle-zona2" class="detalle-zona">
-          <h4>ZONA 2 (zona La Matanza)</h4>
-          <div class="dirigente-info">
-            <img src="img/dirigente2.png" alt="Dirigente Zona 2" class="dirigente-foto">
+    <div id="detalle-zona3" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente3.png" alt="Iara Agnus" class="dirigente-foto">
             <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Fabio Gigli</p>
-              <p><strong>Cargo:</strong> Coordinador General ZONA 2</p>
-              <p><strong>Contacto:</strong> 11-3069-2456</p>
-              <p><strong>Ubicación:</strong> La Matanza</p>
-              <p><strong>Torneos:</strong> Colegio San Carlos Borromeo, Villa Madero.</p>
+                <h4>ZONA 3 (zona Ezeiza-Cañuelas)</h4>
+                <p><strong>Nombre:</strong> Iara Agnus</p>
+                <p><strong>Cargo:</strong> Coordinadora General ZONA 3</p>
+                <p><strong>Contacto:</strong> 11 3913-0849</p>
+                <p><strong>Ubicación:</strong> Ezeiza-Cañuelas (y alrededores)</p>
+                <p><strong>Torneos:</strong> A confirmar</p>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div id="detalle-zona3" class="detalle-zona">
-          <h4>ZONA 3</h4>
-          <p>Información en proceso de carga.</p>
-        </div>
-
-        <div id="detalle-zona4" class="detalle-zona">
-          <h4>ZONA 4 (zona oeste del Gran Buenos Aires)</h4>
-          <div class="dirigente-info">
-            <img src="img/dirigente4.png" alt="Dirigente Zona 4" class="dirigente-foto">
+    <div id="detalle-zona4" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente4.png" alt="Natalia Reale" class="dirigente-foto">
             <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Natalia Reale</p>
-              <p><strong>Cargo:</strong> Coordinadora General Zona 4</p>
-              <p><strong>Contacto:</strong> 11-4960-5313</p>
-              <p><strong>Ubicación:</strong> Castelar, Ituzaingó, Hurlingham, Moreno, San Miguel, Jose C Paz, Etc</p>
-              <p><strong>Torneos:</strong> Club La Catedral</p>
+                <h4>ZONA 4 (zona oeste del Gran Buenos Aires)</h4>
+                <p><strong>Nombre:</strong> Natalia Reale</p>
+                <p><strong>Cargo:</strong> Coordinadora General Zona 4</p>
+                <p><strong>Contacto:</strong> 11-4960-5313</p>
+                <p><strong>Ubicación:</strong> Castelar, Ituzaingó, Hurlingham, Moreno, San Miguel, Jose C Paz, Etc</p>
+                <p><strong>Torneos:</strong> Club La Catedral</p>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div id="detalle-zona5" class="detalle-zona">
-          <h4>ZONA 5 (zona C.A.B.A.)</h4>
-          <div class="dirigente-info">
-            <img src="img/dirigente5.png" alt="Dirigente Zona 5" class="dirigente-foto">
+    <div id="detalle-zona5" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente5.png" alt="Luján Manolio" class="dirigente-foto">
             <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Leonel Sanchez</p>
-              <p><strong>Cargo:</strong> Coordinador General zona 5</p>
-              <p><strong>Contacto:</strong> 11-3178-9679</p>
-              <p><strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires</p>
-              <p><strong>Torneos:</strong> Club Flores Sur</p>
+                <h4>ZONA 5 (zona C.A.B.A.)</h4>
+                <p><strong>Nombre:</strong> Luján Manolio</p>
+                <p><strong>Cargo:</strong> Coordinadora General zona 5</p>
+                <p><strong>Contacto:</strong> 11 2046-2725</p>
+                <p><strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires</p>
+                <p><strong>Torneos:</strong> Club Pintitas</p>
             </div>
-          </div>
         </div>
+    </div>
 
-        <div id="detalle-zona6" class="detalle-zona">
-          <h4>ZONA 6 (zona sur del Gran Buenos Aires)</h4>
-          <div class="dirigente-info">
-            <img src="img/dirigente6.png" alt="Dirigente Zona 6" class="dirigente-foto">
+    <div id="detalle-zona6" class="detalle-zona">
+       <div class="dirigente-info">
+            <img src="img/dirigente6.png" alt="Daniela Chiaramoni" class="dirigente-foto">
             <div class="datos-dirigente">
-              <p><strong>Nombre:</strong> Paola Montenegro</p>
-              <p><strong>Cargo:</strong> Coordinadora General zona 6</p>
-              <p><strong>Contacto:</strong> 11-3668-9794</p>
-              <p><strong>Ubicación:</strong> Quilmes, Avellaneda, Florencio Varela, Berazategui, Solano, Lanus, Etc</p>
-              <p><strong>Torneos:</strong> Sociedad de fomento Barrio La Carne</p>
+                <h4>ZONA 6 (zona sur del Gran Buenos Aires)</h4>
+                <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
+                <p><strong>Cargo:</strong> Coordinadora General zona 6</p>
+                <p><strong>Contacto:</strong> 11-5323-9629</p>
+                <p><strong>Ubicación:</strong> Quilmes, Avellaneda, Florencio Varela, Berazategui, Solano, Lanus, Etc</p>
+                <p><strong>Torneos:</strong> Sociedad de fomento Barrio La Carne</p>
             </div>
-          </div>
         </div>
-      </section>
-
-      <section id="calendario" class="calendario">
-        <h2>🗕️ Calendario por Zonas</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Zona</th>
-              <th>Fecha</th>
-              <th>Lugar</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="zona1"><td>Zona 1</td><td>29 y 30 de NOVIEMBRE</td><td>Colegio Santa Inés</td></tr>
-            <tr class="zona2"><td>Zona 2</td><td>2 de NOVIEMBRE</td><td>Colegio San Carlos Borromeo</td></tr>
-            <tr class="zona4"><td>Zona 4</td><td>9 de NOVIEMBRE</td><td>Club La Catedral</td></tr>
-            <tr class="zona5"><td>Zona 5</td><td>30 de NOVIEMBRE</td><td>Club PINTITAS</td></tr>
-            <tr class="zona6"><td>Zona 6</td><td>6 de julio</td><td>Sociedad de Fomento Barrio La Carne</td></tr>
-          </tbody>
-        </table>
-      </section>
+    </div>
 
       <section id="contacto" class="info">
         <h3>Contacto Directo</h3>
@@ -170,14 +189,15 @@
     </main>
   </div>
 
-  <footer>
+<footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
-    <div class="contacto">
-      <a href="https://www.instagram.com/ligalifepar" target="_blank"><img src="https://cdn-icons-png.flaticon.com/24/174/174855.png" alt="IG" /> @ligalifepar</a>
-      <a href="https://wa.me/541158512121" target="_blank"><img src="https://cdn-icons-png.flaticon.com/24/733/733585.png" alt="WA" /> 11-5851-2121</a>
+    <div class="footer-contact">
+        <a href="https://instagram.com/ligalifepar" target="_blank">📸 @ligalifepar</a>
+        <a href="https://wa.me/541158512121" target="_blank">📱 11-5851-2121</a>
     </div>
-  </footer>
+</footer>
 
+</script>
 <div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
     <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
     <h2 id="loginTitle" style="font-family: 'Anton'; margin-bottom: 20px;">ACCESO PERSONAL</h2>
@@ -259,15 +279,29 @@
     };
   </script>
 
-  <script>
-    function toggleZona(nro) {
-      document.querySelectorAll('.detalle-zona').forEach(det => det.classList.remove('visible'));
-      const target = document.getElementById('detalle-zona' + nro);
-      if (target) {
-        target.classList.add('visible');
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+<script>
+window.verZona = function(numero) {
+    // Buscamos el vidrio central y la info en el depósito
+    const panel = document.getElementById('panel-cristal');
+    const info = document.getElementById('detalle-zona' + numero);
+
+    if (panel && info) {
+        // Vaciamos el centro (adiós mensaje guía)
+        panel.innerHTML = ""; 
+        
+        // Copiamos el contenido del depósito al panel
+        // Usamos innerHTML para que sea una copia limpia
+        panel.innerHTML = info.innerHTML;
+        
+        // OPCIONAL: Si querés que la página se asegure de estar ARRIBA
+        // pero sin saltar a lo loco, usamos esto:
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        console.log("Zona " + numero + " cargada en el centro.");
+    } else {
+        console.error("No se encontró el panel o la info de zona " + numero);
     }
+}
 window.verificarAutorizacion = () => {
   const email = document.getElementById("emailManual").value;
   const urlValidacion = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
@@ -364,13 +398,24 @@ window.recuperarClave = () => {
     });
 };
   </script>
+
+<script>
+    const btnToggle = document.getElementById('toggle-bg');
+
+    if (btnToggle) {
+        btnToggle.addEventListener('click', () => {
+            // Esto le avisa al body que cambie de estado
+            document.body.classList.toggle('no-background');
+            
+            // Cambiamos el ícono para que sepas que funcionó
+            const icono = btnToggle.querySelector('.icono-bg');
+            if (document.body.classList.contains('no-background')) {
+                icono.innerText = '✨'; // Fondo desactivado
+            } else {
+                icono.innerText = '🖼️'; // Fondo activado
+            }
+        });
+    }
+</script>
 </body>
 </html>
-
-
-
-
-
-
-
-

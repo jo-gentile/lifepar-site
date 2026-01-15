@@ -1,274 +1,45 @@
-﻿body {
+﻿/* ============================================================
+   1. ESTILOS GLOBALES Y CUERPO (INTACTO)
+   ============================================================ */
+body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
-  padding: 0;
   background: #fff;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   position: relative;
-  overflow-x: hidden; 
+  overflow-x: hidden;
+  padding-top: 110px; 
 }
 
-
+/* ============================================================
+   2. ENCABEZADO (MANTENIDO SEGÚN TU BASE)
+   ============================================================ */
 header {
-  background-color: #222;
+  background-color: rgba(255, 255, 255, 0.08);
   color: white;
-  padding: 10px 20px;
+  padding: 0px 30px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  position: relative;
-  z-index: 1;
-  overflow: visible;
-
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo-img {
-  height: 120px;
-  margin-right: 10px;
-}
-
-.texto-logo h1 {
-  margin: 0;
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 1rem;
-  padding: 0;
-  margin: 0;
-}
-
-nav ul li a {
-  text-decoration: none;
-  color: #FFFFFF;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  display: inline-block;
-}
-
-nav ul li a:hover {
-  background-color: #dceeff;
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-
-.admin-button {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 0.9rem;
-  padding: 4px 10px;
-  border-radius: 12px;
-  background-color: transparent;
-  color: #c0c0c0; /* plateado claro */
-  border: 1.8px solid #c0c0c0;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  align-self: center; /* para alinear verticalmente en flex container */
-  margin-left: 20px;
-  margin-bottom: -2;
-  box-shadow: 0 0 6px #c0c0c0aa; /* brillo suave metálico */
-}
-
-.admin-button:hover {
-  background-color: #c0c0c0;
-  color: #222;
-  box-shadow: 0 0 10px #e0e0e0dd; /* brillo más intenso al pasar el mouse */
-  transform: scale(1.05);
-}
-
-
-
-.contenedor {
-  display: flex;
-  flex: 1;
-  min-height: 100vh;
-  overflow: hidden;
-  position: relative;
-  z-index: 1;
-}
-
-.banner-lateral {
-  width: 250px;
-  background-image: url('img/banner-lateral.jpg'); /* Cambiar por el nombre real */
-  background-size: cover;
-  background-position: border;
-  background-repeat: no-repeat;
-  position: relative;
-  z-index: 1;
-}
-
-.contenido-principal {
-  flex: 1;
-  padding: 20px;
-  background-color: white;
-  overflow-y: auto;
-  position: relative;
-  z-index: 1;
-}
-
-.info {
-  margin-bottom: 40px;
-}
-
-.zonas-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 10px;
-}
-
-.zona-card {
-  background-color: #f5f5f5;
-  padding: 1rem;
-  text-align: center;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.zona-card:hover {
-  background-color: #dceeff;
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.menu-zona {
-  background: #f8f8f8;
-  padding: 0 15px;
-  margin-top: 0;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: all 0.3s ease;
-  margin-bottom: 0;
-}
-
-.menu-zona.visible {
-  max-height: 500px;
-  opacity: 1;
-  transform: scaleY(1);
-  margin-top: 15px;
-  margin-bottom: 20px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-
-
-.calendario table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.calendario th,
-.calendario td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-
-.contacto-form {
-  margin-top: 40px;
-}
-
-.contacto-form form {
-  display: flex;
-  flex-direction: column;
-}
-
-.contacto-form input,
-.contacto-form textarea {
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-.contacto-form button {
-  padding: 10px;
-  font-size: 16px;
-  background-color: #222;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-footer {
-  background-color: #222;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  position: relative;
-  z-index: 1;
-}
-
-footer .contacto {
-  margin-top: 10px;
-}
-
-footer .contacto a {
-  display: inline-block;
-  margin: 0 10px;
-  color: white;
-  text-decoration: none;
-}
-
-.encabezado {
-  background: #000;
-  color: white;
-  font-size: 2rem;
-  font-weight: bold;
-  position: relative;
-  overflow: hidden;
-}
-
-.encabezado::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.5),
-    transparent
-  );
-  animation: shine 2s infinite;
-}
-
-@keyframes shine {
-  to {
-    left: 125%;
-  }
-}
-
-
-body::before {
-  content: "";
   position: fixed;
-  inset: 0;
-  z-index: -10000;
-  background: #fff;
-}
-
-header {
-  position: relative;
+  z-index: 1000;
   overflow: hidden;
+  backdrop-filter: blur(15px); 
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 70px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 header::after {
@@ -278,281 +49,398 @@ header::after {
   left: -75%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  animation: shine 3s infinite;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shineHeader 3s infinite;
 }
 
-@keyframes shine {
-  100% {
-    left: 125%;
-  }
+@keyframes shineHeader { 
+100% { left: 125%; } 
 }
-@media (max-width: 768px) {
-  .contenedor {
-    flex-direction: column;
-  }
-
- .banner-lateral {
-  width: 100%;
-  max-height: 120px;
-  background-position: center; /* corregido de "boder" a "center" */
-  background-size: cover; /* mejor opción para que se adapte */
-  background-repeat: no-repeat;
-  background-image: url('img/banner-lateral.jpg'); /* agregá esto si no lo definiste en HTML */
-  display: block;
+@keyframes text-gradient-move { 
+0% { background-position: 0% center; } 
+100% { background-position: 300% center; } 
 }
 
-/* Ajustes para pantallas pequeñas */
-@media (max-width: 768px) {
-  .banner-lateral {
-    max-height: 100px; /* opcional: ajustá la altura en móvil si querés */
-    background-size: contain; /* mejor para móviles si querés que se vea completo */
-  }
+.logo { 
+display: flex; 
+flex-direction: row; 
+align-items: center; gap: 12px; margin: 0; 
+}
+.textos-col { 
+display: flex; 
+flex-direction: column; 
+justify-content: center; 
+align-items: flex-start; 
+}
+.logo-img { height: 50px; 
+width: auto; 
+transition: transform 0.5s ease;
+}
+.logo-img:hover { transform: rotate(360deg); 
 }
 
-.contenido-principal {
-  padding: 10px;
-}
-
-nav {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-nav ul {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0;
-  margin: 10px 0;
-}
-
-nav ul li {
-  list-style: none;
-}
-
-nav ul li a {
-  display: block;
-  padding: 8px 12px;
-  color: #333;
-  text-decoration: none;
-  border-radius: 6px;
-  background-color: #eee;
-  font-weight: 500;
-}
-
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .logo {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .admin-btn {
-    align-self: center;
-    margin-top: 10px;
-  }
-}
-
-.detalle-zona {
-  margin-top: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.dirigente-info {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.dirigente-foto {
-  width: 150px;
-  border-radius: 10px;
-  box-shadow: no;
-  background: transparent;
-}
-
-.datos-dirigente p {
-  margin: 5px 0;
-}
-
-.oculto {
-  display: none;
-}
-@keyframes brilloMulticolorZona {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.zona-expandida {
-  background: linear-gradient(270deg, #ffffff, #f0faff, #ffeef5, #ffffff);
-  background-size: 400% 400%;
-  animation: brilloMulticolorZona 20s ease infinite;
-  padding: 1rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-@keyframes zonaBrillante {
-  0% {
-    background-position: 0% 50%;
-  }
-  100% {
-    background-position: 100% 50%;
-  }
-}
-
-.efecto-zona {
-  background: linear-gradient(270deg, #ffffff, #e0e0e0, #ffffff, #e0e0e0);
-  background-size: 400% 400%;
-  animation: zonaBrillante 8s ease infinite;
-  border-radius: 20px;
-  padding: 20px;
-  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-  transition: all 0.5s ease-in-out;
-}
-h4 {
-  position: relative;
-  display: inline-block;
-  font-weight: bold;
-  background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
-  background-size: 300% auto;
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: text-gradient-move 5s linear infinite;
-}
-
-h4::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background: linear-gradient(120deg, #ccc, #fff, #ccc);
-  background-size: 200% auto;
-  animation: shine 2s linear infinite;
-  border-radius: 2px;
-}
-
-/* Animación para el texto multicolor */
-@keyframes text-gradient-move {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 300% center;
-  }
-}
-
-/* Animación para el subrayado metálico */
-@keyframes shine {
-  0% {
-    background-position: -100% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-h1 {
+.logo h1 {
   font-family: 'Anton', sans-serif;
-  font-size: 4rem;
-  letter-spacing: 2px;
-  text-align: center;
+  font-size: 1.4rem;
+  margin: 0;
+  line-height: 1;
   background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
   background-size: 300% auto;
   color: transparent;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: text-gradient-move 5s linear infinite;
-  margin: 0;
+  animation: text-gradient-move 12s linear infinite;
 }
 
-/* Animación para el fondo degradado del texto */
-@keyframes text-gradient-move {
-  0% {
-    background-position: 0% center;
-  }
-  100% {
-    background-position: 300% center;
-  }
-}
-.encabezado {
-  background: #000;
-  color: white;
-  font-size: 2rem;
-  font-weight: bold;
-  position: relative;
-  overflow: hidden;
-}
-
-.encabezado::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent,
-    rgba(255, 255, 255, 0.5),
-    transparent
-  );
-  animation: shine 2s infinite;
-}
-
-@keyframes shine {
-  to {
-    left: 125%;
-  }
-}
 .slogan {
   font-family: 'Dancing Script', cursive;
-  font-size: 1.7rem;
-  color: #f0f0f0;
-  text-align: center;
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1;
   display: block;
-  margin-top: -10px;
-  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================================
+   3. NAVEGACIÓN Y BOTONES
+   ============================================================ */
+nav ul { 
+list-style: none; 
+display: flex; 
+gap: 0.5rem; 
+margin: 0; p
+adding: 0; 
 }
 nav li a {
   font-family: 'Baloo 2', sans-serif;
-  font-size: 1.5rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: #ffffff;
   text-decoration: none;
-  padding: 10px 14px;
-  border-radius: 12px;
+  padding: 4px 12px;
+  border-radius: 20px;
   transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+nav li a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #ff0080;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-nav li a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffd700;
-  transform: scale(1.05);
+.admin-button {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 18px;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.admin-button:hover {
+  background-color: #c0c0c0;
+  color: #222;
+  box-shadow: 0 0 15px rgba(224, 224, 224, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   4. SECCIÓN COMPETENCIA (ZONAS RECUPERADAS)
+   ============================================================ */
+.header-spacer {
+  height: 0px;    /* El tamaño justo para que nada quede tapado */
+  width: 100%;
+  display: block;   /* Asegura que ocupe su lugar */
+}
+
+.contenedor-competencia {
+  position: center;
+  width: 100;
+  min-height: 100px;
+  display: flex;
+  flex-direction: row; /* Para que los bloques se apilen uno debajo de otro */
+  justify-content: space-between; 
+  align-items: center;    /* Centra los textos y botones horizontalmente */
+  padding-top: 20px !important; /* Esto empuja las letras y botones hacia abajo */
+  margin-top: 0;    /* Quitamos el margen para que el fondo blanco no se separe */
+  background: transparent !important; /* Fondo blanco casi transparente */     border: none !important; /* Un borde finito como de cristal 
+    border-radius: 20px;                /* Bordes redondeados para que sea suave */
+    padding: 0 40px;
+    margin: 20px auto;
+    max-width: none;
+  box-shadow: none !important;
+}
+/* --- ESTILO PARA EL NUEVO LOGO DEL CUERPO --- */
+.logo-seccion {
+  max-width: 200px;  /* Ajustá este valor según qué tan grande quieras que se vea */
+  width: 100%;       /* Para que sea responsivo y se achique en el celular */
+  height: auto;
+  margin-bottom: 5px; /* Separa el logo del texto de abajo */
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Estos dos márgenes centran la imagen */
+  
+  /* Un toque opcional: una sombra suave para que flote */
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+}
+
+.info {
+    color: #ffffff; /* Blanco puro */
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    /* Esta sombra hace que aunque la foto de fondo sea clara en alguna parte, se lea igual */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); 
+    margin-top: 0px;
+    line-height: 1.2;
+}
+
+.columna-zonas {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  z-index: 100;
+}
+
+/* TUS POSICIONES ORIGINALES */
+.columna-zonas.izquierda { left: -120px; }
+.columna-zonas.derecha { right: -20px; }
+
+.zona-card {
+  height: 60px !important; 
+  width: 380px !important; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  font-family: 'Quicksand', sans-serif !important; 
+  font-weight: bold !important;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1) !important; 
+  backdrop-filter: blur(15px) !important;
+  border-radius: 50px !important; 
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.4s ease !important;
+  overflow: hidden;
+  position: relative;
+}
+
+.zona-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%; width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shineHeader 4s infinite;
+}
+
+/* --- TU BLOQUE DE CENTRO CORREGIDO (SOLO LO QUE PEDISTE) --- */
+.centro-informacion {
+    width: 480px !important; /* VOLVEMOS A TU TAMAÑO */
+    margin: 20px auto !important;
+    padding: 30px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.dirigente-foto {
+    width: 110px !important;
+    height: 110px !important;
+    border-radius: 0% !important;
+    border: none !important; /* CHAU BORDE NEGRO */
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    
+}
+/* Esto fuerza a que el texto NO empuje a la foto aunque sea largo */
+.datos-dirigente {
+    flex: 1 !important; /* Toma el espacio que sobra pero no más */
+    min-width: 0 !important; /* Truco vital para que el texto largo no rompa el flex */
+    word-wrap: break-word !important; /* Si no entra, que salte de línea */
+}
+
+.dirigente-info {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* PROHIBIDO que la foto se vaya arriba */
+    align-items: center !important;
+}
+
+.centro-informacion h4 { color: #ffd700 !important; margin-bottom: 10px !important; }
+.datos-dirigente p { color: #ffffff !important; margin: 5px 0 !important; }
+.datos-dirigente p strong { color: #ffd700 !important; }
+
+/* ============================================================
+   6. FOOTER Y SLIDER (INTACTO)
+   ============================================================ */
+/* --- PERFECCIÓN EN EL FOOTER --- */
+
+footer {
+    width: 100%;
+    padding: 60px 0 40px 0 !important;
+    margin-top: 100px !important;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9)) !important;
+    text-align: center;
+}
+
+/* Contenedor de las redes para que queden centradas y niveladas */
+.footer-contact {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 40px !important; /* Espacio generoso entre redes */
+    margin-top: 15px !important;
+}
+
+/* Mata el azul, el subrayado y alinea ícono con texto */
+.footer-contact a, 
+footer a {
+    color: #ffd700 !important; /* Dorado Lifepar */
+    text-decoration: none !important; /* Chau subrayado */
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Tamaño de los íconos para que no desnivelen la línea */
+.footer-contact img {
+    width: 24px !important;
+    height: 24px !important;
+    display: block !important;
+}
+
+.footer-contact a:hover {
+    color: #ffffff !important;
+    transform: translateY(-3px) !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+.background-slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Esto lo manda al fondo de todo */
+  overflow: hidden;
+  background-color: black; /* Por si las moscas, fondo base negro */
+}
+footer p {
+    font-size: 0.85rem !important;
+    opacity: 0.7;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+.slide {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: fadeSlider 45s infinite; /* 15 segundos dura todo el ciclo */
+  filter: blur(6px) brightness(0.8); /*Esto hace que las fotos se vean artísticas y no distraigan 
+  transform: scale(1.1); /* Evita que se vean bordes blancos por el blur */
+}
+
+.background-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.50); /* Oscurece la foto un 50% */
+  z-index: 10; /* Se asegura de estar POR ENCIMA de las fotos */
+  pointer-events: none;
+}
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 5s; }
+.slide:nth-child(3) { animation-delay: 10s; }
+.slide:nth-child(4) { animation-delay: 15s; }
+.slide:nth-child(5) { animation-delay: 20s; }
+.slide:nth-child(6) { animation-delay: 25s; }
+.slide:nth-child(7) { animation-delay: 30s; }
+.slide:nth-child(8) { animation-delay: 35s; }
+.slide:nth-child(9) { animation-delay: 40s; }
+
+@keyframes fadeSlider {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  33% { opacity: 1; }
+  43% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes aparecerSuave {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- AJUSTES PARA CELULAR (Mobile) --- */
+@media (max-width: 768px) {
+    
+
+    /* 2. Los óvalos dejan de venir "de afuera" para que no tapen todo */
+    .zona-card {
+        width: 100% !important;   /* Ocupan el ancho del contenedor */
+        max-width: 300px;
+        margin: 10px auto !important; /* Se apilan uno abajo del otro */
+        height: 60px !important;
+        font-size: 1.1em !important;
+        mask-image: none !important; /* Quitamos el desvanecimiento lateral */
+    }
+
+    /* 3. Reordenamos las columnas para que sea una sola fila vertical */
+    .contenedor-opciones {
+        flex-direction: column !important; /* Uno arriba del otro */
+        height: auto !important;
+        gap: 15px; /* Espacio entre óvalos */
+    }
+
+    /* 4. Quitamos los márgenes negativos que los sacaban de la pantalla */
+    .columna-zonas.izquierda .zona-card,
+    .columna-zonas.derecha .zona-card {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 0 !important;
+    }
+}
+/* Esta clase se la agregaremos al body con JavaScript */
+body.no-background .background-slider {
+    display: none !important; /* Esconde el carrusel de un saque */
+}
+
+body.no-background {
+    background-color: #0a0a0a; /* Un color oscuro elegante de reemplazo */
+}
+
+.btn-accesibilidad {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: 0.3s;
 }
