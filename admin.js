@@ -140,42 +140,12 @@ function calcularEdadDeportiva(fechaNac, targetId) {
     const anioActual = 2026; 
     document.getElementById(targetId).value = (anioActual - anioNac) + " AÑOS";
 }
-function abrirModalClubes() {
-    const modal = document.getElementById('modal-clubes');
-    
-    // Inyectamos el contenido para asegurar que no aparezca vacío
-    modal.innerHTML = `
-        <div class="modal-content" style="background: #1a1a1a; border: 1px solid #ffd700; padding: 30px; border-radius: 15px; color: white; width: 90%; max-width: 400px; position: relative;">
-            <h4 style="color: #ffd700; margin-top: 0;">🏢 REGISTRAR NUEVO CLUB</h4>
-            <p style="font-size: 0.8rem; color: #ccc;">Ingresá el nombre del club para asociarlo a tu cuenta.</p>
-            
-            <div style="margin-top: 20px;">
-                <label style="display: block; margin-bottom: 5px; font-size: 0.9rem;">Nombre del Club</label>
-                <input type="text" id="nuevo-club-nombre" placeholder="EJ: CLUB ATLÉTICO" 
-                       style="width: 100%; padding: 10px; background: #333; border: 1px solid #555; color: white; border-radius: 5px; text-transform: uppercase;">
-            </div>
-
-            <div style="display: flex; gap: 10px; margin-top: 25px;">
-                <button onclick="guardarNuevoClub()" 
-                        style="flex: 1; padding: 12px; background: gold; color: black; font-weight: bold; border: none; border-radius: 5px; cursor: pointer;">
-                        💾 GUARDAR
-                </button>
-                <button onclick="cerrarModalClubes()" 
-                        style="flex: 1; padding: 12px; background: #444; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                        CANCELAR
-                </button>
-            </div>
-        </div>
-    `;
-    
-   async function guardarNuevoClub() {
+async function guardarNuevoClub() {
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; 
     const clubNombre = document.getElementById('nuevo-club-nombre').value.toUpperCase();
     
-    // CORRECCIÓN: Obtenemos el mail real desde Firebase Auth
-    // Importante: 'auth' es la constante que definimos en el script del admin.html
-    const user = auth.currentUser;
-    const userEmail = user ? user.email : "profe_invitado@gmail.com";
+    // ESTA ES LA LÍNEA: Toma el mail que ya está escrito en tu pantalla por Firebase
+    const userEmail = document.getElementById('display-email').innerText;
 
     if (!clubNombre) {
         alert("⚠️ Por favor, ingresá el nombre de la institución.");
@@ -184,7 +154,7 @@ function abrirModalClubes() {
 
     const datos = {
         tipo: "REGISTRO_CLUB",
-        mail: userEmail, // Ahora sí enviará tu mail real (ej: jose.gen86@gmail.com)
+        mail: userEmail,
         clubNombre: clubNombre
     };
 
