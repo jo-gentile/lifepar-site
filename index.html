@@ -423,8 +423,28 @@ window.recuperarClave = () => {
         .catch(err => alert("Error: " + err.message));
     });
 };
-</script> <script>
-    const btnToggle = document.getElementById('toggle-bg');
+<script>
+  // ESTO VA A RESUCITAR LAS ZONAS SÍ O SÍ
+  window.verZona = function(numero) {
+      console.log("Cargando zona número:", numero);
+      const contenedorCentro = document.getElementById('panel-cristal');
+      const infoABuscar = document.getElementById('detalle-zona' + numero);
+      
+      if (contenedorCentro && infoABuscar) {
+          contenedorCentro.innerHTML = ''; 
+          const clon = infoABuscar.cloneNode(true);
+          clon.classList.remove('oculto'); 
+          clon.classList.add('visible'); 
+          contenedorCentro.appendChild(clon);
+          
+          // Efecto de subida suave
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+          console.error("Error: No encontré el panel-cristal o la zona " + numero);
+      }
+  };
+
+  const btnToggle = document.getElementById('toggle-bg');
 
     if (btnToggle) {
         btnToggle.addEventListener('click', () => {
@@ -440,5 +460,7 @@ window.recuperarClave = () => {
             }
         });
     }
-</script> <script src="script.js"></script> </body>
+</script>
+
+<script src="script.js"></script> </body>
 </html>
