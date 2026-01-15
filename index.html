@@ -209,7 +209,9 @@
     <div id="bloqueRegistro" style="display: none; margin-top: 10px;">
         <input type="email" id="emailManual" placeholder="Ingresa tu email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
         <button id="btnVerificarSheet" style="width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">VERIFICAR ENTRENADOR</button>
-        
+     <div style="margin-top: 15px;">
+        <a href="javascript:void(0)" id="linkVolverLogin" style="color: #007bff; text-decoration: none; font-size: 0.8rem;">← Volver al inicio de sesión</a>
+    </div>
         <div id="seccionConfirmarPass" style="display: none; margin-top: 10px;">
             <input type="password" id="passNuevo" placeholder="Elegí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
             <input type="password" id="passConfirmar" placeholder="Repetí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
@@ -223,16 +225,6 @@
     </div>
     <button id="btnCerrarLogin" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer; font-size: 0.8rem;">[ CERRAR ]</button>
 
-    <button id="btnVerificarSheet" style="width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">VERIFICAR LISTA BLANCA</button>
-    
-    <div style="margin-top: 15px;">
-        <a href="javascript:void(0)" id="linkVolverLogin" style="color: #007bff; text-decoration: none; font-size: 0.8rem;">← Volver al inicio de sesión</a>
-    </div>
-
-    <div id="seccionConfirmarPass" style="display: none; margin-top: 10px;">
-        </div>
-</div>
- 
 <script type="module">
   // 1. IMPORTACIÓN DE MÓDULOS
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
