@@ -29,14 +29,17 @@ window.verZona = function(numero) {
 /* ============================================================
    2. BOTÓN DE FONDO (Pasado del HTML al JS)
    ============================================================ */
+// Buscamos el botón y el slider
 const btnToggle = document.getElementById('toggle-bg');
-if (btnToggle) {
-    btnToggle.addEventListener('click', () => {
-        document.body.classList.toggle('no-background');
-        const icono = btnToggle.querySelector('.icono-bg');
-        if (icono) {
-            // Lógica de cambio de emoji que tenías en el HTML
-            icono.innerText = document.body.classList.contains('no-background') ? '✨' : '🖼️';
+const slider = document.querySelector('.background-slider');
+
+if (btnToggle && slider) {
+    btnToggle.onclick = () => {
+        // Si está visible, lo oculta; si está oculto, lo muestra
+        if (slider.style.display === 'none') {
+            slider.style.display = 'block';
+        } else {
+            slider.style.display = 'none';
         }
-    });
+    };
 }
