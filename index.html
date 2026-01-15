@@ -256,21 +256,28 @@
     };
 
     document.getElementById('btn-google').addEventListener('click', () => {
-      const provider = new GoogleAuthProvider();
-      setPersistence(auth, browserLocalPersistence).then(() => {
-        return signInWithPopup(auth, provider);
-      }).then((result) => {
-        localStorage.setItem("nombreUsuario", result.user.displayName);
-        localStorage.setItem("fotoUsuario", result.user.photoURL);
-        localStorage.setItem("emailUsuario", result.user.email);
-        window.location.href = "admin.html";
+  const provider = new GoogleAuthProvider();
+  signInWithPopup(auth, provider).then((result) => {
+    const email = result.user.email;
+    // VERIFICACIÓN LISTA BLANCA
+    fetch("https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=" + encodeURIComponent(email))
+      .then(res => res.text())
+      .then(respuesta => {
+        if (respuesta.trim() === "SI") {
+          localStorage.setItem("userEmail", email); // Nombre unificado
+          window.location.href = "admin.html";
+        } else {
+          alert("ACCESO DENEGADO: Tu mail no está autorizado.");
+          auth.signOut(); 
+        }
       });
-    });
+  });
+});
 
     window.verificarManual = () => {
       const email = document.getElementById("emailManual").value;
       if (email.includes("@")) {
-        localStorage.setItem("emailUsuario", email);
+        localStorage.setItem("userEmail", email);
         localStorage.setItem("nombreUsuario", "Entrenador");
         window.location.href = "admin.html";
       } else {
@@ -307,24 +314,17 @@ window.verificarAutorizacion = () => {
   const urlValidacion = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
 
   if (!email.includes("@")) { alert("Ingresá un mail válido."); return; }
-
   alert("Verificando en LIFEPAR...");
 
   fetch(urlValidacion + "?email=" + encodeURIComponent(email))
     .then(res => res.text())
     .then(respuesta => {
       if (respuesta.trim() === "SI") {
-        // EXITO: Abrimos la sección de claves
-        document.getElementById("seccionPassword").style.display = "block";
-        document.getElementById("btnContinuar").style.display = "none";
-        document.getElementById("btnGoogleSeccion").style.display = "none";
+        // Usamos el ID que SÍ tenés en tu HTML
+        document.getElementById("seccionRegistroExtra").style.display = "block";
         document.getElementById("emailManual").readOnly = true;
         document.getElementById("emailManual").style.background = "#f0f0f0";
-        
-        // Decidimos si mostramos botón de "Ingresar" o "Crear cuenta"
-        // Por ahora dejamos ambos o podés alternar. Para simplificar, 
-        // habilitamos el botón de registro por si no tiene cuenta.
-        document.getElementById("botonesRegistro").style.display = "block";
+        alert("Mail autorizado. Ahora creá tu contraseña.");
       } else {
         alert("ACCESO DENEGADO: Tu email no figura en la lista de entrenadores.");
       }
