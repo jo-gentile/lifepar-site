@@ -45,4 +45,4 @@ if (btn) {
         const estado = document.body.classList.contains('no-background');
         localStorage.setItem('fondo-desactivado', estado);
     });
-}
+} // <--- Asegurate que acá también cierre bien.

@@ -376,7 +376,6 @@ footer p {
 .slide:nth-child(6) { animation-delay: 25s; }
 .slide:nth-child(7) { animation-delay: 30s; }
 .slide:nth-child(8) { animation-delay: 35s; }
-.slide:nth-child(9) { animation-delay: 40s; }
 
 @keyframes fadeSlider {
   0% { opacity: 0; }

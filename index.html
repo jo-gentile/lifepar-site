@@ -27,7 +27,6 @@
   <div class="slide" style="background-image: url('img/foto6.jpg');"></div>
   <div class="slide" style="background-image: url('img/foto7.jpg');"></div>
   <div class="slide" style="background-image: url('img/foto8.jpg');"></div>
-  <div class="slide" style="background-image: url('img/foto9.jpg');"></div>
 </div>
   <header>
     <div class="logo">
@@ -258,32 +257,39 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    window.mostrarLogin = () => {
-      const form = document.getElementById("loginForm");
-      const overlay = document.getElementById("loginOverlay");
-      const isVisible = form.style.display === "block";
-      form.style.display = isVisible ? "none" : "block";
-      overlay.style.display = isVisible ? "none" : "block";
+window.mostrarLogin = () => {
+        const form = document.getElementById("loginForm");
+        const overlay = document.getElementById("loginOverlay");
+        
+        // Agregamos esta seguridad para que no tire error si no los encuentra
+        if (!form) return; 
+
+        const isVisible = form.style.display === "block";
+        form.style.display = isVisible ? "none" : "block";
+        if (overlay) overlay.style.display = isVisible ? "none" : "block";
     };
 
-    document.getElementById('btn-google').addEventListener('click', () => {
-  const provider = new GoogleAuthProvider();
-  signInWithPopup(auth, provider).then((result) => {
-    const email = result.user.email;
-    // VERIFICACIÓN LISTA BLANCA
-    fetch("https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=" + encodeURIComponent(email))
-      .then(res => res.text())
-      .then(respuesta => {
-        if (respuesta.trim() === "SI") {
-          localStorage.setItem("userEmail", email); // Nombre unificado
-          window.location.href = "admin.html";
-        } else {
-          alert("ACCESO DENEGADO: Tu mail no está autorizado.");
-          auth.signOut(); 
-        }
-      });
-  });
-});
+    // BOTÓN GOOGLE
+    const btnGoogle = document.getElementById('btn-google');
+    if (btnGoogle) {
+        btnGoogle.addEventListener('click', () => {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider).then((result) => {
+                const email = result.user.email;
+                fetch("https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=" + encodeURIComponent(email))
+                .then(res => res.text())
+                .then(respuesta => {
+                    if (respuesta.trim() === "SI") {
+                        localStorage.setItem("userEmail", email);
+                        window.location.href = "admin.html";
+                    } else {
+                        alert("ACCESO DENEGADO: Tu mail no está autorizado.");
+                        auth.signOut(); 
+                    }
+                });
+            }).catch(error => console.error("Error Google:", error));
+        });
+    }
 
  window.verificarManual = () => {
   const email = document.getElementById("emailLogin").value.trim();
