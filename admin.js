@@ -20,6 +20,8 @@ function actualizarCascada(nivel) {
     const disc = document.getElementById('z3-disciplina').value;
     const div = document.getElementById('z3-divisional');
     const cat = document.getElementById('z3-categoria');
+    document.getElementById('z3-dni').value = "";
+}
 
     if (nivel === 'disciplina') {
         // Si el candado de divisional está abierto, actualizamos
@@ -220,6 +222,16 @@ contenedor.innerHTML = `
         </div>
 
         <div style="margin-bottom: 15px;">
+            <label style="color: white; font-size: 0.8rem;">Género</label>
+            <select id="z3-genero" class="input-registro" style="width:100%">
+                <option value="">SELECCIONE...</option>
+                <option value="FEMENINO">FEMENINO</option>
+                <option value="MASCULINO">MASCULINO</option>
+                <option value="NO BINARIO">NO BINARIO</option>
+            </select>
+        </div>
+
+        <div style="margin-bottom: 15px;">
             <input type="number" id="z3-dni" placeholder="DNI (Sín puntos)" class="input-registro" style="width:100%">
         </div>
 
@@ -313,3 +325,18 @@ async function guardarNuevoClub() {
         alert("❌ No se pudo conectar con el servidor.");
     }
 }
+async function enviarCargaPatinador() {
+    const datos = {
+        tipo: "INSCRIPCION",
+        nombreZona: zonaActiva,
+        club: document.getElementById('z3-club').value,
+        disciplina: document.getElementById('z3-disciplina').value,
+        divisional: document.getElementById('z3-divisional').value,
+        categoria: document.getElementById('z3-categoria').value,
+        apellido: document.getElementById('z3-apellido').value.toUpperCase(),
+        nombre: document.getElementById('z3-nombre').value.toUpperCase(),
+        dni: document.getElementById('z3-dni').value, // <-- NUEVO CAMPO
+        nacimiento: document.getElementById('z3-nacimiento').value,
+        edadDeportiva: document.getElementById('z3-edad').value,
+        mailProfe: userEmail
+    };
