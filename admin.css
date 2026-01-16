@@ -351,7 +351,7 @@ body {
 /* --- LA TARJETA PROFESIONAL (EFECTO VIDRIO) --- */
 .menu-zona {
     display: none;
-    background: rgba(255, 255, 255, 0.05) !important; /* Transparencia */
+    background: #1a1a1a !important; /* Transparencia */
     backdrop-filter: blur(15px); /* Efecto de desenfoque */
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1); /* Borde suave */
@@ -361,7 +361,8 @@ body {
     max-width: 450px; /* Para que no sea gigante en monitores grandes */
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
     text-align: center; /* Centra el texto interno */
-    animation: entradaSuave 0.5s ease; /* Para que aparezca con onda */
+    animation: entradaSuave 0.5s ease;
+    opacity: 1 !important; /* Para que aparezca con onda */
 }
 
 /* Título de la tarjeta */
@@ -516,13 +517,8 @@ body {
 
 /* Este es el cuadradito que no estás viendo */
 .modal-content {
-    background-color: #1a1a1a !important; /* Un gris casi negro pero sólido */
-    background-image: none !important;    /* Por si hay algún gradiente molestando */
-    opacity: 1 !important;               /* Asegura que no sea transparente */
-    padding: 30px;
-    border: 2px solid #ffd700;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.8); /* Le da profundidad */
+    background: #000000 !important;
+    border: 2px solid #ffd700 !important; /* El toque de LIFEPAR */
+    padding: 25px;
+    border-radius: 20px;
 }
