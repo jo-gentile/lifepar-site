@@ -345,3 +345,4 @@ await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf
     mode: "no-cors",
     body: JSON.stringify(datos) // Aquí adentro viaja "tipo: INSCRIPCION" y la "zonaActiva"
 });
+}
