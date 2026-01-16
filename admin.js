@@ -219,6 +219,10 @@ contenedor.innerHTML = `
             <input type="text" id="z3-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
         </div>
 
+        <div style="margin-bottom: 15px;">
+            <input type="number" id="z3-dni" placeholder="DNI (Sín puntos)" class="input-registro" style="width:100%">
+        </div>
+
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <div style="flex: 2;">
                 <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
