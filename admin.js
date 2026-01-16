@@ -175,21 +175,19 @@ async function guardarNuevoClub() {
     };
 
     try {
-        const respuesta = await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";, {
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
             method: "POST",
             mode: "no-cors", // Cambiado de no-cors para asegurar que viaje el JSON
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         });
         
-        const texto = await respuesta.text();
+// Con no-cors no podemos leer la respuesta "OK", pero si no salta al catch, es que salió.
+        alert("✅ Solicitud de registro enviada.");
+        cerrarModalClubes();
+        document.getElementById('nuevo-club-nombre').value = "";
 
-        if (texto === "OK") {
-            alert("✅ Club registrado correctamente.");
-            cerrarModalClubes();
-            document.getElementById('nuevo-club-nombre').value = "";
-        } else {
-            alert("ℹ️ Mensaje del sistema: " + texto);
-        }
     } catch (error) {
         console.error("Error:", error);
         alert("❌ No se pudo conectar con el servidor.");
