@@ -159,17 +159,15 @@ function cerrarModalClubes() {
     document.getElementById('modal-clubes').style.display = 'none';
 }
 async function guardarNuevoClub() {
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; 
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; // La que termina en /exec
     const clubNombre = document.getElementById('nuevo-club-nombre').value.toUpperCase();
-    
-    // Este mail luego vendrá del login automático
-    const userEmail = localStorage.getItem('userEmail') || "profe_invitado@gmail.com";
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    if (!clubNombre) {
-        alert("⚠️ Por favor, ingresá el nombre de la institución.");
+    if (!clubNombre || !userEmail) {
+        alert("⚠️ Error: Datos incompletos (Nombre del club o Email).");
         return;
     }
- 
+
     const datos = {
         tipo: "REGISTRO_CLUB",
         mail: userEmail,
@@ -177,22 +175,23 @@ async function guardarNuevoClub() {
     };
 
     try {
-        // El envío que funcionará cuando estés online
-        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
+        const respuesta = await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";, {
             method: "POST",
-            mode: "cors",
+            mode: "cors", // Cambiado de no-cors para asegurar que viaje el JSON
             body: JSON.stringify(datos)
         });
-
-        alert("✅ Club registrado. El sistema lo asociará a tu planilla.");
         
-        // Cierra el modal y limpia el campo
-        cerrarModalClubes();
-        document.getElementById('nuevo-club-nombre').value = "";
+        const texto = await respuesta.text();
 
+        if (texto === "OK") {
+            alert("✅ Club registrado correctamente.");
+            cerrarModalClubes();
+            document.getElementById('nuevo-club-nombre').value = "";
+        } else {
+            alert("ℹ️ Mensaje del sistema: " + texto);
+        }
     } catch (error) {
-        // Esto es lo que verás ahora que estás offline
-        console.log("Modo Offline: El dato se procesó pero no pudo viajar.");
-        alert("❌ Error de conexión. Inténtalo de nuevo.");  
+        console.error("Error:", error);
+        alert("❌ No se pudo conectar con el servidor.");
     }
 }
