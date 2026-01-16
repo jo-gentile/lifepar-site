@@ -1,3 +1,55 @@
+// --- MAPA DE COMPETENCIA (El Cerebro) ---
+const MAPA_COMPETENCIA = {
+    "LIBRE": {
+        "A": ["Nacional A", "Elite"],
+        "B": ["1°", "2°", "3°", "Promocional"],
+        "C": ["1°", "2°", "3°", "4°", "5°", "Escuela Formativa"],
+        "D": ["Principiantes A", "Principiantes B", "Incentivación", "Futuros Talentos"]
+    },
+    "DANZA": {
+        "Lifedance": ["Advanced", "Elemental"],
+        "Gonzalez Molina": ["Avanzado"],
+        "Nacional": ["Basico", "Avanzado"]
+    }
+};
+async function abrirFormularioCarga(numZona) {
+    zonaActiva = "ZONA " + numZona; // Esto guarda "ZONA 3" para el envío
+    // ... resto de tu código de la función ...
+}
+function actualizarCascada(nivel) {
+    const disc = document.getElementById('z3-disciplina').value;
+    const div = document.getElementById('z3-divisional');
+    const cat = document.getElementById('z3-categoria');
+
+    if (nivel === 'disciplina') {
+        // Si el candado de divisional está abierto, actualizamos
+        if (!div.disabled) {
+            div.innerHTML = '<option value="">DIVISIONAL...</option>';
+            if (MAPA_COMPETENCIA[disc]) {
+                Object.keys(MAPA_COMPETENCIA[disc]).forEach(d => {
+                    div.innerHTML += `<option value="${d}">${d}</option>`;
+                });
+            }
+            // Al cambiar disciplina, reseteamos categoría si no está trabada
+            if (!cat.disabled) cat.innerHTML = '<option value="">CATEGORÍA...</option>';
+        }
+    }
+
+    if (nivel === 'divisional') {
+        // Si el candado de categoría está abierto, actualizamos
+        if (!cat.disabled) {
+            cat.innerHTML = '<option value="">CATEGORÍA...</option>';
+            const seleccionada = div.value;
+            if (MAPA_COMPETENCIA[disc] && MAPA_COMPETENCIA[disc][seleccionada]) {
+                MAPA_COMPETENCIA[disc][seleccionada].forEach(c => {
+                    cat.innerHTML += `<option value="${c}">${c}</option>`;
+                });
+            }
+        }
+    }
+}
+// Variable global para saber en qué pestaña de Sheets escribir
+let zonaActiva = "";
 // Buscamos en Session y en Local por las dudas
 let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
 let userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
