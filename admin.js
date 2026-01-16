@@ -340,3 +340,9 @@ async function enviarCargaPatinador() {
         edadDeportiva: document.getElementById('z3-edad').value,
         mailProfe: userEmail
     };
+    // El cartero de PATINADORES usa la misma brújula que el de clubes
+await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", { 
+    method: "POST",
+    mode: "no-cors",
+    body: JSON.stringify(datos) // Aquí adentro viaja "tipo: INSCRIPCION" y la "zonaActiva"
+});
