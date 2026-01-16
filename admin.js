@@ -148,7 +148,12 @@ function calcularEdadDeportiva(fechaNac, targetId) {
     const anioActual = 2026; 
     document.getElementById(targetId).value = (anioActual - anioNac) + " AÑOS";
 }
-modal.style.display = 'flex';
+function abrirModalClubes() {
+    const modal = document.getElementById('modal-clubes');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
+}
 
 function cerrarModalClubes() {
     document.getElementById('modal-clubes').style.display = 'none';
