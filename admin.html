@@ -107,24 +107,24 @@
 
     <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;">
         </div>
-    <div id="modal-clubes" class="modal-lifepar" style="display: none;">
-    <div class="modal-content box-oficina">
-        <h4 style="color: #ffd700; text-align: center;">🏢 GESTIÓN DE MIS CLUBES</h4>
-        <p style="font-size: 0.8rem; color: #ccc; text-align: center;">Registrá tus escuelas. Quedarán asociadas a tu cuenta permanentemente.</p>
+   <div id="modal-clubes" class="modal-lifepar">
+    <div class="modal-content" style="background: #1a1a1a; border: 2px solid #ffd700; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px;">
+        <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">🏢 GESTIÓN DE MIS CLUBES</h4>
+        <p style="font-size: 0.8rem; color: #ccc; text-align: center;">Registrá tus escuelas. Quedarán asociadas a tu cuenta.</p>
         
-        <div id="lista-clubes-actuales" style="margin-bottom: 20px; color: #ffd700; font-weight: bold;">
-            </div>
+        <div id="lista-clubes-actuales" style="margin-bottom: 20px; color: #ffd700; font-weight: bold;"></div>
 
-        <div class="input-group">
-            <label>Nombre del Nuevo Club / Escuela</label>
-            <input type="text" id="nuevo-club-nombre" placeholder="EJ: CLUB PATÍN ARTÍSTICO" class="input-registro" style="text-transform: uppercase;">
+        <div style="margin-bottom: 15px;">
+            <label style="display: block; margin-bottom: 5px; font-size: 0.8rem;">Nombre del Nuevo Club / Escuela</label>
+            <input type="text" id="nuevo-club-nombre" placeholder="EJ: CLUB PATÍN ARTÍSTICO" class="input-registro" style="width: 100%; padding: 10px; box-sizing: border-box; text-transform: uppercase; background: rgba(255,255,255,0.1); border: 1px solid #555; color: white; border-radius: 10px;">
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="guardarNuevoClub()" class="btn-enviar-datos" style="flex: 2;">💾 REGISTRAR CLUB</button>
-            <button onclick="cerrarModalClubes()" class="btn-accion" style="flex: 1; background: #444;">CANCELAR</button>
+            <button onclick="guardarNuevoClub()" style="flex: 2; padding: 12px; background: #ffd700; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">💾 REGISTRAR</button>
+            <button onclick="cerrarModalClubes()" style="flex: 1; padding: 12px; background: #444; color: white; border: none; border-radius: 10px; cursor: pointer;">CANCELAR</button>
         </div>
-    </div> </div>
+    </div>
+</div>
 
   <div class="menu-zona" id="menu-zona4" style="display: none;">
     <h4>Acciones para Zona 4</h4>

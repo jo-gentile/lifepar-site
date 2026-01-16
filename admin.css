@@ -238,15 +238,13 @@ body {
 }
 
 .box-oficina {
-    display: none; /* <--- AGREGÁ ESTO AQUÍ */
+    display: none; /* Mantiene ocultos los bloques de Seguros/Copa por defecto */
     background: rgba(255, 255, 255, 0.03) !important;
     border-radius: 20px !important;
     padding: 25px;
     margin: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05) !important;
 }
-
 .toggle-btn {
     background: none;
     border: none;
@@ -503,14 +501,14 @@ body {
 }
 /* Asegura que el modal sea visible y esté por encima de todo */
 .modal-lifepar {
-    display: none; /* Por defecto oculto */
+    display: none; 
     position: fixed;
-    z-index: 9999; /* Super importante para que no quede atrás */
+    z-index: 10000; /* Aumentado para que tape el footer y el header */
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.8); /* El fondo oscuro que ya ves */
+    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para resaltar el cuadro */
     justify-content: center;
     align-items: center;
 }
