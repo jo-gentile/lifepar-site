@@ -167,17 +167,26 @@ async function abrirFormularioCarga(numZona) {
 
         // Cargamos TODO el HTML dentro del contenedor vía JS
         // ... dentro de abrirFormularioCarga(numZona) ...
+// Este bloque integra TODO: Competencia + Datos Personales + Botón Final
 contenedor.innerHTML = `
     <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
-        <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+        <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ${zonaActiva}</h4>
         
+        <div style="margin-bottom: 15px;">
+            <label style="color: white; font-size: 0.8rem;">Club</label>
+            <div style="display: flex; gap: 5px;">
+                <select id="z3-club" class="input-registro" style="width:100%">${opcionesClub}</select>
+                <button type="button" onclick="toggleLock('z3-club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
+            </div>
+        </div>
+
         <div style="margin-bottom: 15px;">
             <label style="color: white; font-size: 0.8rem;">Disciplina</label>
             <div style="display: flex; gap: 5px;">
                 <select id="z3-disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina')">
                     <option value="">SELECCIONE...</option>
                     <option value="LIBRE">LIBRE</option>
-                    <option value="DANZA">DANZA</option>
+                    <option value="DANZA">DANZA SOLO</option>
                 </select>
                 <button type="button" onclick="toggleLock('z3-disciplina')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
             </div>
@@ -202,8 +211,26 @@ contenedor.innerHTML = `
                 <button type="button" onclick="toggleLock('z3-categoria')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
             </div>
         </div>
-        
-        <button type="button" onclick="enviarCargaPatinador()" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif;">
+
+        <hr style="border: 0.5px solid rgba(255,215,0,0.3); margin: 20px 0;">
+
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <input type="text" id="z3-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
+            <input type="text" id="z3-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <div style="flex: 2;">
+                <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
+                <input type="date" id="z3-nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z3-edad')">
+            </div>
+            <div style="flex: 1;">
+                <label style="color: white; font-size: 0.7rem;">Edad Dep.</label>
+                <input type="text" id="z3-edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
+            </div>
+        </div>
+
+        <button type="button" onclick="enviarCargaPatinador()" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif; margin-top: 10px;">
             🚀 PROBAR CARGA
         </button>
     </div>
