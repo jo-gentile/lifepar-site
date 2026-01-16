@@ -307,31 +307,40 @@ const firebaseConfig = {
   document.getElementById('btnEntrar').onclick = async () => {
     const email = document.getElementById('emailLogin').value;
     const pass = document.getElementById('passLogin').value;
+    
+    if(!email || !pass) return alert("Completá todos los campos.");
+
     try {
       await signInWithEmailAndPassword(auth, email, pass);
+      
+      // GUARDADO DE DATOS (Asegurate que esté dentro del try)
       sessionStorage.setItem('userEmail', email);
-      sessionStorage.setItem('userName', "Entrenador Lifepar");
+      sessionStorage.setItem('userName', "Entrenador Lifepar"); 
+
       alert("Ingreso exitoso.");
       loginForm.style.display = 'none';
       window.location.href = "admin.html";
     } catch (err) {
-      alert("Credenciales incorrectas.");
+      console.error("Error Firebase:", err.code);
+      alert("Credenciales incorrectas o usuario no encontrado.");
     }
   };
 
-  // D. Ingreso con Google + Check de Lista Blanca
+// D. Ingreso con Google + Check de Lista Blanca
   document.getElementById('btnGoogle').onclick = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const email = result.user.email;
+      const nombre = result.user.displayName || "Entrenador";
 
-      // Check obligatorio contra el Sheet
-      const response = await fetch(`${URL_SHEET}?email=${email}`);
+      // --- FIJATE QUE ESTA LÍNEA ESTÉ COMPLETA ---
+      const response = await fetch(`https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=${email}`);
       const data = await response.json();
 
       if(data.autorizado) {
         sessionStorage.setItem('userEmail', email);
         sessionStorage.setItem('userName', nombre);
+
         alert("Bienvenido entrenador: " + email);
         window.location.href = "admin.html";
       } else {
@@ -339,6 +348,7 @@ const firebaseConfig = {
         await signOut(auth);
       }
     } catch (err) {
+      console.error(err);
       alert("Error con Google.");
     }
   };
