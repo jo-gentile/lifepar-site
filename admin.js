@@ -1,4 +1,5 @@
 // --- MAPA DE COMPETENCIA (El Cerebro) ---
+let zonaActiva = "";
 const MAPA_COMPETENCIA = {
     "LIBRE": {
         "A": ["Nacional A", "Elite"],
@@ -20,7 +21,6 @@ function actualizarCascada(nivel) {
     const disc = document.getElementById('z3-disciplina').value;
     const div = document.getElementById('z3-divisional');
     const cat = document.getElementById('z3-categoria');
-    document.getElementById('z3-dni').value = "";
 }
 
     if (nivel === 'disciplina') {
@@ -49,7 +49,7 @@ function actualizarCascada(nivel) {
             }
         }
     }
-// Variable global para saber en qué pestaña de Sheets escribir
+    // Variable global para saber en qué pestaña de Sheets escribir
 let zonaActiva = "";
 // Buscamos en Session y en Local por las dudas
 let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
@@ -339,10 +339,21 @@ async function enviarCargaPatinador() {
         edadDeportiva: document.getElementById('z3-edad').value,
         mailProfe: userEmail
     };
-    // El cartero de PATINADORES usa la misma brújula que el de clubes
-await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", { 
-    method: "POST",
-    mode: "no-cors",
-    body: JSON.stringify(datos) // Aquí adentro viaja "tipo: INSCRIPCION" y la "zonaActiva"
-});
+        try {
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", { 
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(datos)
+        });
+
+        // 3. Si llegó acá, es que el navegador procesó el envío
+        alert("✅ Registro enviado a la " + zonaActiva);
+        
+        // Aquí podés llamar a la función que limpia los campos (DNI, Nombre, etc.)
+        limpiarFormularioPostCarga(); 
+
+    } catch (error) {
+        console.error("Error al enviar:", error);
+        alert("❌ Hubo un problema al conectar con la planilla.");
+    }
 }
