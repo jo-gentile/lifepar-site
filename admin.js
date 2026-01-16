@@ -179,38 +179,63 @@ function abrirModalClubes() {
 function cerrarModalClubes() {
     document.getElementById('modal-clubes').style.display = 'none';
 }
-async function guardarNuevoClub() {
-    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; // La que termina en /exec
-    const clubNombre = document.getElementById('nuevo-club-nombre').value.toUpperCase();
+async function abrirFormularioCarga(numZona) {
+    const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    if (!clubNombre || !userEmail) {
-        alert("⚠️ Error: Datos incompletos (Nombre del club o Email).");
-        return;
-    }
-
-    const datos = {
-        tipo: "REGISTRO_CLUB",
-        mail: userEmail,
-        clubNombre: clubNombre
-    };
-
-    try {
-        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
-            method: "POST",
-            mode: "no-cors", // Cambiado de no-cors para asegurar que viaje el JSON
-            cache: "no-cache",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
+    if (contenedor.style.display === 'none' || contenedor.style.display === '') {
+        let opcionesClub = '<option value="">Cargando mis clubes...</option>';
         
-// Con no-cors no podemos leer la respuesta "OK", pero si no salta al catch, es que salió.
-        alert("✅ Solicitud de registro enviada.");
-        cerrarModalClubes();
-        document.getElementById('nuevo-club-nombre').value = "";
+        try {
+            // encodeURIComponent asegura que el mail no rompa la URL si tiene caracteres raros
+            const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${encodeURIComponent(userEmail)}`;
+            const respuesta = await fetch(URL_GET);
+            const listaDeClubes = await respuesta.json();
+            
+            if (Array.isArray(listaDeClubes) && listaDeClubes.length > 0) {
+                opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
+            } else {
+                opcionesClub = '<option value="">No tenés clubes registrados</option>';
+            }
+        } catch (error) {
+            console.error("Error en fetch:", error);
+            opcionesClub = '<option value="">Error al conectar</option>';
+        }
 
-    } catch (error) {
-        console.error("Error:", error);
-        alert("❌ No se pudo conectar con el servidor.");
+        // Usamos backticks (`) para definir el HTML. Ojo con las llaves de los estilos CSS.
+        contenedor.innerHTML = `
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
+                <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+                
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="color: white; font-size: 0.8rem;">Club</label>
+                        <div style="display: flex; gap: 5px;">
+                            <select id="z3-club" class="input-registro" style="width:100%">
+                                ${opcionesClub}
+                            </select>
+                            <button type="button" onclick="toggleLock('z3-club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="text" id="z3-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
+                    <input type="text" id="z3-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                    <input type="date" id="z3-nacimiento" class="input-registro" style="flex:1" onchange="calcularEdadDeportiva(this.value, 'z3-edad')">
+                    <input type="text" id="z3-edad" placeholder="EDAD" class="input-registro" readonly style="flex:1; color:gold; font-weight:bold;">
+                </div>
+
+                <button type="button" onclick="alert('Datos listos')" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif;">
+                    🚀 PROBAR CARGA
+                </button>
+            </div>
+        `;
+        contenedor.style.display = 'block';
+    } else {
+        contenedor.style.display = 'none';
     }
 }
