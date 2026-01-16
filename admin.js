@@ -155,10 +155,15 @@ async function abrirFormularioCarga(numZona) {
 // 2. FUNCIÓN PARA LOS CANDADOS (Corregida)
 function toggleLock(fieldId) {
     const input = document.getElementById(fieldId);
+    // Buscamos el botón que está justo al lado del input
+    const boton = input.nextElementSibling; 
+
     if (input.disabled) {
         input.disabled = false;
+        if (boton) boton.innerText = "🔓";
     } else {
         input.disabled = true;
+        if (boton) boton.innerText = "🔒";
     }
 }
 
