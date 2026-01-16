@@ -1,5 +1,4 @@
 // --- MAPA DE COMPETENCIA (El Cerebro) ---
-let zonaActiva = "";
 const MAPA_COMPETENCIA = {
     "LIBRE": {
         "A": ["Nacional A", "Elite"],
