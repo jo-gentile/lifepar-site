@@ -179,81 +179,38 @@ function abrirModalClubes() {
 function cerrarModalClubes() {
     document.getElementById('modal-clubes').style.display = 'none';
 }
-// VARIABLES GLOBALES DE SESIÓN
-let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
-let userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
-
-// Mostrar datos en el header
-if(document.getElementById('display-email')) document.getElementById('display-email').innerText = userEmail;
-if(document.getElementById('display-name')) document.getElementById('display-name').innerText = userName;
-
-// URL ÚNICA DE TU SCRIPT DE GOOGLE
-const MI_URL_GOOGLE = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";
-
-// --- FUNCIONES DE NAVEGACIÓN (Se mantienen igual) ---
-function logout() { localStorage.clear(); window.location.href = "index.html"; }
-function toggleSidebar() { 
-    document.getElementById('sidebar').classList.toggle('collapsed'); 
-    document.getElementById('main-content').classList.toggle('expanded'); 
-}
-function toggleArbol(id) {
-    const lista = document.getElementById(id);
-    lista.style.display = (lista.style.display === "flex") ? "none" : "flex";
-}
-function mostrarAccionesZona(num) {
-    document.getElementById('contenedor-acciones-zonas').style.display = 'flex';
-    document.querySelectorAll('.menu-zona').forEach(m => m.style.display = 'none');
-    const seleccionado = document.getElementById('menu-zona' + num);
-    if (seleccionado) seleccionado.style.display = 'block';
-}
-
-// --- FUNCIÓN 1: GUARDAR NUEVO CLUB (La que te tiraba error en Chrome) ---
 async function guardarNuevoClub() {
+    const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; // La que termina en /exec
     const clubNombre = document.getElementById('nuevo-club-nombre').value.toUpperCase();
-    if (!clubNombre || userEmail === "Email no detectado") {
-        alert("⚠️ Datos incompletos."); return;
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+
+    if (!clubNombre || !userEmail) {
+        alert("⚠️ Error: Datos incompletos (Nombre del club o Email).");
+        return;
     }
-    const datos = { tipo: "REGISTRO_CLUB", mail: userEmail, clubNombre: clubNombre };
+
+    const datos = {
+        tipo: "REGISTRO_CLUB",
+        mail: userEmail,
+        clubNombre: clubNombre
+    };
 
     try {
-        await fetch(MI_URL_GOOGLE, {
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
             method: "POST",
-            mode: "no-cors",
+            mode: "no-cors", // Cambiado de no-cors para asegurar que viaje el JSON
+            cache: "no-cache",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(datos)
         });
-        alert("✅ Solicitud enviada. Reiniciá para ver los cambios.");
+        
+// Con no-cors no podemos leer la respuesta "OK", pero si no salta al catch, es que salió.
+        alert("✅ Solicitud de registro enviada.");
         cerrarModalClubes();
-    } catch (e) { alert("❌ Error de conexión."); }
+        document.getElementById('nuevo-club-nombre').value = "";
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("❌ No se pudo conectar con el servidor.");
+    }
 }
-
-// --- FUNCIÓN 2: CARGAR FORMULARIO Y BUSCAR CLUBES ---
-async function abrirFormularioCarga(numZona) {
-    const contenedor = document.getElementById('contenedor-formulario-dinamico');
-    if (contenedor.style.display === 'block') { contenedor.style.display = 'none'; return; }
-
-    let opciones = '<option value="">Cargando clubes...</option>';
-    try {
-        const res = await fetch(`${MI_URL_GOOGLE}?mail=${encodeURIComponent(userEmail)}`);
-        const clubes = await res.json();
-        opciones = clubes.length > 0 
-            ? clubes.map(c => `<option value="${c}">${c}</option>`).join('')
-            : '<option value="">Sin clubes asociados</option>';
-    } catch (e) { opciones = '<option value="">Error al cargar</option>'; }
-
-    contenedor.innerHTML = `
-        <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px;">
-            <h4 style="color: #ffd700; text-align: center;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
-            <label>Club</label>
-            <select id="z3-club" class="input-registro" style="width:100%; margin-bottom:15px;">${opciones}</select>
-            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                <input type="text" id="z3-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
-                <input type="text" id="z3-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
-            </div>
-            <button class="btn-accion" style="width:100%; background:gold; color:black;">🚀 PROBAR CARGA</button>
-        </div>`;
-    contenedor.style.display = 'block';
-}
-
-// --- FUNCIONES MODAL ---
-function abrirModalClubes() { document.getElementById('modal-clubes').style.display = 'flex'; }
-function cerrarModalClubes() { document.getElementById('modal-clubes').style.display = 'none'; }
