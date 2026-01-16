@@ -500,23 +500,27 @@ body {
     color: #ffd700;
     transform: translateY(-2px);
 }
+/* Asegura que el modal sea visible y esté por encima de todo */
 .modal-lifepar {
+    display: none; /* Por defecto oculto */
     position: fixed;
-    top: 0;
+    z-index: 9999; /* Super importante para que no quede atrás */
     left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Fondo oscuro con transparencia */
-    backdrop-filter: blur(8px);    /* Desenfoque del fondo */
-    display: none;                 /* Oculto por defecto */
-    align-items: center;           /* Centra verticalmente */
-    justify-content: center;       /* Centra horizontalmente */
-    z-index: 10000;                /* Por encima de todo */
+    background-color: rgba(0,0,0,0.8); /* El fondo oscuro que ya ves */
+    justify-content: center;
+    align-items: center;
 }
+
+/* Este es el cuadradito que no estás viendo */
 .modal-content {
-    width: 90%;
-    max-width: 450px;
+    display: block !important; 
+    background: #1a1a1a;
     padding: 30px;
-    border: 1px solid #ffd700;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
 }
