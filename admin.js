@@ -49,7 +49,6 @@ function actualizarCascada(nivel) {
             }
         }
     }
-}
 // Variable global para saber en qué pestaña de Sheets escribir
 let zonaActiva = "";
 // Buscamos en Session y en Local por las dudas
