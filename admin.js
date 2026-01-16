@@ -87,25 +87,45 @@ function mostrarCopa() {
         boxCopa.style.display = 'block';
     }
 }
-// 1. FUNCIÓN PRINCIPAL: ABRE Y CIERRA EL FORMULARIO
-function abrirFormularioCarga(numZona) {
+async function abrirFormularioCarga(numZona) {
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
-    
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+
+    // Si está oculto, lo cargamos y mostramos
     if (contenedor.style.display === 'none' || contenedor.style.display === '') {
-        // Metemos el HTML
+        
+        let opcionesClub = '<option value="">Cargando mis clubes...</option>';
+        
+        try {
+            // Usamos tu URL de Google Apps Script con el mail del usuario logueado
+            const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
+            const respuesta = await fetch(URL_GET);
+            const listaDeClubes = await respuesta.json();
+            
+            if (listaDeClubes.length > 0) {
+                // Si hay clubes en la planilla, armamos el select dinámico
+                opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
+            } else {
+                opcionesClub = '<option value="">Sin clubes registrados</option>';
+            }
+        } catch (error) {
+            console.error("Error al traer clubes:", error);
+            opcionesClub = '<option value="CLUB PRUEBA">CLUB PRUEBA</option>';
+        }
+
+        // Cargamos TODO el HTML dentro del contenedor vía JS
         contenedor.innerHTML = `
             <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                <h4 style="color: #ffd700; text-align: center;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+                <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <div style="flex: 1;">
-                        <label>Club</label>
+                        <label style="color: white; font-size: 0.8rem;">Club</label>
                         <div style="display: flex; gap: 5px;">
                             <select id="z3-club" class="input-registro" style="width:100%">
-                                <option value="">Seleccione...</option>
-                                <option value="CLUB PRUEBA">CLUB PRUEBA</option>
+                                ${opcionesClub}
                             </select>
-                            <button type="button" onclick="toggleLock('z3-club')" style="cursor:pointer">🔓</button>
+                            <button type="button" onclick="toggleLock('z3-club')" style="cursor:pointer; background: transparent; border: none; font-size: 1.2rem;">🔓</button>
                         </div>
                     </div>
                 </div>
@@ -117,16 +137,17 @@ function abrirFormularioCarga(numZona) {
 
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <input type="date" id="z3-nacimiento" class="input-registro" style="flex:1" onchange="calcularEdadDeportiva(this.value, 'z3-edad')">
-                    <input type="text" id="z3-edad" placeholder="EDAD" class="input-registro" readonly style="flex:1; color:gold">
+                    <input type="text" id="z3-edad" placeholder="EDAD" class="input-registro" readonly style="flex:1; color:gold; font-weight: bold;">
                 </div>
 
-                <button type="button" onclick="alert('¡Casi listo! Falta conectar con Google')" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:5px;">
+                <button type="button" onclick="alert('¡Datos listos para enviar!')" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border: none; font-family: 'Anton', sans-serif; letter-spacing: 1px;">
                     🚀 PROBAR CARGA
                 </button>
             </div>
         `;
         contenedor.style.display = 'block';
     } else {
+        // Si ya está visible, el botón lo cierra
         contenedor.style.display = 'none';
     }
 }
