@@ -177,7 +177,7 @@ async function guardarNuevoClub() {
     try {
         const respuesta = await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";, {
             method: "POST",
-            mode: "cors", // Cambiado de no-cors para asegurar que viaje el JSON
+            mode: "no-cors", // Cambiado de no-cors para asegurar que viaje el JSON
             body: JSON.stringify(datos)
         });
         
