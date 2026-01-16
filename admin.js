@@ -1,4 +1,5 @@
 // --- MAPA DE COMPETENCIA (El Cerebro) ---
+let zonaActiva = "";
 const MAPA_COMPETENCIA = {
     "LIBRE": {
         "A": ["Nacional A", "Elite"],
@@ -20,7 +21,6 @@ function actualizarCascada(nivel) {
     const disc = document.getElementById('z3-disciplina').value;
     const div = document.getElementById('z3-divisional');
     const cat = document.getElementById('z3-categoria');
-}
 
     if (nivel === 'disciplina') {
         // Si el candado de divisional está abierto, actualizamos
@@ -48,8 +48,9 @@ function actualizarCascada(nivel) {
             }
         }
     }
+}    
     // Variable global para saber en qué pestaña de Sheets escribir
-let zonaActiva = "";
+
 // Buscamos en Session y en Local por las dudas
 let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
 let userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
