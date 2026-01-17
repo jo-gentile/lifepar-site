@@ -14,9 +14,9 @@ const MAPA_COMPETENCIA = {
 };
 
 function actualizarCascada(nivel) {
-    const disc = document.getElementById('z${numZona}--disciplina').value;
-    const div = document.getElementById('z${numZona}--divisional');
-    const cat = document.getElementById('z${numZona}--categoria');
+    const disc = document.getElementById(reg-disciplina-disciplina').value;
+    const div = document.getElementById(reg-divisional');
+    const cat = document.getElementById(reg-categoria');
 
     if (nivel === 'disciplina') {
         // Si el candado de divisional está abierto, actualizamos
@@ -31,7 +31,7 @@ function actualizarCascada(nivel) {
             if (!cat.disabled) cat.innerHTML = '<option value="">CATEGORÍA...</option>';
         }
     }
-
+}
     if (nivel === 'divisional') {
         // Si el candado de categoría está abierto, actualizamos
         if (!cat.disabled) {
@@ -44,7 +44,6 @@ function actualizarCascada(nivel) {
             }
         }
     }
-}    
 
 async function abrirFormularioCarga(numZona) {
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
