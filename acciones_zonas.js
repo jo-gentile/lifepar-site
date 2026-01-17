@@ -14,9 +14,9 @@ const MAPA_COMPETENCIA = {
 };
 
 function actualizarCascada(nivel) {
-    const disc = document.getElementById('z3-disciplina').value;
-    const div = document.getElementById('z3-divisional');
-    const cat = document.getElementById('z3-categoria');
+    const disc = document.getElementById('z${numZona}--disciplina').value;
+    const div = document.getElementById('z${numZona}--divisional');
+    const cat = document.getElementById('z${numZona}--categoria');
 
     if (nivel === 'disciplina') {
         // Si el candado de divisional está abierto, actualizamos
@@ -88,15 +88,15 @@ async function abrirFormularioCarga(numZona) {
                 <div style="margin-bottom: 15px;">
                     <label style="color: white; font-size: 0.8rem;">Club</label>
                     <div style="display: flex; gap: 5px;">
-                        <select id="z3-club" class="input-registro" style="width:100%">${opcionesClub}</select>
-                        <button type="button" onclick="toggleLock('z3-club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
+                        <select id="z${numZona}--club" class="input-registro" style="width:100%">${opcionesClub}</select>
+                        <button type="button" onclick="toggleLock('z${numZona}--club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
                     </div>
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <label style="color: white; font-size: 0.8rem;">Disciplina</label>
                     <div style="display: flex; gap: 5px;">
-                        <select id="z3-disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina')">
+                        <select id="z${numZona}--disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina')">
                             <option value="">SELECCIONE...</option>
                             <option value="LIBRE">LIBRE</option>
                             <option value="DANZA">DANZA SOLO</option>
@@ -107,7 +107,7 @@ async function abrirFormularioCarga(numZona) {
                 <div style="margin-bottom: 15px;">
                     <label style="color: white; font-size: 0.8rem;">Divisional</label>
                     <div style="display: flex; gap: 5px;">
-                        <select id="z3-divisional" class="input-registro" style="width:100%" onchange="actualizarCascada('divisional')">
+                        <select id="z${numZona}--divisional" class="input-registro" style="width:100%" onchange="actualizarCascada('divisional')">
                             <option value="">DIVISIONAL...</option>
                         </select>
                     </div>
@@ -116,7 +116,7 @@ async function abrirFormularioCarga(numZona) {
                 <div style="margin-bottom: 15px;">
                     <label style="color: white; font-size: 0.8rem;">Categoría</label>
                     <div style="display: flex; gap: 5px;">
-                        <select id="z3-categoria" class="input-registro" style="width:100%">
+                        <select id="z${numZona}--categoria" class="input-registro" style="width:100%">
                             <option value="">CATEGORÍA...</option>
                         </select>
                     </div>
@@ -125,22 +125,22 @@ async function abrirFormularioCarga(numZona) {
                 <hr style="border: 0.5px solid rgba(255,215,0,0.3); margin: 20px 0;">
 
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="text" id="z3-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
-                    <input type="text" id="z3-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
+                    <input type="text" id="z${numZona}--apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
+                    <input type="text" id="z${numZona}--nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
                 </div>
 
                 <div style="margin-bottom: 15px;">
-                    <input type="number" id="z3-DNI" placeholder="DNI (Sin puntos)" class="input-registro" style="width:100%">
+                    <input type="number" id="z${numZona}--DNI" placeholder="DNI (Sin puntos)" class="input-registro" style="width:100%">
                 </div>
 
                 <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                     <div style="flex: 2;">
                         <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
-                        <input type="date" id="z3-nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z3-edad')">
+                        <input type="date" id="z${numZona}--nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z${numZona}--edad')">
                     </div>
                     <div style="flex: 1;">
                         <label style="color: white; font-size: 0.7rem;">Edad Dep.</label>
-                        <input type="text" id="z3-edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
+                        <input type="text" id="z${numZona}--edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
                     </div>
                 </div>
 
@@ -236,22 +236,22 @@ async function guardarNuevoClub() {
         alert("❌ No se pudo conectar con el servidor.");
     }
 }
-async function enviarCargaPatinador() {
+async function enviarCargaPatinador(num) {
     // Definimos el mail aquí para que la función sepa quién carga
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     
     const datos = {
         tipo: "INSCRIPCION",
         nombreZona: window.zonaActiva, // Usa la variable global que definiste al principio del JS
-        club: document.getElementById('z3-club').value,
-        disciplina: document.getElementById('z3-disciplina').value,
-        divisional: document.getElementById('z3-divisional').value,
-        categoria: document.getElementById('z3-categoria').value,
-        apellido: document.getElementById('z3-apellido').value.toUpperCase(),
-        nombre: document.getElementById('z3-nombre').value.toUpperCase(),
-        DNI: document.getElementById('z3-DNI').value,
-        nacimiento: document.getElementById('z3-nacimiento').value,
-        edadDeportiva: document.getElementById('z3-edad').value,
+        club: document.getElementById('z${numZona}--club').value,
+        disciplina: document.getElementById('z${numZona}--disciplina').value,
+        divisional: document.getElementById('z${numZona}--divisional').value,
+        categoria: document.getElementById('z${numZona}--categoria').value,
+        apellido: document.getElementById('z${numZona}--apellido').value.toUpperCase(),
+        nombre: document.getElementById('z${numZona}--nombre').value.toUpperCase(),
+        DNI: document.getElementById('z${numZona}--DNI').value,
+        nacimiento: document.getElementById('z${numZona}--nacimiento').value,
+        edadDeportiva: document.getElementById('z${numZona}--edad').value,
         mailProfe: userEmail
     };
 
@@ -275,13 +275,13 @@ async function enviarCargaPatinador() {
 
 // Función de limpieza movida afuera para que funcione bien
 function limpiarFormularioPostCarga() {
-    if(document.getElementById('z3-apellido')) document.getElementById('z3-apellido').value = "";
-    if(document.getElementById('z3-nombre')) document.getElementById('z3-nombre').value = "";
-    if(document.getElementById('z3-DNI')) document.getElementById('z3-DNI').value = "";
-    if(document.getElementById('z3-nacimiento')) document.getElementById('z3-nacimiento').value = "";
-    if(document.getElementById('z3-edad')) document.getElementById('z3-edad').value = "";
+    if(document.getElementById('z${numZona}--apellido')) document.getElementById('z${numZona}--apellido').value = "";
+    if(document.getElementById('z${numZona}--nombre')) document.getElementById('z${numZona}--nombre').value = "";
+    if(document.getElementById('z${numZona}--DNI')) document.getElementById('z${numZona}--DNI').value = "";
+    if(document.getElementById('z${numZona}--nacimiento')) document.getElementById('z${numZona}--nacimiento').value = "";
+    if(document.getElementById('z${numZona}--edad')) document.getElementById('z${numZona}--edad').value = "";
     
-    if(document.getElementById('z3-genero')) document.getElementById('z3-genero').selectedIndex = 0;
+    if(document.getElementById('z${numZona}--genero')) document.getElementById('z${numZona}--genero').selectedIndex = 0;
 
     console.log("Campos de patinador vaciados correctamente.");
 }
