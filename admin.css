@@ -517,7 +517,11 @@ body {
 /* Este es el cuadradito que no estás viendo */
 .modal-content {
     background: #000000 !important;
-    border: 2px solid #ffd700 !important; /* El toque de LIFEPAR */
+    border: 2px solid #ffd700 !important;
     padding: 25px;
     border-radius: 20px;
+
+    max-height: 85vh;
+    overflow-y: auto;
 }
+
