@@ -50,108 +50,113 @@ async function abrirFormularioCarga(numZona) {
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    // 1. Verificación de seguridad
     if (!userEmail) {
         alert("⚠️ No se detectó sesión de usuario. Por favor reingresa.");
         return;
     }
 
-    // Si está oculto, lo cargamos
-    if (contenedor.style.display === 'none' || contenedor.style.display === '') {
-        
-        // 2. Feedback inmediato (para que no parezca que no hace nada)
-        contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Buscando tus clubes registrados...</p>';
-        contenedor.style.display = 'block';
-        
-        let opcionesClub = "";
-        
-        try {
-            const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
-            const respuesta = await fetch(URL_GET);
-            const listaDeClubes = await respuesta.json();
-            
-            if (listaDeClubes && listaDeClubes.length > 0) {
-                opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
-            } else {
-                opcionesClub = '<option value="">Sin clubes registrados</option>';
-            }
-        } catch (error) {
-            console.error("Error al traer clubes:", error);
-            opcionesClub = '<option value="CLUB PRUEBA">ERROR AL CARGAR CLUBES</option>';
-        }
-
-        // 3. Dibujamos el formulario (Usando numZona directamente)
-        contenedor.innerHTML = `
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
-                
-                <div style="margin-bottom: 15px;">
-                    <label style="color: white; font-size: 0.8rem;">Club</label>
-                    <div style="display: flex; gap: 5px;">
-                        <select id="z${numZona}--club" class="input-registro" style="width:100%">${opcionesClub}</select>
-                        <button type="button" onclick="toggleLock('z${numZona}--club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: white; font-size: 0.8rem;">Disciplina</label>
-                    <div style="display: flex; gap: 5px;">
-                        <select id="z${numZona}--disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina')">
-                            <option value="">SELECCIONE...</option>
-                            <option value="LIBRE">LIBRE</option>
-                            <option value="DANZA">DANZA SOLO</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: white; font-size: 0.8rem;">Divisional</label>
-                    <div style="display: flex; gap: 5px;">
-                        <select id="z${numZona}--divisional" class="input-registro" style="width:100%" onchange="actualizarCascada('divisional')">
-                            <option value="">DIVISIONAL...</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <label style="color: white; font-size: 0.8rem;">Categoría</label>
-                    <div style="display: flex; gap: 5px;">
-                        <select id="z${numZona}--categoria" class="input-registro" style="width:100%">
-                            <option value="">CATEGORÍA...</option>
-                        </select>
-                    </div>
-                </div>
-
-                <hr style="border: 0.5px solid rgba(255,215,0,0.3); margin: 20px 0;">
-
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <input type="text" id="z${numZona}--apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
-                    <input type="text" id="z${numZona}--nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
-                </div>
-
-                <div style="margin-bottom: 15px;">
-                    <input type="number" id="z${numZona}--DNI" placeholder="DNI (Sin puntos)" class="input-registro" style="width:100%">
-                </div>
-
-                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                    <div style="flex: 2;">
-                        <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
-                        <input type="date" id="z${numZona}--nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z${numZona}--edad')">
-                    </div>
-                    <div style="flex: 1;">
-                        <label style="color: white; font-size: 0.7rem;">Edad Dep.</label>
-                        <input type="text" id="z${numZona}--edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
-                    </div>
-                </div>
-
-                <button type="button" onclick="enviarCargaPatinador()" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif; margin-top: 10px;">
-                    🚀 CARGAR PATINADOR
-                </button>
-            </div>
-        `;
-    } else {
+    // Si ya está visible, lo ocultamos (toggle)
+    if (contenedor.style.display === 'block') {
         contenedor.style.display = 'none';
+        return;
     }
+
+    // Feedback visual inmediato
+    contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Conectando con la base de datos...</p>';
+    contenedor.style.display = 'block';
+    
+    let opcionesClub = "";
+    
+    try {
+        // Ponemos un tiempo límite (timeout) al fetch para que no se quede colgado
+        const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
+        
+        const respuesta = await fetch(URL_GET);
+        
+        if (!respuesta.ok) throw new Error("Error en servidor");
+        
+        const listaDeClubes = await respuesta.json();
+        
+        if (listaDeClubes && listaDeClubes.length > 0) {
+            opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
+        } else {
+            opcionesClub = '<option value="">Sin clubes asociados</option>';
+        }
+    } catch (error) {
+        console.error("Error al traer clubes:", error);
+        // Si falla el fetch, cargamos un selector manual para que no se trabe el panel
+        opcionesClub = '<option value="CLUB MANUAL">ERROR AL CARGAR - ESCRIBIR ABAJO</option>';
+    }
+
+    // DIBUJAMOS EL FORMULARIO (Asegurate que use las comillas ` backticks)
+    contenedor.innerHTML = `
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
+            <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Club</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-club" class="input-registro" style="width:100%">${opcionesClub}</select>
+                    <button type="button" onclick="toggleLock('z${numZona}-club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Disciplina</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina', ${numZona})">
+                        <option value="">SELECCIONE...</option>
+                        <option value="LIBRE">LIBRE</option>
+                        <option value="DANZA">DANZA SOLO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Divisional</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-divisional" class="input-registro" style="width:100%" onchange="actualizarCascada('divisional', ${numZona})">
+                        <option value="">DIVISIONAL...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Categoría</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-categoria" class="input-registro" style="width:100%">
+                        <option value="">CATEGORÍA...</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr style="border: 0.5px solid rgba(255,215,0,0.3); margin: 20px 0;">
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
+                <input type="text" id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <input type="number" id="z${numZona}-DNI" placeholder="DNI (Sin puntos)" class="input-registro" style="width:100%">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div style="flex: 2;">
+                    <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
+                    <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
+                </div>
+                <div style="flex: 1;">
+                    <label style="color: white; font-size: 0.7rem;">Edad Dep.</label>
+                    <input type="text" id="z${numZona}-edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
+                </div>
+            </div>
+
+            <button type="button" onclick="enviarCargaPatinador(${numZona})" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif; margin-top: 10px;">
+                🚀 CARGAR PATINADOR
+            </button>
+        </div>
+    `;
 }
 
 // 2. FUNCIÓN PARA LOS CANDADOS (Corregida)
