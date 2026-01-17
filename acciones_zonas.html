@@ -53,16 +53,16 @@
         function ejecutarCarga() {
             console.log("Cargando para Zona: " + zonaActiva);
             // Aquí llamarías a tu función de abrir formulario pasando zonaActiva
-            window.parent.abrirFormularioCarga(zonaActiva); 
+            abrirFormularioCarga(zonaActiva); 
         }
 
         function ejecutarVerDatos() {
             const url = urlsPorZona[zonaActiva].ver;
-            window.parent.abrirVistaFiltrada(url);
+            abrirVistaFiltrada(url);
         }
 
         function ejecutarModalClubes() {
-            window.parent.abrirModalClubes();
+            abrirModalClubes();
         }
     </script>
 </body>
