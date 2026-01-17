@@ -87,89 +87,10 @@
     <span id="display-name" style="font-weight: bold; font-size: 1.2rem; color: #333;">Cargando...</span><br>
     <span id="display-email" style="font-size: 0.9rem; color: #666;"></span>
  </div>
-  <section id="contenedor-acciones-zonas" style="display: none;">
-  <div class="menu-zona" id="menu-zona1" style="display: none;">
-    <h4>Acciones para Zona 1</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="redirigirFormulario('zona1')">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwRqwgBcnDMjqDwTLaqcedo7lf7CUfcv7G3l6AkxbQ6l1uU6cR0fNUZBVLaLJaD3gKd/exec')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby0hOm1BG7mcu74uH6_7cUmdo2qRfrrWoX3tPECHc2WyBc4PPdMAeAB0isw7YcQkYGLGQ/exec')">Ver datos cargados</a></li>
-    </ul>
-  </div>
+</section>
 
-  <div class="menu-zona" id="menu-zona2" style="display: none;">
-    <h4>Acciones para Zona 2</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="redirigirFormulario('zona2')">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbwUNxBhdxXbTtY3aTJK8z4OLRhZTn1ChXzisiN7F366DG0_Mc9hHqvGQH8vxix6ticM/exec')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycby8JHx-2wRF1VBenmZzLNlstfFcmtISJU5O5godZR18ghrKZ6dTeRi_2HxmS6S7qMQW/exec')">Ver datos cargados</a></li>
-    </ul>
-  </div>
-
-  <div class="menu-zona" id="menu-zona3" style="display: none;">
-    <h4>Acciones para Zona 3</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="abrirFormularioCarga(3)" class="btn-accion">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('URL_ZONA_3_ALTAS')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('URL_ZONA_3_VER_DATOS')">Ver datos cargados</a></li>
-      <li>🏢 <button onclick="abrirModalClubes()" class="btn-accion" style="background: rgba(255,215,0,0.1); border: 1px dashed gold;">Asociar nuevo Club</button></li>
-    </ul>
-
-    <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;">
-        </div>
-   <div id="modal-clubes" class="modal-lifepar">
-    <div class="modal-content" style="background: #1a1a1a; border: 2px solid #ffd700; padding: 25px; border-radius: 20px; width: 90%; max-width: 400px;">
-        <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">🏢 GESTIÓN DE MIS CLUBES</h4>
-        <p style="font-size: 0.8rem; color: #ccc; text-align: center;">Registrá tus escuelas. Quedarán asociadas a tu cuenta.</p>
-        
-        <div id="lista-clubes-actuales" style="margin-bottom: 20px; color: #ffd700; font-weight: bold;"></div>
-
-        <div style="margin-bottom: 15px;">
-            <label style="display: block; margin-bottom: 5px; font-size: 0.8rem;">Nombre del Nuevo Club / Escuela</label>
-            <input type="text" id="nuevo-club-nombre" placeholder="EJ: CLUB PATÍN ARTÍSTICO" class="input-registro" style="width: 100%; padding: 10px; box-sizing: border-box; text-transform: uppercase; background: rgba(255,255,255,0.1); border: 1px solid #555; color: white; border-radius: 10px;">
-        </div>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button onclick="guardarNuevoClub()" style="flex: 2; padding: 12px; background: #ffd700; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer;">💾 REGISTRAR</button>
-            <button onclick="cerrarModalClubes()" style="flex: 1; padding: 12px; background: #444; color: white; border: none; border-radius: 10px; cursor: pointer;">CANCELAR</button>
-        </div>
-    </div>
-</div>
-
-  <div class="menu-zona" id="menu-zona4" style="display: none;">
-    <h4>Acciones para Zona 4</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="redirigirFormulario('zona4')">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbxqpnvYavegXSktj2Oo0RJ8RkpWZtcr9RoJg_z8Qx31LrXDQoPdk1lN1EX-6cJ83T8IyA/exec')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyYnD6a60a8cXAHrhdWr2ibVFU91_KpJgtGYAwQoLFVhs3MsxrLDOXVuYbSeTv_iqfB/exec')">Ver datos cargados</a></li>
-    </ul>
-  </div>
-
-  <div class="menu-zona" id="menu-zona5" style="display: none;">
-    <h4>Acciones para Zona 5</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="redirigirFormulario('zona5')">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzT1T6DtWx7uL4EkcLjpLadE9bTbvVO4Qn5SBTE1XqNqZANdGRASva1lZsnMT_JklvZJg/exec')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyNcUtcLejXvEC89398LW0pGR1bLylTQuqYwI-R51pSeIhiuDi472vnMdtXZMHgASMk/exec')">Ver datos cargados</a></li>
-    </ul>
-  </div>
-
-  <div class="menu-zona" id="menu-zona6" style="display: none;">
-    <h4>Acciones para Zona 6</h4>
-    <ul>
-      <li>📅 Fecha: <select><option>Fecha 1</option><option>Fecha 2</option><option>Fecha 3</option><option>Fecha 4</option></select></li>
-      <li>📝 <button onclick="redirigirFormulario('zona6')">Cargar patinadoras/es</button></li>
-      <li>✅ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbzkXSFNmpuPaRVJA7uvQJfZHC5eqPpvKocvTN4H_c3oDXu1qjpghEfpg3AOsgeIFpER/exec')">Altas próxima fecha</a></li>
-      <li>👁️ <a href="#" onclick="abrirVistaFiltrada('https://script.google.com/macros/s/AKfycbyjrTOGkwvHBAj20iwGnLQ58Te_LpAlFhjTk_6iWOgSDYWSrVcX-3RFKPElnK4Ez3O4/exec')">Ver datos cargados</a></li>
-    </ul>
-  </div>
-</section>  
-    </main>
+<section id="contenedor-acciones-zonas" style="display: none; margin-top: 20px; width: 100%;">
+    </section>
       
     <section class="box-oficina" id="seguros" style="display: none;">
         <h3>Gestión de Seguros</h3>
