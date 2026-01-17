@@ -50,38 +50,50 @@
 <script src="acciones_zonas.js?v=1.1"></script>
 
  <script>
-    // 1. Detección de zona (usamos window para que sea global)
-    urlParams = new URLSearchParams(window.location.search);
-    window.zonaActivaNum = urlParams.get('zona'); 
-    window.zonaActiva = "ZONA " + window.zonaActivaNum; 
+    // 1. Detección de zona (Aseguramos que existan antes de usarlas)
+    const urlParams = new URLSearchParams(window.location.search);
+    const zonaSaca = urlParams.get('zona'); 
+    
+    // Las guardamos en window para que el .js las vea
+    window.zonaActivaNum = zonaSaca; 
+    window.zonaActiva = "ZONA " + zonaSaca; 
 
-    document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${window.zonaActivaNum}`;
+    // Seteamos el título
+    const titulo = document.getElementById('dinamico-titulo');
+    if (titulo) titulo.innerText = `Acciones para Zona ${zonaSaca}`;
 
-        // 2. Funciones Puente
+    // 2. Funciones Puente
     function ejecutarCarga() {
+        // Verificamos que zonaActivaNum tenga algo
+        if (!window.zonaActivaNum) {
+            console.error("Error: No se detectó el número de zona en la URL");
+            return;
+        }
+        
         console.log("Cargando para Zona: " + window.zonaActivaNum);
+        
         if (typeof abrirFormularioCarga === 'function') {
             abrirFormularioCarga(window.zonaActivaNum); 
+        } else {
+            console.error("La función abrirFormularioCarga no está definida en acciones_zonas.js");
         }
     }
 
-        function ejecutarAltas() {
-            // Si tenés una función para altas en el JS, llamala acá
-            alert("Abriendo Altas para Zona " + zonaActivaNum);
-        }
+    function ejecutarAltas() {
+        alert("Abriendo Altas para " + window.zonaActiva);
+    }
 
-        function ejecutarVerDatos() {
-            // Aquí podés usar tu lógica de urlsPorZona
-            alert("Visualizando datos de Zona " + zonaActivaNum);
-        }
+    function ejecutarVerDatos() {
+        alert("Visualizando datos de " + window.zonaActiva);
+    }
 
-        function ejecutarModalClubes() {
-            if (typeof abrirModalClubes === 'function') {
-                abrirModalClubes();
-            } else {
-                alert("La función de clubes no está cargada.");
-            }
+    function ejecutarModalClubes() {
+        if (typeof abrirModalClubes === 'function') {
+            abrirModalClubes();
+        } else {
+            alert("La función de clubes no está cargada.");
         }
-    </script>
+    }
+</script>
 </body>
 </html>
