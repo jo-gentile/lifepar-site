@@ -520,7 +520,6 @@ body {
     border: 2px solid #ffd700 !important;
     padding: 25px;
     border-radius: 20px;
-
     max-height: 85vh;
     overflow-y: auto;
 }
