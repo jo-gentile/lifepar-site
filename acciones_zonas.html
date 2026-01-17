@@ -33,36 +33,40 @@
 <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;">
     </div>
 
+ <script src="tus_funciones.js"></script> 
+
     <script>
-        // 1. Detectamos qué zona es apenas abre el archivo
+        // 1. Identificación de zona
         const urlParams = new URLSearchParams(window.location.search);
-        const zonaActiva = urlParams.get('zona');
-        document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${zonaActiva}`;
+        const zonaActivaNum = urlParams.get('zona');
+        document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${zonaActivaNum}`;
 
-        // 2. Diccionario de URLs (Aquí ponés tus macros de Sheets)
-        const urlsPorZona = {
-            "1": { altas: "URL_ZONA_1_ALTAS", ver: "URL_ZONA_1_VER" },
-            "2": { altas: "URL_ZONA_2_ALTAS", ver: "URL_ZONA_2_VER" },
-            "3": { altas: "URL_ZONA_3_ALTAS", ver: "URL_ZONA_3_VER" }, // Aquí van tus links reales
-            "4": { altas: "URL_ZONA_4_ALTAS", ver: "URL_ZONA_4_VER" },
-            "5": { altas: "URL_ZONA_5_ALTAS", ver: "URL_ZONA_5_VER" },
-            "6": { altas: "URL_ZONA_6_ALTAS", ver: "URL_ZONA_6_VER" }
-        };
-
-        // 3. Funciones que usan el número de zona para decidir qué hacer
+        // 2. Funciones "Puente" para que los botones encuentren el JS externo
         function ejecutarCarga() {
-            console.log("Cargando para Zona: " + zonaActiva);
-            // Aquí llamarías a tu función de abrir formulario pasando zonaActiva
-            abrirFormularioCarga(zonaActiva); 
+            console.log("Cargando para Zona: " + zonaActivaNum);
+            if (typeof abrirFormularioCarga === 'function') {
+                abrirFormularioCarga(zonaActivaNum); 
+            } else {
+                console.error("La función abrirFormularioCarga no existe en el JS externo.");
+            }
+        }
+
+        function ejecutarAltas() {
+            // Si tenés una función para altas en el JS, llamala acá
+            alert("Abriendo Altas para Zona " + zonaActivaNum);
         }
 
         function ejecutarVerDatos() {
-            const url = urlsPorZona[zonaActiva].ver;
-            abrirVistaFiltrada(url);
+            // Aquí podés usar tu lógica de urlsPorZona
+            alert("Visualizando datos de Zona " + zonaActivaNum);
         }
 
         function ejecutarModalClubes() {
-            abrirModalClubes();
+            if (typeof abrirModalClubes === 'function') {
+                abrirModalClubes();
+            } else {
+                alert("La función de clubes no está cargada.");
+            }
         }
     </script>
 </body>

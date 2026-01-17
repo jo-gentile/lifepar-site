@@ -227,12 +227,22 @@ function calcularEdadDeportiva(fechaNac, targetId) {
     const anioActual = 2026; 
     document.getElementById(targetId).value = (anioActual - anioNac) + " AÑOS";
 }
+// 1. FUNCIÓN PARA MOSTRAR EL CARTEL
 function abrirModalClubes() {
-    abrirModalClubes();
+    const modal = document.getElementById('ModalClub');
+    if (modal) {
+        modal.style.display = 'block';
+    } else {
+        console.error("Error: No se encontró el div con ID 'ModalClub'");
+    }
 }
 
+// 2. FUNCIÓN PARA CERRAR EL CARTEL
 function cerrarModalClubes() {
-    cerrarModalClubes();
+    const modal = document.getElementById('ModalClub');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
 async function guardarNuevoClub() {
     const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec"; // La que termina en /exec
@@ -270,48 +280,51 @@ async function guardarNuevoClub() {
     }
 }
 async function enviarCargaPatinador() {
+    // Definimos el mail aquí para que la función sepa quién carga
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    
     const datos = {
         tipo: "INSCRIPCION",
-        nombreZona: zonaActiva,
+        nombreZona: zonaActiva, // Usa la variable global que definiste al principio del JS
         club: document.getElementById('z3-club').value,
         disciplina: document.getElementById('z3-disciplina').value,
         divisional: document.getElementById('z3-divisional').value,
         categoria: document.getElementById('z3-categoria').value,
         apellido: document.getElementById('z3-apellido').value.toUpperCase(),
         nombre: document.getElementById('z3-nombre').value.toUpperCase(),
-        DNI: document.getElementById('z3-DNI').value, // <-- NUEVO CAMPO
+        DNI: document.getElementById('z3-DNI').value,
         nacimiento: document.getElementById('z3-nacimiento').value,
         edadDeportiva: document.getElementById('z3-edad').value,
         mailProfe: userEmail
     };
-        try {
+
+    try {
         await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", { 
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify(datos)
         });
 
-        // 3. Si llegó acá, es que el navegador procesó el envío
         alert("✅ Registro enviado a la " + zonaActiva);
         
-        // Aquí podés llamar a la función que limpia los campos (DNI, Nombre, etc.)
-        function limpiarFormularioPostCarga() {
-    // Solo vaciamos los datos del patinador para que el profe no escriba doble
-    if(document.getElementById('z3-apellido')) document.getElementById('z3-apellido').value = "";
-    if(document.getElementById('z3-nombre')) document.getElementById('z3-nombre').value = "";
-    if(document.getElementById('z3-DNI')) document.getElementById('z3-DNI').value = "";
-    if(document.getElementById('z3-nacimiento')) document.getElementById('z3-nacimiento').value = "";
-    if(document.getElementById('z3-edad')) document.getElementById('z3-edad').value = "";
-    // El género lo reseteamos a la primera opción
-    if(document.getElementById('z3-genero')) document.getElementById('z3-genero').selectedIndex = 0;
-
-    console.log("Campos de patinador vaciados correctamente.");
-}
+        // Llamamos a la limpieza después del éxito
+        limpiarFormularioPostCarga();
 
     } catch (error) {
         console.error("Error al enviar:", error);
         alert("❌ Hubo un problema al conectar con la planilla.");
     }
 }
-// --- FUNCIÓN DE LIMPIEZA DE CAMPOS ---
 
+// Función de limpieza movida afuera para que funcione bien
+function limpiarFormularioPostCarga() {
+    if(document.getElementById('z3-apellido')) document.getElementById('z3-apellido').value = "";
+    if(document.getElementById('z3-nombre')) document.getElementById('z3-nombre').value = "";
+    if(document.getElementById('z3-DNI')) document.getElementById('z3-DNI').value = "";
+    if(document.getElementById('z3-nacimiento')) document.getElementById('z3-nacimiento').value = "";
+    if(document.getElementById('z3-edad')) document.getElementById('z3-edad').value = "";
+    
+    if(document.getElementById('z3-genero')) document.getElementById('z3-genero').selectedIndex = 0;
+
+    console.log("Campos de patinador vaciados correctamente.");
+}
