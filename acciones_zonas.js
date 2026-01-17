@@ -168,22 +168,21 @@ async function guardarNuevoClub() {
         alert("❌ No se pudo conectar con el servidor.");
     }
 }
-async function enviarCargaPatinador(num) {
-    // Definimos el mail aquí para que la función sepa quién carga
+async function enviarCargaPatinador() {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     
     const datos = {
         tipo: "INSCRIPCION",
-        nombreZona: window.zonaActiva, // Usa la variable global que definiste al principio del JS
-        club: document.getElementById('z${numZona}--club').value,
-        disciplina: document.getElementById('z${numZona}--disciplina').value,
-        divisional: document.getElementById('z${numZona}--divisional').value,
-        categoria: document.getElementById('z${numZona}--categoria').value,
-        apellido: document.getElementById('z${numZona}--apellido').value.toUpperCase(),
-        nombre: document.getElementById('z${numZona}--nombre').value.toUpperCase(),
-        DNI: document.getElementById('z${numZona}--DNI').value,
-        nacimiento: document.getElementById('z${numZona}--nacimiento').value,
-        edadDeportiva: document.getElementById('z${numZona}--edad').value,
+        nombreZona: window.zonaActiva,
+        club: document.getElementById('reg-club').value,
+        disciplina: document.getElementById('reg-disciplina').value,
+        divisional: document.getElementById('reg-divisional').value,
+        categoria: document.getElementById('reg-categoria').value,
+        apellido: document.getElementById('reg-apellido').value.toUpperCase(),
+        nombre: document.getElementById('reg-nombre').value.toUpperCase(),
+        DNI: document.getElementById('reg-DNI').value,
+        nacimiento: document.getElementById('reg-nacimiento').value,
+        edadDeportiva: document.getElementById('reg-edad').value,
         mailProfe: userEmail
     };
 
@@ -195,8 +194,6 @@ async function enviarCargaPatinador(num) {
         });
 
         alert("✅ Registro enviado a la " + window.zonaActiva);
-        
-        // Llamamos a la limpieza después del éxito
         limpiarFormularioPostCarga();
 
     } catch (error) {
@@ -205,15 +202,10 @@ async function enviarCargaPatinador(num) {
     }
 }
 
-// Función de limpieza movida afuera para que funcione bien
 function limpiarFormularioPostCarga() {
-    if(document.getElementById('z${numZona}--apellido')) document.getElementById('z${numZona}--apellido').value = "";
-    if(document.getElementById('z${numZona}--nombre')) document.getElementById('z${numZona}--nombre').value = "";
-    if(document.getElementById('z${numZona}--DNI')) document.getElementById('z${numZona}--DNI').value = "";
-    if(document.getElementById('z${numZona}--nacimiento')) document.getElementById('z${numZona}--nacimiento').value = "";
-    if(document.getElementById('z${numZona}--edad')) document.getElementById('z${numZona}--edad').value = "";
-    
-    if(document.getElementById('z${numZona}--genero')) document.getElementById('z${numZona}--genero').selectedIndex = 0;
-
+    const campos = ['reg-apellido', 'reg-nombre', 'reg-DNI', 'reg-nacimiento', 'reg-edad'];
+    campos.forEach(id => {
+        if(document.getElementById(id)) document.getElementById(id).value = "";
+    });
     console.log("Campos de patinador vaciados correctamente.");
 }
