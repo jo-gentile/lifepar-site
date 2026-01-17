@@ -246,7 +246,7 @@ contenedor.innerHTML = `
         </div>
 
         <button type="button" onclick="enviarCargaPatinador()" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif; margin-top: 10px;">
-            🚀 PROBAR CARGA
+            🚀 CARGAR PATINADOR
         </button>
     </div>
 `;
