@@ -187,11 +187,19 @@ function calcularEdadDeportiva(fechaNac, targetId) {
 }
 // 1. FUNCIÓN PARA MOSTRAR EL CARTEL
 function abrirModalClubes() {
-    const modal = document.getElementById('ModalClub');
+    // Busca en el documento actual
+    let modal = document.getElementById('ModalClub');
+    
+    // Si no lo encuentra, busca en la página padre (por si acaso)
+    if (!modal) {
+        modal = window.parent.document.getElementById('ModalClub');
+    }
+
     if (modal) {
         modal.style.display = 'block';
     } else {
-        console.error("Error: No se encontró el div con ID 'ModalClub'");
+        console.error("Error: No se encontró el div con ID 'ModalClub' en ningún lado.");
+        alert("Error de sistema: El componente ModalClub no fue detectado.");
     }
 }
 
