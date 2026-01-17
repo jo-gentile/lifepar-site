@@ -231,7 +231,7 @@ contenedor.innerHTML = `
         </div>
 
         <div style="margin-bottom: 15px;">
-            <input type="number" id="z3-dni" placeholder="DNI (Sín puntos)" class="input-registro" style="width:100%">
+            <input type="number" id="z3-DNI" placeholder="DNI (Sín puntos)" class="input-registro" style="width:100%">
         </div>
 
         <div style="display: flex; gap: 10px; margin-bottom: 15px;">
@@ -334,7 +334,7 @@ async function enviarCargaPatinador() {
         categoria: document.getElementById('z3-categoria').value,
         apellido: document.getElementById('z3-apellido').value.toUpperCase(),
         nombre: document.getElementById('z3-nombre').value.toUpperCase(),
-        dni: document.getElementById('z3-dni').value, // <-- NUEVO CAMPO
+        DNI: document.getElementById('z3-DNI').value, // <-- NUEVO CAMPO
         nacimiento: document.getElementById('z3-nacimiento').value,
         edadDeportiva: document.getElementById('z3-edad').value,
         mailProfe: userEmail
@@ -350,10 +350,23 @@ async function enviarCargaPatinador() {
         alert("✅ Registro enviado a la " + zonaActiva);
         
         // Aquí podés llamar a la función que limpia los campos (DNI, Nombre, etc.)
-        limpiarFormularioPostCarga(); 
+        function limpiarFormularioPostCarga() {
+    // Solo vaciamos los datos del patinador para que el profe no escriba doble
+    if(document.getElementById('z3-apellido')) document.getElementById('z3-apellido').value = "";
+    if(document.getElementById('z3-nombre')) document.getElementById('z3-nombre').value = "";
+    if(document.getElementById('z3-DNI')) document.getElementById('z3-DNI').value = "";
+    if(document.getElementById('z3-nacimiento')) document.getElementById('z3-nacimiento').value = "";
+    if(document.getElementById('z3-edad')) document.getElementById('z3-edad').value = "";
+    // El género lo reseteamos a la primera opción
+    if(document.getElementById('z3-genero')) document.getElementById('z3-genero').selectedIndex = 0;
+
+    console.log("Campos de patinador vaciados correctamente.");
+}
 
     } catch (error) {
         console.error("Error al enviar:", error);
         alert("❌ Hubo un problema al conectar con la planilla.");
     }
 }
+// --- FUNCIÓN DE LIMPIEZA DE CAMPOS ---
+
