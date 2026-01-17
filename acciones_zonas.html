@@ -37,7 +37,7 @@
 
  <script>
     // 1. Detección de zona (usamos window para que sea global)
-    const urlParams = new URLSearchParams(window.location.search);
+    urlParams = new URLSearchParams(window.location.search);
     window.zonaActivaNum = urlParams.get('zona'); 
     window.zonaActiva = "ZONA " + window.zonaActivaNum; 
 
