@@ -33,6 +33,20 @@
 <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;">
     </div>
 
+    <div id="ModalClub" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding-top: 100px;">
+    <div style="background: #1a1a1a; margin: auto; padding: 20px; border: 1px solid gold; border-radius: 15px; width: 80%; max-width: 400px; text-align: center; color: white;">
+        <h3 style="color: gold; font-family: 'Anton', sans-serif;">ASOCIAR NUEVO CLUB</h3>
+        <p style="font-size: 0.8rem; margin-bottom: 15px;">Escribí el nombre del club para solicitar el alta:</p>
+        
+        <input type="text" id="nuevo-club-nombre" placeholder="NOMBRE DEL CLUB" class="input-registro" style="width: 100%; margin-bottom: 20px; text-transform: uppercase;">
+        
+        <div style="display: flex; gap: 10px;">
+            <button onclick="guardarNuevoClub()" style="flex: 1; padding: 10px; background: gold; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">ENVIAR</button>
+            <button onclick="cerrarModalClubes()" style="flex: 1; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; cursor: pointer;">CANCELAR</button>
+        </div>
+    </div>
+</div>
+
  <script src="acciones_zonas.js"></script> 
 
  <script>
