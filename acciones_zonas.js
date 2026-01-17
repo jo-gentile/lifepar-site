@@ -14,9 +14,9 @@ const MAPA_COMPETENCIA = {
 };
 
 function actualizarCascada(nivel) {
-    const disc = document.getElementById(reg-disciplina-disciplina').value;
-    const div = document.getElementById(reg-divisional');
-    const cat = document.getElementById(reg-categoria');
+    const disc = document.getElementById('z${numZona}--disciplina').value;
+    const div = document.getElementById('z${numZona}--divisional');
+    const cat = document.getElementById('z${numZona}--categoria');
 
     if (nivel === 'disciplina') {
         // Si el candado de divisional está abierto, actualizamos
@@ -31,7 +31,7 @@ function actualizarCascada(nivel) {
             if (!cat.disabled) cat.innerHTML = '<option value="">CATEGORÍA...</option>';
         }
     }
-}
+
     if (nivel === 'divisional') {
         // Si el candado de categoría está abierto, actualizamos
         if (!cat.disabled) {
@@ -44,47 +44,121 @@ function actualizarCascada(nivel) {
             }
         }
     }
+}    
 
 async function abrirFormularioCarga(numZona) {
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
-    const titulo = document.getElementById('titulo-dinamico-zona');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    // Guardamos la zona en una variable global para el envío
-    window.zonaActivaNum = numZona;
-    window.zonaActiva = "ZONA " + numZona;
+    if (!userEmail) {
+        alert("⚠️ No se detectó sesión de usuario. Por favor reingresa.");
+        return;
+    }
 
+    // Si ya está visible, lo ocultamos (toggle)
     if (contenedor.style.display === 'block') {
         contenedor.style.display = 'none';
-    } else {
-        titulo.innerText = `📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}`;
-        contenedor.style.display = 'block';
-        
-        // Cargamos los clubes solo si el selector está vacío o dice "Cargando..."
-        const selectorClub = document.getElementById('reg-club');
-        if (selectorClub.options.length <= 1) {
-            cargarClubesDinamicos(userEmail);
-        }
+        return;
     }
-}
 
-// Nueva función separada para no trabar el dibujo del HTML
-async function cargarClubesDinamicos(email) {
-    const selectorClub = document.getElementById('reg-club');
+    // Feedback visual inmediato
+    contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Conectando con la base de datos...</p>';
+    contenedor.style.display = 'block';
+    
+    let opcionesClub = "";
+    
     try {
-        const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${email}`;
+        // Ponemos un tiempo límite (timeout) al fetch para que no se quede colgado
+        const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
+        
         const respuesta = await fetch(URL_GET);
+        
+        if (!respuesta.ok) throw new Error("Error en servidor");
+        
         const listaDeClubes = await respuesta.json();
         
         if (listaDeClubes && listaDeClubes.length > 0) {
-            selectorClub.innerHTML = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
+            opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
         } else {
-            selectorClub.innerHTML = '<option value="">Sin clubes registrados</option>';
+            opcionesClub = '<option value="">Sin clubes asociados</option>';
         }
-    } catch (e) {
-        selectorClub.innerHTML = '<option value="ERROR">Error al cargar clubes</option>';
+    } catch (error) {
+        console.error("Error al traer clubes:", error);
+        // Si falla el fetch, cargamos un selector manual para que no se trabe el panel
+        opcionesClub = '<option value="CLUB MANUAL">ERROR AL CARGAR - ESCRIBIR ABAJO</option>';
     }
+
+    // DIBUJAMOS EL FORMULARIO (Asegurate que use las comillas ` backticks)
+    contenedor.innerHTML = `
+        <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
+            <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+            
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Club</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-club" class="input-registro" style="width:100%">${opcionesClub}</select>
+                    <button type="button" onclick="toggleLock('z${numZona}-club')" style="cursor:pointer; background:transparent; border:none; font-size:1.2rem;">🔓</button>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Disciplina</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-disciplina" class="input-registro" style="width:100%" onchange="actualizarCascada('disciplina', ${numZona})">
+                        <option value="">SELECCIONE...</option>
+                        <option value="LIBRE">LIBRE</option>
+                        <option value="DANZA">DANZA SOLO</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Divisional</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-divisional" class="input-registro" style="width:100%" onchange="actualizarCascada('divisional', ${numZona})">
+                        <option value="">DIVISIONAL...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="color: white; font-size: 0.8rem;">Categoría</label>
+                <div style="display: flex; gap: 5px;">
+                    <select id="z${numZona}-categoria" class="input-registro" style="width:100%">
+                        <option value="">CATEGORÍA...</option>
+                    </select>
+                </div>
+            </div>
+
+            <hr style="border: 0.5px solid rgba(255,215,0,0.3); margin: 20px 0;">
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <input type="text" id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="flex:1">
+                <input type="text" id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="flex:1">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <input type="number" id="z${numZona}-DNI" placeholder="DNI (Sin puntos)" class="input-registro" style="width:100%">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                <div style="flex: 2;">
+                    <label style="color: white; font-size: 0.7rem;">Fecha de Nacimiento</label>
+                    <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="width:100%" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
+                </div>
+                <div style="flex: 1;">
+                    <label style="color: white; font-size: 0.7rem;">Edad Dep.</label>
+                    <input type="text" id="z${numZona}-edad" placeholder="0" class="input-registro" readonly style="width:100%; color:gold; font-weight:bold; text-align:center;">
+                </div>
+            </div>
+
+            <button type="button" onclick="enviarCargaPatinador(${numZona})" style="width: 100%; padding: 15px; background: gold; color: black; font-weight: bold; cursor:pointer; border-radius:10px; border:none; font-family: 'Anton', sans-serif; margin-top: 10px;">
+                🚀 CARGAR PATINADOR
+            </button>
+        </div>
+    `;
 }
+
 // 2. FUNCIÓN PARA LOS CANDADOS (Corregida)
 function toggleLock(fieldId) {
     const input = document.getElementById(fieldId);
@@ -167,21 +241,22 @@ async function guardarNuevoClub() {
         alert("❌ No se pudo conectar con el servidor.");
     }
 }
-async function enviarCargaPatinador() {
+async function enviarCargaPatinador(num) {
+    // Definimos el mail aquí para que la función sepa quién carga
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     
     const datos = {
         tipo: "INSCRIPCION",
-        nombreZona: window.zonaActiva,
-        club: document.getElementById('reg-club').value,
-        disciplina: document.getElementById('reg-disciplina').value,
-        divisional: document.getElementById('reg-divisional').value,
-        categoria: document.getElementById('reg-categoria').value,
-        apellido: document.getElementById('reg-apellido').value.toUpperCase(),
-        nombre: document.getElementById('reg-nombre').value.toUpperCase(),
-        DNI: document.getElementById('reg-DNI').value,
-        nacimiento: document.getElementById('reg-nacimiento').value,
-        edadDeportiva: document.getElementById('reg-edad').value,
+        nombreZona: window.zonaActiva, // Usa la variable global que definiste al principio del JS
+        club: document.getElementById('z${numZona}--club').value,
+        disciplina: document.getElementById('z${numZona}--disciplina').value,
+        divisional: document.getElementById('z${numZona}--divisional').value,
+        categoria: document.getElementById('z${numZona}--categoria').value,
+        apellido: document.getElementById('z${numZona}--apellido').value.toUpperCase(),
+        nombre: document.getElementById('z${numZona}--nombre').value.toUpperCase(),
+        DNI: document.getElementById('z${numZona}--DNI').value,
+        nacimiento: document.getElementById('z${numZona}--nacimiento').value,
+        edadDeportiva: document.getElementById('z${numZona}--edad').value,
         mailProfe: userEmail
     };
 
@@ -193,6 +268,8 @@ async function enviarCargaPatinador() {
         });
 
         alert("✅ Registro enviado a la " + window.zonaActiva);
+        
+        // Llamamos a la limpieza después del éxito
         limpiarFormularioPostCarga();
 
     } catch (error) {
@@ -201,10 +278,15 @@ async function enviarCargaPatinador() {
     }
 }
 
+// Función de limpieza movida afuera para que funcione bien
 function limpiarFormularioPostCarga() {
-    const campos = ['reg-apellido', 'reg-nombre', 'reg-DNI', 'reg-nacimiento', 'reg-edad'];
-    campos.forEach(id => {
-        if(document.getElementById(id)) document.getElementById(id).value = "";
-    });
+    if(document.getElementById('z${numZona}--apellido')) document.getElementById('z${numZona}--apellido').value = "";
+    if(document.getElementById('z${numZona}--nombre')) document.getElementById('z${numZona}--nombre').value = "";
+    if(document.getElementById('z${numZona}--DNI')) document.getElementById('z${numZona}--DNI').value = "";
+    if(document.getElementById('z${numZona}--nacimiento')) document.getElementById('z${numZona}--nacimiento').value = "";
+    if(document.getElementById('z${numZona}--edad')) document.getElementById('z${numZona}--edad').value = "";
+    
+    if(document.getElementById('z${numZona}--genero')) document.getElementById('z${numZona}--genero').selectedIndex = 0;
+
     console.log("Campos de patinador vaciados correctamente.");
 }
