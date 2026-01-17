@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="admin.css"> <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Estilos mínimos para que el iframe se vea integrado */
+        body { background: transparent; padding: 10px; color: white; overflow: hidden; }
+        .menu-zona { display: block !important; margin: auto; max-width: 450px; }
+        .btn-accion { width: 100%; margin: 10px 0; cursor: pointer; }
+        select { background: #333; color: white; border-radius: 5px; padding: 5px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="menu-zona">
+        <h4 id="dinamico-titulo">Acciones para Zona ...</h4>
+        <ul>
+            <li>📅 Fecha: 
+                <select id="select-fecha">
+                    <option>Fecha 1</option>
+                    <option>Fecha 2</option>
+                    <option>Fecha 3</option>
+                    <option>Fecha 4</option>
+                </select>
+            </li>
+            <li>📝 <button onclick="ejecutarCarga()" class="btn-accion">Cargar patinadoras/es</button></li>
+            <li>✅ <button onclick="ejecutarAltas()" class="btn-accion">Altas próxima fecha</button></li>
+            <li>👁️ <button onclick="ejecutarVerDatos()" class="btn-accion">Ver datos cargados</button></li>
+            <li>🏢 <button onclick="ejecutarModalClubes()" class="btn-accion" style="background: rgba(255,215,0,0.1); border: 1px dashed gold;">Asociar nuevo Club</button></li>
+        </ul>
+    </div>
+<div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;">
+    </div>
+
+    <script>
+        // 1. Detectamos qué zona es apenas abre el archivo
+        const urlParams = new URLSearchParams(window.location.search);
+        const zonaActiva = urlParams.get('zona');
+        document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${zonaActiva}`;
+
+        // 2. Diccionario de URLs (Aquí ponés tus macros de Sheets)
+        const urlsPorZona = {
+            "1": { altas: "URL_ZONA_1_ALTAS", ver: "URL_ZONA_1_VER" },
+            "2": { altas: "URL_ZONA_2_ALTAS", ver: "URL_ZONA_2_VER" },
+            "3": { altas: "URL_ZONA_3_ALTAS", ver: "URL_ZONA_3_VER" }, // Aquí van tus links reales
+            "4": { altas: "URL_ZONA_4_ALTAS", ver: "URL_ZONA_4_VER" },
+            "5": { altas: "URL_ZONA_5_ALTAS", ver: "URL_ZONA_5_VER" },
+            "6": { altas: "URL_ZONA_6_ALTAS", ver: "URL_ZONA_6_VER" }
+        };
+
+        // 3. Funciones que usan el número de zona para decidir qué hacer
+        function ejecutarCarga() {
+            console.log("Cargando para Zona: " + zonaActiva);
+            // Aquí llamarías a tu función de abrir formulario pasando zonaActiva
+            abrirFormularioCarga(zonaActiva); 
+        }
+
+        function ejecutarVerDatos() {
+            const url = urlsPorZona[zonaActiva].ver;
+            abrirVistaFiltrada(url);
+        }
+
+        function ejecutarModalClubes() {
+            abrirModalClubes();
+        }
+    </script>
+</body>
+</html>
