@@ -242,7 +242,7 @@ async function enviarCargaPatinador() {
     
     const datos = {
         tipo: "INSCRIPCION",
-        nombreZona: zonaActiva, // Usa la variable global que definiste al principio del JS
+        nombreZona: window.zonaActiva, // Usa la variable global que definiste al principio del JS
         club: document.getElementById('z3-club').value,
         disciplina: document.getElementById('z3-disciplina').value,
         divisional: document.getElementById('z3-divisional').value,
@@ -262,7 +262,7 @@ async function enviarCargaPatinador() {
             body: JSON.stringify(datos)
         });
 
-        alert("✅ Registro enviado a la " + zonaActiva);
+        alert("✅ Registro enviado a la " + window.zonaActiva);
         
         // Llamamos a la limpieza después del éxito
         limpiarFormularioPostCarga();
