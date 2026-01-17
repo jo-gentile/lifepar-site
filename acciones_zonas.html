@@ -35,21 +35,21 @@
 
  <script src="acciones_zonas.js"></script> 
 
-    <script>
-        // 1. Identificación de zona
-        const urlParams = new URLSearchParams(window.location.search);
-        const zonaActivaNum = urlParams.get('zona');
-        document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${zonaActivaNum}`;
+ <script>
+    // 1. Detección de zona (usamos window para que sea global)
+    const urlParams = new URLSearchParams(window.location.search);
+    window.zonaActivaNum = urlParams.get('zona'); 
+    window.zonaActiva = "ZONA " + window.zonaActivaNum; 
 
-        // 2. Funciones "Puente" para que los botones encuentren el JS externo
-        function ejecutarCarga() {
-            console.log("Cargando para Zona: " + zonaActivaNum);
-            if (typeof abrirFormularioCarga === 'function') {
-                abrirFormularioCarga(zonaActivaNum); 
-            } else {
-                console.error("La función abrirFormularioCarga no existe en el JS externo.");
-            }
+    document.getElementById('dinamico-titulo').innerText = `Acciones para Zona ${window.zonaActivaNum}`;
+
+        // 2. Funciones Puente
+    function ejecutarCarga() {
+        console.log("Cargando para Zona: " + window.zonaActivaNum);
+        if (typeof abrirFormularioCarga === 'function') {
+            abrirFormularioCarga(window.zonaActivaNum); 
         }
+    }
 
         function ejecutarAltas() {
             // Si tenés una función para altas en el JS, llamala acá

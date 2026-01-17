@@ -1,8 +1,3 @@
-// --- 1. IDENTIFICACIÓN DE LA ZONA (Manteniendo tus nombres) ---
-const urlParams = new URLSearchParams(window.location.search);
-const numZonaActiva = urlParams.get('zona'); 
-let zonaActiva = "ZONA " + numZonaActiva; // Esto ya captura el número automáticamente
-
 // --- 2. MAPA DE COMPETENCIA ---
 const MAPA_COMPETENCIA = {
     "LIBRE": {
