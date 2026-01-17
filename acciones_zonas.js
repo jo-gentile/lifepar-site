@@ -48,13 +48,13 @@ async function abrirFormularioCarga(numZona) {
         return;
     }
 
-    if (contenedor.style.display === 'block') {
+    if (contenedor.style.display === 'flex') {
         contenedor.style.display = 'none';
         return;
     }
 
     contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Conectando con la base de datos...</p>';
-    contenedor.style.display = 'block';
+    contenedor.style.display = 'flex';
 
     let opcionesClub = "";
 
@@ -105,6 +105,7 @@ async function abrirFormularioCarga(numZona) {
         <button onclick="enviarCargaPatinador(${numZona})" style="margin-top:10px;width:100%;background:gold;font-weight:bold;">🚀 CARGAR PATINADOR</button>
     </div>`;
 }
+
 
 function calcularEdadDeportiva(fecha, target) {
     const anio = new Date(fecha).getFullYear();

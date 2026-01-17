@@ -98,16 +98,14 @@ function mostrarCopa() {
     }
 }
 // --- FUNCIONES PARA EL MODAL DE CLUBES (Deben estar en el Rey) ---
-function abrirModalClubes() {
-    const modal = document.getElementById('modal-clubes');
-    if (modal) {
-        modal.style.display = 'flex';
-    }
+function abrirModalClub() {
+    const modal = document.getElementById("ModalClub");
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
 }
 
-function cerrarModalClubes() {
-    const modal = document.getElementById('modal-clubes');
-    if (modal) {
-        modal.style.display = 'none';
-    }
+function cerrarModalClub() {
+    const modal = document.getElementById("ModalClub");
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
 }

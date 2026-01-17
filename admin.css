@@ -502,17 +502,17 @@ body {
 }
 /* Asegura que el modal sea visible y esté por encima de todo */
 .modal-lifepar {
-    display: none; 
+    display: none;
     position: fixed;
-    z-index: 10000; /* Aumentado para que tape el footer y el header */
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9); /* Más oscuro para resaltar el cuadro */
+    z-index: 10000;
+    inset: 0;
+    background-color: rgba(0,0,0,0.9);
+
+    display: flex;
     justify-content: center;
     align-items: center;
 }
+
 
 /* Este es el cuadradito que no estás viendo */
 .modal-content {
