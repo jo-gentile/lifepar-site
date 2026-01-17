@@ -18,43 +18,6 @@ const MAPA_COMPETENCIA = {
     }
 };
 
-// --- 3. FUNCIÓN DE CARGA (Corregida sin duplicados) ---
-async function abrirFormularioCarga() {
-    const contenedor = document.getElementById('contenedor-formulario-dinamico');
-    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-
-    // Si está oculto, lo cargamos y mostramos
-    if (contenedor.style.display === 'none' || contenedor.style.display === '') {
-        
-        let opcionesClub = '<option value="">Cargando mis clubes...</option>';
-        
-        try {
-            const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
-            const respuesta = await fetch(URL_GET);
-            const listaDeClubes = await respuesta.json();
-            
-            if (listaDeClubes.length > 0) {
-                opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
-            } else {
-                opcionesClub = '<option value="">Sin clubes registrados</option>';
-            }
-        } catch (error) {
-            console.error("Error al traer clubes:", error);
-            opcionesClub = '<option value="CLUB PRUEBA">CLUB PRUEBA</option>';
-        }
-
-        // Cargamos el HTML usando la variable zonaActiva que definimos arriba
-        contenedor.innerHTML = `
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
-                <h4 style="color: #ffd700; text-align: center; font-family: 'Anton', sans-serif;">📝 NUEVA INSCRIPCIÓN - ${zonaActiva}</h4>
-                
-                </div>
-        `;
-        contenedor.style.display = 'block';
-    } else {
-        contenedor.style.display = 'none';
-    }
-}
 function actualizarCascada(nivel) {
     const disc = document.getElementById('z3-disciplina').value;
     const div = document.getElementById('z3-divisional');
