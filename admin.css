@@ -9,6 +9,7 @@ body {
     background-size: 400% 400%;
     animation: movimientoFino 40s ease infinite;
     background-attachment: fixed;
+    overflow: auto;
 }
 
 @keyframes movimientoFino {
