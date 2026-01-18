@@ -343,7 +343,7 @@ body.layout-collapsed .header-admin {
     text-align: center;
     animation: entradaSuave 0.5s ease;
     opacity: 1 !important;
-    margin: -10px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
+    margin: -40px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
     float: none !important;
     overflow: visible !important; /* Permite que el contenido se vea sin barritas */
     max-height: none !important; /* Quita cualquier tope de altura */
