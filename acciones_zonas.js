@@ -136,6 +136,16 @@ contenedor.innerHTML = `
         <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
         <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold;text-align:center;margin-top:10px;">
 
+        <label>Género</label>
+        <div class="lock-group">
+            <select id="z${numZona}-genero" class="input-registro" style="height: 35px;">
+                <option value="FEMENINO">FEMENINO</option>
+                <option value="MASCULINO">MASCULINO</option>
+                <option value="NO BINARIO">NO BINARIO</option>
+            </select>
+            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-genero')">🔓</button>
+        </div>
+
         <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px;width:100%;background:gold;font-weight:bold;color:black;padding:12px;border-radius:5px;border:none;cursor:pointer;">🚀 CARGAR PATINADOR</button>
     </div>`;
 }   
@@ -155,13 +165,14 @@ async function enviarCargaPatinador(numZona) {
         disciplina: document.getElementById(`z${numZona}-disciplina`).value,
         divisional: document.getElementById(`z${numZona}-divisional`).value,
         categoria: document.getElementById(`z${numZona}-categoria`).value,
-        apellido: document.getElementById(`z${numZona}-apellido`).value,
-        nombre: document.getElementById(`z${numZona}-nombre`).value,
-        DNI: document.getElementById(`z${numZona}-DNI`).value,
-        nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
+        genero: document.getElementById(`z${numZona}-genero`).value, // <--- REVISÁ QUE ESTO ESTÉ
+        apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
+        nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
+        DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
+        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
         edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: userEmail
-    };
+        mailProfe: sessionStorage.getItem('userEmail')
+};
 
     await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
         method: "POST",
