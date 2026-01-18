@@ -326,7 +326,7 @@ body.layout-collapsed .header-admin {
     justify-content: center;
     align-items: flex-start;
     width: 100%;
-    padding: 20px;
+    padding: 0px;
 }
 
 .menu-zona {
