@@ -131,10 +131,6 @@ body {
     left: 80px; 
     width: calc(100vw - 110px);
 }
-.header-admin {
-    position: fixed;
-    z-index: 200;
-}
 
 /* El brillo del header */
 .header-admin::after {
