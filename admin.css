@@ -345,6 +345,8 @@ body.layout-collapsed .header-admin {
     opacity: 1 !important;
     margin: -10px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
     float: none !important;
+    overflow: visible !important; /* Permite que el contenido se vea sin barritas */
+    max-height: none !important; /* Quita cualquier tope de altura */
 }
 
 .menu-zona h4 {
@@ -364,11 +366,11 @@ body.layout-collapsed .header-admin {
 }
 
 .menu-zona li {
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0px !important;
     color: #fff !important;
     font-weight: 500;
     text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
@@ -405,9 +407,11 @@ body.layout-collapsed .header-admin {
     display: none; /* Mantiene ocultos los bloques de Seguros/Copa por defecto */
     background: rgba(255, 255, 255, 0.03) !important;
     border-radius: 20px !important;
-    padding: 25px;
-    margin: 20px;
+    padding: 15px !important; /* Bajamos el padding interno */
+    margin: 10px auto !important; /* Menos margen para que suba */
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    overflow: visible !important;     /* SEGURIDAD CONTRA SCROLL */
+    height: auto !important;
 }
 
 #seguros {
