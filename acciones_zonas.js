@@ -157,23 +157,26 @@ async function guardarNuevoClub() {
         return;
     }
 
+    // Ajustamos los nombres para que coincidan con tu doPost (data.tipo y data.clubNombre)
     const datos = {
-        tipo: "SOLICITUD_CLUB",
-        club: nombreClub,
-        mailProfe: userEmail,
-        zona: window.zonaActiva
+        tipo: "REGISTRO_CLUB", // Coincide con tu if (data.tipo === "REGISTRO_CLUB")
+        clubNombre: nombreClub, // Coincide con data.clubNombre
+        mail: userEmail         // Coincide con data.mail
     };
 
     try {
-        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
+        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";
+        
+        await fetch(URL_SCRIPT, {
             method: "POST",
             mode: "no-cors",
             body: JSON.stringify(datos)
         });
-        alert("🚀 Solicitud enviada. El club será revisado para su alta.");
+
+        alert("✅ Solicitud enviada correctamente.");
         document.getElementById('nuevo-club-nombre').value = "";
         cerrarModalClubes();
     } catch (error) {
-        alert("❌ Error al enviar la solicitud.");
+        alert("❌ Error de conexión al enviar.");
     }
 }
