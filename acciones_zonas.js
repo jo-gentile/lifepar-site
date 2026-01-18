@@ -72,40 +72,64 @@ async function abrirFormularioCarga(numZona) {
         opcionesClub = '<option value="CLUB MANUAL">ERROR AL CARGAR - ESCRIBIR ABAJO</option>';
     }
 
-    contenedor.innerHTML = `
+   contenedor.innerHTML = `
     <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
         <h4 style="color:#ffd700;text-align:center;font-family:'Anton',sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
 
+        <style>
+            .lock-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+            .btn-lock { background: none; border: 1px solid #444; border-radius: 5px; cursor: pointer; padding: 5px; font-size: 1.2rem; transition: 0.3s; }
+            .btn-lock.locked { border-color: gold; background: rgba(255, 215, 0, 0.1); }
+            .input-registro { margin-bottom: 0 !important; flex-grow: 1; }
+            label { display: block; font-size: 0.8rem; color: #aaa; margin-bottom: 2px; }
+        </style>
+
         <label>Club</label>
-        <select id="z${numZona}-club" class="input-registro">${opcionesClub}</select>
+        <div class="lock-group">
+            <select id="z${numZona}-club" class="input-registro">${opcionesClub}</select>
+            <button class="btn-lock" onclick="toggleLock(this, 'z${numZona}-club')">🔓</button>
+        </div>
 
         <label>Disciplina</label>
-        <select id="z${numZona}-disciplina" class="input-registro" onchange="actualizarCascada('disciplina', ${numZona})">
-            <option value="">SELECCIONE...</option>
-            <option value="LIBRE">LIBRE</option>
-            <option value="DANZA">DANZA SOLO</option>
-        </select>
+        <div class="lock-group">
+            <select id="z${numZona}-disciplina" class="input-registro" onchange="actualizarCascada('disciplina', ${numZona})">
+                <option value="">SELECCIONE...</option>
+                <option value="LIBRE">LIBRE</option>
+                <option value="DANZA">DANZA SOLO</option>
+            </select>
+            <button class="btn-lock" onclick="toggleLock(this, 'z${numZona}-disciplina')">🔓</button>
+        </div>
 
         <label>Divisional</label>
-        <select id="z${numZona}-divisional" class="input-registro" onchange="actualizarCascada('divisional', ${numZona})">
-            <option value="">DIVISIONAL...</option>
-        </select>
+        <div class="lock-group">
+            <select id="z${numZona}-divisional" class="input-registro" onchange="actualizarCascada('divisional', ${numZona})">
+                <option value="">DIVISIONAL...</option>
+            </select>
+            <button class="btn-lock" onclick="toggleLock(this, 'z${numZona}-divisional')">🔓</button>
+        </div>
 
         <label>Categoría</label>
-        <select id="z${numZona}-categoria" class="input-registro">
-            <option value="">CATEGORÍA...</option>
-        </select>
+        <div class="lock-group">
+            <select id="z${numZona}-categoria" class="input-registro">
+                <option value="">CATEGORÍA...</option>
+            </select>
+            <button class="btn-lock" onclick="toggleLock(this, 'z${numZona}-categoria')">🔓</button>
+        </div>
 
-        <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro">
-        <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro">
-        <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro">
-        <input type="date" id="z${numZona}-nacimiento" class="input-registro" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
-        <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold;text-align:center;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+            <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro">
+            <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro">
+        </div>
+        
+        <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
+        
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+            <input type="date" id="z${numZona}-nacimiento" class="input-registro" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
+            <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold;text-align:center; width: 80px;" placeholder="EDAD">
+        </div>
 
-        <button onclick="enviarCargaPatinador(${numZona})" style="margin-top:10px;width:100%;background:gold;font-weight:bold;">🚀 CARGAR PATINADOR</button>
+        <button onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px;width:100%;background:gold;font-weight:bold;padding: 12px; border-radius: 8px; border:none; cursor:pointer;">🚀 CARGAR PATINADOR</button>
     </div>`;
-}
-
 
 function calcularEdadDeportiva(fecha, target) {
     const anio = new Date(fecha).getFullYear();
@@ -178,5 +202,17 @@ async function guardarNuevoClub() {
         cerrarModalClubes();
     } catch (error) {
         alert("❌ Error de conexión al enviar.");
+    }
+}
+function toggleLock(btn, idCampo) {
+    const campo = document.getElementById(idCampo);
+    if (campo.disabled) {
+        campo.disabled = false;
+        btn.innerText = "🔓";
+        btn.classList.remove("locked");
+    } else {
+        campo.disabled = true;
+        btn.innerText = "🔒";
+        btn.classList.add("locked");
     }
 }
