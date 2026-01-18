@@ -139,39 +139,54 @@ async function enviarCargaPatinador(numZona) {
     alert("✅ Registro enviado");
 }
 
-/* --- FUNCIÓN PARA ASOCIAR NUEVO CLUB --- */
-async function asociarNuevoClub() {
+/* --- CONTROL DEL MODAL DE CLUBES --- */
+function ejecutarModalClubes() {
+    // Esta es la función que busca tu botón del icono 🏢
+    document.getElementById('ModalClub').style.display = 'block';
+}
+
+function cerrarModalClubes() {
+    document.getElementById('ModalClub').style.display = 'none';
+}
+
+/* --- ENVÍO DE DATOS A GOOGLE SHEETS (USUARIOS_CLUBES) --- */
+async function guardarNuevoClub() {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
+    const nombreInput = document.getElementById('nuevo-club-nombre');
+    const nombreClub = nombreInput.value.trim();
+
     if (!userEmail) {
         alert("⚠️ No se detectó sesión de usuario.");
         return;
     }
 
-    const nombreClub = prompt("Ingrese el nombre del nuevo Club a asociar:");
-    
-    if (nombreClub && nombreClub.trim() !== "") {
-        // Armamos el objeto con la estructura que espera tu Script de Google
-        const datosClub = {
-            tipo: "ASOCIAR_CLUB", // Etiqueta para que el Sheets sepa qué hacer
-            pestaña: "USUARIOS_CLUBES", 
-            club: nombreClub.toUpperCase().trim(),
-            mailProfe: userEmail,
-            fechaSolicitud: new Date().toLocaleString()
-        };
+    if (nombreClub === "") {
+        alert("⚠️ Por favor, escribí el nombre del club.");
+        return;
+    }
 
-        try {
-            // Usamos tu URL de Apps Script
-            await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
-                method: "POST",
-                mode: "no-cors", // Mantenemos el modo que ya usás en otras funciones
-                body: JSON.stringify(datosClub)
-            });
+    // Estructura para tu pestaña USUARIOS_CLUBES
+    const datosClub = {
+        tipo: "ASOCIAR_CLUB",
+        pestaña: "USUARIOS_CLUBES",
+        club: nombreClub.toUpperCase(),
+        mailProfe: userEmail,
+        fechaSolicitud: new Date().toLocaleString()
+    };
 
-            alert("✅ Solicitud enviada: El club '" + nombreClub + "' se ha vinculado a tu cuenta.");
-        } catch (error) {
-            console.error("Error al asociar club:", error);
-            alert("❌ Hubo un error al conectar con la base de datos.");
-        }
+    try {
+        // Usamos tu URL de Apps Script proporcionada
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(datosClub)
+        });
+
+        alert("✅ Solicitud enviada correctamente.");
+        nombreInput.value = ""; // Limpia el input
+        cerrarModalClubes();
+    } catch (error) {
+        console.error("Error al guardar club:", error);
+        alert("❌ Error al conectar con la base de datos.");
     }
 }
