@@ -125,7 +125,7 @@ body {
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
-    z-index: 1;
+    z-index: 150;
 }
 .layout-collapsed .zona-derecha {
     margin-left: var(--sidebar-width-collapsed);
@@ -137,7 +137,7 @@ body {
     left: var(--sidebar-width);
 
     height: 70px;
-    width: calc(100vw - 280px);
+    width: calc(100vw - var(--sidebar-width));
 
     z-index: 200;
 
@@ -159,8 +159,8 @@ body {
     overflow: hidden; /* RECORTA el brillo dentro de la cápsula */
 }
 body.layout-collapsed .header-admin {
-    left: 80px;
-    width: calc(100vw - 100px);
+    left: var(--sidebar-width-collapsed);
+    width: calc(100vw - var(--sidebar-width-collapsed));
 }
 
 
@@ -448,8 +448,8 @@ body.layout-collapsed .header-admin {
 .footer-premium {
     position: fixed;
     bottom: 0;
-    left: 260px;
-    width: calc(100vw - 260px);
+    left: var(--sidebar-width);
+    width: calc(100vw - var(--sidebar-width));
 
     z-index: 300;
 
@@ -468,8 +468,8 @@ body.layout-collapsed .header-admin {
 
 
 body.layout-collapsed .footer-premium {
-    left: 80px;
-    width: calc(100vw - 80px);
+    left: var(--sidebar-width-collapsed);
+    width: calc(100vw - var(--sidebar-width-collapsed));
 }
 
 
