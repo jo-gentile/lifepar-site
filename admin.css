@@ -3,9 +3,7 @@
     --sidebar-width-collapsed: 80px;
 }
 
-/* ==========================================================
-   1. FONDO Y ESTRUCTURA GENERAL
-   ========================================================== */
+/* --- 1. FONDO Y ESTRUCTURA GENERAL --- */
 body {
     margin: 0;
     padding: 0;
@@ -26,17 +24,15 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* ==========================================================
-   2. SIDEBAR (MENÚ LATERAL)
-   ========================================================== */
+/* --- 2. EL SIDEBAR (MENÚ LATERAL) --- */
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro para que los nombres resalten */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 100px 20px 20px 20px;
+    padding: 100px 20px 20px 20px; /* 100px arriba para que baje y no choque con el logo */
     position: fixed;
     left: 0;
     top: 0;
@@ -46,32 +42,36 @@ body {
     overflow-y: auto;
 }
 
+/* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
 .sidebar.collapsed {
-    width: var(--sidebar-width-collapsed);
+    width: var(--sidebar-width-collapsed); /* Mantenemos el ancho finito */
     padding-left: 10px !important;
     padding-right: 10px !important;
-    align-items: center;
-    overflow: hidden;
+    align-items: center; /* Centramos los iconos */
 }
 
+/* ESCONDEMOS EL TEXTO Y LAS FLECHAS */
+/* Buscamos cualquier texto dentro de los enlaces del sidebar colapsado */
 .sidebar.collapsed .nav-item span,
 .sidebar.collapsed .nav-item .flecha,
 .sidebar.collapsed .submenu-lista {
-    display: none !important;
+    display: none !important; /* Desaparecen sin dejar rastro */
 }
 
+/* CENTRADO DE ICONOS */
 .sidebar.collapsed .nav-item {
-    justify-content: center !important;
+    justify-content: center !important; /* El icono queda en el centro de la bolilla */
     padding: 15px 0 !important;
-    width: 50px;
-    margin: 5px auto !important;
-    font-size: 1.5rem !important;
+    width: 50px; /* Área de clic redonda/cuadrada perfecta */
+    margin: 5px auto !important; /* Centra el botón en la columna */
+    font-size: 1.5rem !important; /* Un pelín más grandes los iconos para que luzcan */
     gap: 0 !important;
 }
 
-/* ==========================================================
-   3. NAVEGACIÓN SIDEBAR
-   ========================================================== */
+/* RECORTE DE SEGURIDAD */
+.sidebar.collapsed {
+    overflow: hidden; /* Evita que cualquier letra se escape por el costado */
+}
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
     font-weight: 600 !important;
@@ -87,7 +87,6 @@ body {
     transition: all 0.3s ease;
     border: 1px solid transparent;
 }
-
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
     font-weight: 600 !important;
@@ -103,107 +102,68 @@ body {
     transition: all 0.3s ease;
     border: 1px solid transparent;
 }
-
 .nav-item.active {
     background: rgba(255, 215, 0, 0.1);
     color: #ffd700 !important;
     border: 1px solid rgba(255, 215, 0, 0.3);
 }
-
-.submenu-lista {
-    display: none;
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.03);
-    margin-left: 15px;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
-    overflow: hidden;
-}
-
 .submenu-lista a {
-    padding: 12px 20px 12px 55px !important;
+    padding: 12px 20px 12px 55px !important; /* Alineado bajo el texto del padre */
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.5) !important;
     border-radius: 12px;
     margin: 2px 0;
 }
-
-.submenu-lista a {
-    padding: 10px 20px;
-    font-size: 0.85rem;
-    color: #bbb;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.submenu-lista a:hover {
-    color: #ffd700;
-    background: rgba(255, 255, 255, 0.05);
-}
-
 .submenu-lista a:hover {
     color: white !important;
     background: rgba(255, 255, 255, 0.03);
 }
-
-.flecha {
-    float: right;
-    font-size: 0.7rem;
-    transition: 0.3s;
-}
-
-/* ==========================================================
-   4. LAYOUT PRINCIPAL (ZONA DERECHA)
-   ========================================================== */
 .zona-derecha {
     margin-left: var(--sidebar-width);
-    padding-top: 120px;
-    padding-bottom: 120px;
+    padding-top: 120px;   /* espacio para el header */
+    padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
 }
-
 .layout-collapsed .zona-derecha {
     margin-left: var(--sidebar-width-collapsed);
 }
 
-.contenedor-principal {
-    min-height: auto !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    padding-top: 0;
-}
-
-/* ==========================================================
-   5. HEADER
-   ========================================================== */
 .header-admin {
     position: fixed;
     top: 20px;
     left: var(--sidebar-width);
+
     height: 70px;
-    right: 20px;
+    right: 20px; /* margen derecho visual */
+
     z-index: 200;
+
     background: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.2);
+
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     padding: 0 30px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: hidden; /* RECORTA el brillo dentro de la cápsula */
 }
-
 body.layout-collapsed .header-admin {
     left: var(--sidebar-width-collapsed);
 }
 
+
+/* El brillo del header */
 .header-admin::after {
     content: "";
     position: absolute;
@@ -215,6 +175,33 @@ body.layout-collapsed .header-admin {
     animation: shineHeader 45s infinite;
 }
 
+/* --- 4. LOGO Y TIPOGRAFÍA --- */
+.logo { display: flex; flex-direction: row; align-items: center; gap: 12px; }
+
+.logo-img { height: 45px !important; width: auto !important; transition: transform 0.5s ease; }
+.logo-img:hover { transform: rotate(360deg); }
+
+.logo h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+    background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
+    background-size: 300% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient-move 12s linear infinite;
+}
+
+.slogan {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* --- 5. BOTONES DEL NAV (Con puntos agregados) --- */
 .header-admin nav ul {
     list-style: none !important;
     display: flex !important;
@@ -224,7 +211,7 @@ body.layout-collapsed .header-admin {
     padding: 0 !important;
 }
 
-.header-admin nav ul li a,
+.header-admin nav ul li a, 
 .btn-cerrar-sesion {
     display: inline-block !important;
     padding: 8px 20px !important;
@@ -257,93 +244,104 @@ body.layout-collapsed .header-admin {
     box-shadow: 0 0 15px rgba(220, 53, 69, 0.3) !important;
 }
 
+/* --- 6. ELEMENTOS DE INTERFAZ --- */
 .header-spacer {
-    height: 75px !important;
+    height: 75px !important; /* Probá con 75px, que es casi lo mismo que tu header */
     width: 100%;
     display: block !important;
 }
 
-/* ==========================================================
-   6. FOOTER
-   ========================================================== */
-.footer-premium {
-    position: fixed;
-    bottom: 0;
-    left: var(--sidebar-width);
-    right: 0;
-    z-index: 300;
-    background: rgba(10,10,10,0.9);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding: 15px 30px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
+.box-oficina {
+    display: none; /* Mantiene ocultos los bloques de Seguros/Copa por defecto */
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 20px !important;
+    padding: 25px;
+    margin: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
 }
-
-body.layout-collapsed .footer-premium {
-    left: var(--sidebar-width-collapsed);
-}
-
-.footer-premium p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.footer-premium .brand {
-    font-family: 'Anton', sans-serif;
+.toggle-btn {
+    background: none;
+    border: none;
     color: #ffd700;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 15px;
 }
 
-.footer-contact {
-    display: flex;
-    gap: 20px;
+/* --- 7. ANIMACIONES --- */
+@keyframes shineHeader { 100% { left: 125%; } }
+@keyframes text-gradient-move { 
+    0% { background-position: 0% center; } 
+    100% { background-position: 300% center; } 
+}
+/* Estilo del árbol desplegable */
+.submenu-lista {
+    display: none; /* Empieza cerrado */
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    margin-left: 15px; /* Sangría de árbol */
+    border-left: 1px solid rgba(255, 255, 255, 0.1); /* Línea guía visual */
+    overflow: hidden;
 }
 
-.footer-contact a {
-    color: #ffffff;
-    text-decoration: none;
+.submenu-lista a {
+    padding: 10px 20px;
     font-size: 0.85rem;
-    font-weight: 600;
+    color: #bbb;
+    text-decoration: none;
     transition: 0.3s;
 }
 
-.footer-contact a:hover {
+.submenu-lista a:hover {
     color: #ffd700;
-    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
 }
 
-/* ==========================================================
-   7. CONTENIDO Y SECCIONES
-   ========================================================== */
+.flecha {
+    float: right;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+.contenedor-principal {
+    /* Si dice min-height: 100vh; BORRALO */
+    min-height: auto !important; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Esto empuja todo hacia arriba */
+    padding-top: 0; 
+}
+
 .bienvenida-seccion {
-    margin-top: 0px !important;
+    margin-top: 0px !important; /* Ponelo en 0 para que no sume más aire */
     text-align: center;
     width: 100%;
     height: auto !important;
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Dale aire hacia abajo, no hacia arriba */
 }
 
 .bienvenida-seccion h2 {
-    font-family: 'Anton', sans-serif !important;
+    /* La Anton es robusta y deportiva, ideal para LIFEPAR */
+    font-family: 'Anton', sans-serif !important; 
     font-size: 2.8rem !important;
-    text-transform: uppercase;
+    text-transform: uppercase; /* Mayúsculas para que imponga respeto */
     letter-spacing: 2px;
+    
+    /* Un degradado sutil para que no sea un blanco aburrido */
     background: linear-gradient(to bottom, #ffd700, #ffb800);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    
     margin-bottom: 5px !important;
     text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
 }
-
 .frase-fina {
     font-family: 'Dancing Script', cursive !important;
     font-size: 1.8rem !important;
-    text-transform: none !important;
+    
+    /* ESTO ES LO QUE SOLUCIONA TU PROBLEMA */
+    text-transform: none !important; /* Cancela las mayúsculas del padre */
+    
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     background: none !important;
@@ -353,6 +351,7 @@ body.layout-collapsed .footer-premium {
     display: inline-block;
     vertical-align: middle;
 }
+/* --- CONTENEDOR DE TARJETAS --- */
 
 #contenedor-acciones-zonas {
     display: flex;
@@ -362,7 +361,6 @@ body.layout-collapsed .footer-premium {
     padding: 20px;
     border: 2px solid red !important;
 }
-
 .menu-zona {
     display: none;
     background: #1a1a1a !important;
@@ -433,28 +431,89 @@ body.layout-collapsed .footer-premium {
     box-shadow: 0 5px 15px rgba(255,215,0,0.3);
 }
 
+
+/* Animación de entrada */
+@keyframes entradaSuave {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 #seguros {
-    display: none;
+    display: none; /* Esto lo hace desaparecer de entrada */
 }
-
+/* OCULTAR EL BLOQUE DE COPA FEDERAL AL INICIO */
 #copa-federal {
-    display: none;
+    display: none; /* Desaparece por completo del flujo visual */
+}
+.footer-premium {
+    position: fixed;
+    bottom: 0;
+    left: var(--sidebar-width);
+    right: 0;
+
+    z-index: 300;
+
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 30px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
 }
 
-/* ==========================================================
-   8. MODALES
-   ========================================================== */
+
+body.layout-collapsed .footer-premium {
+    left: var(--sidebar-width-collapsed);
+}
+
+
+.footer-premium p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-premium .brand {
+    font-family: 'Anton', sans-serif;
+    color: #ffd700;
+}
+
+.footer-contact {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-contact a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.footer-contact a:hover {
+    color: #ffd700;
+    transform: translateY(-2px);
+}
+/* Asegura que el modal sea visible y esté por encima de todo */
 .modal-lifepar {
     display: none;
     position: fixed;
     z-index: 10000;
     inset: 0;
     background-color: rgba(0,0,0,0.9);
+
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+
+/* Este es el cuadradito que no estás viendo */
 .modal-content {
     background: #000000 !important;
     border: 2px solid #ffd700 !important;
@@ -464,17 +523,3 @@ body.layout-collapsed .footer-premium {
     overflow-y: auto;
 }
 
-/* ==========================================================
-   9. ANIMACIONES
-   ========================================================== */
-@keyframes shineHeader { 100% { left: 125%; } }
-
-@keyframes text-gradient-move { 
-    0% { background-position: 0% center; } 
-    100% { background-position: 300% center; } 
-}
-
-@keyframes entradaSuave {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
