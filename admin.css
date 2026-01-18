@@ -118,7 +118,7 @@ body {
     background: rgba(255, 255, 255, 0.03);
 }
 .zona-derecha {
-    margin-left: var(--sidebar-width)
+    margin-left: var(--sidebar-width);
     padding-top: 120px;   /* espacio para el header */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
