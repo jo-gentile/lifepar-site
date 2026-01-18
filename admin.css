@@ -339,7 +339,7 @@ body.layout-collapsed .header-admin {
     border-radius: 25px;
     padding: 10px 25px !important; /* Bajamos de 20px a 10px arriba/abajo */
     width: 100%;
-    max-width: 420px; /* Un poco más angosto para que se vea estilizado */
+    max-width: 100px; /* Un poco más angosto para que se vea estilizado */
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     text-align: center;
     animation: entradaSuave 0.5s ease;
