@@ -124,13 +124,14 @@ body {
     margin-left: var(--sidebar-width) !important;
     display: block;
     width: calc(100% - var(--sidebar-width)) !important;
-    padding: 100px 40px 40px 40px; /* Más aire arriba para que el Header no tape el título */
+    padding: 60px 40px 40px 40px; /* Más aire arriba para que el Header no tape el título */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
     display: block;
+    flex-grow: 1;
     overflow-x: hidden; /* Evita que el formulario "gigante" cree scroll lateral */
 }
 /* Ajuste para cuando está colapsado */
@@ -280,17 +281,17 @@ body.layout-collapsed .header-admin {
 }
 
 .bienvenida-seccion {
-    margin-top: 0px !important; /* Ponelo en 0 para que no sume más aire */
-    text-align: center;
-    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important; /* Eliminamos rellenos internos */
     height: auto !important;
-    margin-bottom: 0px; /* Dale aire hacia abajo, no hacia arriba */
+    min-height: 0 !important; /* Evita que mantenga una altura mínima */
+    display: block !important;
+    text-align: center;
 }
 
 .bienvenida-seccion h2 {
     /* La Anton es robusta y deportiva, ideal para LIFEPAR */
     font-family: 'Anton', sans-serif !important; 
-    
     font-size: 2.8rem !important;
     text-transform: uppercase; /* Mayúsculas para que imponga respeto */
     letter-spacing: 2px;
@@ -301,6 +302,9 @@ body.layout-collapsed .header-admin {
     margin-bottom: 0px !important;
     text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
     line-height: 1 !important;
+    margin: 0 !important;
+    padding-top: 10px !important; /* Solo un toque para que no choque con la cápsula */
+    line-height: 1.1 !important; /* Compacta el alto de la línea de texto */
 }
 
 .frase-fina {
