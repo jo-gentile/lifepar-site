@@ -1,37 +1,11 @@
-/* =========================================================
-   0. VARIABLES GLOBALES
-========================================================= */
 :root {
     --sidebar-width: 260px;
     --sidebar-width-collapsed: 80px;
 }
 
-/* =========================================================
-   1. ANIMACIONES BASE
-========================================================= */
-@keyframes movimientoFino {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-@keyframes shineHeader { 
-    100% { left: 125%; } 
-}
-
-@keyframes text-gradient-move { 
-    0% { background-position: 0% center; } 
-    100% { background-position: 300% center; } 
-}
-
-@keyframes entradaSuave {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* =========================================================
-   2. BODY Y ESTRUCTURA GENERAL
-========================================================= */
+/* ==========================================================
+   1. FONDO Y ESTRUCTURA GENERAL
+   ========================================================== */
 body {
     margin: 0;
     padding: 0;
@@ -46,9 +20,15 @@ body {
     overflow-x: hidden;
 }
 
-/* =========================================================
-   3. SIDEBAR
-========================================================= */
+@keyframes movimientoFino {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ==========================================================
+   2. SIDEBAR (MENÚ LATERAL)
+   ========================================================== */
 .sidebar {
     width: var(--sidebar-width);
     height: 100vh;
@@ -89,9 +69,9 @@ body {
     gap: 0 !important;
 }
 
-/* =========================================================
-   4. ITEMS DEL SIDEBAR
-========================================================= */
+/* ==========================================================
+   3. NAVEGACIÓN SIDEBAR
+   ========================================================== */
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
     font-weight: 600 !important;
@@ -130,9 +110,6 @@ body {
     border: 1px solid rgba(255, 215, 0, 0.3);
 }
 
-/* =========================================================
-   5. SUBMENÚ / ÁRBOL
-========================================================= */
 .submenu-lista {
     display: none;
     flex-direction: column;
@@ -143,19 +120,19 @@ body {
 }
 
 .submenu-lista a {
-    padding: 10px 20px;
-    font-size: 0.85rem;
-    color: #bbb;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.submenu-lista a {
     padding: 12px 20px 12px 55px !important;
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.5) !important;
     border-radius: 12px;
     margin: 2px 0;
+}
+
+.submenu-lista a {
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    color: #bbb;
+    text-decoration: none;
+    transition: 0.3s;
 }
 
 .submenu-lista a:hover {
@@ -174,9 +151,9 @@ body {
     transition: 0.3s;
 }
 
-/* =========================================================
-   6. ZONA DERECHA (CONTENIDO)
-========================================================= */
+/* ==========================================================
+   4. LAYOUT PRINCIPAL (ZONA DERECHA)
+   ========================================================== */
 .zona-derecha {
     margin-left: var(--sidebar-width);
     padding-top: 120px;
@@ -191,15 +168,23 @@ body {
     margin-left: var(--sidebar-width-collapsed);
 }
 
-/* =========================================================
-   7. HEADER
-========================================================= */
+.contenedor-principal {
+    min-height: auto !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 0;
+}
+
+/* ==========================================================
+   5. HEADER
+   ========================================================== */
 .header-admin {
     position: fixed;
     top: 20px;
     left: var(--sidebar-width);
-    right: 20px;
     height: 70px;
+    right: 20px;
     z-index: 200;
     background: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(15px);
@@ -230,49 +215,57 @@ body.layout-collapsed .header-admin {
     animation: shineHeader 45s infinite;
 }
 
-/* =========================================================
-   8. LOGO Y TEXTO
-========================================================= */
-.logo {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 12px;
+.header-admin nav ul {
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
-.logo-img {
-    height: 45px !important;
-    width: auto !important;
-    transition: transform 0.5s ease;
+.header-admin nav ul li a,
+.btn-cerrar-sesion {
+    display: inline-block !important;
+    padding: 8px 20px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 50px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Quicksand', sans-serif !important;
 }
 
-.logo-img:hover {
-    transform: rotate(360deg);
+.header-admin nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #fff !important;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
 }
 
-.logo h1 {
-    font-family: 'Anton', sans-serif;
-    font-size: 1.4rem;
-    margin: 0;
-    background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
-    background-size: 300% auto;
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: text-gradient-move 12s linear infinite;
+.btn-cerrar-sesion {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #ff8a8a !important;
+    border: 1px solid rgba(220, 53, 69, 0.4) !important;
 }
 
-.slogan {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.1rem;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+.btn-cerrar-sesion:hover {
+    background: #dc3545 !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.3) !important;
 }
 
-/* =========================================================
-   9. FOOTER
-========================================================= */
+.header-spacer {
+    height: 75px !important;
+    width: 100%;
+    display: block !important;
+}
+
+/* ==========================================================
+   6. FOOTER
+   ========================================================== */
 .footer-premium {
     position: fixed;
     bottom: 0;
@@ -323,9 +316,134 @@ body.layout-collapsed .footer-premium {
     transform: translateY(-2px);
 }
 
-/* =========================================================
-   10. MODALES
-========================================================= */
+/* ==========================================================
+   7. CONTENIDO Y SECCIONES
+   ========================================================== */
+.bienvenida-seccion {
+    margin-top: 0px !important;
+    text-align: center;
+    width: 100%;
+    height: auto !important;
+    margin-bottom: 20px;
+}
+
+.bienvenida-seccion h2 {
+    font-family: 'Anton', sans-serif !important;
+    font-size: 2.8rem !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(to bottom, #ffd700, #ffb800);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px !important;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
+}
+
+.frase-fina {
+    font-family: 'Dancing Script', cursive !important;
+    font-size: 1.8rem !important;
+    text-transform: none !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    opacity: 1 !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    margin-left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#contenedor-acciones-zonas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 20px;
+    border: 2px solid red !important;
+}
+
+.menu-zona {
+    display: none;
+    background: #1a1a1a !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 25px;
+    padding: 20px 30px !important;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    text-align: center;
+    animation: entradaSuave 0.5s ease;
+    opacity: 1 !important;
+}
+
+.menu-zona h4 {
+    font-family: 'Anton', sans-serif !important;
+    font-size: 1.5rem;
+    color: #ffd700 !important;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.menu-zona ul {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.menu-zona li {
+    margin-bottom: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.menu-zona select,
+.menu-zona button,
+.menu-zona a {
+    width: 100%;
+    max-width: 300px;
+    padding: 8px 15px !important;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.5) !important;
+    color: #fff !important;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.85rem !important;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none;
+}
+
+.menu-zona button:hover,
+.menu-zona a:hover {
+    background: #ffd700;
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+}
+
+#seguros {
+    display: none;
+}
+
+#copa-federal {
+    display: none;
+}
+
+/* ==========================================================
+   8. MODALES
+   ========================================================== */
 .modal-lifepar {
     display: none;
     position: fixed;
@@ -344,4 +462,19 @@ body.layout-collapsed .footer-premium {
     border-radius: 20px;
     max-height: 85vh;
     overflow-y: auto;
+}
+
+/* ==========================================================
+   9. ANIMACIONES
+   ========================================================== */
+@keyframes shineHeader { 100% { left: 125%; } }
+
+@keyframes text-gradient-move { 
+    0% { background-position: 0% center; } 
+    100% { background-position: 300% center; } 
+}
+
+@keyframes entradaSuave {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
