@@ -165,22 +165,54 @@ async function enviarCargaPatinador(numZona) {
         disciplina: document.getElementById(`z${numZona}-disciplina`).value,
         divisional: document.getElementById(`z${numZona}-divisional`).value,
         categoria: document.getElementById(`z${numZona}-categoria`).value,
-        genero: document.getElementById(`z${numZona}-genero`).value, // <--- REVISÁ QUE ESTO ESTÉ
+        genero: document.getElementById(`z${numZona}-genero`).value,
         apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
         nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
         DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
         fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
         edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: sessionStorage.getItem('userEmail')
-};
+        mailProfe: userEmail
+    };
 
-    await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(datos)
+    try {
+        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(datos)
+        });
+
+        alert("✅ Registro enviado");
+        
+        // LLAMAMOS A LA FUNCIÓN DE LIMPIEZA
+        limpiarCamposPostCarga(numZona);
+
+    } catch (error) {
+        alert("❌ Error al enviar los datos.");
+    }
+}
+
+// ESTA FUNCIÓN VA AFUERA (Independiente)
+function limpiarCamposPostCarga(numZona) {
+    const campos = [
+        `z${numZona}-club`,
+        `z${numZona}-disciplina`,
+        `z${numZona}-divisional`,
+        `z${numZona}-categoria`,
+        `z${numZona}-genero`,
+        `z${numZona}-apellido`,
+        `z${numZona}-nombre`,
+        `z${numZona}-DNI`,
+        `z${numZona}-nacimiento`,
+        `z${numZona}-edad`
+    ];
+
+    campos.forEach(id => {
+        const el = document.getElementById(id);
+        // Si el elemento existe y NO está bloqueado por el candado, se limpia
+        if (el && !el.disabled) { 
+            el.value = "";
+        }
     });
-
-    alert("✅ Registro enviado");
 }
 
 /* --- CONTROL DEL MODAL DE CLUBES --- */
