@@ -131,6 +131,32 @@ body {
     left: 80px; 
     width: calc(100vw - 110px);
 }
+.header-admin {
+    position: fixed;
+    top: 20px;
+    left: 270px;
+
+    height: 70px;
+    width: calc(100vw - 320px);
+
+    z-index: 200;
+
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 30px;
+    box-sizing: border-box;
+}
 
 /* El brillo del header */
 .header-admin::after {
