@@ -137,7 +137,7 @@ body {
     left: var(--sidebar-width);
 
     height: 70px;
-    width: calc(100vw - var(--sidebar-width) - 40px);
+    width: calc(100vw - 280px);
 
     z-index: 200;
 
@@ -156,11 +156,13 @@ body {
 
     padding: 0 30px;
     box-sizing: border-box;
+    overflow: hidden; /* RECORTA el brillo dentro de la cápsula */
 }
-.layout-collapsed .header-admin {
-    left: var(--sidebar-width-collapsed);
-    width: calc(100vw - var(--sidebar-width-collapsed) - 40px);
+body.layout-collapsed .header-admin {
+    left: 80px;
+    width: calc(100vw - 100px);
 }
+
 
 /* El brillo del header */
 .header-admin::after {
@@ -444,27 +446,32 @@ body {
     display: none; /* Desaparece por completo del flujo visual */
 }
 .footer-premium {
-    background: rgba(10, 10, 10, 0.9) !important;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 15px 30px;
     position: fixed;
     bottom: 0;
-    left: var(--sidebar-width);
-    width: calc(100vw - var(--sidebar-width));
-    z-index: 300; /* Supera al Sidebar y al Header */
+    left: 260px;
+    width: calc(100vw - 260px);
+
+    z-index: 300;
+
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 30px;
+
     display: flex;
-    justify-content: space-between; /* Texto a la izquierda, contactos a la derecha */
+    justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    font-family: 'Quicksand', sans-serif;
 }
 
-.layout-collapsed .footer-premium {
-    left: var(--sidebar-width-collapsed);
-    width: calc(100vw - var(--sidebar-width-collapsed));
+
+body.layout-collapsed .footer-premium {
+    left: 80px;
+    width: calc(100vw - 80px);
 }
+
 
 .footer-premium p {
     margin: 0;
