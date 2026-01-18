@@ -138,6 +138,7 @@ contenedor.innerHTML = `
 
         <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px;width:100%;background:gold;font-weight:bold;color:black;padding:12px;border-radius:5px;border:none;cursor:pointer;">🚀 CARGAR PATINADOR</button>
     </div>`;
+}   
 
 function calcularEdadDeportiva(fecha, target) {
     const anio = new Date(fecha).getFullYear();
