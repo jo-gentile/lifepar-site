@@ -284,33 +284,29 @@ body.layout-collapsed .header-admin {
     text-align: center;
     width: 100%;
     height: auto !important;
-    margin-bottom: 20px; /* Dale aire hacia abajo, no hacia arriba */
+    margin-bottom: 0px; /* Dale aire hacia abajo, no hacia arriba */
 }
 
 .bienvenida-seccion h2 {
     /* La Anton es robusta y deportiva, ideal para LIFEPAR */
     font-family: 'Anton', sans-serif !important; 
+    
     font-size: 2.8rem !important;
     text-transform: uppercase; /* Mayúsculas para que imponga respeto */
     letter-spacing: 2px;
-    
-    /* Un degradado sutil para que no sea un blanco aburrido */
-    background: linear-gradient(to bottom, #ffd700, #ffb800);
+    background: linear-gradient(to bottom, #ffd700, #ffb800); /* Un degradado sutil para que no sea un blanco aburrido */
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
-    margin-bottom: 5px !important;
+    margin-bottom: 0px !important;
     text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
+    line-height: 1 !important;
 }
 
 .frase-fina {
     font-family: 'Dancing Script', cursive !important;
     font-size: 1.8rem !important;
-    
-    /* ESTO ES LO QUE SOLUCIONA TU PROBLEMA */
     text-transform: none !important; /* Cancela las mayúsculas del padre */
-    
     color: #ffffff !important;
     -webkit-text-fill-color: #ffffff !important;
     background: none !important;
