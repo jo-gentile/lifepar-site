@@ -138,3 +138,40 @@ async function enviarCargaPatinador(numZona) {
 
     alert("✅ Registro enviado");
 }
+
+/* --- FUNCIÓN PARA ASOCIAR NUEVO CLUB --- */
+async function asociarNuevoClub() {
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    
+    if (!userEmail) {
+        alert("⚠️ No se detectó sesión de usuario.");
+        return;
+    }
+
+    const nombreClub = prompt("Ingrese el nombre del nuevo Club a asociar:");
+    
+    if (nombreClub && nombreClub.trim() !== "") {
+        // Armamos el objeto con la estructura que espera tu Script de Google
+        const datosClub = {
+            tipo: "ASOCIAR_CLUB", // Etiqueta para que el Sheets sepa qué hacer
+            pestaña: "USUARIOS_CLUBES", 
+            club: nombreClub.toUpperCase().trim(),
+            mailProfe: userEmail,
+            fechaSolicitud: new Date().toLocaleString()
+        };
+
+        try {
+            // Usamos tu URL de Apps Script
+            await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
+                method: "POST",
+                mode: "no-cors", // Mantenemos el modo que ya usás en otras funciones
+                body: JSON.stringify(datosClub)
+            });
+
+            alert("✅ Solicitud enviada: El club '" + nombreClub + "' se ha vinculado a tu cuenta.");
+        } catch (error) {
+            console.error("Error al asociar club:", error);
+            alert("❌ Hubo un error al conectar con la base de datos.");
+        }
+    }
+}
