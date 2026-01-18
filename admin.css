@@ -32,8 +32,9 @@ body {
     top: 0;
     display: flex;
     flex-direction: column;
-    z-index: 1000;
+    z-index: 2000;
     overflow-y: auto;
+    box-sizing: border-box; /* Fundamental para que el padding no sume ancho */
 }
 
 /* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
@@ -120,20 +121,31 @@ body {
 }
 
 .zona-derecha {
-    margin-left: var(--sidebar-width);
+    margin-left: var(--sidebar-width) !important;
     display: block;
-    width: calc(100% - var(--sidebar-width));
-    padding-top: 120px;   /* espacio para el header */
+    width: calc(100% - var(--sidebar-width)) !important;
+    padding: 140px 40px 120px 40px; /* Más aire arriba para que el Header no tape el título */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
+    display: block;
+    overflow-x: hidden; /* Evita que el formulario "gigante" cree scroll lateral */
 }
 /* Ajuste para cuando está colapsado */
 .layout-collapsed .zona-derecha {
-    margin-left: var(--sidebar-width-collapsed);
-    width: calc(100% - var(--sidebar-width-collapsed));
+    margin-left: var(--sidebar-width-collapsed) !important;
+    width: calc(100% - var(--sidebar-width-collapsed)) !important;
+}
+
+/* Impedir que los hijos de la zona derecha se desborden */
+.zona-derecha > *, 
+#contenedor-acciones-zonas, 
+.menu-zona,
+.box-oficina {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
 }
 
 /* --- 6. ELEMENTOS DE INTERFAZ --- */
@@ -155,10 +167,10 @@ body {
 .header-admin {
     position: fixed;
     top: 20px;
-    left: var(--sidebar-width);
+    left: calc(var(--sidebar-width) + 20px);
     height: 70px;
     right: 20px; /* margen derecho visual */
-    z-index: 200;
+    z-index: 1500;
     background: rgba(20, 20, 20, 0.8);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
@@ -173,10 +185,10 @@ body {
     overflow: hidden; /* RECORTA el brillo dentro de la cápsula */
 }
 
+/* Ajuste del Header colapsado */
 body.layout-collapsed .header-admin {
-    left: var(--sidebar-width-collapsed);
+    left: calc(var(--sidebar-width-collapsed) + 20px);
 }
-
 /* El brillo del header */
 .header-admin::after {
     content: "";
@@ -332,6 +344,8 @@ body.layout-collapsed .header-admin {
     text-align: center;
     animation: entradaSuave 0.5s ease;
     opacity: 1 !important;
+    margin: 0 auto !important; /* Centra el bloque de zona */
+    float: none !important;
 }
 
 .menu-zona h4 {
@@ -496,3 +510,6 @@ body.layout-collapsed .footer-premium {
     0% { background-position: 0% center; } 
     100% { background-position: 300% center; } 
 }
+
+
+
