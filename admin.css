@@ -328,7 +328,7 @@ body.layout-collapsed .header-admin {
     align-items: flex-start;
     width: 100%;
     padding: 0px;
-    max-width: 100px; /* Un poco más angosto para que se vea estilizado */
+    max-width: 450px; /* Un poco más angosto para que se vea estilizado */
     overflow: visible !important; /* Permite que el contenido se vea sin barritas */
     max-height: 50px; /* Quita cualquier tope de altura */
     margin: -10px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
@@ -343,7 +343,7 @@ body.layout-collapsed .header-admin {
     border-radius: 25px;
     padding: 10px 25px !important; /* Bajamos de 20px a 10px arriba/abajo */
     width: 100%;
-    max-width: 100px; /* Un poco más angosto para que se vea estilizado */
+    max-width: 0px; /* Un poco más angosto para que se vea estilizado */
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     text-align: center;
     animation: entradaSuave 0.5s ease;
