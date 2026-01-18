@@ -15,6 +15,7 @@ body {
     animation: movimientoFino 40s ease infinite;
     background-attachment: fixed;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 @keyframes movimientoFino {
@@ -125,7 +126,6 @@ body {
     min-height: 100vh;
     box-sizing: border-box;
     position: relative;
-    z-index: 150;
 }
 .layout-collapsed .zona-derecha {
     margin-left: var(--sidebar-width-collapsed);
@@ -137,7 +137,7 @@ body {
     left: var(--sidebar-width);
 
     height: 70px;
-    width: calc(100vw - var(--sidebar-width));
+    right: 20px; /* margen derecho visual */
 
     z-index: 200;
 
@@ -160,7 +160,6 @@ body {
 }
 body.layout-collapsed .header-admin {
     left: var(--sidebar-width-collapsed);
-    width: calc(100vw - var(--sidebar-width-collapsed));
 }
 
 
@@ -449,7 +448,7 @@ body.layout-collapsed .header-admin {
     position: fixed;
     bottom: 0;
     left: var(--sidebar-width);
-    width: calc(100vw - var(--sidebar-width));
+    right: 0;
 
     z-index: 300;
 
@@ -469,7 +468,6 @@ body.layout-collapsed .header-admin {
 
 body.layout-collapsed .footer-premium {
     left: var(--sidebar-width-collapsed);
-    width: calc(100vw - var(--sidebar-width-collapsed));
 }
 
 
