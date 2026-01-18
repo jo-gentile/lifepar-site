@@ -140,8 +140,7 @@ async function enviarCargaPatinador(numZona) {
 }
 
 /* --- CONTROL DEL MODAL DE CLUBES --- */
-function ejecutarModalClubes() {
-    // Esta es la función que busca tu botón del icono 🏢
+function abrirModalClubes() { // Cambié el nombre para que el "puente" del HTML la encuentre
     document.getElementById('ModalClub').style.display = 'block';
 }
 
@@ -149,44 +148,32 @@ function cerrarModalClubes() {
     document.getElementById('ModalClub').style.display = 'none';
 }
 
-/* --- ENVÍO DE DATOS A GOOGLE SHEETS (USUARIOS_CLUBES) --- */
 async function guardarNuevoClub() {
+    const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    const nombreInput = document.getElementById('nuevo-club-nombre');
-    const nombreClub = nombreInput.value.trim();
 
-    if (!userEmail) {
-        alert("⚠️ No se detectó sesión de usuario.");
+    if (!nombreClub) {
+        alert("⚠️ Por favor, escribe el nombre del club.");
         return;
     }
 
-    if (nombreClub === "") {
-        alert("⚠️ Por favor, escribí el nombre del club.");
-        return;
-    }
-
-    // Estructura para tu pestaña USUARIOS_CLUBES
-    const datosClub = {
-        tipo: "ASOCIAR_CLUB",
-        pestaña: "USUARIOS_CLUBES",
-        club: nombreClub.toUpperCase(),
+    const datos = {
+        tipo: "SOLICITUD_CLUB",
+        club: nombreClub,
         mailProfe: userEmail,
-        fechaSolicitud: new Date().toLocaleString()
+        zona: window.zonaActiva
     };
 
     try {
-        // Usamos tu URL de Apps Script proporcionada
         await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
             method: "POST",
             mode: "no-cors",
-            body: JSON.stringify(datosClub)
+            body: JSON.stringify(datos)
         });
-
-        alert("✅ Solicitud enviada correctamente.");
-        nombreInput.value = ""; // Limpia el input
+        alert("🚀 Solicitud enviada. El club será revisado para su alta.");
+        document.getElementById('nuevo-club-nombre').value = "";
         cerrarModalClubes();
     } catch (error) {
-        console.error("Error al guardar club:", error);
-        alert("❌ Error al conectar con la base de datos.");
+        alert("❌ Error al enviar la solicitud.");
     }
 }

@@ -335,18 +335,21 @@ body.layout-collapsed .header-admin {
     margin: -10px auto 0 !important;
 }
 
-/* Caja negra angosta y centrada */
 .menu-zona {
     display: none;
-    background: #1a1a1a !important;
+    background: rgba(26, 26, 26, 0.95) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 25px;
-    padding: 20px !important;
+    padding: 20px !important; 
     width: 100%;
-    max-width: 300px; /* La hacemos bien angosta y estilizada */
-    margin: 0 auto !important;
-    overflow: visible !important; /* ELIMINA EL SCROLL INTERNO */
+    max-width: 100% !important; /* Ocupa el ancho del contenedor padre */
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    text-align: center;
+    animation: entradaSuave 0.5s ease;
+    opacity: 1 !important;
+    overflow: visible !important; /* Evita scrolls internos */
 }
 
 .menu-zona h4 {
@@ -365,11 +368,15 @@ body.layout-collapsed .header-admin {
     padding: 0 !important;
 }
 
-/* Botones que ocupan todo el ancho (Ensanchados) */
 .menu-zona li {
-    width: 100% !important;
-    display: block !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px !important;
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
 .menu-zona select,
@@ -398,17 +405,6 @@ body.layout-collapsed .header-admin {
     color: #000;
     transform: translateY(-3px);
     box-shadow: 0 5px 15px rgba(255,215,0,0.3);
-}
-
-.btn-accion, 
-.menu-zona select {
-    width: 100% !important; /* Ocupan todo el ancho de la caja angosta */
-    box-sizing: border-box !important;
-    padding: 12px !important;
-    border-radius: 50px !important;
-    font-size: 0.85rem !important;
-    cursor: pointer;
-    transition: 0.3s;
 }
 
 .box-oficina {
