@@ -22,48 +22,44 @@ body {
 .sidebar {
     width: 260px;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.4); /* Más oscuro para que los nombres resalten */
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 100px 20px 20px 20px; /* 100px arriba para que baje y no choque con el logo */
+    padding: 100px 20px 20px 20px;
     position: fixed;
     left: 0;
     top: 0;
     display: flex;
     flex-direction: column;
     z-index: 100;
-}
-/* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
-.sidebar.collapsed {
-    width: 80px !important; /* Mantenemos el ancho finito */
-    padding-left: 10px !important;
-    padding-right: 10px !important;
-    align-items: center; /* Centramos los iconos */
+    transition: all 0.3s ease-in-out;
 }
 
-/* ESCONDEMOS EL TEXTO Y LAS FLECHAS */
-/* Buscamos cualquier texto dentro de los enlaces del sidebar colapsado */
+.sidebar.collapsed {
+    width: 80px !important;
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* Elementos internos del sidebar colapsado */
 .sidebar.collapsed .nav-item span,
 .sidebar.collapsed .nav-item .flecha,
 .sidebar.collapsed .submenu-lista {
-    display: none !important; /* Desaparecen sin dejar rastro */
+    display: none !important;
 }
 
-/* CENTRADO DE ICONOS */
 .sidebar.collapsed .nav-item {
-    justify-content: center !important; /* El icono queda en el centro de la bolilla */
+    justify-content: center !important;
     padding: 15px 0 !important;
-    width: 50px; /* Área de clic redonda/cuadrada perfecta */
-    margin: 5px auto !important; /* Centra el botón en la columna */
-    font-size: 1.5rem !important; /* Un pelín más grandes los iconos para que luzcan */
+    width: 50px;
+    margin: 5px auto !important;
+    font-size: 1.5rem !important;
     gap: 0 !important;
 }
 
-/* RECORTE DE SEGURIDAD */
-.sidebar.collapsed {
-    overflow: hidden; /* Evita que cualquier letra se escape por el costado */
-}
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
     font-weight: 600 !important;
@@ -79,78 +75,56 @@ body {
     transition: all 0.3s ease;
     border: 1px solid transparent;
 }
-.nav-item {
-    font-family: 'Quicksand', sans-serif !important;
-    font-weight: 600 !important;
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.7) !important;
-    text-decoration: none;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    transition: all 0.3s ease;
-    border: 1px solid transparent;
-}
+
 .nav-item.active {
     background: rgba(255, 215, 0, 0.1);
     color: #ffd700 !important;
     border: 1px solid rgba(255, 215, 0, 0.3);
 }
-.submenu-lista a {
-    padding: 12px 20px 12px 55px !important; /* Alineado bajo el texto del padre */
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.5) !important;
-    border-radius: 12px;
-    margin: 2px 0;
-}
-.submenu-lista a:hover {
-    color: white !important;
-    background: rgba(255, 255, 255, 0.03);
-}
+
+/* --- 3. ZONA DERECHA (AJUSTABLE) --- */
 .zona-derecha {
-    margin-left: 250px;
-    transition: margin-left 0.3s ease;
+    margin-left: 260px; /* Coincide con sidebar */
+    transition: margin-left 0.3s ease-in-out;
     min-height: 100vh;
+    padding-bottom: 100px; /* Espacio para el footer */
 }
 
-.zona-derecha.expanded { margin-left: 60px; }
+/* Reacción automática al cerrar el sidebar */
+.sidebar.collapsed ~ .zona-derecha {
+    margin-left: 80px;
+}
 
+/* --- 4. HEADER ADMIN (DINÁMICO) --- */
 .header-admin {
     position: fixed;
     top: 20px;
     height: 70px;
     z-index: 1500;
-    
-    /* DISEÑO */
     background: rgba(20, 20, 20, 0.8) !important;
     backdrop-filter: blur(15px);
     border-radius: 50px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    overflow: hidden; /* ESTO ENCIERRA EL BRILLO ADENTRO */
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 30px;
     box-sizing: border-box;
-
-    /* LA SOLUCIÓN: Usar la pantalla completa (vw = view width) */
-    left: 270px; 
-    /* Le decimos: medí el 100% del ancho de la VENTANA, no de tu padre */
-    width: calc(100vw - 300px); 
     
+    /* Posición inicial */
+    left: 280px; 
+    width: calc(100vw - 320px); 
     transition: all 0.3s ease-in-out;
+    overflow: hidden;
 }
 
-/* Ajuste cuando el menú se achica */
-.zona-derecha.expanded .header-admin {
-    left: 80px; 
-    width: calc(100vw - 110px);
+/* Ajuste del header cuando el sidebar se colapsa */
+.sidebar.collapsed ~ .zona-derecha .header-admin {
+    left: 100px; 
+    width: calc(100vw - 140px);
 }
-/* El brillo del header */
+
 .header-admin::after {
     content: "";
     position: absolute;
@@ -162,365 +136,57 @@ body {
     animation: shineHeader 45s infinite;
 }
 
-/* --- 4. LOGO Y TIPOGRAFÍA --- */
-.logo { display: flex; flex-direction: row; align-items: center; gap: 12px; }
-
-.logo-img { height: 45px !important; width: auto !important; transition: transform 0.5s ease; }
-.logo-img:hover { transform: rotate(360deg); }
-
-.logo h1 {
-    font-family: 'Anton', sans-serif;
-    font-size: 1.4rem;
-    margin: 0;
-    background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
-    background-size: 300% auto;
-    color: transparent;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: text-gradient-move 12s linear infinite;
-}
-
-.slogan {
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.1rem;
-    color: #ffffff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* --- 5. BOTONES DEL NAV (Con puntos agregados) --- */
-.header-admin nav ul {
-    list-style: none !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 15px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.header-admin nav ul li a, 
-.btn-cerrar-sesion {
-    display: inline-block !important;
-    padding: 8px 20px !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    color: #fff !important;
-    text-decoration: none !important;
-    border-radius: 50px !important;
-    font-size: 0.8rem !important;
-    font-weight: 600 !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    transition: all 0.3s ease !important;
-    font-family: 'Quicksand', sans-serif !important;
-}
-
-.header-admin nav ul li a:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
-    border-color: #fff !important;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
-}
-
-.btn-cerrar-sesion {
-    background: rgba(220, 53, 69, 0.1) !important;
-    color: #ff8a8a !important;
-    border: 1px solid rgba(220, 53, 69, 0.4) !important;
-}
-
-.btn-cerrar-sesion:hover {
-    background: #dc3545 !important;
-    color: white !important;
-    box-shadow: 0 0 15px rgba(220, 53, 69, 0.3) !important;
-}
-
-/* --- 6. ELEMENTOS DE INTERFAZ --- */
-.header-spacer {
-    height: 75px !important; /* Probá con 75px, que es casi lo mismo que tu header */
-    width: 100%;
-    display: block !important;
-}
-
-.box-oficina {
-    display: none; /* Mantiene ocultos los bloques de Seguros/Copa por defecto */
-    background: rgba(255, 255, 255, 0.03) !important;
-    border-radius: 20px !important;
-    padding: 25px;
-    margin: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-}
-.toggle-btn {
-    background: none;
-    border: none;
-    color: #ffd700;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 15px;
-}
-
-/* --- 7. ANIMACIONES --- */
-@keyframes shineHeader { 100% { left: 125%; } }
-@keyframes text-gradient-move { 
-    0% { background-position: 0% center; } 
-    100% { background-position: 300% center; } 
-}
-/* Estilo del árbol desplegable */
-.submenu-lista {
-    display: none; /* Empieza cerrado */
-    flex-direction: column;
-    background: rgba(255, 255, 255, 0.03);
-    margin-left: 15px; /* Sangría de árbol */
-    border-left: 1px solid rgba(255, 255, 255, 0.1); /* Línea guía visual */
-    overflow: hidden;
-}
-
-.submenu-lista a {
-    padding: 10px 20px;
-    font-size: 0.85rem;
-    color: #bbb;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.submenu-lista a:hover {
-    color: #ffd700;
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.flecha {
-    float: right;
-    font-size: 0.7rem;
-    transition: 0.3s;
-}
-.contenedor-principal {
-    /* Si dice min-height: 100vh; BORRALO */
-    min-height: auto !important; 
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start; /* Esto empuja todo hacia arriba */
-    padding-top: 0; 
-}
-
+/* --- 5. CONTENIDO Y TARJETAS --- */
 .bienvenida-seccion {
-    margin-top: 0px !important; /* Ponelo en 0 para que no sume más aire */
     text-align: center;
-    width: 100%;
-    height: auto !important;
-    margin-bottom: 20px; /* Dale aire hacia abajo, no hacia arriba */
+    padding-top: 20px;
+    margin-bottom: 20px;
 }
 
 .bienvenida-seccion h2 {
-    /* La Anton es robusta y deportiva, ideal para LIFEPAR */
     font-family: 'Anton', sans-serif !important; 
     font-size: 2.8rem !important;
-    text-transform: uppercase; /* Mayúsculas para que imponga respeto */
-    letter-spacing: 2px;
-    
-    /* Un degradado sutil para que no sea un blanco aburrido */
+    text-transform: uppercase;
     background: linear-gradient(to bottom, #ffd700, #ffb800);
-    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    
-    margin-bottom: 5px !important;
     text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
 }
-.frase-fina {
-    font-family: 'Dancing Script', cursive !important;
-    font-size: 1.8rem !important;
-    
-    /* ESTO ES LO QUE SOLUCIONA TU PROBLEMA */
-    text-transform: none !important; /* Cancela las mayúsculas del padre */
-    
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-    background: none !important;
-    opacity: 1 !important;
-    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
-    margin-left: 15px;
-    display: inline-block;
-    vertical-align: middle;
-}
-/* --- CONTENEDOR DE TARJETAS --- */
-#contenedor-acciones-zonas {
-    justify-content: center; /* Centra la tarjeta horizontalmente */
-    align-items: flex-start;
-    width: 100%;
-    padding: 20px;
-    border: 2px solid red !important;
-}
 
-/* --- LA TARJETA PROFESIONAL (EFECTO VIDRIO) --- */
 .menu-zona {
     display: none;
-    background: #1a1a1a !important; /* Transparencia */
-    backdrop-filter: blur(15px); /* Efecto de desenfoque */
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde suave */
-    border-radius: 25px; /* Bordes redondeados */
-    padding: 20px 30px !important;
-    width: 100%;
-    max-width: 450px; /* Para que no sea gigante en monitores grandes */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    text-align: center; /* Centra el texto interno */
-    animation: entradaSuave 0.5s ease;
-    opacity: 1 !important; /* Para que aparezca con onda */
-}
-
-/* Título de la tarjeta */
-.menu-zona h4 {
-    font-family: 'Anton', sans-serif !important;
-    font-size: 1.5rem;
-    color: #ffd700 !important;
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Limpieza de la lista */
-.menu-zona ul {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.menu-zona li {
-    margin-bottom: 8px;
-    display: flex;
-    flex-direction: column; /* Apila los elementos */
-    align-items: center;
-    gap: 5px;
-    color: #ffffff !important;
-    font-weight: 500;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
-}
-
-/* --- ESTILO DE BOTONES Y SELECTORES --- */
-.menu-zona select, 
-.menu-zona button, 
-.menu-zona a {
-    width: 100%;
-    max-width: 300px;
-    padding: 8px 15px !important;
-    border-radius: 50px; /* Estilo cápsula como el header */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.5) !important; 
-    color: #ffffff !important;
-    font-family: 'Quicksand', sans-serif;
-    font-size: 0.85rem !important;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    appearance: none; /* Quita la flecha fea por defecto */
-}
-.menu-zona select {
-    appearance: none;
-    -webkit-appearance: none;
-    text-align: center;
-    text-align-last: center;
-    /* La flechita que te pasé antes */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 15px center !important;
-    background-size: 12px !important;
-    padding-right: 40px !important; /* Espacio para que el texto no pise la flecha */
-}
-.menu-zona select option {
-    /* Como no permiten blur, usamos un color casi negro sólido */
-    background-color: #121212 !important; 
-    color: white !important;
-    padding: 10px;
-    border-radius: 20px;
+    background: #1a1a1a !important;
     backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.1);
-}
-/* Hover: Cuando pasas el mouse */
-.menu-zona button:hover, 
-.menu-zona a:hover {
-    background: #ffd700;
-    color: black;
-    transform: translateY(-3px); /* Efecto de que flota */
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 20px 30px !important;
+    width: 90%;
+    max-width: 450px;
+    margin: 20px auto;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    animation: entradaSuave 0.5s ease;
 }
 
-/* Animación de entrada */
-@keyframes entradaSuave {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-#seguros {
-    display: none; /* Esto lo hace desaparecer de entrada */
-}
-/* OCULTAR EL BLOQUE DE COPA FEDERAL AL INICIO */
-#copa-federal {
-    display: none; /* Desaparece por completo del flujo visual */
-}
+/* --- 6. FOOTER --- */
 .footer-premium {
     background: rgba(10, 10, 10, 0.9) !important;
     backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 15px 30px;
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%; /* Ancho total de la pantalla */
-    z-index: 3000; /* Supera al Sidebar y al Header */
+    width: 100%;
+    z-index: 3000;
     display: flex;
-    justify-content: space-between; /* Texto a la izquierda, contactos a la derecha */
+    justify-content: space-between;
     align-items: center;
     box-sizing: border-box;
-    font-family: 'Quicksand', sans-serif;
 }
 
-.footer-premium p {
-    margin: 0;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.7);
+/* --- 7. ANIMACIONES --- */
+@keyframes shineHeader { 100% { left: 125%; } }
+@keyframes entradaSuave {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
-
-.footer-premium .brand {
-    font-family: 'Anton', sans-serif;
-    color: #ffd700;
-}
-
-.footer-contact {
-    display: flex;
-    gap: 20px;
-}
-
-.footer-contact a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.85rem;
-    font-weight: 600;
-    transition: 0.3s;
-}
-
-.footer-contact a:hover {
-    color: #ffd700;
-    transform: translateY(-2px);
-}
-/* Asegura que el modal sea visible y esté por encima de todo */
-.modal-lifepar {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    inset: 0;
-    background-color: rgba(0,0,0,0.9);
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-/* Este es el cuadradito que no estás viendo */
-.modal-content {
-    background: #000000 !important;
-    border: 2px solid #ffd700 !important;
-    padding: 25px;
-    border-radius: 20px;
-    max-height: 85vh;
-    overflow-y: auto;
-}
-
