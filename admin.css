@@ -33,7 +33,9 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 100;
+    overflow-y: auto;
 }
+
 /* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
 .sidebar.collapsed {
     width: 80px !important; /* Mantenemos el ancho finito */
@@ -112,44 +114,28 @@ body {
 }
 .zona-derecha {
     margin-left: 250px;
+    padding-top: 120px;   /* espacio para el header */
+    padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
-}
-
-.zona-derecha.expanded { margin-left: 60px; }
-
-.header-admin {
-    position: fixed;
-    top: 20px;
-    height: 70px;
-    z-index: 1500;
-    
-    /* DISEÑO */
-    background: rgba(20, 20, 20, 0.8) !important;
-    backdrop-filter: blur(15px);
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    overflow: hidden; /* ESTO ENCIERRA EL BRILLO ADENTRO */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 30px;
     box-sizing: border-box;
-
-    /* LA SOLUCIÓN: Usar la pantalla completa (vw = view width) */
-    left: 270px; 
-    /* Le decimos: medí el 100% del ancho de la VENTANA, no de tu padre */
-    width: calc(100vw - 300px); 
-    
-    transition: all 0.3s ease-in-out;
+    position: relative;
+    z-index: 1;
 }
 
+.zona-derecha.expanded {
+    margin-left: 60px;
+}
 /* Ajuste cuando el menú se achica */
 .zona-derecha.expanded .header-admin {
     left: 80px; 
     width: calc(100vw - 110px);
 }
+.header-admin {
+    position: fixed;
+    z-index: 200;
+}
+
 /* El brillo del header */
 .header-admin::after {
     content: "";
@@ -339,32 +325,31 @@ body {
     vertical-align: middle;
 }
 /* --- CONTENEDOR DE TARJETAS --- */
+
 #contenedor-acciones-zonas {
-    justify-content: center; /* Centra la tarjeta horizontalmente */
+    display: flex;
+    justify-content: center;
     align-items: flex-start;
     width: 100%;
     padding: 20px;
     border: 2px solid red !important;
 }
-
-/* --- LA TARJETA PROFESIONAL (EFECTO VIDRIO) --- */
 .menu-zona {
     display: none;
-    background: #1a1a1a !important; /* Transparencia */
-    backdrop-filter: blur(15px); /* Efecto de desenfoque */
+    background: #1a1a1a !important;
+    backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1); /* Borde suave */
-    border-radius: 25px; /* Bordes redondeados */
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 25px;
     padding: 20px 30px !important;
     width: 100%;
-    max-width: 450px; /* Para que no sea gigante en monitores grandes */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-    text-align: center; /* Centra el texto interno */
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    text-align: center;
     animation: entradaSuave 0.5s ease;
-    opacity: 1 !important; /* Para que aparezca con onda */
+    opacity: 1 !important;
 }
 
-/* Título de la tarjeta */
 .menu-zona h4 {
     font-family: 'Anton', sans-serif !important;
     font-size: 1.5rem;
@@ -372,75 +357,53 @@ body {
     margin-bottom: 15px;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
 }
 
-/* Limpieza de la lista */
 .menu-zona ul {
     list-style: none !important;
-    padding: 0 !important;
     margin: 0 !important;
+    padding: 0 !important;
 }
 
 .menu-zona li {
     margin-bottom: 8px;
     display: flex;
-    flex-direction: column; /* Apila los elementos */
+    flex-direction: column;
     align-items: center;
     gap: 5px;
-    color: #ffffff !important;
+    color: #fff !important;
     font-weight: 500;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
 }
 
-/* --- ESTILO DE BOTONES Y SELECTORES --- */
-.menu-zona select, 
-.menu-zona button, 
+.menu-zona select,
+.menu-zona button,
 .menu-zona a {
     width: 100%;
     max-width: 300px;
     padding: 8px 15px !important;
-    border-radius: 50px; /* Estilo cápsula como el header */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.5) !important; 
-    color: #ffffff !important;
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.5) !important;
+    color: #fff !important;
     font-family: 'Quicksand', sans-serif;
     font-size: 0.85rem !important;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.3s ease;
     cursor: pointer;
-    appearance: none; /* Quita la flecha fea por defecto */
-}
-.menu-zona select {
+    transition: all 0.3s ease;
     appearance: none;
-    -webkit-appearance: none;
-    text-align: center;
-    text-align-last: center;
-    /* La flechita que te pasé antes */
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E") !important;
-    background-repeat: no-repeat !important;
-    background-position: right 15px center !important;
-    background-size: 12px !important;
-    padding-right: 40px !important; /* Espacio para que el texto no pise la flecha */
 }
-.menu-zona select option {
-    /* Como no permiten blur, usamos un color casi negro sólido */
-    background-color: #121212 !important; 
-    color: white !important;
-    padding: 10px;
-    border-radius: 20px;
-    backdrop-filter: blur(15px);
-    background: rgba(255, 255, 255, 0.1);
-}
-/* Hover: Cuando pasas el mouse */
-.menu-zona button:hover, 
+
+.menu-zona button:hover,
 .menu-zona a:hover {
     background: #ffd700;
-    color: black;
-    transform: translateY(-3px); /* Efecto de que flota */
-    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255,215,0,0.3);
 }
+
 
 /* Animación de entrada */
 @keyframes entradaSuave {
