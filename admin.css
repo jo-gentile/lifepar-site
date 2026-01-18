@@ -122,9 +122,9 @@ body {
 
 .zona-derecha {
     margin-left: var(--sidebar-width) !important;
-    display: block;
+    display: flex;
     width: calc(100% - var(--sidebar-width)) !important;
-    padding: 60px 40px 40px 40px; /* Más aire arriba para que el Header no tape el título */
+    padding: 40px 40px; /* Más aire arriba para que el Header no tape el título */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
@@ -133,6 +133,7 @@ body {
     display: block;
     flex-grow: 1;
     overflow-x: hidden; /* Evita que el formulario "gigante" cree scroll lateral */
+    padding: 40px 40px;
 }
 /* Ajuste para cuando está colapsado */
 .layout-collapsed .zona-derecha {
