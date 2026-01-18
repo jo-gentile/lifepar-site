@@ -414,6 +414,7 @@ body.layout-collapsed .header-admin {
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     overflow: visible !important;     /* SEGURIDAD CONTRA SCROLL */
     height: auto !important;
+    max-width: 50px; /* Un poco más angosto para que se vea estilizado */
 }
 
 #seguros {
