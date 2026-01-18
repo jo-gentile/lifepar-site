@@ -1,3 +1,8 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-width-collapsed: 80px;
+}
+
 /* --- 1. FONDO Y ESTRUCTURA GENERAL --- */
 body {
     margin: 0;
@@ -20,7 +25,7 @@ body {
 
 /* --- 2. EL SIDEBAR (MENÚ LATERAL) --- */
 .sidebar {
-    width: 260px;
+    width: var(--sidebar-width);
     height: 100vh;
     background: rgba(0, 0, 0, 0.4); /* Más oscuro para que los nombres resalten */
     backdrop-filter: blur(20px);
@@ -38,7 +43,7 @@ body {
 
 /* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
 .sidebar.collapsed {
-    width: 80px !important; /* Mantenemos el ancho finito */
+    width: var(--sidebar-width-collapsed); /* Mantenemos el ancho finito */
     padding-left: 10px !important;
     padding-right: 10px !important;
     align-items: center; /* Centramos los iconos */
@@ -113,7 +118,7 @@ body {
     background: rgba(255, 255, 255, 0.03);
 }
 .zona-derecha {
-    margin-left: 250px;
+    margin-left: var(--sidebar-width)
     padding-top: 120px;   /* espacio para el header */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
@@ -122,22 +127,17 @@ body {
     position: relative;
     z-index: 1;
 }
+.layout-collapsed .zona-derecha {
+    margin-left: var(--sidebar-width-collapsed);
+}
 
-.zona-derecha.expanded {
-    margin-left: 60px;
-}
-/* Ajuste cuando el menú se achica */
-.zona-derecha.expanded .header-admin {
-    left: 80px; 
-    width: calc(100vw - 110px);
-}
 .header-admin {
     position: fixed;
     top: 20px;
-    left: 270px;
+    left: var(--sidebar-width);
 
     height: 70px;
-    width: calc(100vw - 320px);
+    width: calc(100vw - var(--sidebar-width) - 40px);
 
     z-index: 200;
 
@@ -156,6 +156,10 @@ body {
 
     padding: 0 30px;
     box-sizing: border-box;
+}
+.layout-collapsed .header-admin {
+    left: var(--sidebar-width-collapsed);
+    width: calc(100vw - var(--sidebar-width-collapsed) - 40px);
 }
 
 /* El brillo del header */
@@ -447,14 +451,19 @@ body {
     padding: 15px 30px;
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%; /* Ancho total de la pantalla */
+    left: var(--sidebar-width);
+    width: calc(100vw - var(--sidebar-width));
     z-index: 300; /* Supera al Sidebar y al Header */
     display: flex;
     justify-content: space-between; /* Texto a la izquierda, contactos a la derecha */
     align-items: center;
     box-sizing: border-box;
     font-family: 'Quicksand', sans-serif;
+}
+
+.layout-collapsed .footer-premium {
+    left: var(--sidebar-width-collapsed);
+    width: calc(100vw - var(--sidebar-width-collapsed));
 }
 
 .footer-premium p {

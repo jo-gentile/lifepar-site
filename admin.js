@@ -21,9 +21,13 @@ function logout() {
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
+
     sidebar.classList.toggle('collapsed');
     mainContent.classList.toggle('expanded');
+
+    document.body.classList.toggle('layout-collapsed'); // ← ESTA ES LA CLAVE
 }
+
 
 // 3. Abrir/Cerrar el árbol de Zonas
 function toggleArbol(id) {
