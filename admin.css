@@ -83,7 +83,7 @@ body {
 .zona-derecha.expanded { 
     margin-left: 80px; /* Ajustado al ancho del sidebar colapsado */
 }
-}
+
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
     font-weight: 600 !important;
