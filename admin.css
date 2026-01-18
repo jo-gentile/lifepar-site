@@ -124,7 +124,7 @@ body {
     margin-left: var(--sidebar-width) !important;
     display: block;
     width: calc(100% - var(--sidebar-width)) !important;
-    padding: 140px 40px 120px 40px; /* Más aire arriba para que el Header no tape el título */
+    padding: 100px 40px 40px 40px; /* Más aire arriba para que el Header no tape el título */
     padding-bottom: 120px; /* espacio para el footer */
     transition: margin-left 0.3s ease;
     min-height: 100vh;
