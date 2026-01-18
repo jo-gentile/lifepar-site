@@ -78,6 +78,11 @@ body {
     gap: 15px;
     transition: all 0.3s ease;
     border: 1px solid transparent;
+/* Cuando el sidebar tiene la clase .collapsed, la zona derecha se pega a la izquierda */
+.sidebar.collapsed + .zona-derecha,
+.zona-derecha.expanded { 
+    margin-left: 80px; /* Ajustado al ancho del sidebar colapsado */
+}
 }
 .nav-item {
     font-family: 'Quicksand', sans-serif !important;
@@ -111,9 +116,10 @@ body {
     background: rgba(255, 255, 255, 0.03);
 }
 .zona-derecha {
-    margin-left: 250px;
-    transition: margin-left 0.3s ease;
+    margin-left: 260px; /* Ajustado al ancho de tu .sidebar (260px) */
+    transition: margin-left 0.3s ease-in-out; /* Movimiento suave */
     min-height: 100vh;
+    padding-bottom: 80px; /* Para que el footer no tape el final del form */
 }
 
 .zona-derecha.expanded { margin-left: 60px; }
