@@ -330,8 +330,8 @@ body.layout-collapsed .header-admin {
     padding: 0px;
     max-width: 100px; /* Un poco más angosto para que se vea estilizado */
     overflow: visible !important; /* Permite que el contenido se vea sin barritas */
-    max-height: none !important; /* Quita cualquier tope de altura */
-    margin: -40px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
+    max-height: 50px; /* Quita cualquier tope de altura */
+    margin: -10px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
 }
 
 .menu-zona {
