@@ -322,33 +322,34 @@ body.layout-collapsed .header-admin {
     vertical-align: middle;
 }
 
+/* --- AJUSTE CONTENEDOR DE ACCIONES --- */
 #contenedor-acciones-zonas {
     display: flex;
     justify-content: center;
     align-items: flex-start;
     width: 100%;
     padding: 0px;
-    max-width: 450px; /* Un poco más angosto para que se vea estilizado */
-    overflow: visible !important; /* Permite que el contenido se vea sin barritas */
-    max-height: 50px; /* Quita cualquier tope de altura */
-    margin: -10px auto 0 !important; /* Margen negativo arriba para pegarlo al título */
+    max-width: 320px; /* Lo angostamos para que sea más estilizado */
+    overflow: visible !important; 
+    max-height: none !important; /* Eliminamos el límite de altura */
+    margin: -10px auto 0 !important;
 }
 
 .menu-zona {
     display: none;
-    background: #1a1a1a !important;
+    background: rgba(26, 26, 26, 0.95) !important;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 25px;
-    padding: 10px 25px !important; /* Bajamos de 20px a 10px arriba/abajo */
+    padding: 20px !important; 
     width: 100%;
-    max-width: 0px; /* Un poco más angosto para que se vea estilizado */
+    max-width: 100% !important; /* Ocupa el ancho del contenedor padre */
     box-shadow: 0 15px 35px rgba(0,0,0,0.5);
     text-align: center;
     animation: entradaSuave 0.5s ease;
     opacity: 1 !important;
-    float: none !important;
+    overflow: visible !important; /* Evita scrolls internos */
 }
 
 .menu-zona h4 {
@@ -381,20 +382,21 @@ body.layout-collapsed .header-admin {
 .menu-zona select,
 .menu-zona button,
 .menu-zona a {
-    width: 100%;
-    max-width: 100px;
-    padding: 5px 15px !important;
+    width: 100% !important; /* Obligamos a que ocupen el ancho de la caja */
+    max-width: 250px !important; /* Límite razonable para que no sean gigantes */
+    padding: 12px 15px !important; /* Más altos para mejor click */
+    margin: 5px auto !important; /* Espaciado entre ellos */
     border-radius: 50px;
     border: 1px solid rgba(255,255,255,0.2);
     background: rgba(0,0,0,0.5) !important;
     color: #fff !important;
     font-family: 'Quicksand', sans-serif;
-    font-size: 0.8rem !important;
+    font-size: 0.9rem !important; /* Un poquito más legible */
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    appearance: none;
+    display: inline-block; /* Asegura que respeten el ancho */
 }
 
 .menu-zona button:hover,
@@ -406,15 +408,15 @@ body.layout-collapsed .header-admin {
 }
 
 .box-oficina {
-    display: none; /* Mantiene ocultos los bloques de Seguros/Copa por defecto */
+    display: none;
     background: rgba(255, 255, 255, 0.03) !important;
     border-radius: 20px !important;
-    padding: 15px !important; /* Bajamos el padding interno */
-    margin: 10px auto !important; /* Menos margen para que suba */
+    padding: 15px !important;
+    margin: 10px auto !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    overflow: visible !important;     /* SEGURIDAD CONTRA SCROLL */
+    overflow: visible !important;
     height: auto !important;
-    max-width: 50px; /* Un poco más angosto para que se vea estilizado */
+    max-width: 320px; /* Igualamos al ancho del contenedor de acciones */
 }
 
 #seguros {
