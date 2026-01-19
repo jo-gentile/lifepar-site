@@ -90,8 +90,7 @@
 </section>
 
 <section id="contenedor-acciones-zonas" style="display: none; margin-top: 20px; width: 100%;">
-         <div id="tarjetasAltas"></div>
-    </section>
+        </section>
       
     <section class="box-oficina" id="seguros" style="display: none;">
         <h3>Gestión de Seguros</h3>
@@ -196,7 +195,58 @@ window.actualizarAsistencia = async (numZona, idPatinador, campoFecha, estado) =
     
     return update(ref(db), updates);
 };
+window.mostrarListadoAltas = async (numZona) => {
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    const contenedor = document.getElementById('contenedor-acciones-zonas');
+    
+    contenedor.style.display = 'block';
+    contenedor.innerHTML = '<p style="color:gold;">⏳ Cargando padrón...</p>';
 
+    try {
+        const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+        const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
+        const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
+        const snapshot = await get(consulta);
+
+        if (!snapshot.exists()) {
+            contenedor.innerHTML = '<p>No hay patinadores cargados.</p>';
+            return;
+        }
+
+        let tablaHTML = `
+            <h3 style="color:gold;">PADRÓN ZONA ${numZona}</h3>
+            <table style="width:100%; color:white; border-collapse: collapse;">
+                <thead>
+                    <tr style="border-bottom: 1px solid gold;">
+                        <th style="text-align:left; padding:10px;">PATINADOR</th>
+                        <th style="text-align:center;">F2</th>
+                        <th style="text-align:center;">F3</th>
+                        <th style="text-align:center;">F4</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+
+        snapshot.forEach((child) => {
+            const p = child.val();
+            const id = child.key;
+            tablaHTML += `
+                <tr style="border-bottom: 1px solid #333;">
+                    <td style="padding:10px;">${p.apellido}, ${p.nombre}<br><small>${p.categoria}</small></td>
+                    <td style="text-align:center;"><input type="checkbox" ${p.asisteF2 ? 'checked' : ''} onclick="actualizarAsistencia('${numZona}', '${id}', 'asisteF2', this.checked)"></td>
+                    <td style="text-align:center;"><input type="checkbox" ${p.asisteF3 ? 'checked' : ''} onclick="actualizarAsistencia('${numZona}', '${id}', 'asisteF3', this.checked)"></td>
+                    <td style="text-align:center;"><input type="checkbox" ${p.asisteF4 ? 'checked' : ''} onclick="actualizarAsistencia('${numZona}', '${id}', 'asisteF4', this.checked)"></td>
+                </tr>`;
+        });
+
+        tablaHTML += `</tbody></table>
+        <button onclick="this.parentElement.style.display='none'" style="margin-top:10px; background:gold; border:none; padding:10px; cursor:pointer;">CERRAR</button>`;
+        
+        contenedor.innerHTML = tablaHTML;
+
+    } catch (e) {
+        contenedor.innerHTML = '<p style="color:red;">Error al cargar datos.</p>';
+    }
+};
 </script>
 <script src="admin.js"></script>
 </body>
