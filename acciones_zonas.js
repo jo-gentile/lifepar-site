@@ -312,50 +312,77 @@ const estilosTarjetas = `
 </style>
 `;
 
-// 2. FUNCIÓN PARA MOSTRAR EL PADRÓN (ALTAS)
 async function ejecutarAltas(numZona) {
-    const contenedor = document.getElementById('contenedor-dinamico'); // Ajustar a tu ID
+    // 1. Buscamos el lugar donde vamos a dibujar (el div central)
+    const contenedor = document.getElementById('contenedor-dinamico');
     const mailProfe = sessionStorage.getItem('userEmail');
-    
-    // Mostramos un loader o mensaje de carga
-    contenedor.innerHTML = estilosTarjetas + '<p style="color:gold;">Cargando Padrón...</p>';
+
+    // 2. Definimos cómo se ven las tarjetas (Diseño interactivo)
+    const estilos = `
+    <style>
+        .grid-tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 20px; }
+        .tarjeta { background: #1a1a1a; border: 1px solid #ffd700; border-radius: 15px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .tarjeta h3 { color: #ffd700; margin: 0 0 5px 0; font-size: 1.1rem; text-transform: uppercase; }
+        .tarjeta p { color: #ccc; margin: 2px 0; font-size: 0.9rem; }
+        .botones-f { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
+        .btn-f { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; background: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-f.activo { background: #28a745; border-color: #28a745; box-shadow: 0 0 10px rgba(40,167,69,0.5); }
+    </style>`;
+
+    // 3. Limpiamos y avisamos que estamos cargando
+    contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center;">Cargando Padrón...</p>';
 
     try {
-        // Pedimos al padre (admin.html) que busque en Firebase
+        // 4. Pedimos los patinadores al PADRE (index/admin.html)
         const patinadores = await parent.obtenerPatinadoresPorClub(numZona, mailProfe);
         
-        contenedor.innerHTML = estilosTarjetas + `
-            <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px;">
-                <button onclick="volverAlMenu(${numZona})" style="background:none; border:none; color:gold; cursor:pointer;">⬅ Volver</button>
-                <input type="text" id="busqueda" placeholder="🔍 Buscar por apellido..." 
-                       style="padding:8px; border-radius:20px; border:1px solid gold; background:#000; color:#fff;"
-                       onkeyup="filtrarTarjetas()">
+        if (!patinadores || Object.keys(patinadores).length === 0) {
+            contenedor.innerHTML = '<p style="color:white; text-align:center;">No tenés patinadores en esta zona.</p>';
+            return;
+        }
+
+        // 5. Dibujamos la estructura del buscador y la grilla
+        contenedor.innerHTML = estilos + `
+            <div style="padding:10px; display:flex; flex-direction:column; gap:10px;">
+                <button onclick="location.reload()" style="background:none; border:none; color:gold; cursor:pointer; text-align:left;">⬅ Volver al menú</button>
+                <input type="text" id="buscador" placeholder="🔍 Buscar patinador..." onkeyup="filtrar()" 
+                       style="padding:10px; border-radius:10px; background:#000; color:#fff; border:1px solid #444;">
             </div>
-            <div class="grid-tarjetas" id="grid-tarjetas"></div>
+            <div class="grid-tarjetas" id="grid"></div>
         `;
 
-        const grid = document.getElementById('grid-tarjetas');
+        const grid = document.getElementById('grid');
 
+        // 6. Creamos cada tarjeta (Nombre, Categoría y Edad)
         Object.keys(patinadores).forEach(id => {
             const p = patinadores[id];
             const div = document.createElement('div');
-            div.className = 'tarjeta-patinador';
+            div.className = 'tarjeta';
             div.innerHTML = `
                 <h3>${p.apellido}, ${p.nombre}</h3>
                 <p>Categoría: ${p.categoria}</p>
-                <p>Edad: ${p.edadDeportiva} años</p>
-                <div class="selector-fechas">
-                    <button class="btn-fecha ${p.asisteF2 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF2', this)">F2</button>
-                    <button class="btn-fecha ${p.asisteF3 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF3', this)">F3</button>
-                    <button class="btn-fecha ${p.asisteF4 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF4', this)">F4</button>
+                <p>Edad: ${p.edadDeportiva}</p>
+                <div class="botones-f">
+                    <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF2', this)">F2</button>
+                    <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF3', this)">F3</button>
+                    <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF4', this)">F4</button>
                 </div>
             `;
             grid.appendChild(div);
         });
 
-    } catch (error) {
-        contenedor.innerHTML = '<p style="color:red;">Error al cargar datos.</p>';
+    } catch (e) {
+        contenedor.innerHTML = '<p style="color:red;">Error al conectar con la base de datos.</p>';
     }
+}
+
+// Función auxiliar para que el buscador funcione
+function filtrar() {
+    const texto = document.getElementById('buscador').value.toLowerCase();
+    document.querySelectorAll('.tarjeta').forEach(t => {
+        const nombre = t.querySelector('h3').innerText.toLowerCase();
+        t.style.display = nombre.includes(texto) ? 'block' : 'none';
+    });
 }
 async function toggleAsistencia(numZona, id, campo, boton) {
     // Si ya es verde (activo), el nuevo estado es false. Si no, es true.
