@@ -163,9 +163,8 @@ function calcularEdadDeportiva(fecha, target) {
 async function enviarCargaPatinador(numZona) {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
+    // Recolectamos los datos de los inputs
     const datos = {
-        tipo: "INSCRIPCION",
-        nombreZona: window.zonaActiva,
         club: document.getElementById(`z${numZona}-club`).value,
         disciplina: document.getElementById(`z${numZona}-disciplina`).value,
         divisional: document.getElementById(`z${numZona}-divisional`).value,
@@ -179,20 +178,27 @@ async function enviarCargaPatinador(numZona) {
         mailProfe: userEmail
     };
 
+    // Validación básica
+    if (!datos.apellido || !datos.nombre || !datos.DNI) {
+        alert("⚠️ Por favor, completa Apellido, Nombre y DNI.");
+        return;
+    }
+
     try {
-        await fetch("https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec", {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify(datos)
-        });
-
-        alert("✅ Registro enviado");
-        
-        // LLAMAMOS A LA FUNCIÓN DE LIMPIEZA
-        limpiarCamposPostCarga(numZona);
-
+        // Llamamos al puente del padre para guardar en Firebase
+        if (parent && parent.guardarPatinadorFirebase) {
+            await parent.guardarPatinadorFirebase(numZona, datos);
+            
+            alert("✅ Registro guardado en Firebase (Zona " + numZona + ")");
+            
+            // Limpiamos los campos que no están bloqueados
+            limpiarCamposPostCarga(numZona);
+        } else {
+            throw new Error("No se pudo conectar con la base de datos.");
+        }
     } catch (error) {
-        alert("❌ Error al enviar los datos.");
+        console.error(error);
+        alert("❌ Error al guardar: " + error.message);
     }
 }
 
