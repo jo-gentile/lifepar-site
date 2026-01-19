@@ -94,6 +94,22 @@
             alert("La función de clubes no está cargada.");
         }
     }
+
+    // Esta función recibirá el aviso desde el iframe de acciones_zonas
+    window.registrarClubEnFirebase = async (emailKey, clubKey) => {
+    try {
+    const { getDatabase, ref, set } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+    const db = getDatabase();
+    
+    // Guardamos en la rama CLUBES > MAIL_PROFE > NOMBRE_CLUB
+    const clubRef = ref(db, `CLUBES/${emailKey}/${clubKey}`);
+    
+    await set(clubRef, true);
+    console.log("Club guardado exitosamente en Firebase");
+  } catch (error) {
+    console.error("Error al guardar club:", error);
+  }
+};
 </script>
 </body>
 </html>
