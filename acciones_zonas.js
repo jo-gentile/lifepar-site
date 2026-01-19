@@ -390,6 +390,7 @@ async function ejecutarAltas(numZona) {
         console.error("❌ HIJO: Error capturado:", e);
         contenedor.innerHTML = '<p style="color:red; text-align:center;">Error al conectar con la base de datos.</p>';
     }
+}    
 
 // Función auxiliar para que el buscador funcione
 function filtrar() {
