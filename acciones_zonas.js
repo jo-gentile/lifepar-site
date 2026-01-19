@@ -321,8 +321,7 @@ async function ejecutarAltas(numZona) {
     }
     // 1. Buscamos el lugar donde vamos a dibujar (el div central)
     const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
-    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
+        
     if (!contenedor) {
         console.error("Error: No se encontró el contenedor-acciones-zonas en el padre.");
         return;
@@ -432,3 +431,4 @@ async function toggleAsistencia(numZona, id, campo, boton) {
         alert("Error al guardar asistencia. Reintentá.");
     }
 }
+window.ejecutarAltas = ejecutarAltas;
