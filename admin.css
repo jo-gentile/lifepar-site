@@ -519,67 +519,73 @@ body.layout-collapsed .footer-premium {
     100% { background-position: 300% center; } 
 }
 
-/* --- AJUSTE FINAL CELULARES ADMIN --- */
+/* --- ADAPTACIÓN FINAL E INDESTRUCTIBLE PARA CELULARES --- */
 @media (max-width: 768px) {
     
-    /* 1. EL BOTÓN DE MENÚ (Haciéndolo indestructible) */
+    /* 1. EL BOTÓN: Lo clavamos a la pantalla, no al sidebar */
     .toggle-btn {
         position: fixed !important;
-        top: 20px !important;
-        left: 15px !important;
-        z-index: 5000 !important; /* Por encima de todo */
+        top: 15px !important;
+        left: 10px !important;
+        z-index: 9999 !important; /* Por encima de absolutamente todo */
         display: flex !important;
-        background: rgba(0, 0, 0, 0.7) !important;
-        border: 1px solid #ffd700 !important;
-        border-radius: 8px !important;
-        width: 40px !important;
-        height: 40px !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+        border: 2px solid #ffd700 !important;
+        border-radius: 12px !important;
+        width: 45px !important;
+        height: 45px !important;
         justify-content: center;
         align-items: center;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
     }
 
-    /* 2. EL SIDEBAR (Para que no desaparezca el acceso) */
-  #sidebar {
+    /* 2. EL SIDEBAR: En celular no se achica a 80px, se ESCONDE */
+    #sidebar {
         position: fixed !important;
         left: 0 !important;
         top: 0 !important;
-        width: 280px !important; /* Ancho cómodo para leer las opciones */
+        width: 280px !important; 
         height: 100vh !important;
-        z-index: 4500 !important;
-        transition: transform 0.3s ease-in-out !important;
-        transform: translateX(0); /* Visible por defecto o según tu JS */
+        z-index: 9998 !important;
+        transform: translateX(0); /* Visible si no está colapsado */
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        background: rgba(10, 10, 10, 0.98) !important;
+        padding-top: 80px !important; /* Para que el primer ítem no quede bajo el botón */
     }
 
-    /* Cuando el JS le pone la clase 'collapsed', lo mandamos fuera de la pantalla */
+    /* Cuando el JS le pone 'collapsed', lo mandamos fuera de la pantalla a la izquierda */
     #sidebar.collapsed {
         transform: translateX(-100%) !important;
         width: 280px !important; /* Mantenemos el ancho para cuando vuelva */
     }
 
- /* 3. EL CONTENIDO (ZONA DERECHA): Siempre al 100% en celu */
+    /* 3. CONTENIDO PRINCIPAL: Empuja el footer hacia abajo */
     .zona-derecha {
         margin-left: 0 !important;
         width: 100% !important;
-        padding: 90px 15px 150px 15px !important; /* 90px arriba para no pisar el header */
-        min-height: 100vh !important;
+        padding: 90px 15px 20px 15px !important;
         display: flex !important;
         flex-direction: column !important;
+        min-height: 100vh !important; /* Ocupa todo el alto de la pantalla */
+        box-sizing: border-box !important;
     }
 
-    /* 4. EL HEADER (Cápsula superior) */
+    /* 4. EL HEADER (Cápsula): Le damos aire al botón */
     .header-admin {
-        left: 60px !important; /* Deja espacio al botón de 3 rayas */
+        left: 65px !important; /* Deja el hueco para el botón fijo */
         right: 10px !important;
         width: auto !important;
-        padding: 0 10px !important;
+        top: 15px !important;
+        height: 50px !important;
     }
 
-/* 4. EL FOOTER: Lo mandamos al final del scroll */
+    /* 5. EL FOOTER: Pegado abajo de todo */
     footer, .footer-premium {
         position: relative !important;
-        margin-top: auto !important;
-        left: 0 !important;
+        margin-top: auto !important; /* Clave: empuja hacia el fondo */
         width: 100% !important;
+        left: 0 !important;
         padding: 20px 0 !important;
+        background: #000 !important;
     }
 }
