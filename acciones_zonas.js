@@ -74,17 +74,22 @@ async function abrirFormularioCarga(numZona) {
     let opcionesClub = "";
 
     try {
-        const URL_GET = `https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec?mail=${userEmail}`;
-        const respuesta = await fetch(URL_GET);
-        const listaDeClubes = await respuesta.json();
+        const emailKey = userEmail.replace(/\./g, '_');
+        // Llamamos al puente del padre para traer los clubes de Firebase
+        const clubesData = await parent.obtenerClubesFirebase(emailKey);
 
-        if (listaDeClubes && listaDeClubes.length > 0) {
-            opcionesClub = listaDeClubes.map(c => `<option value="${c}">${c}</option>`).join('');
+        if (clubesData) {
+            // Convertimos el objeto de Firebase en opciones del select
+            opcionesClub = Object.keys(clubesData).map(key => {
+                const nombreLimpio = key.replace(/_/g, ' ');
+                return `<option value="${nombreLimpio}">${nombreLimpio}</option>`;
+            }).join('');
         } else {
             opcionesClub = '<option value="">Sin clubes asociados</option>';
         }
-    } catch {
-        opcionesClub = '<option value="CLUB MANUAL">ERROR AL CARGAR - ESCRIBIR ABAJO</option>';
+    } catch (error) {
+        console.error("Error al leer Firebase:", error);
+        opcionesClub = '<option value="">Error al cargar clubes</option>';
     }
 
 contenedor.innerHTML = `
