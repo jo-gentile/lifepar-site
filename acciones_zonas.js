@@ -255,28 +255,27 @@ async function guardarNuevoClub() {
     } catch (error) {
         alert("❌ Error de conexión al enviar.");
     }
-async function guardarNuevoClub() {
+
+    async function guardarNuevoClub() {
     const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
     if (!nombreClub || !userEmail) {
-        alert("⚠️ Faltan datos (Club o Email).");
+        alert("⚠️ Faltan datos.");
         return;
     }
 
     const emailKey = userEmail.replace(/\./g, '_');
     const clubKey = nombreClub.replace(/\./g, '_');
 
-    // Llamamos a la función que definimos en el HTML del paso 2
     try {
-        await registrarClubEnFirebase(emailKey, clubKey);
+        await enviarDatosAlPadre(emailKey, clubKey);
         alert("✅ Club enviado con éxito.");
         cerrarModalClubes();
     } catch (error) {
-        alert("❌ Error al guardar.");
+        alert("❌ Error: La base de datos aún no respondió.");
     }
 }
-
 // Forzamos que las funciones sean visibles para los botones del HTML
 window.abrirModalClubes = abrirModalClubes;
 window.cerrarModalClubes = cerrarModalClubes;
