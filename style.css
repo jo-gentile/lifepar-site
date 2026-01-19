@@ -484,3 +484,74 @@ input, textarea {
   user-select: text !important;
   -webkit-user-select: text !important;
 }
+
+/* --- ADAPTACIÓN TOTAL PARA CELULAR (INDEX LIFEPAR) --- */
+@media (max-width: 768px) {
+    /* 1. Ajuste del Header: lo hacemos un poco más chico para que no tape tanto */
+    header {
+        width: 95% !important;
+        height: auto !important;
+        padding: 10px 15px !important;
+        flex-direction: column !important; /* Apilamos logo y botones */
+        top: 10px !important;
+        border-radius: 25px !important;
+    }
+
+    .logo-img { height: 35px !important; }
+    .logo h1 { font-size: 1.1rem !important; }
+    .slogan { font-size: 0.9rem !important; }
+
+    nav ul { margin-top: 10px !important; gap: 5px !important; }
+    .admin-button { margin: 10px 0 0 0 !important; padding: 5px 12px !important; font-size: 0.75rem !important; }
+
+    /* 2. El contenedor de competencia deja de ser absoluto */
+    .contenedor-competencia {
+        flex-direction: column !important;
+        padding: 120px 10px 40px 10px !important; /* Espacio para que el header no tape el contenido */
+    }
+
+    /* 3. COLUMNAS DE ZONAS: Las sacamos de su posición lateral */
+    .columna-zonas {
+        position: relative !important; /* Ya no flotan a los costados */
+        left: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    .zona-card {
+        width: 90% !important; /* Que ocupen casi todo el ancho del celu */
+        max-width: 320px !important;
+        margin: 10px auto !important;
+        height: 55px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* 4. CENTRO DE INFORMACIÓN: Ya no puede medir 480px */
+    .centro-informacion {
+        width: 95% !important; /* Se ajusta a la pantalla */
+        max-width: 350px !important;
+        padding: 15px !important;
+        margin: 20px auto !important;
+    }
+
+    .dirigente-info {
+        flex-direction: column !important; /* Foto arriba, texto abajo en el celu */
+        text-align: center !important;
+    }
+
+    .dirigente-foto {
+        margin-bottom: 15px !important;
+    }
+
+    /* 5. FOOTER: Alineamos las redes en vertical para que no se pisen */
+    footer {
+        margin-top: 50px !important;
+        padding: 30px 10px !important;
+    }
+
+    .footer-contact {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+}
