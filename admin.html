@@ -168,6 +168,28 @@ window.guardarPatinadorFirebase = async (numZona, datos) => {
         fecha_registro: new Date().toISOString()
     });
 };
+// FUNCIÓN 1: Trae solo los patinadores del club del profe
+window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
+    const { getDatabase, ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+    const db = getDatabase();
+    const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
+    
+    // Filtramos en Firebase: "Traeme solo donde mailProfe sea igual al del profe logueado"
+    const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
+    const snapshot = await get(consulta);
+    
+    return snapshot.exists() ? snapshot.val() : {};
+};
+
+// FUNCIÓN 2: Guarda el tilde de F2, F3 o F4 al instante
+window.actualizarAsistencia = async (numZona, idPatinador, campoFecha, estado) => {
+    const { getDatabase, ref, update } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+    const db = getDatabase();
+    const updates = {};
+    updates[`ZONAS/ZONA_${numZona}/${idPatinador}/${campoFecha}`] = estado;
+    
+    return update(ref(db), updates);
+};
 
 </script>
 <script src="admin.js"></script>

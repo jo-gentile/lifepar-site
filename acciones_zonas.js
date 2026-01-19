@@ -265,3 +265,110 @@ async function guardarNuevoClub() {
 window.abrirModalClubes = abrirModalClubes;
 window.cerrarModalClubes = cerrarModalClubes;
 window.guardarNuevoClub = guardarNuevoClub;
+
+// 1. ESTILOS INYECTADOS (Para que se vea como la App)
+const estilosTarjetas = `
+<style>
+    .grid-tarjetas {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 15px;
+        padding: 15px;
+    }
+    .tarjeta-patinador {
+        background: #1e1e1e;
+        border: 1px solid #333;
+        border-radius: 12px;
+        padding: 15px;
+        position: relative;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+    .tarjeta-patinador h3 { color: #ffd700; margin: 0 0 10px 0; font-size: 1.2rem; }
+    .tarjeta-patinador p { color: #ccc; margin: 3px 0; font-size: 0.9rem; }
+    
+    .selector-fechas {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        border-top: 1px solid #333;
+        padding-top: 10px;
+    }
+    .btn-fecha {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 2px solid #555;
+        background: transparent;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    .btn-fecha.activo {
+        background: #28a745;
+        border-color: #28a745;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.5);
+    }
+</style>
+`;
+
+// 2. FUNCIÓN PARA MOSTRAR EL PADRÓN (ALTAS)
+async function ejecutarAltas(numZona) {
+    const contenedor = document.getElementById('contenedor-dinamico'); // Ajustar a tu ID
+    const mailProfe = sessionStorage.getItem('userEmail');
+    
+    // Mostramos un loader o mensaje de carga
+    contenedor.innerHTML = estilosTarjetas + '<p style="color:gold;">Cargando Padrón...</p>';
+
+    try {
+        // Pedimos al padre (admin.html) que busque en Firebase
+        const patinadores = await parent.obtenerPatinadoresPorClub(numZona, mailProfe);
+        
+        contenedor.innerHTML = estilosTarjetas + `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding: 10px;">
+                <button onclick="volverAlMenu(${numZona})" style="background:none; border:none; color:gold; cursor:pointer;">⬅ Volver</button>
+                <input type="text" id="busqueda" placeholder="🔍 Buscar por apellido..." 
+                       style="padding:8px; border-radius:20px; border:1px solid gold; background:#000; color:#fff;"
+                       onkeyup="filtrarTarjetas()">
+            </div>
+            <div class="grid-tarjetas" id="grid-tarjetas"></div>
+        `;
+
+        const grid = document.getElementById('grid-tarjetas');
+
+        Object.keys(patinadores).forEach(id => {
+            const p = patinadores[id];
+            const div = document.createElement('div');
+            div.className = 'tarjeta-patinador';
+            div.innerHTML = `
+                <h3>${p.apellido}, ${p.nombre}</h3>
+                <p>Categoría: ${p.categoria}</p>
+                <p>Edad: ${p.edadDeportiva} años</p>
+                <div class="selector-fechas">
+                    <button class="btn-fecha ${p.asisteF2 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF2', this)">F2</button>
+                    <button class="btn-fecha ${p.asisteF3 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF3', this)">F3</button>
+                    <button class="btn-fecha ${p.asisteF4 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF4', this)">F4</button>
+                </div>
+            `;
+            grid.appendChild(div);
+        });
+
+    } catch (error) {
+        contenedor.innerHTML = '<p style="color:red;">Error al cargar datos.</p>';
+    }
+}
+async function toggleAsistencia(numZona, id, campo, boton) {
+    // Si ya es verde (activo), el nuevo estado es false. Si no, es true.
+    const nuevoEstado = !boton.classList.contains('activo');
+    
+    try {
+        // Le avisamos al padre que guarde en Firebase
+        await parent.actualizarAsistencia(numZona, id, campo, nuevoEstado);
+        
+        // Si salió bien, cambiamos el color del botón en la pantalla
+        boton.classList.toggle('activo');
+        
+    } catch (error) {
+        alert("Error al guardar asistencia. Reintentá.");
+    }
+}
