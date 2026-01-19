@@ -174,9 +174,9 @@ window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
     const db = getDatabase();
     const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
     
-    // Filtramos en Firebase: "Traeme solo donde mailProfe sea igual al del profe logueado"
-    const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
-    const snapshot = await get(consulta);
+    // PRUEBA: Comentamos la consulta con filtro y pedimos la referencia directa
+    // const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
+    const snapshot = await get(zonaRef); 
     
     return snapshot.exists() ? snapshot.val() : {};
 };
