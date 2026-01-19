@@ -228,54 +228,28 @@ async function guardarNuevoClub() {
     const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    if (!nombreClub) {
-        alert("⚠️ Por favor, escribe el nombre del club.");
-        return;
-    }
-
-    // Ajustamos los nombres para que coincidan con tu doPost (data.tipo y data.clubNombre)
-    const datos = {
-        tipo: "REGISTRO_CLUB", // Coincide con tu if (data.tipo === "REGISTRO_CLUB")
-        clubNombre: nombreClub, // Coincide con data.clubNombre
-        mail: userEmail         // Coincide con data.mail
-    };
-
-    try {
-        const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbyvMXrBXZSGvxDwVGIXib-_CRrf5S9kG_pejm4ccUKMVTCHSHVpWMN1OKlE3zgd8yWc/exec";
-        
-        await fetch(URL_SCRIPT, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify(datos)
-        });
-
-        alert("✅ Solicitud enviada correctamente.");
-        document.getElementById('nuevo-club-nombre').value = "";
-        cerrarModalClubes();
-    } catch (error) {
-        alert("❌ Error de conexión al enviar.");
-    }
-
-    async function guardarNuevoClub() {
-    const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
-    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-
     if (!nombreClub || !userEmail) {
-        alert("⚠️ Faltan datos.");
+        alert("⚠️ Faltan datos (nombre del club o sesión de usuario).");
         return;
     }
 
+    // Limpiamos los puntos para que Firebase no de error en la ruta
     const emailKey = userEmail.replace(/\./g, '_');
     const clubKey = nombreClub.replace(/\./g, '_');
 
     try {
+        // Usamos la función puente que ya tenés creada para hablar con el script type="module" del padre
         await enviarDatosAlPadre(emailKey, clubKey);
-        alert("✅ Club enviado con éxito.");
+        
+        alert("✅ Club registrado con éxito en Firebase.");
+        document.getElementById('nuevo-club-nombre').value = "";
         cerrarModalClubes();
     } catch (error) {
-        alert("❌ Error: La base de datos aún no respondió.");
+        console.error(error);
+        alert("❌ Error: La base de datos de Firebase no respondió.");
     }
 }
+
 // Forzamos que las funciones sean visibles para los botones del HTML
 window.abrirModalClubes = abrirModalClubes;
 window.cerrarModalClubes = cerrarModalClubes;
