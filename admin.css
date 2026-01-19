@@ -524,42 +524,44 @@ body.layout-collapsed .footer-premium {
     
     /* 1. EL BOTÓN DE MENÚ (Haciéndolo indestructible) */
     .toggle-btn {
-        display: flex !important;
         position: fixed !important;
-        top: 15px !important;
-        left: 10px !important;
-        z-index: 5000 !important; /* Por encima de la cápsula */
-        background: rgba(0, 0, 0, 0.6) !important;
+        top: 20px !important;
+        left: 15px !important;
+        z-index: 5000 !important; /* Por encima de todo */
+        display: flex !important;
+        background: rgba(0, 0, 0, 0.7) !important;
         border: 1px solid #ffd700 !important;
-        border-radius: 10px !important;
-        width: 45px !important;
-        height: 45px !important;
-        align-items: center;
+        border-radius: 8px !important;
+        width: 40px !important;
+        height: 40px !important;
         justify-content: center;
+        align-items: center;
     }
 
     /* 2. EL SIDEBAR (Para que no desaparezca el acceso) */
-    #sidebar {
-        width: 280px !important;
+  #sidebar {
         position: fixed !important;
         left: 0 !important;
         top: 0 !important;
-        z-index: 4000 !important;
+        width: 280px !important; /* Ancho cómodo para leer las opciones */
+        height: 100vh !important;
+        z-index: 4500 !important;
         transition: transform 0.3s ease-in-out !important;
-        background: rgba(10, 10, 10, 0.95) !important;
+        transform: translateX(0); /* Visible por defecto o según tu JS */
     }
 
-    /* Si tiene la clase collapsed, lo sacamos de la pantalla */
+    /* Cuando el JS le pone la clase 'collapsed', lo mandamos fuera de la pantalla */
     #sidebar.collapsed {
         transform: translateX(-100%) !important;
+        width: 280px !important; /* Mantenemos el ancho para cuando vuelva */
     }
 
-    /* 3. LA ZONA DERECHA (Evitar que el footer se pegue) */
+ /* 3. EL CONTENIDO (ZONA DERECHA): Siempre al 100% en celu */
     .zona-derecha {
         margin-left: 0 !important;
         width: 100% !important;
-        padding-top: 90px !important; /* Espacio para que el header no tape el form */
-        min-height: 100vh !important; /* Ocupa toda la pantalla */
+        padding: 90px 15px 150px 15px !important; /* 90px arriba para no pisar el header */
+        min-height: 100vh !important;
         display: flex !important;
         flex-direction: column !important;
     }
@@ -572,13 +574,12 @@ body.layout-collapsed .footer-premium {
         padding: 0 10px !important;
     }
 
-    /* 5. EL FOOTER (Al fondo de todo) */
-    .footer-premium {
+/* 4. EL FOOTER: Lo mandamos al final del scroll */
+    footer, .footer-premium {
         position: relative !important;
-        margin-top: auto !important; /* Empuja el footer al final del contenido */
+        margin-top: auto !important;
         left: 0 !important;
         width: 100% !important;
-        background: #000 !important;
         padding: 20px 0 !important;
     }
 }
