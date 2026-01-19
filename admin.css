@@ -519,74 +519,60 @@ body.layout-collapsed .footer-premium {
     100% { background-position: 300% center; } 
 }
 
-/* --- AJUSTES EXCLUSIVOS PARA MÓVILES (LIFEPAR) --- */
+/* --- AJUSTES EXCLUSIVOS PARA MÓVILES (CORREGIDO PARA NO PERDER EL MENÚ) --- */
 @media (max-width: 768px) {
-    /* 1. Ocultamos el sidebar lateral y lo convertimos en un menú superior si es necesario, 
-       o simplemente liberamos el espacio */
+    /* 1. El Sidebar ahora es una capa superior que solo se ve si no está colapsado */
     .sidebar {
-        display: none !important; /* En celular es mejor usar un menú hamburguesa o botones arriba */
+        width: 100% !important;
+        height: auto !important;
+        max-height: 80vh; /* Para que no tape TODA la pantalla eternamente */
+        position: fixed !important;
+        top: 80px !important; /* Debajo del header */
+        z-index: 3000 !important;
+        background: rgba(10, 10, 10, 0.98) !important;
+        padding: 20px !important;
+        display: none; /* Se oculta por defecto */
     }
 
-    /* 2. Liberamos la Zona Derecha para que ocupe todo el ancho */
+    /* Si el sidebar NO tiene la clase .collapsed, lo mostramos */
+    body:not(.layout-collapsed) .sidebar {
+        display: flex !important;
+    }
+
+    /* 2. La Zona Derecha ahora ocupa todo el ancho sin margen */
     .zona-derecha {
         margin-left: 0 !important;
         width: 100% !important;
-        padding: 20px 15px !important; /* Menos aire a los costados para ganar espacio */
-        padding-bottom: 150px !important; /* Espacio para que el footer no tape el último botón */
+        padding: 20px 10px !important;
+        padding-top: 100px !important; /* Espacio para el header fijo */
+        padding-bottom: 180px !important;
     }
 
-    /* 3. Ajustamos la Cápsula del Header para que no se desborde */
+    /* 3. El Header se ajusta y el botón de menú (toggle) se vuelve vital */
     .header-admin {
-        left: 10px !important;
-        right: 10px !important;
-        padding: 0 15px !important;
-        height: 60px !important;
-        top: 10px !important;
+        left: 5px !important;
+        right: 5px !important;
+        width: 98% !important;
+        padding: 0 10px !important;
+        justify-content: space-around !important;
     }
 
-    /* Escondemos el slogan en móviles para que entre el logo */
-    .slogan {
-        display: none !important;
+    /* Hacemos los ítems del menú más grandes para tocar con el dedo */
+    .nav-item {
+        padding: 20px !important;
+        font-size: 1.1rem !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
     }
 
-    /* 4. Título de Bienvenida más chico para que no se corte */
-    .bienvenida-seccion h2 {
-        font-size: 1.8rem !important;
-        margin-top: 80px !important; /* Bajamos el texto para que no quede bajo el Header fixed */
-    }
-
-    .frase-fina {
-        font-size: 1.2rem !important;
-        display: block !important; /* Se pone abajo del título principal */
-        margin-left: 0 !important;
-    }
-
-    /* 5. Contenedor de Acciones al 100% */
-    #contenedor-acciones-zonas, .box-oficina, .menu-zona {
-        max-width: 100% !important;
-        width: 100% !important;
-        margin: 10px 0 !important;
-    }
-
-    /* 6. Footer Flexible: Los elementos se apilan uno abajo del otro */
+    /* 4. Footer y Botones */
     .footer-premium {
         left: 0 !important;
         flex-direction: column !important;
-        gap: 10px;
-        text-align: center;
-        padding: 15px !important;
-        position: relative !important; /* Deja de ser fijo para no tapar botones */
+        position: relative !important;
+        margin-top: 20px;
     }
 
-    .footer-contact {
-        flex-direction: column !important;
-        gap: 5px;
-    }
-
-    /* 7. Inputs y Botones más grandes para dedos */
-    .menu-zona select, .menu-zona button, .menu-zona a {
-        max-width: 100% !important;
-        height: 50px !important; /* Más cómodos para tocar */
+    .menu-zona select, .menu-zona button {
+        height: 55px !important; /* Tamaño ideal para pulgares */
     }
 }
-
