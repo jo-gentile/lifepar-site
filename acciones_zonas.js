@@ -313,6 +313,12 @@ const estilosTarjetas = `
 `;
 
 async function ejecutarAltas(numZona) {
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+
+    if (!mailProfe) {
+        alert("⚠️ Sesión no detectada. Volvé a iniciar sesión.");
+        return;
+    }
     // 1. Buscamos el lugar donde vamos a dibujar (el div central)
     const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
