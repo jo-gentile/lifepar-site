@@ -255,37 +255,28 @@ async function guardarNuevoClub() {
     } catch (error) {
         alert("❌ Error de conexión al enviar.");
     }
-}async function guardarNuevoClub() {
+async function guardarNuevoClub() {
     const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
-    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    const userEmail = sessionStorage.getItem('userEmail');
 
     if (!nombreClub) {
         alert("⚠️ Por favor, escribe el nombre del club.");
         return;
     }
 
-    // Cambiamos el punto por guion bajo para Firebase
+    // Adaptamos los datos para Firebase (puntos por guiones)
     const emailKey = userEmail.replace(/\./g, '_');
     const clubKey = nombreClub.replace(/\./g, '_');
 
-    // Avisamos que estamos procesando
-    console.log("Solicitando registro de club a Firebase para:", userEmail);
-
-    try {
-        // ACCIÓN CLAVE: Le mandamos el dato a la ventana principal (index/admin) 
-        // para que ella, que tiene la conexión a Firebase, lo guarde.
-        if (window.parent && window.parent.registrarClubEnFirebase) {
-            window.parent.registrarClubEnFirebase(emailKey, clubKey);
-            
-            // Limpiamos y cerramos el modal de una vez
-            document.getElementById('nuevo-club-nombre').value = "";
-            cerrarModalClubes();
-            alert("✅ Solicitud enviada. El club aparecerá en tu lista en unos instantes.");
-        } else {
-            throw new Error("No se encontró la conexión con la base de datos principal.");
-        }
-    } catch (err) {
-        console.error(err);
-        alert("❌ Error: No se pudo conectar con Firebase.");
+    // LLAMADA AL PADRE: Usamos el nombre exacto que tenés en tu HTML
+    if (parent && parent.registrarClubEnFirebase) {
+        parent.registrarClubEnFirebase(emailKey, clubKey);
+        
+        // Limpiamos y cerramos el modal
+        document.getElementById('nuevo-club-nombre').value = "";
+        cerrarModalClubes();
+        alert("✅ Solicitud de club enviada.");
+    } else {
+        alert("❌ Error: No se encontró la conexión con la base de datos.");
     }
 }
