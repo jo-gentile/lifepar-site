@@ -337,18 +337,29 @@ async function ejecutarAltas(numZona) {
     // 3. Limpiamos y avisamos que estamos cargando
     contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center; font-family:sans-serif;">⏳ Cargando Padrón de Zona ' + numZona + '...</p>';
 
+ // ... (código anterior de ejecutarAltas)
+
     try {
         console.log("🚀 HIJO: Gritándole al padre por datos de Zona " + numZona);
         
-        // Llamada única al padre
-        const patinadores = await window.parent.obtenerPatinadoresPorClub(numZona, mailProfe);
-        
+        // --- ESTA ES LA LÍNEA QUE CAMBIAMOS ---
+        const puente = window.parent.obtenerPatinadoresPorClub || parent.obtenerPatinadoresPorClub;
+
+        if (!puente) {
+            throw new Error("El puente con Firebase no está listo.");
+        }
+
+        const patinadores = await puente(numZona, mailProfe);
+        // --------------------------------------
+
         console.log("📥 HIJO: El padre me respondió esto:", patinadores);
 
         // Si el padre no responde nada (null o undefined)
-        if (!patinadores) {
+        if (patinadores === null) {
             throw new Error("El padre respondió NULL (error en el puente)");
         }
+        
+        // ... (resto del código igual)
 
         // Si el padre responde pero la zona está vacía para ese profe
         if (Object.keys(patinadores).length === 0) {
