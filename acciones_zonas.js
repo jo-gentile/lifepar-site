@@ -345,6 +345,18 @@ async function ejecutarAltas(numZona) {
             contenedor.innerHTML = '<p style="color:white; text-align:center;">No tenés patinadores en esta zona.</p>';
             return;
         }
+        // ... dentro de ejecutarAltas ...
+
+    console.log("🚀 HIJO: Gritándole al padre por datos...");
+    
+    const patinadores = await window.parent.obtenerPatinadoresPorClub(numZona, mailProfe);
+    
+    console.log("📥 HIJO: El padre me respondió esto:", patinadores);
+
+    if (!patinadores) {
+        throw new Error("El padre respondió NULL (error en el puente)");
+    }
+    // ... resto del código
 
         // 5. Dibujamos la estructura del buscador y la grilla
         contenedor.innerHTML = estilos + `
