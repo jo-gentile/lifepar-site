@@ -87,23 +87,28 @@
         alert("Visualizando datos de " + window.zonaActiva);
     }
 
-    function ejecutarModalClubes() {
-        if (typeof abrirModalClubes === 'function') {
-            abrirModalClubes();
-        } else {
-            alert("La función de clubes no está cargada.");
+ // Funciones puente para conectar con el padre (admin.html)
+window.registrarClubEnFirebase = async (emailKey, clubKey) => {
+    if (window.parent && window.parent.registrarClubEnFirebase) {
+        try {
+            return await window.parent.registrarClubEnFirebase(emailKey, clubKey);
+        } catch (error) {
+            console.error("Error al ejecutar en el padre:", error);
+            throw error;
         }
-    }
-
-    // Esta función recibirá el aviso desde el iframe de acciones_zonas
-     window.registrarClubEnFirebase = async (emailKey, clubKey) => {
-    // Si estamos en un iframe, llamamos a la función del admin.html
-    if (parent && parent.registrarClubEnFirebase) {
-        return await parent.registrarClubEnFirebase(emailKey, clubKey);
     } else {
-        alert("Error: No se pudo conectar con la base de datos principal.");
+        console.warn("Esperando conexión con la base de datos principal...");
+        alert("La base de datos todavía se está conectando. Reintentá en un segundo.");
     }
 };
+
+function ejecutarModalClubes() {
+    if (typeof window.abrirModalClubes === 'function') {
+        window.abrirModalClubes();
+    } else {
+        alert("La función de clubes todavía se está cargando. Esperá un momento.");
+    }
+}
 </script>
 </body>
 </html>

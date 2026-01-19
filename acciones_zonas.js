@@ -276,3 +276,8 @@ async function guardarNuevoClub() {
         alert("❌ Error al guardar.");
     }
 }
+
+// Forzamos que las funciones sean visibles para los botones del HTML
+window.abrirModalClubes = abrirModalClubes;
+window.cerrarModalClubes = cerrarModalClubes;
+window.guardarNuevoClub = guardarNuevoClub;
