@@ -519,58 +519,66 @@ body.layout-collapsed .footer-premium {
     100% { background-position: 300% center; } 
 }
 
+/* --- AJUSTE FINAL CELULARES ADMIN --- */
 @media (max-width: 768px) {
-    /* 1. Forzamos que el botón de los tres puntitos sea visible y flote arriba a la izquierda */
+    
+    /* 1. EL BOTÓN DE MENÚ (Haciéndolo indestructible) */
     .toggle-btn {
-        display: block !important;
+        display: flex !important;
         position: fixed !important;
-        top: 25px !important;
-        left: 20px !important;
-        z-index: 4000 !important; /* Por encima de TODO */
-        background: rgba(255, 215, 0, 0.2) !important; /* Un fondo sutil dorado para encontrarlo rápido */
-        border-radius: 50% !important;
-        width: 50px !important;
-        height: 50px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        backdrop-filter: blur(10px);
+        top: 15px !important;
+        left: 10px !important;
+        z-index: 5000 !important; /* Por encima de la cápsula */
+        background: rgba(0, 0, 0, 0.6) !important;
+        border: 1px solid #ffd700 !important;
+        border-radius: 10px !important;
+        width: 45px !important;
+        height: 45px !important;
+        align-items: center;
+        justify-content: center;
     }
 
-    /* 2. Ajustamos el Header para que no tape al botón */
-    .header-admin {
-        left: 80px !important; /* Le damos espacio al botón a la izquierda */
-        right: 15px !important;
-        width: auto !important;
-        height: 60px !important;
-        top: 20px !important;
-        padding: 0 15px !important;
-    }
-
-    /* Escondemos los botones de texto del header en el celu para que no se encimen */
-    .header-admin nav, .header-admin .btn-cerrar-sesion {
-        display: none !important; 
-    }
-
-    /* 3. El Sidebar ahora "cae" desde arriba cuando lo llamas */
-    .sidebar {
-        width: 85% !important; /* No ocupa todo el ancho para que veas que hay algo atrás */
-        height: 100vh !important;
-        top: 0 !important;
+    /* 2. EL SIDEBAR (Para que no desaparezca el acceso) */
+    #sidebar {
+        width: 280px !important;
+        position: fixed !important;
         left: 0 !important;
-        transition: transform 0.3s ease !important;
+        top: 0 !important;
+        z-index: 4000 !important;
+        transition: transform 0.3s ease-in-out !important;
+        background: rgba(10, 10, 10, 0.95) !important;
     }
 
-    /* Si está colapsado en el celu, lo sacamos de la pantalla hacia la izquierda */
-    .sidebar.collapsed {
+    /* Si tiene la clase collapsed, lo sacamos de la pantalla */
+    #sidebar.collapsed {
         transform: translateX(-100%) !important;
-        display: flex !important; /* Mantenemos el flex pero fuera de vista */
-        width: 85% !important;
     }
 
-    /* Si NO está colapsado, entra a la pantalla */
-    body:not(.layout-collapsed) .sidebar {
-        transform: translateX(0) !important;
+    /* 3. LA ZONA DERECHA (Evitar que el footer se pegue) */
+    .zona-derecha {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-top: 90px !important; /* Espacio para que el header no tape el form */
+        min-height: 100vh !important; /* Ocupa toda la pantalla */
         display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* 4. EL HEADER (Cápsula superior) */
+    .header-admin {
+        left: 60px !important; /* Deja espacio al botón de 3 rayas */
+        right: 10px !important;
+        width: auto !important;
+        padding: 0 10px !important;
+    }
+
+    /* 5. EL FOOTER (Al fondo de todo) */
+    .footer-premium {
+        position: relative !important;
+        margin-top: auto !important; /* Empuja el footer al final del contenido */
+        left: 0 !important;
+        width: 100% !important;
+        background: #000 !important;
+        padding: 20px 0 !important;
     }
 }
