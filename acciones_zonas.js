@@ -316,7 +316,7 @@ async function ejecutarAltas(numZona) {
     // 1. Buscamos el lugar donde vamos a dibujar (el div central)
     const contenedor = document.getElementById('contenedor-dinamico');
     const mailProfe = sessionStorage.getItem('userEmail');
-
+    contenedor.style.display = 'block';
     // 2. Definimos cómo se ven las tarjetas (Diseño interactivo)
     const estilos = `
     <style>
