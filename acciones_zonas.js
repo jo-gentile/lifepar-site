@@ -316,11 +316,21 @@ async function ejecutarAltas(numZona) {
 
     const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
     contenedor.style.display = 'block';
-    contenedor.innerHTML = '<p style="color:gold;text-align:center;">🧪 ejecutarAltas ENTRÓ (Zona ' + numZona + ')</p>';
 
-    console.log("HIJO: ejecutarAltas OK. Zona:", numZona);
+    const existePadre = !!window.parent;
+    const existeFuncion = typeof window.parent.obtenerPatinadoresPorClub;
+
+    contenedor.innerHTML = `
+        <div style="color:white; text-align:center;">
+            <p>🧪 ejecutarAltas ENTRÓ (Zona ${numZona})</p>
+            <p>👨‍👦 Padre existe: ${existePadre}</p>
+            <p>🔌 obtenerPatinadoresPorClub: ${existeFuncion}</p>
+        </div>
+    `;
+
+    console.log("PADRE:", window.parent);
+    console.log("FUNCION:", window.parent.obtenerPatinadoresPorClub);
 }
-   
 
 // Función auxiliar para que el buscador funcione
 function filtrar() {
