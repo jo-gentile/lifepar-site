@@ -338,27 +338,26 @@ async function ejecutarAltas(numZona) {
     contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center; font-family:sans-serif;">⏳ Cargando Padrón de Zona ' + numZona + '...</p>';
 
     try {
-        // 4. Pedimos los patinadores al PADRE (index/admin.html)
+        console.log("🚀 HIJO: Gritándole al padre por datos de Zona " + numZona);
+        
+        // Llamada única al padre
         const patinadores = await window.parent.obtenerPatinadoresPorClub(numZona, mailProfe);
         
-        if (!patinadores || Object.keys(patinadores).length === 0) {
+        console.log("📥 HIJO: El padre me respondió esto:", patinadores);
+
+        // Si el padre no responde nada (null o undefined)
+        if (!patinadores) {
+            throw new Error("El padre respondió NULL (error en el puente)");
+        }
+
+        // Si el padre responde pero la zona está vacía para ese profe
+        if (Object.keys(patinadores).length === 0) {
+            console.warn("⚠️ HIJO: El objeto vino vacío de Firebase.");
             contenedor.innerHTML = '<p style="color:white; text-align:center;">No tenés patinadores en esta zona.</p>';
             return;
         }
-        // ... dentro de ejecutarAltas ...
 
-    console.log("🚀 HIJO: Gritándole al padre por datos...");
-    
-    const patinadores = await window.parent.obtenerPatinadoresPorClub(numZona, mailProfe);
-    
-    console.log("📥 HIJO: El padre me respondió esto:", patinadores);
-
-    if (!patinadores) {
-        throw new Error("El padre respondió NULL (error en el puente)");
-    }
-    // ... resto del código
-
-        // 5. Dibujamos la estructura del buscador y la grilla
+        // 5. SI LLEGAMOS ACÁ, DIBUJAMOS LAS TARJETAS
         contenedor.innerHTML = estilos + `
             <div style="padding:10px; display:flex; flex-direction:column; gap:10px;">
                 <button onclick="location.reload()" style="background:none; border:none; color:gold; cursor:pointer; text-align:left;">⬅ Volver al menú</button>
@@ -369,8 +368,7 @@ async function ejecutarAltas(numZona) {
         `;
 
         const grid = document.getElementById('grid');
-
-        // 6. Creamos cada tarjeta (Nombre, Categoría y Edad)
+        
         Object.keys(patinadores).forEach(id => {
             const p = patinadores[id];
             const div = document.createElement('div');
@@ -378,7 +376,7 @@ async function ejecutarAltas(numZona) {
             div.innerHTML = `
                 <h3>${p.apellido}, ${p.nombre}</h3>
                 <p>Categoría: ${p.categoria}</p>
-                <p>Edad: ${p.edadDeportiva}</p>
+                <p>Edad: ${p.edadDeportiva || 'N/A'}</p>
                 <div class="botones-f">
                     <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF2', this)">F2</button>
                     <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF3', this)">F3</button>
@@ -389,9 +387,9 @@ async function ejecutarAltas(numZona) {
         });
 
     } catch (e) {
-        contenedor.innerHTML = '<p style="color:red;">Error al conectar con la base de datos.</p>';
+        console.error("❌ HIJO: Error capturado:", e);
+        contenedor.innerHTML = '<p style="color:red; text-align:center;">Error al conectar con la base de datos.</p>';
     }
-}
 
 // Función auxiliar para que el buscador funcione
 function filtrar() {
