@@ -519,70 +519,68 @@ body.layout-collapsed .footer-premium {
     100% { background-position: 300% center; } 
 }
 
-/* --- AJUSTE QUIRÚRGICO PARA CELULARES (MAX 480px) --- */
-@media (max-width: 400px) {
+/* --- AJUSTE QUIRÚRGICO FINAL (MAX 400px) --- */
+@media (max-width: 350px) {
     
-    /* 1. EL BOTÓN INDESTRUCTIBLE */
-    /* Lo sacamos del sidebar para que no se mueva con él */
+    /* 1. EL BOTÓN "RESCATE": Siempre visible arriba a la izquierda */
     .toggle-btn {
         position: fixed !important;
-        top: 15px !important;
-        left: 10px !important;
+        top: 12px !important;
+        left: 8px !important;
         z-index: 9999 !important; 
         display: flex !important;
-        width: 42px !important;
-        height: 42px !important;
+        width: 40px !important;
+        height: 40px !important;
         background: #000 !important;
-        border: 1px solid #ffd700 !important;
+        border: 1.5px solid #ffd700 !important;
         border-radius: 8px !important;
         justify-content: center;
         align-items: center;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
 
-    /* 2. EL SIDEBAR (Ahora es una cortina total) */
+    /* 2. EL SIDEBAR: Se convierte en una cortina que sale del todo */
     #sidebar {
-        width: 300px !important; /* Un poco menos que el ancho total del celu */
+        width: 290px !important; /* Deja un margen para ver el fondo y no marear */
         position: fixed !important;
         left: 0 !important;
         top: 0 !important;
         height: 100vh !important;
         z-index: 9000 !important;
-        /* En lugar de achicarse a 80px, se va afuera de la pantalla */
         transform: translateX(0); 
         transition: transform 0.3s ease-in-out !important;
     }
 
-    /* Cuando el JS activa 'collapsed', el sidebar desaparece al 100% */
+    /* Escondido total en lugar de 80px */
     #sidebar.collapsed {
         transform: translateX(-100%) !important;
-        width: 300px !important; /* Mantenemos el tamaño para cuando vuelva */
+        width: 290px !important;
     }
 
-    /* 3. CONTENIDO (ZONA DERECHA) */
-    /* Al ser un celu de 375px, la zona derecha DEBE ser el 100% */
+    /* 3. ZONA DERECHA: Ocupa el 100% real del celular */
     .zona-derecha {
         margin-left: 0 !important;
         width: 100% !important;
-        padding: 80px 10px 20px 10px !important;
+        padding: 75px 8px 20px 8px !important; /* Menos padding lateral para ganar aire */
         min-height: 100vh !important;
         display: flex !important;
         flex-direction: column !important;
     }
 
-    /* 4. EL FOOTER (Al fondo de todo) */
+    /* 4. EL FOOTER: Clavado al fondo del formulario */
     footer, .footer-premium {
         position: relative !important;
-        margin-top: auto !important; /* Esto lo empuja al fondo real */
+        margin-top: auto !important;
         width: 100% !important;
         left: 0 !important;
-        padding: 20px 0 !important;
+        padding: 15px 0 !important;
+        background: #000 !important;
+        font-size: 0.8rem !important; /* Achicamos un pelín la letra para que entre */
     }
 
-    /* 5. HEADER (Oficina Virtual) */
-    .header-admin {
-        left: 60px !important; /* Espacio para el botón de 3 rayas */
-        right: 10px !important;
-        width: auto !important;
-        top: 15px !important;
+    /* 5. INPUTS Y SELECTS: Los hacemos aptos para dedos */
+    input, select, .menu-zona button {
+        height: 48px !important; /* Tamaño estándar de Apple/Google para touch */
+        font-size: 16px !important; /* Evita que el iPhone haga zoom automático al clickear */
     }
 }
