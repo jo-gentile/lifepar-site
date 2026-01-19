@@ -313,171 +313,99 @@ const estilosTarjetas = `
 `;
 
 async function ejecutarAltas(numZona) {
-
-    // 1. Buscamos el lugar donde vamos a dibujar (el div central)
-
-    const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
-
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    
-
-    if (!contenedor) {
-
-        console.error("Error: No se encontró el contenedor-acciones-zonas en el padre.");
-
+    if (!mailProfe) {
+        alert("⚠️ Sesión no detectada. Volvé a iniciar sesión.");
         return;
-
     }
-
+    // 1. Buscamos el lugar donde vamos a dibujar (el div central)
+    const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
+        
+    if (!contenedor) {
+        console.error("Error: No se encontró el contenedor-acciones-zonas en el padre.");
+        return;
+    }
     
-
     contenedor.style.display = 'block';
-
     // 2. Definimos cómo se ven las tarjetas (Diseño interactivo)
-
-    const estilos =     <style>
-
+    const estilos = `
+    <style>
         .grid-tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 20px; }
-
         .tarjeta { background: #1a1a1a; border: 1px solid #ffd700; border-radius: 15px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-
         .tarjeta h3 { color: #ffd700; margin: 0 0 5px 0; font-size: 1.1rem; text-transform: uppercase; font-family: 'Anton', sans-serif; }
-
         .tarjeta p { color: #ccc; margin: 2px 0; font-size: 0.9rem; font-family: 'Quicksand', sans-serif; }
-
         .botones-f { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
-
         .btn-f { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; background: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
-
         .btn-f.activo { background: #28a745; border-color: #28a745; box-shadow: 0 0 10px rgba(40,167,69,0.5); }
-
-    </style>;    // 3. Limpiamos y avisamos que estamos cargando
-
+    </style>`;
+    // 3. Limpiamos y avisamos que estamos cargando
     contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center; font-family:sans-serif;">⏳ Cargando Padrón de Zona ' + numZona + '...</p>';
-
-
 
  // ... (código anterior de ejecutarAltas)
 
-
-
     try {
-
         console.log("🚀 HIJO: Gritándole al padre por datos de Zona " + numZona);
-
         
-
         // --- ESTA ES LA LÍNEA QUE CAMBIAMOS ---
-
         const puente = window.parent.obtenerPatinadoresPorClub || parent.obtenerPatinadoresPorClub;
 
-
-
         if (!puente) {
-
             throw new Error("El puente con Firebase no está listo.");
-
         }
 
-
-
         const patinadores = await puente(numZona, mailProfe);
-
         // --------------------------------------
-
-
 
         console.log("📥 HIJO: El padre me respondió esto:", patinadores);
 
-
-
         // Si el padre no responde nada (null o undefined)
-
         if (patinadores === null) {
-
             throw new Error("El padre respondió NULL (error en el puente)");
-
         }
-
         
-
         // ... (resto del código igual)
 
-
-
         // Si el padre responde pero la zona está vacía para ese profe
-
         if (Object.keys(patinadores).length === 0) {
-
             console.warn("⚠️ HIJO: El objeto vino vacío de Firebase.");
-
             contenedor.innerHTML = '<p style="color:white; text-align:center;">No tenés patinadores en esta zona.</p>';
-
             return;
-
         }
 
-
-
         // 5. SI LLEGAMOS ACÁ, DIBUJAMOS LAS TARJETAS
-
-        contenedor.innerHTML = estilos +             <div style="padding:10px; display:flex; flex-direction:column; gap:10px;">
-
+        contenedor.innerHTML = estilos + `
+            <div style="padding:10px; display:flex; flex-direction:column; gap:10px;">
                 <button onclick="location.reload()" style="background:none; border:none; color:gold; cursor:pointer; text-align:left;">⬅ Volver al menú</button>
-
                 <input type="text" id="buscador" placeholder="🔍 Buscar patinador..." onkeyup="filtrar()" 
-
                        style="padding:10px; border-radius:10px; background:#000; color:#fff; border:1px solid #444;">
-
             </div>
-
             <div class="grid-tarjetas" id="grid"></div>
-
-        ;
+        `;
 
         const grid = document.getElementById('grid');
-
         
-
         Object.keys(patinadores).forEach(id => {
-
             const p = patinadores[id];
-
             const div = document.createElement('div');
-
             div.className = 'tarjeta';
-
-            div.innerHTML =                 <h3>${p.apellido}, ${p.nombre}</h3>
-
+            div.innerHTML = `
+                <h3>${p.apellido}, ${p.nombre}</h3>
                 <p>Categoría: ${p.categoria}</p>
-
                 <p>Edad: ${p.edadDeportiva || 'N/A'}</p>
-
                 <div class="botones-f">
-
                     <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF2', this)">F2</button>
-
                     <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF3', this)">F3</button>
-
                     <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" onclick="toggleAsistencia('${numZona}', '${id}', 'asisteF4', this)">F4</button>
-
                 </div>
-
-            ;            grid.appendChild(div);
-
+            `;
+            grid.appendChild(div);
         });
 
-
-
     } catch (e) {
-
         console.error("❌ HIJO: Error capturado:", e);
-
         contenedor.innerHTML = '<p style="color:red; text-align:center;">Error al conectar con la base de datos.</p>';
-
     }
-
 }    
 
 // Función auxiliar para que el buscador funcione
