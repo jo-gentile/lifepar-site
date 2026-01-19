@@ -314,23 +314,28 @@ const estilosTarjetas = `
 
 async function ejecutarAltas(numZona) {
     // 1. Buscamos el lugar donde vamos a dibujar (el div central)
-    const contenedor = document.getElementById('contenedor-dinamico');
-    const mailProfe = sessionStorage.getItem('userEmail');
+    const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    
+    if (!contenedor) {
+        console.error("Error: No se encontró el contenedor-acciones-zonas en el padre.");
+        return;
+    }
+    
     contenedor.style.display = 'block';
     // 2. Definimos cómo se ven las tarjetas (Diseño interactivo)
     const estilos = `
     <style>
         .grid-tarjetas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px; padding: 20px; }
         .tarjeta { background: #1a1a1a; border: 1px solid #ffd700; border-radius: 15px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .tarjeta h3 { color: #ffd700; margin: 0 0 5px 0; font-size: 1.1rem; text-transform: uppercase; }
-        .tarjeta p { color: #ccc; margin: 2px 0; font-size: 0.9rem; }
+        .tarjeta h3 { color: #ffd700; margin: 0 0 5px 0; font-size: 1.1rem; text-transform: uppercase; font-family: 'Anton', sans-serif; }
+        .tarjeta p { color: #ccc; margin: 2px 0; font-size: 0.9rem; font-family: 'Quicksand', sans-serif; }
         .botones-f { display: flex; gap: 10px; margin-top: 15px; border-top: 1px solid #333; padding-top: 10px; }
         .btn-f { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #444; background: none; color: white; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-f.activo { background: #28a745; border-color: #28a745; box-shadow: 0 0 10px rgba(40,167,69,0.5); }
     </style>`;
-
     // 3. Limpiamos y avisamos que estamos cargando
-    contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center;">Cargando Padrón...</p>';
+    contenedor.innerHTML = estilos + '<p style="color:gold; text-align:center; font-family:sans-serif;">⏳ Cargando Padrón de Zona ' + numZona + '...</p>';
 
     try {
         // 4. Pedimos los patinadores al PADRE (index/admin.html)
