@@ -230,6 +230,8 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+  // ESTA ES LA QUE SUMAMOS:
+  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   // 2. CONFIGURACIÓN (Extraída de tus archivos)
 const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
@@ -250,6 +252,7 @@ const firebaseConfig = {
   const bloqueLogin = document.getElementById('bloqueLogin');
   const bloqueRegistro = document.getElementById('bloqueRegistro');
   const title = document.getElementById('loginTitle');
+  const db = getDatabase(app);
 
   window.mostrarLogin = () => { loginForm.style.display = 'block'; };
   document.getElementById('btnCerrarLogin').onclick = () => { loginForm.style.display = 'none'; };
@@ -263,25 +266,26 @@ const firebaseConfig = {
 
   // 4. LÓGICA DE NEGOCIO (SHEETS + FIREBASE)
 
-  // A. Verificar en Lista Blanca (Sheets)
-  document.getElementById('btnVerificarSheet').onclick = async () => {
-    const email = document.getElementById('emailManual').value;
-    if(!email.includes("@")) return alert("Ingresá un mail válido.");
+document.getElementById('btnVerificarSheet').onclick = async () => {
+    const emailNormal = document.getElementById('emailManual').value.trim().toLowerCase();
+    const emailFirebase = emailNormal.replace(/\./g, '_'); // Preparamos el mail para Firebase
+    
+    if(!emailNormal.includes("@")) return alert("Ingresá un mail válido.");
 
-    alert("Consultando base de datos...");
+    const dbRef = ref(db);
     try {
-      const response = await fetch(`https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=${email}`);
-      const data = await response.json();
-      
-      if(data.autorizado) {
-        alert("¡Autorizado! Configurá tu contraseña.");
+      // PREGUNTA A FIREBASE (No a Sheets):
+      const snapshot = await get(child(dbRef, `listaBlanca/${emailFirebase}`));
+
+      if (snapshot.exists()) {
+        alert("¡Autorizado! Ahora configurá tu contraseña de acceso.");
         document.getElementById('btnVerificarSheet').style.display = 'none';
         document.getElementById('seccionConfirmarPass').style.display = 'block';
       } else {
-        alert("Error: Tu mail no figura en la lista blanca de entrenadores.");
+        alert("Acceso denegado: Tu mail no figura en la lista de entrenadores.");
       }
     } catch (err) {
-      alert("Error de conexión. Revisá tu internet.");
+      alert("Error de conexión con la base de datos.");
     }
   };
 
