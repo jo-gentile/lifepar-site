@@ -320,13 +320,13 @@ async function ejecutarAltas(numZona) {
         return;
     }
     // 1. Buscamos el lugar donde vamos a dibujar (el div central)
-    const contenedor = window.parent.document.getElementById('contenedor-acciones-zonas');
+    const contenedorPadre = window.parent.document.getElementById('contenedor-acciones-zonas');
+    const contenedor = window.parent.document.getElementById('tarjetasAltas');
         
-    if (!contenedor) {
-        console.error("Error: No se encontró el contenedor-acciones-zonas en el padre.");
-        return;
+     if (!contenedorPadre || !contenedor) {
+    console.error("No se encontraron contenedores");
+    return;
     }
-    
     contenedor.style.display = 'block';
     // 2. Definimos cómo se ven las tarjetas (Diseño interactivo)
     const estilos = `
@@ -377,7 +377,7 @@ async function ejecutarAltas(numZona) {
         contenedor.innerHTML = estilos + `
             <div style="padding:10px; display:flex; flex-direction:column; gap:10px;">
                 <button onclick="location.reload()" style="background:none; border:none; color:gold; cursor:pointer; text-align:left;">⬅ Volver al menú</button>
-                <input type="text" id="buscador" placeholder="🔍 Buscar patinador..." onkeyup="filtrar()" 
+                <input type="text" id="buscador" placeholder="🔍 Buscar patinador..." onkeyup="onkeyup()" 
                        style="padding:10px; border-radius:10px; background:#000; color:#fff; border:1px solid #444;">
             </div>
             <div class="grid-tarjetas" id="grid"></div>
@@ -431,4 +431,5 @@ async function toggleAsistencia(numZona, id, campo, boton) {
         alert("Error al guardar asistencia. Reintentá.");
     }
 }
-window.ejecutarAltas = ejecutarAltas;
+window.ejecutarAltas = async function (numZona) {
+
