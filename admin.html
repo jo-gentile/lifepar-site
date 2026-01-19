@@ -168,17 +168,23 @@ window.guardarPatinadorFirebase = async (numZona, datos) => {
         fecha_registro: new Date().toISOString()
     });
 };
-// FUNCIÓN 1: Trae solo los patinadores del club del profe
+
+// Usá esta versión simplificada en el admin.html
 window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
-    const { getDatabase, ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const db = getDatabase();
-    const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
-    
-    // PRUEBA: Comentamos la consulta con filtro y pedimos la referencia directa
-    // const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
-    const snapshot = await get(zonaRef); 
-    
-    return snapshot.exists() ? snapshot.val() : {};
+    try {
+        // Importamos solo las herramientas de consulta (get y ref ya están disponibles o se traen rápido)
+        const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+        
+        // Usamos la variable 'db' que ya definiste arriba en el inicio del script
+        const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
+        const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
+        
+        const snapshot = await get(consulta);
+        return snapshot.exists() ? snapshot.val() : {};
+    } catch (error) {
+        console.error("Error en el puente de patinadores:", error);
+        return null; // Esto disparará el error visual para que sepamos que falló aquí
+    }
 };
 
 // FUNCIÓN 2: Guarda el tilde de F2, F3 o F4 al instante
