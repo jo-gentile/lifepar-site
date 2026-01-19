@@ -257,26 +257,22 @@ async function guardarNuevoClub() {
     }
 async function guardarNuevoClub() {
     const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
-    const userEmail = sessionStorage.getItem('userEmail');
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    if (!nombreClub) {
-        alert("⚠️ Por favor, escribe el nombre del club.");
+    if (!nombreClub || !userEmail) {
+        alert("⚠️ Faltan datos (Club o Email).");
         return;
     }
 
-    // Adaptamos los datos para Firebase (puntos por guiones)
     const emailKey = userEmail.replace(/\./g, '_');
     const clubKey = nombreClub.replace(/\./g, '_');
 
-    // LLAMADA AL PADRE: Usamos el nombre exacto que tenés en tu HTML
-    if (parent && parent.registrarClubEnFirebase) {
-        parent.registrarClubEnFirebase(emailKey, clubKey);
-        
-        // Limpiamos y cerramos el modal
-        document.getElementById('nuevo-club-nombre').value = "";
+    // Llamamos a la función que definimos en el HTML del paso 2
+    try {
+        await registrarClubEnFirebase(emailKey, clubKey);
+        alert("✅ Club enviado con éxito.");
         cerrarModalClubes();
-        alert("✅ Solicitud de club enviada.");
-    } else {
-        alert("❌ Error: No se encontró la conexión con la base de datos.");
+    } catch (error) {
+        alert("❌ Error al guardar.");
     }
 }

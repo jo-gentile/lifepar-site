@@ -117,6 +117,45 @@
         <a href="https://wa.me/541158512121" target="_blank">📱 11-5851-2121</a>
     </div>
 </footer>
- <script src="admin.js"></script>
+
+<script type="module">
+  // Importamos las herramientas de Firebase desde la web
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+  // Tus datos de Lifepar que me pasaste
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
+    authDomain: "web-lifepar.firebaseapp.com",
+    databaseURL: "https://web-lifepar-default-rtdb.firebaseio.com",
+    projectId: "web-lifepar",
+    storageBucket: "web-lifepar.firebasestorage.app",
+    messagingSenderId: "140850288146",
+    appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb",
+    measurementId: "G-MF0RNRQL92"
+  };
+
+  // Inicializamos la conexión
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Esta es la función "maestra" que el hijo va a usar
+  window.registrarClubEnFirebase = async (emailKey, clubKey) => {
+    try {
+      const clubRef = ref(db, `CLUBES/${emailKey}/${clubKey}`);
+      await set(clubRef, {
+        nombre: clubKey.replace(/_/g, ' '),
+        estado: "pendiente",
+        fecha: new Date().toLocaleDateString()
+      });
+      console.log("¡Club guardado en Firebase!");
+      return true;
+    } catch (error) {
+      console.error("Error en Firebase:", error);
+      throw error;
+    }
+  };
+</script>
+<script src="admin.js"></script>
 </body>
 </html>
