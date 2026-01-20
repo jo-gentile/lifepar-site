@@ -196,9 +196,10 @@ window.actualizarAsistencia = async (numZona, idPatinador, campoFecha, estado) =
     return update(ref(db), updates);
 };
 
-// 1. FUNCIÓN PRINCIPAL: BUSCA LOS DATOS Y DIBUJA LAS TARJETAS
-window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
+window.mostrarListadoAltas = async (numZona) => {
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const contenedor = document.getElementById('contenedor-acciones-zonas');
+    
     contenedor.style.display = 'block';
     contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Cargando Tarjetas...</p>';
 
@@ -221,10 +222,10 @@ window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
             .card-alta h3 { color: gold; font-family: 'Anton'; font-size: 1.1rem; margin-bottom: 5px; text-transform: uppercase; }
             .card-alta p { color: #ccc; font-size: 0.85rem; margin-bottom: 12px; font-family: 'Quicksand'; }
             .controles-f { display: flex; justify-content: space-between; border-top: 1px solid #222; padding-top: 10px; }
-            .btn-check { background: #222; border: 1px solid #444; color: #777; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; margin: 0 3px; font-size: 0.75rem; }
-            .btn-check.activo { background: #28a745; color: white; border-color: #28a745; }
+            .btn-check { background: #222; border: 1px solid #444; color: #777; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; flex: 1; margin: 0 3px; font-size: 0.75rem; transition: 0.2s; }
+            .btn-check.activo { background: #28a745; color: white; border-color: #28a745; box-shadow: 0 0 8px rgba(40, 167, 69, 0.4); }
         </style>
-        <h3 style="color:gold; font-family:'Anton'; margin-bottom:15px; text-align:center;">PADRÓN INTERACTIVO - ZONA ${numZona}</h3>
+        <h3 style="color:gold; font-family:'Anton'; margin-bottom:15px; text-align:center;">PADRÓN ZONA ${numZona}</h3>
         <div class="grid-altas">`;
 
         snapshot.forEach((hijo) => {
@@ -246,14 +247,11 @@ window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
                  <button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="margin-top:20px; width:100%; background:gold; border:none; padding:12px; font-weight:bold; cursor:pointer; border-radius:8px; color:black;">CERRAR PANEL</button>`;
         
         contenedor.innerHTML = html;
-        return snapshot.val(); 
     } catch (e) {
-        contenedor.innerHTML = '<p style="color:red;">Error de conexión.</p>';
-        return null;
+        contenedor.innerHTML = '<p style="color:red;">Error al cargar datos.</p>';
     }
 };
 
-// 2. FUNCIÓN PARA LOS BOTONES
 window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
     const nuevoEstado = !boton.classList.contains('activo');
     try {
