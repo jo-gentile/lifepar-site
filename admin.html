@@ -232,15 +232,16 @@ window.mostrarListadoAltas = async (numZona) => {
             const p = hijo.val();
             const id = hijo.key;
             html += `
-                <div class="card-alta">
-                    <h3>${p.apellido}, ${p.nombre}</h3>
-                    <p>${p.categoria}</p>
-                    <div class="controles-f">
-                        <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
-                        <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
-                        <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
-                    </div>
-                </div>`;
+                 <div class="card-alta">
+                 <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 2px;">${p.apellido}, ${p.nombre}</h3>
+                 <p style="color: gold; font-weight: bold; margin-bottom: 2px;">${p.divisional}</p>
+                 <p style="color: #ccc; font-size: 0.9rem;">${p.categoria}</p>
+                 <div class="controles-f">
+            <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
+            <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
+            <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
+                 </div>
+             </div>`;
         });
 
         html += `</div>
