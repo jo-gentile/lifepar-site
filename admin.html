@@ -232,21 +232,21 @@ window.mostrarListadoAltas = async (numZona) => {
             const p = hijo.val();
             const id = hijo.key;
             html += `
-                <div class="card-alta" style="padding: 12px; border-left: 3px solid gold;">
-                    <h3 style="color: #fff; font-size: 1.2rem; margin: 0; font-family: 'Quicksand', sans-serif; font-weight: 600; text-transform: uppercase;">
+                <div class="card-alta" style="padding: 10px; border-left: 4px solid gold; display: flex; flex-direction: column; align-items: center; text-align: center;">
+                    <h3 style="color: #fff; font-size: 1.15rem; margin: 0; font-family: 'Quicksand', sans-serif; font-weight: 600; text-transform: uppercase; width: 100%;">
                         ${p.apellido}, ${p.nombre}
                     </h3>
                     
-                    <div style="display: flex; gap: 10px; margin: 15px 0 12px 0; font-family: 'Quicksand', sans-serif; font-size: 0.95rem;">
+                    <div style="display: flex; gap: 8px; margin: 2px 0 8px 0; font-family: 'Quicksand', sans-serif; font-size: 0.85rem; justify-content: center; width: 100%;">
                         <span style="color: gold; font-weight: bold;">${p.divisional}</span>
                         <span style="color: #bbb;">${p.categoria}</span>
                         <span style="color: #888;">${p.edadDeportiva || ''}</span>
                     </div>
 
-                    <div class="controles-f">
-                        <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
-                        <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
-                        <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
+                    <div class="controles-f" style="width: 100%; gap: 4px; padding-top: 8px;">
+                        <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" style="padding: 6px; font-size: 0.75rem;" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
+                        <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" style="padding: 6px; font-size: 0.75rem;" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
+                        <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" style="padding: 6px; font-size: 0.75rem;" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
                     </div>
                 </div>`;
         });
