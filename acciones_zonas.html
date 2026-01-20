@@ -208,12 +208,22 @@ window.filtrarTarjetas = () => {
 };
 
 window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
+    // BLOQUEO: Si ya es verde, salimos de la función y no hacemos nada
+    if (boton.classList.contains('activo')) return; 
+
     const nuevoEstado = !boton.classList.contains('activo');
     try {
-        // LE AVISAMOS AL PADRE QUE GRABE
+        // LE AVISAMOS AL PADRE QUE GRABE (Mandará 'true' siempre debido al bloqueo anterior)
         await window.parent.actualizarAsistencia(numZona, id, campo, nuevoEstado);
-        boton.classList.toggle('activo');
-    } catch (e) { alert("Error al guardar"); }
+        
+        // Lo ponemos activo y le quitamos el cursor de clic para que se note el bloqueo
+        boton.classList.add('activo');
+        boton.style.pointerEvents = 'none'; 
+        boton.style.cursor = 'default';
+        
+    } catch (e) { 
+        alert("Error al guardar"); 
+    }
 };
 </script>
 </body>
