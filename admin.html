@@ -197,65 +197,62 @@ window.mostrarListadoAltas = async (numZona) => {
     contenedor.style.left = '0';
     contenedor.style.width = '100%';
     contenedor.style.height = '100%';
-    contenedor.style.backgroundColor = 'rgba(0, 0, 0, 0.9)'; 
-    contenedor.style.zIndex = '3000';
+    contenedor.style.backgroundColor = 'rgba(0, 0, 0, 0.95)'; 
+    contenedor.style.zIndex = '5000';
     contenedor.style.justifyContent = 'center';
     contenedor.style.alignItems = 'flex-start';
     contenedor.style.overflowY = 'auto';
     contenedor.style.padding = '20px 0';
 
-    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top: 50px;">⏳ Cargando Padrón Lifepar...</p>';
+    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top: 50px;">⏳ Organizando Padrón...</p>';
 
     try {
         const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
         const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
         
-        let consulta;
-        if (mailProfe === 'jose.gen86@gmail.com') { 
-            consulta = zonaRef; 
-        } else {
-            consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
-        }
-
+        let consulta = (mailProfe === 'jose.gen86@gmail.com') ? zonaRef : query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
         const snapshot = await get(consulta);
 
         if (!snapshot.exists()) {
-            contenedor.innerHTML = `<div style="text-align:center; margin-top:50px;"><button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="background:gold; border:none; padding:10px; cursor:pointer; font-weight:bold;">CERRAR</button></div>`;
+            contenedor.innerHTML = `<button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="background:gold; border:none; padding:15px; margin-top:50px; cursor:pointer; font-weight:bold;">CERRAR</button>`;
             return;
         }
 
         let patinadores = [];
-        snapshot.forEach((hijo) => {
-            patinadores.push({ id: hijo.key, ...hijo.val() });
-        });
-
+        snapshot.forEach((hijo) => { patinadores.push({ id: hijo.key, ...hijo.val() }); });
         patinadores.sort((a, b) => a.apellido.localeCompare(b.apellido));
 
         let html = `
         <style>
-            .modal-altas-cuerpo { background: #0a0a0a; width: 95%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 20px; position: relative; margin-top:20px; }
-            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
-            .card-alta { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; border-left: 4px solid gold; text-align: center; }
-            .fila-botones { display: flex; gap: 3px; width: 100%; margin-top: 5px; }
+            .modal-altas-cuerpo { background: #0a0a0a; width: 95%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; position: relative; margin: 20px auto; box-shadow: 0 0 50px #000; }
+            .btn-x-cerrar { position: absolute; top: -15px; right: -15px; background: gold; color: black; border: 2px solid black; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 6000; }
             
-            /* Botones más angostos */
-            .btn-check-f { background: #222; border: 1px solid #444; color: #777; padding: 5px; border-radius: 4px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.7rem; }
-            .btn-check-f.activo { background: #28a745; color: white; border-color: #28a745; }
+            .buscador-fijo { position: sticky; top: -25px; background: #0a0a0a; padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; margin-bottom: 20px; }
+            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%; }
             
-            .btn-check-f:disabled { opacity: 0.7; cursor: not-allowed; }
-            .tag-seccion { font-size: 0.6rem; color: #444; margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
-            .btn-x-cerrar { position: absolute; top: 15px; right: 20px; background: none; border: none; color: gold; font-size: 1.5rem; cursor: pointer; font-weight: bold; }
+            /* LA TARJETA QUE NO SE DEFORMA */
+            .card-alta { background: #151515; border-radius: 10px; padding: 15px; border-left: 5px solid gold; display: flex !important; flex-direction: column; align-items: center; min-height: 200px; width: 100%; box-sizing: border-box; }
+            
+            .info-p { margin: 0; width: 100%; text-align: center; }
+            .nombre-p { color: white; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
+            .datos-p { color: #888; font-size: 0.75rem; margin-bottom: 10px; line-height: 1.2; }
+
+            .seccion-t { font-size: 0.65rem; color: #444; font-weight: bold; text-transform: uppercase; margin-top: 10px; width: 100%; border-top: 1px solid #222; padding-top: 5px; }
+            .fila-btns { display: flex; gap: 4px; width: 100%; margin-top: 5px; }
+            
+            .btn-f { background: #222; border: 1px solid #333; color: #666; padding: 8px 2px; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.75rem; transition: 0.2s; }
+            .btn-f.activo { background: #28a745 !important; color: white !important; border-color: #28a745 !important; }
+            .btn-f:disabled { opacity: 0.7; cursor: not-allowed; }
         </style>
 
         <div class="modal-altas-cuerpo">
             <button class="btn-x-cerrar" onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'">✕</button>
             
-            <div style="position:sticky; top:-20px; background:#0a0a0a; padding:15px 0; z-index:10; border-bottom: 1px solid #222;">
-                <input type="text" id="inputFiltroPatinador" style="width:100%; padding:12px; border-radius:8px; border: 1px solid #333; background:#111; color:white; font-family:Quicksand;" placeholder="🔍 Buscar..." onkeyup="window.filtrarTarjetas()">
+            <div class="buscador-fijo">
+                <input type="text" id="inputFiltroPatinador" style="width:100%; padding:15px; border-radius:10px; border: 1px solid #444; background:#111; color:white; font-family:Quicksand; font-size: 1rem;" placeholder="🔍 Buscar por nombre, apellido o club..." onkeyup="window.filtrarTarjetas()">
             </div>
 
-            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin: 15px 0; letter-spacing: 1px;">PADRÓN ZONA ${numZona}</h3>
-            
+            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin-bottom:20px; text-transform: uppercase;">PADRÓN ZONA ${numZona}</h3>
             <div class="grid-altas" id="grillaPatinadores">`;
 
         patinadores.forEach((p) => {
@@ -264,55 +261,40 @@ window.mostrarListadoAltas = async (numZona) => {
 
             html += `
                 <div class="card-alta" data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.club.toLowerCase()}">
-                    <h3 style="color: #fff; font-size: 0.9rem; margin: 0; font-family: 'Quicksand'; text-transform: uppercase;">${p.apellido}, ${p.nombre}</h3>
-                    <p style="color: #777; font-size: 0.7rem; margin: 2px 0;">${p.club} | ${p.divisional} ${p.categoria} | ${p.edadDeportiva || ''} AÑOS</p>
-
-                    <div class="tag-seccion">Seguros</div>
-                    <div class="fila-botones">
-                        <button class="btn-check-f ${tieneAnual ? 'activo' : ''}" 
-                            ${(tieneAnual && !esAdmin) ? 'disabled' : ''} 
-                            onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
-                        
-                        <button class="btn-check-f ${p.seguroF2 ? 'activo' : ''}" 
-                            ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} 
-                            onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
+                    <div class="info-p">
+                        <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
+                        <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''} AÑOS</div>
                     </div>
 
-                    <div class="tag-seccion">Asistencia</div>
-                    <div class="fila-botones">
-                        <button class="btn-check-f ${p.asisteF2 ? 'activo' : ''}" 
-                            ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} 
-                            onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
-                        <button class="btn-check-f ${p.asisteF3 ? 'activo' : ''}" 
-                            ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} 
-                            onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
-                        <button class="btn-check-f ${p.asisteF4 ? 'activo' : ''}" 
-                            ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} 
-                            onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
+                    <div class="seccion-t">Seguros</div>
+                    <div class="fila-btns">
+                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
+                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
+                    </div>
+
+                    <div class="seccion-t">Asistencias</div>
+                    <div class="fila-btns">
+                        <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
+                        <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
+                        <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
                     </div>
                 </div>`;
         });
 
         html += `</div>
-            <button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="margin-top:25px; width:100%; background:gold; border:none; padding:12px; font-weight:bold; cursor:pointer; border-radius:8px; color:black;">CERRAR PADRÓN</button>
+            <button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="margin-top:30px; width:100%; background:gold; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:10px; color:black; font-family:Quicksand; font-size:1.1rem;">CERRAR PADRÓN</button>
         </div>`;
         
         contenedor.innerHTML = html;
     } catch (e) { console.error(e); }
 };
 
-// --- FUNCIÓN DE FILTRADO (LA QUE FALTABA) ---
 window.filtrarTarjetas = () => {
     const texto = document.getElementById('inputFiltroPatinador').value.toLowerCase();
     const tarjetas = document.querySelectorAll('.card-alta');
-
-    tarjetas.forEach(tarjeta => {
-        const busqueda = tarjeta.getAttribute('data-busqueda');
-        if (busqueda.includes(texto)) {
-            tarjeta.style.display = 'flex';
-        } else {
-            tarjeta.style.display = 'none';
-        }
+    tarjetas.forEach(t => {
+        // Al usar 'flex' forzamos a que mantenga su estructura interna al volver a aparecer
+        t.style.display = t.getAttribute('data-busqueda').includes(texto) ? 'flex' : 'none';
     });
 };
 
