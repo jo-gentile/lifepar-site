@@ -19,7 +19,7 @@
     <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(0,0,0,0.3);">
         <label style="color: gold; font-size: 0.8rem; display: block; margin-bottom: 5px; font-family: 'Quicksand';">SELECCIONAR FECHA DE TRABAJO:</label>
         <select id="selectorFechaActiva" style="width: 100%; padding: 8px; background: #111; color: white; border: 1px solid gold; border-radius: 5px; font-family: 'Quicksand';">
-            <option value="1">Padrón Base (Solo Carga)</option>
+            <option value="1">Padrón Base (Fecha 1)</option>
             <option value="2">Fecha 2</option>
             <option value="3">Fecha 3</option>
             <option value="4">Fecha 4</option>
@@ -27,7 +27,7 @@
     </div>
 
     <ul>
-        <li>📝 <button onclick="ejecutarCargaConFecha()" class="btn-accion">Cargar patinadoras/es</button></li>
+        <button onclick="ejecutarCargaConFecha()" class="btn-accion">Cargar patinadoras/es</button>
         <li>✅ <button onclick="window.mostrarListadoAltas(window.zonaActivaNum)" class="btn-accion">Altas próxima fecha</button></li>
         <li>🏢 <button onclick="ejecutarModalClubes()" class="btn-accion" style="background: rgba(255,215,0,0.1); border: 1px dashed gold;">Asociar nuevo Club</button></li>
     </ul>
@@ -65,21 +65,21 @@
     if (titulo) titulo.innerText = `Acciones para Zona ${zonaSaca}`;
 
     // 2. Funciones Puente
-    function ejecutarCarga() {
-        // Verificamos que zonaActivaNum tenga algo
-        if (!window.zonaActivaNum) {
-            console.error("Error: No se detectó el número de zona en la URL");
-            return;
-        }
-        
-        console.log("Cargando para Zona: " + window.zonaActivaNum);
-        
-        if (typeof abrirFormularioCarga === 'function') {
-            abrirFormularioCarga(window.zonaActivaNum); 
-        } else {
-            console.error("La función abrirFormularioCarga no está definida en acciones_zonas.js");
-        }
+function ejecutarCargaConFecha() {
+    // 1. Leemos qué fecha eligió el profe en el selector
+    const selector = document.getElementById('selectorFechaActiva');
+    const fechaSeleccionada = selector ? selector.value : "1"; // "1" es el Padrón Base
+    
+    // 2. Obtenemos el número de zona que ya tenemos guardado
+    const numZona = window.zonaActivaNum;
+    
+    console.log("Iniciando carga para Zona " + numZona + " en la Fecha " + fechaSeleccionada);
+    
+    // 3. Abrimos el formulario de carga pasándole ambos datos
+    if (typeof abrirFormularioCarga === 'function') {
+        abrirFormularioCarga(numZona, fechaSeleccionada); 
     }
+}
 
     function ejecutarVerDatos() {
         alert("Visualizando datos de " + window.zonaActiva);
