@@ -187,20 +187,10 @@ window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
 };
 
 // FUNCIÓN 2: Guarda el tilde de F2, F3 o F4 al instante
-window.actualizarAsistencia = async (numZona, idPatinador, campoFecha, estado) => {
-    const { getDatabase, ref, update } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const db = getDatabase();
-    const updates = {};
-    updates[`ZONAS/ZONA_${numZona}/${idPatinador}/${campoFecha}`] = estado;
-    
-    return update(ref(db), updates);
-};
-
 window.mostrarListadoAltas = async (numZona) => {
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const contenedor = document.getElementById('contenedor-acciones-zonas');
     
-    // Configuración del Modal
     contenedor.style.display = 'flex';
     contenedor.style.position = 'fixed';
     contenedor.style.top = '0';
@@ -214,7 +204,7 @@ window.mostrarListadoAltas = async (numZona) => {
     contenedor.style.overflowY = 'auto';
     contenedor.style.padding = '20px 0';
 
-    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top: 50px;">⏳ Organizando Padrón...</p>';
+    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top: 50px;">⏳ Cargando Padrón Lifepar...</p>';
 
     try {
         const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
@@ -230,7 +220,7 @@ window.mostrarListadoAltas = async (numZona) => {
         const snapshot = await get(consulta);
 
         if (!snapshot.exists()) {
-            contenedor.innerHTML = `<div style="text-align:center; margin-top:50px;"><button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="background:gold; border:none; padding:10px; cursor:pointer;">CERRAR</button></div>`;
+            contenedor.innerHTML = `<div style="text-align:center; margin-top:50px;"><button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="background:gold; border:none; padding:10px; cursor:pointer; font-weight:bold;">CERRAR</button></div>`;
             return;
         }
 
@@ -239,36 +229,33 @@ window.mostrarListadoAltas = async (numZona) => {
             patinadores.push({ id: hijo.key, ...hijo.val() });
         });
 
-        patinadores.sort((a, b) => {
-            if (a.club !== b.club) return a.club.localeCompare(b.club);
-            return a.apellido.localeCompare(b.apellido);
-        });
+        patinadores.sort((a, b) => a.apellido.localeCompare(b.apellido));
 
         let html = `
         <style>
             .modal-altas-cuerpo { background: #0a0a0a; width: 95%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 20px; position: relative; margin-top:20px; }
-            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-            .card-alta { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 12px; border-left: 5px solid gold; text-align: center; }
-            .fila-botones { display: flex; gap: 4px; width: 100%; margin-top: 8px; }
+            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+            .card-alta { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 10px; border-left: 4px solid gold; text-align: center; }
+            .fila-botones { display: flex; gap: 3px; width: 100%; margin-top: 5px; }
             
-            /* Botones de Seguro */
-            .btn-seguro { background: #1a1a1a; border: 1px solid #444; color: #999; padding: 6px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 0.75rem; font-weight: bold; }
-            .btn-seguro.activo { background: #28a745; color: white; border-color: #28a745; } /* Verde para que sepan que ESTÁ ASEGURADO */
+            /* Botones más angostos */
+            .btn-check-f { background: #222; border: 1px solid #444; color: #777; padding: 5px; border-radius: 4px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.7rem; }
+            .btn-check-f.activo { background: #28a745; color: white; border-color: #28a745; }
             
-            /* Botones de Asistencia */
-            .btn-check { background: #222; border: 1px solid #444; color: #777; padding: 8px; border-radius: 6px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.8rem; }
-            .btn-check.activo { background: #28a745; color: white; border-color: #28a745; }
-            
-            .btn-check:disabled, .btn-seguro:disabled { opacity: 0.7; cursor: not-allowed; } /* Opacidad alta para que el verde se vea bien */
-            .tag-seguro { font-size: 0.65rem; color: #555; margin-bottom: 2px; text-transform: uppercase; font-weight: bold; }
+            .btn-check-f:disabled { opacity: 0.7; cursor: not-allowed; }
+            .tag-seccion { font-size: 0.6rem; color: #444; margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; }
+            .btn-x-cerrar { position: absolute; top: 15px; right: 20px; background: none; border: none; color: gold; font-size: 1.5rem; cursor: pointer; font-weight: bold; }
         </style>
 
         <div class="modal-altas-cuerpo">
-            <button style="position:absolute; top:15px; right:20px; background:none; border:none; color:gold; font-size:1.8rem; cursor:pointer;" onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'">×</button>
-            <div style="position:sticky; top:-20px; background:#0a0a0a; padding:15px 0; z-index:10;">
-                <input type="text" id="inputFiltroPatinador" style="width:100%; padding:15px; border-radius:10px; border:1px solid #444; background:#111; color:white;" placeholder="🔍 Buscar patinador o club..." onkeyup="window.filtrarTarjetas()">
+            <button class="btn-x-cerrar" onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'">✕</button>
+            
+            <div style="position:sticky; top:-20px; background:#0a0a0a; padding:15px 0; z-index:10; border-bottom: 1px solid #222;">
+                <input type="text" id="inputFiltroPatinador" style="width:100%; padding:12px; border-radius:8px; border: 1px solid #333; background:#111; color:white; font-family:Quicksand;" placeholder="🔍 Buscar..." onkeyup="window.filtrarTarjetas()">
             </div>
-            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin-bottom:20px;">PADRÓN ZONA ${numZona}</h3>
+
+            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin: 15px 0; letter-spacing: 1px;">PADRÓN ZONA ${numZona}</h3>
+            
             <div class="grid-altas" id="grillaPatinadores">`;
 
         patinadores.forEach((p) => {
@@ -277,36 +264,39 @@ window.mostrarListadoAltas = async (numZona) => {
 
             html += `
                 <div class="card-alta" data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.club.toLowerCase()}">
-                    <h3 style="color: #fff; font-size: 1rem; margin: 0; font-family: 'Quicksand'; font-weight: 600;">${p.apellido}, ${p.nombre}</h3>
-                    <p style="color: #666; font-size: 0.75rem; margin: 4px 0; font-style: italic;">${p.club} | ${p.divisional}</p>
+                    <h3 style="color: #fff; font-size: 0.9rem; margin: 0; font-family: 'Quicksand'; text-transform: uppercase;">${p.apellido}, ${p.nombre}</h3>
+                    <p style="color: #777; font-size: 0.7rem; margin: 2px 0;">${p.club} | ${p.divisional} ${p.categoria} | ${p.edadDeportiva || ''} AÑOS</p>
 
-                    <div class="tag-seguro">Seguros</div>
+                    <div class="tag-seccion">Seguros</div>
                     <div class="fila-botones">
-                        <button class="btn-seguro ${tieneAnual ? 'activo' : ''}" 
+                        <button class="btn-check-f ${tieneAnual ? 'activo' : ''}" 
                             ${(tieneAnual && !esAdmin) ? 'disabled' : ''} 
                             onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
                         
-                        <button class="btn-seguro ${p.seguroF2 ? 'activo' : ''}" 
+                        <button class="btn-check-f ${p.seguroF2 ? 'activo' : ''}" 
                             ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} 
                             onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
                     </div>
 
-                    <div class="tag-seguro" style="margin-top:8px;">Asistencia</div>
+                    <div class="tag-seccion">Asistencia</div>
                     <div class="fila-botones">
-                        <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" 
+                        <button class="btn-check-f ${p.asisteF2 ? 'activo' : ''}" 
                             ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} 
                             onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
-                        <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" 
+                        <button class="btn-check-f ${p.asisteF3 ? 'activo' : ''}" 
                             ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} 
                             onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
-                        <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" 
+                        <button class="btn-check-f ${p.asisteF4 ? 'activo' : ''}" 
                             ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} 
                             onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
                     </div>
                 </div>`;
         });
 
-        html += `</div></div>`;
+        html += `</div>
+            <button onclick="document.getElementById('contenedor-acciones-zonas').style.display='none'" style="margin-top:25px; width:100%; background:gold; border:none; padding:12px; font-weight:bold; cursor:pointer; border-radius:8px; color:black;">CERRAR PADRÓN</button>
+        </div>`;
+        
         contenedor.innerHTML = html;
     } catch (e) { console.error(e); }
 };
