@@ -120,34 +120,48 @@ body {
     transition: 0.3s;
 }
 
+/* --- ZONA DERECHA UNIFICADA Y LIBRE DE SCROLL --- */
 .zona-derecha {
     margin-left: var(--sidebar-width) !important;
-    display: flex;
     width: calc(100% - var(--sidebar-width)) !important;
-    padding: 40px 40px; /* Más aire arriba para que el Header no tape el título */
-    padding-bottom: 120px; /* espacio para el footer */
-    transition: margin-left 0.3s ease;
     min-height: 100vh;
-    box-sizing: border-box;
+    padding: 40px;
+    padding-bottom: 120px;
+    transition: margin-left 0.3s ease;
     position: relative;
     display: block;
     flex-grow: 1;
-    overflow-x: hidden; /* Evita que el formulario "gigante" cree scroll lateral */
-    padding: 40px 40px;
+    box-sizing: border-box;
+    /* Liberamos el flujo para que el iframe crezca */
+    overflow: visible !important; 
 }
-/* Ajuste para cuando está colapsado */
+
+/* Ajuste para Sidebar colapsado */
 .layout-collapsed .zona-derecha {
     margin-left: var(--sidebar-width-collapsed) !important;
     width: calc(100% - var(--sidebar-width-collapsed)) !important;
 }
 
-/* Impedir que los hijos de la zona derecha se desborden */
+/* Impedir desbordes sin forzar scroll lateral */
 .zona-derecha > *, 
 #contenedor-acciones-zonas, 
 .menu-zona,
 .box-oficina {
     max-width: 100% !important;
     box-sizing: border-box !important;
+    overflow: visible !important;
+}
+
+/* --- AJUSTE PARA CELULARES (Media Query) --- */
+@media (max-width: 350px) {
+    .zona-derecha {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 75px 8px 20px 8px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: visible !important;
+    }
 }
 
 /* --- 6. ELEMENTOS DE INTERFAZ --- */
@@ -560,16 +574,6 @@ body.layout-collapsed .footer-premium {
     #sidebar.collapsed {
         transform: translateX(-100%) !important;
         width: 290px !important;
-    }
-
-    /* 3. ZONA DERECHA: Ocupa el 100% real del celular */
-    .zona-derecha {
-        margin-left: 0 !important;
-        width: 100% !important;
-        padding: 75px 8px 20px 8px !important; /* Menos padding lateral para ganar aire */
-        min-height: 100vh !important;
-        display: flex !important;
-        flex-direction: column !important;
     }
 
     /* 4. EL FOOTER: Clavado al fondo del formulario */
