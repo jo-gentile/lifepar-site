@@ -347,11 +347,11 @@ body.layout-collapsed .header-admin {
 }
 
 #contenedor-acciones-zonas iframe {
-    width: 100%;
-    min-height: 1200px; /* Altura mínima inicial generosa */
-    height: auto; /* Que intente crecer solo */
-    border: none;
-    overflow: hidden; /* Prohibido el scroll interno */
+    width: 100% !important;
+    min-height: 1800px !important; /* Altura mínima inicial generosa */
+    height: auto !important; /* Que intente crecer solo */
+    border: none !important;
+    overflow: hidden !important; /* Prohibido el scroll interno */
 }
 
 .menu-zona {
@@ -435,7 +435,6 @@ body.layout-collapsed .header-admin {
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     overflow: visible !important;
     height: auto !important;
-    max-width: 320px; /* Igualamos al ancho del contenedor de acciones */
 }
 
 #seguros {
