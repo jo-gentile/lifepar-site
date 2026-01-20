@@ -162,9 +162,18 @@ function calcularEdadDeportiva(fecha, target) {
 
 async function enviarCargaPatinador(numZona) {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    // 1. Leemos qué fecha está seleccionada en el menú de arriba
+    const selectorFecha = document.getElementById('selectorFechaActiva');
+    const fechaValor = selectorFecha ? selectorFecha.value : "1"; 
 
+// 2. Creamos la "marca" de asistencia según la fecha
+      let marcaAsistencia = {};
+      if (fechaValor === "2") marcaAsistencia.asisteF2 = true;
+      if (fechaValor === "3") marcaAsistencia.asisteF3 = true;
+      if (fechaValor === "4") marcaAsistencia.asisteF4 = true;
     // Recolectamos los datos de los inputs
     const datos = {
+        ...marcaAsistencia,
         club: document.getElementById(`z${numZona}-club`).value,
         disciplina: document.getElementById(`z${numZona}-disciplina`).value,
         divisional: document.getElementById(`z${numZona}-divisional`).value,
