@@ -232,16 +232,23 @@ window.mostrarListadoAltas = async (numZona) => {
             const p = hijo.val();
             const id = hijo.key;
             html += `
-                 <div class="card-alta">
-                 <h3 style="color: #fff; font-size: 1.3rem; margin-bottom: 2px;">${p.apellido}, ${p.nombre}</h3>
-                 <p style="color: gold; font-weight: bold; margin-bottom: 2px;">${p.divisional}</p>
-                 <p style="color: #ccc; font-size: 0.9rem;">${p.categoria}</p>
-                 <div class="controles-f">
-            <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
-            <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
-            <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
-                 </div>
-             </div>`;
+                <div class="card-alta" style="padding: 12px; border-left: 3px solid gold;">
+                    <h3 style="color: #fff; font-size: 1.2rem; margin: 0; font-family: 'Quicksand', sans-serif; font-weight: 600; text-transform: uppercase;">
+                        ${p.apellido}, ${p.nombre}
+                    </h3>
+                    
+                    <div style="display: flex; gap: 10px; margin: 5px 0 12px 0; font-family: 'Quicksand', sans-serif; font-size: 0.85rem;">
+                        <span style="color: gold; font-weight: bold;">${p.divisional}</span>
+                        <span style="color: #bbb;">${p.categoria}</span>
+                        <span style="color: #888;">${p.edadDeportiva || ''}</span>
+                    </div>
+
+                    <div class="controles-f">
+                        <button class="btn-check ${p.asisteF2 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF2',this)">F2</button>
+                        <button class="btn-check ${p.asisteF3 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF3',this)">F3</button>
+                        <button class="btn-check ${p.asisteF4 ? 'activo' : ''}" onclick="window.toggleBotonAsistencia('${numZona}','${id}','asisteF4',this)">F4</button>
+                    </div>
+                </div>`;
         });
 
         html += `</div>
