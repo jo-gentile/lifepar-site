@@ -54,7 +54,7 @@ function mostrarAccionesZona(numeroZona) {
         // 2. Cargamos el nuevo sistema de iframe
         contenedor.innerHTML = `
             <iframe src="acciones_zonas.html?zona=${numeroZona}" 
-                    style="width: 100%; height: 600px; border: none; background: transparent;">
+                    style="width: 100%; min-height: 1800px; border: none; background: transparent;"
             </iframe>
         `;
 
