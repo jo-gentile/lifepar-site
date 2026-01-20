@@ -149,14 +149,14 @@ window.mostrarListadoAltas = async (numZona) => {
             .modal-altas-cuerpo { width: 80%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; position: relative; margin: 20px auto; box-shadow: 0 0 50px #000; }
             .btn-x-cerrar { position: absolute; top: -15px; right: -15px; background: gold; color: black; border: 2px solid black; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 6000; }
             .buscador-fijo { position: sticky; top: -25px; background: #0a0a0a; padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; margin-bottom: 20px; }
-            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; width: 100%; }
+            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 210px)); gap: 15px; width: 100%; }
             .card-alta { background: #151515; border-radius: 10px; padding: 15px; border-left: 5px solid gold; display: flex !important; flex-direction: column; align-items: center; min-height: 200px; width: 100%; box-sizing: border-box; }
             .info-p { margin: 0; width: 100%; text-align: center; }
             .nombre-p { color: white; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
             .datos-p { color: #888; font-size: 0.75rem; margin-bottom: 10px; line-height: 1.2; }
             .seccion-t { font-size: 0.65rem; color: #444; font-weight: bold; text-transform: uppercase; margin-top: 10px; width: 100%; border-top: 1px solid #222; padding-top: 5px; }
-            .fila-btns { display: flex; gap: 4px; width: 100%; margin-top: 5px; }
-            .btn-f { background: #222; border: 1px solid #333; color: #666; padding: 5px 2px; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.75rem; transition: 0.2s; width: auto !important; }
+            .fila-btns { display: flex; gap: 4px; width: 100%; margin-top: 5px; justify-content: center; }
+            .btn-f { background: #222; border: 1px solid #333; color: #666; padding: 8px 2px; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.75rem; transition: 0.2s; }
             .btn-f.activo { background: #28a745 !important; color: white !important; border-color: #28a745 !important; }
             .btn-f:disabled { opacity: 0.7; cursor: not-allowed; }
         </style>
