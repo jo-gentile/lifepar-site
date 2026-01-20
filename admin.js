@@ -52,11 +52,12 @@ function mostrarAccionesZona(numeroZona) {
         contenedor.style.display = 'block';
 
         // 2. Cargamos el nuevo sistema de iframe
-        contenedor.innerHTML = `
-            <iframe src="acciones_zonas.html?zona=${numeroZona}" 
-                    style="width: 100%; min-height: 1800px; border: none; background: transparent;"
-            </iframe>
-        `;
+         contenedor.innerHTML = `
+         <iframe src="acciones_zonas.html?zona=${numeroZona}" 
+            scrolling="no" 
+            style="width: 100%; min-height: 2000px; border: none; background: transparent; overflow: hidden;">
+          </iframe>
+       `;
 
         // 3. Ocultamos Seguros y Copa para que no se pisen
         if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
