@@ -255,6 +255,7 @@ window.mostrarListadoAltas = async (numZona) => {
 
 window.filtrarTarjetas = () => {
     const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase().trim();
+    console.log("📢 El buscador dice: Filtrando por '" + busqueda + "'"); // TESTIGO 1
     const club = document.getElementById('filtroClub').value.toLowerCase().trim();
     const cat = document.getElementById('filtroCategoria').value.toLowerCase().trim();
     
@@ -262,6 +263,7 @@ window.filtrarTarjetas = () => {
     
     tarjetas.forEach(t => {
         const infoBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
+        console.log("👀 Tarjeta encontrada. Club de esta tarjeta: " + infoClub); // TESTIGO 2
         const infoClub = (t.getAttribute('data-club') || "").toLowerCase();
         // El buscador ahora mira Divisional + Categoría para no fallar
         const infoCat = (t.getAttribute('data-categoria') || "").toLowerCase();
