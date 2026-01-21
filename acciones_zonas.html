@@ -308,13 +308,14 @@ window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
         alert("Error al guardar"); 
     }
 };
-window.abrirEditorPatinador = async (numZona, id) => {
+wwindow.abrirEditorPatinador = async (numZona, id) => {
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
     
     if (snapshot.exists()) {
         const p = snapshot.val()[id];
         if (typeof abrirFormularioCarga === 'function') {
+            // Llamamos a tu función base
             abrirFormularioCarga(numZona, "1"); 
 
             const formContenedor = document.getElementById('contenedor-formulario-dinamico');
@@ -331,28 +332,30 @@ window.abrirEditorPatinador = async (numZona, id) => {
                 formContenedor.style.display = 'block';
             }
 
+            // Usamos el mismo tiempo de espera para que los campos ya existan
             setTimeout(() => {
                 const tituloH4 = formContenedor.querySelector('h4');
                 if(tituloH4) {
                     tituloH4.innerHTML = `📝 EDITANDO A: <span style="color:white;">${p.apellido}, ${p.nombre}</span>`;
                 }
 
-                // --- NUEVA LÓGICA PARA LA X (DENTRO DEL TIMEOUT PARA QUE NO SE TAPE) ---
+                // --- SOLUCIÓN PARA LA X: Inyectar al final para que no sea tapada ---
                 let btnX = document.getElementById('btn-cerrar-editor-pro');
                 if(!btnX){
                     btnX = document.createElement('div');
                     btnX.id = 'btn-cerrar-editor-pro';
                     btnX.innerHTML = '✕';
-                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10005;';
+                    // Z-INDEX alto para que esté por encima de todo el formulario base
+                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10010;';
+                    
+                    btnX.onclick = () => { 
+                        formContenedor.innerHTML = ''; 
+                        formContenedor.style.cssText = 'display: none;'; // Mata la barra fantasma
+                    };
+                    
                     formContenedor.style.position = 'relative'; 
                     formContenedor.appendChild(btnX);
                 }
-                
-                btnX.onclick = () => { 
-                    formContenedor.innerHTML = ''; 
-                    formContenedor.style.cssText = 'display: none;'; // RESETEA TODO EL ESTILO (Elimina la barra fantasma)
-                };
-                // -----------------------------------------------------------------------
 
                 const btnCargaMaldito = formContenedor.querySelector('button[onclick*="enviarCargaPatinador"]');
                 if (btnCargaMaldito) btnCargaMaldito.remove(); 
@@ -385,11 +388,11 @@ window.abrirEditorPatinador = async (numZona, id) => {
                     btnSave.onclick = (e) => {
                         e.preventDefault(); 
                         window.guardarEdicionPatinador(numZona, id);
-                        formContenedor.innerHTML = ''; // Limpiamos al guardar exitoso
+                        formContenedor.innerHTML = ''; 
                         formContenedor.style.cssText = 'display: none;';
                     };
                 }
-            }, 800);
+            }, 850); // Un pelín más de tiempo para asegurar que el HTML base terminó de cargar
         }
     }
 };

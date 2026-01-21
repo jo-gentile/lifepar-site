@@ -93,7 +93,10 @@ async function abrirFormularioCarga(numZona) {
     }
 
 contenedor.innerHTML = `
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
+    <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px; position: relative;">
+        
+        <div id="btn-cerrar-modal-general" onclick="this.parentElement.parentElement.style.display='none'; this.parentElement.parentElement.innerHTML='';" 
+             style="display:none; position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:25px; font-weight:bold; z-index:10005;">✕</div>
         <h4 style="color:#ffd700; text-align:center; font-family:'Anton',sans-serif; font-weight: 400; letter-spacing: 2px; font-size: 1.2rem;">
     📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}
 </h4>
