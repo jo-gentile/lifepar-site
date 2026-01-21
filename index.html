@@ -172,7 +172,46 @@
         </div>
       </section>
     </main>
- 
+
+    <div id="portal-padres" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(10px); overflow-y: auto;">
+    <div class="card-padre" style="max-width: 500px; margin: 50px auto; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 30px; text-align: center; color: white; font-family: 'Quicksand'; box-shadow: 0 8px 32px rgba(0,0,0,0.37);">
+        
+        <img src="img/logo.png" style="width: 80px; margin-bottom: 10px;">
+        <h2 style="font-family: 'Anton'; letter-spacing: 1px;">CENTRO DE DOCUMENTACIÓN</h2>
+        <p id="instruccion-padre" style="font-size: 0.9rem; margin-bottom: 20px;">Por seguridad, validá los datos del patinador para continuar.</p>
+
+        <div id="paso-dni">
+            <input type="number" id="dni-validacion" placeholder="DNI del Patinador" style="width: 80%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1.1rem;">
+            <br>
+            <button onclick="verificarDniPadre()" style="background: #ffd700; color: #000; padding: 10px 25px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer;">VERIFICAR DNI</button>
+        </div>
+
+        <div id="paso-fecha" style="display: none;">
+            <p style="font-size: 0.8rem; color: #ffd700;">DNI Encontrado. Ahora ingresá su fecha de nacimiento:</p>
+            <input type="date" id="fecha-validacion" style="width: 80%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center;">
+            <br>
+            <button onclick="validarFechaPadre()" style="background: #ffd700; color: #000; padding: 10px 25px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer;">VALIDAR IDENTIDAD</button>
+        </div>
+
+        <div id="paso-carga" style="display: none;">
+            <div id="ficha-bienvenida" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-bottom: 20px;">
+                <h3 id="nombre-hijo" style="margin: 0; color: #ffd700;"></h3>
+                <p id="detalle-hijo" style="font-size: 0.8rem; margin: 5px 0;"></p>
+            </div>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    🖼️ ADJUNTAR DNI (Frente/Dorso)
+                </button>
+                <button class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    ⚕️ ADJUNTAR APTO MÉDICO 2026
+                </button>
+            </div>
+        </div>
+
+        <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
+    </div>
+</div>
 
 <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
