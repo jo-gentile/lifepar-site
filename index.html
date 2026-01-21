@@ -396,7 +396,12 @@ if(data.autorizado) {
         document.getElementById('portal-padres').style.display = 'block';
         document.querySelector('.contenido-principal').style.display = 'none';
       }
-
+    } catch (err) { // <--- ESTO ES LO QUE TE FALTA
+      console.error(err);
+      alert("Error con Google.");
+    }
+};
+ 
   // E. Recuperar Clave
   document.getElementById('linkRecuperar').onclick = async () => {
     const email = document.getElementById('emailLogin').value || document.getElementById('emailManual').value;
@@ -472,7 +477,7 @@ window.verificarDniPadre = async () => {
         } else {
             alert("DNI no encontrado en el padrón de LIFEPAR. Contacte a su entrenador.");
         }
-    } catch (e) {
+      } catch (e) {
         alert("Error al buscar: " + e.message);
     }
 };
