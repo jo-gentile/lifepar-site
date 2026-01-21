@@ -328,7 +328,7 @@ window.abrirEditorPatinador = async (numZona, id) => {
                 formContenedor.style.border = '2px solid gold';
                 formContenedor.style.padding = '20px';
 
-                // AJUSTE X: Le puse color GOLD y la moví un poquito más (Punto 2)
+                // BOTÓN CERRAR X (En ORO para que se vea)
                 const btnCerrar = document.createElement('div');
                 btnCerrar.innerHTML = '✕';
                 btnCerrar.style = 'position:absolute; top:15px; right:20px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:11000;';
@@ -339,16 +339,22 @@ window.abrirEditorPatinador = async (numZona, id) => {
             setTimeout(() => {
                 const inputs = formContenedor.querySelectorAll('input, select');
                 
-                // --- AJUSTE TÍTULO: Agregalo acá para que diga a quién editás (Punto 3) ---
+                // TÍTULO PERSONALIZADO
                 const titulo = formContenedor.querySelector('h3') || formContenedor.querySelector('div[style*="gold"]');
-                if(titulo) titulo.innerHTML = `📝 EDITANDO A: ${p.apellido}, ${p.nombre}`;
+                if(titulo) titulo.innerHTML = `<span style="color:gold">📝 EDITANDO:</span> ${p.apellido}, ${p.nombre}`;
+
+                // --- ELIMINAR EL BOTÓN QUE ENCONTRASTE ---
+                // Lo buscamos exactamente por su función 'enviarCargaPatinador'
+                const btnCargaMaldito = formContenedor.querySelector('button[onclick*="enviarCargaPatinador"]');
+                if (btnCargaMaldito) {
+                    btnCargaMaldito.remove(); 
+                    console.log("✂️ Botón de carga eliminado para evitar duplicados");
+                }
 
                 if (inputs.length >= 6) {
                     inputs[4].value = p.apellido || "";
                     inputs[5].value = p.nombre || "";
                     inputs[6].value = p.DNI || "";
-                    
-                    // Si tiene fecha, la cargamos (Punto 4)
                     if(inputs[7] && p.fechaNacimiento) inputs[7].value = p.fechaNacimiento;
 
                     inputs[1].value = p.disciplina || "";
@@ -365,12 +371,8 @@ window.abrirEditorPatinador = async (numZona, id) => {
                     inputs[0].value = p.club || "";
                 }
 
-                // --- AJUSTE BOTONES: Borramos el amarillo de Cargar (Punto 1) ---
-                const btnAmarillo = formContenedor.querySelector('button[onclick*="registrarPatinador"]');
-                if (btnAmarillo) btnAmarillo.remove(); // LO BORRAMOS PARA QUE NO DUPLIQUE
-
+                // NUESTRO BOTÓN VERDE (El único que queda)
                 const btnSave = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button');
-
                 if (btnSave) {
                     btnSave.innerText = "💾 ACTUALIZAR DATOS"; 
                     btnSave.style.background = "linear-gradient(to right, #28a745, #1e7e34)"; 
