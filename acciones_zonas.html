@@ -318,62 +318,67 @@ window.abrirEditorPatinador = async (numZona, id) => {
             abrirFormularioCarga(numZona, "1"); 
 
             const formContenedor = document.getElementById('contenedor-formulario-dinamico');
-            if (formContenedor) {
-                // SOLUCIÓN 1: Siempre arriba y visible
-                formContenedor.style.position = 'fixed';
-                formContenedor.style.top = '10px'; // Pegado arriba para que se vea siempre
-                formContenedor.style.left = '50%';
-                formContenedor.style.transform = 'translateX(-50%)';
-                formContenedor.style.zIndex = '10000';
-                formContenedor.style.background = '#111';
-                formContenedor.style.border = '2px solid gold';
-                formContenedor.style.padding = '20px';
-
-                // SOLUCIÓN 3: Agregar botón de cerrar (X)
-                const btnCerrar = document.createElement('div');
-                btnCerrar.innerHTML = '✕';
-                btnCerrar.style = 'position:absolute; top:10px; right:15px; color:white; cursor:pointer; font-size:24px; font-weight:bold;';
-                btnCerrar.onclick = () => { formContenedor.innerHTML = ''; };
-                formContenedor.appendChild(btnCerrar);
-            }
-
-            // SOLUCIÓN 2: Rellenar y "Despertar" los menús
+            
             setTimeout(() => {
+                // PUNTO 3: Título personalizado
+                const titulo = formContenedor.querySelector('h3') || formContenedor.querySelector('div[style*="gold"]');
+                if(titulo) {
+                    titulo.innerHTML = `<span style="color:gold">📝 EDITAR:</span> ${p.apellido}, ${p.nombre}`;
+                    titulo.style.fontSize = "1.2rem";
+                }
+
+                // PUNTO 2: Botón Cerrar (X) - Forzado
+                if(!document.getElementById('btn-cerrar-editor')){
+                    const btnX = document.createElement('div');
+                    btnX.id = 'btn-cerrar-editor';
+                    btnX.innerHTML = '✕';
+                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:28px; font-weight:bold; z-index:11000;';
+                    btnX.onclick = () => { formContenedor.innerHTML = ''; window.scrollTo(0,0); };
+                    formContenedor.style.position = 'relative';
+                    formContenedor.appendChild(btnX);
+                }
+
+                // PUNTO 1: Limpieza de botones
+                const btnAmarilloOriginal = formContenedor.querySelector('button[onclick*="registrarPatinador"]') || formContenedor.querySelector('.btn-registrar');
+                if (btnAmarilloOriginal) {
+                    btnAmarilloOriginal.style.display = 'none'; // OCULTAMOS EL DE CARGAR
+                }
+
+                // RELLENADO DE DATOS (Incluyendo Fecha - Punto 4)
                 const inputs = formContenedor.querySelectorAll('input, select');
-                if (inputs.length >= 6) {
-                    // Llenamos los datos básicos
-                    inputs[4].value = p.apellido || "";
-                    inputs[5].value = p.nombre || "";
-                    inputs[6].value = p.DNI || "";
-                    
-                    // Llenamos Disciplina y "disparamos" el cambio para que cargue lo demás
+                if (inputs.length >= 7) {
+                    inputs[0].value = p.club || "";
                     inputs[1].value = p.disciplina || "";
-                    inputs[1].dispatchEvent(new Event('change')); // <--- Esto "despierta" Divisional
+                    inputs[1].dispatchEvent(new Event('change'));
 
                     setTimeout(() => {
                         inputs[2].value = p.divisional || "";
-                        inputs[2].dispatchEvent(new Event('change')); // <--- Esto "despierta" Categoría
+                        inputs[2].dispatchEvent(new Event('change'));
                         setTimeout(() => {
                             inputs[3].value = p.categoria || "";
                         }, 200);
                     }, 200);
 
-                    inputs[0].value = p.club || "";
+                    inputs[4].value = p.apellido || "";
+                    inputs[5].value = p.nombre || "";
+                    inputs[6].value = p.DNI || "";
+                    
+                    // CARGAR FECHA (Punto 4)
+                    if(p.fechaNacimiento) {
+                        inputs[7].value = p.fechaNacimiento; 
+                    }
                 }
 
-               // Buscamos el botón de siempre
-const btnSave = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button');
-
-if (btnSave) {
-    btnSave.innerText = "💾 ACTUALIZAR DATOS"; // Cambiamos el texto
-    btnSave.style.background = "linear-gradient(to right, #28a745, #1e7e34)"; // Color verde de éxito
-    
-    // IMPORTANTE: Borramos la función vieja y le asignamos la de editar
-    btnSave.onclick = (e) => {
-        e.preventDefault(); // Evitamos que el formulario haga cualquier otra cosa
-        window.guardarEdicionPatinador(numZona, id); // Llamamos a la función de guardado real
-    };
-}
+                // BOTÓN DE ACTUALIZAR (El único que debe quedar)
+                let btnAct = document.getElementById('btn-actualizar-pro');
+                if(!btnAct){
+                    btnAct = document.createElement('button');
+                    btnAct.id = 'btn-actualizar-pro';
+                    btnAct.innerHTML = '💾 GUARDAR CAMBIOS EN PADRÓN';
+                    btnAct.style = 'width:100%; padding:15px; background:linear-gradient(to right, #28a745, #1e7e34); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer; margin-top:10px; font-family:Quicksand;';
+                    btnAct.onclick = () => window.guardarEdicionPatinador(numZona, id);
+                    formContenedor.querySelector('div').appendChild(btnAct);
+                }
             }, 800);
         }
     }
