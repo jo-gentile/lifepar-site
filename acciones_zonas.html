@@ -270,7 +270,7 @@ window.filtrarTarjetas = () => {
         const coincideClub = club === "" || infoClub === club;
         const coincideCat = cat === "" || infoCat.includes(cat);
 
-        t.style.display = (coincideTexto && coincideClub && coincideCat) ? 'flex' : 'none';
+        t.style.display = (coincideTexto && coincideClub && coincideCat) ? 'flex' : 'none', 'important';
     });
 };
 
@@ -306,34 +306,27 @@ window.abrirEditorPatinador = async (numZona, id) => {
     if (snapshot.exists()) {
         const p = snapshot.val()[id];
         
-        // Pedimos los datos con los ejemplos reales que me pasaste
-        const nN = prompt("APELLIDO Y NOMBRE:", `${p.apellido}, ${p.nombre}`);
-        const nD = prompt("DISCIPLINA (Libre, Danza, Show, etc):", p.disciplina || "");
-        const nV = prompt("DIVISIONAL (A, B, C, Avanzado, etc):", p.divisional || "");
-        const nK = prompt("CATEGORÍA (1°, Futuros Talentos, etc):", p.categoria || "");
-        const nC = prompt("CLUB:", p.club);
-        const nG = prompt("GÉNERO (Masculino / Femenino):", p.genero || "");
-
-        if (nN) {
-            try {
-                const partes = nN.split(',');
-                const ape = partes[0].trim();
-                const nom = partes[1] ? partes[1].trim() : "";
-
-                // Mandamos todas las correcciones al Padre para que impacten en Firebase
-                await window.parent.actualizarAsistencia(numZona, id, 'nombre', nom);
-                await window.parent.actualizarAsistencia(numZona, id, 'apellido', ape);
-                await window.parent.actualizarAsistencia(numZona, id, 'disciplina', nD);
-                await window.parent.actualizarAsistencia(numZona, id, 'divisional', nV);
-                await window.parent.actualizarAsistencia(numZona, id, 'categoria', nK);
-                await window.parent.actualizarAsistencia(numZona, id, 'club', nC);
-                await window.parent.actualizarAsistencia(numZona, id, 'genero', nG);
+        // 1. Abrimos tu formulario de carga de siempre
+        if (typeof abrirFormularioCarga === 'function') {
+            abrirFormularioCarga(numZona, "1"); // Abrimos el form base
+            
+            // 2. Esperamos un milisegundo a que se dibuje y lo rellenamos
+            setTimeout(() => {
+                document.getElementById('reg-apellido').value = p.apellido || "";
+                document.getElementById('reg-nombre').value = p.nombre || "";
+                document.getElementById('reg-dni').value = p.DNI || "";
+                document.getElementById('reg-club').value = p.club || "";
+                document.getElementById('reg-disciplina').value = p.disciplina || "";
+                document.getElementById('reg-divisional').value = p.divisional || "";
+                document.getElementById('reg-categoria').value = p.categoria || "";
                 
-                alert("✅ Datos actualizados. El padrón se refrescará.");
-                window.mostrarListadoAltas(numZona); 
-            } catch (e) {
-                alert("Error al guardar cambios.");
-            }
+                // 3. Cambiamos el botón de "REGISTRAR" por uno de "ACTUALIZAR"
+                const btnOriginal = document.querySelector('.btn-registrar');
+                if(btnOriginal) {
+                    btnOriginal.innerText = "💾 GUARDAR CAMBIOS";
+                    btnOriginal.onclick = () => window.guardarEdicionPatinador(numZona, id);
+                }
+            }, 500);
         }
     }
 };
