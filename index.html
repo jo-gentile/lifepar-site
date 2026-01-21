@@ -307,13 +307,12 @@ const firebaseConfig = {
 
 document.getElementById('btnVerificarSheet').onclick = async () => {
     const emailNormal = document.getElementById('emailManual').value.trim().toLowerCase();
-    const emailFirebase = emailNormal.replace(/\./g, '_'); // Preparamos el mail para Firebase
+    const emailFirebase = emailNormal.replace(/\./g, '_'); 
     
     if(!emailNormal.includes("@")) return alert("Ingresá un mail válido.");
 
     const dbRef = ref(db);
     try {
-      // PREGUNTA A FIREBASE (No a Sheets):
       const snapshot = await get(child(dbRef, `listaBlanca/${emailFirebase}`));
 
       if (snapshot.exists()) {
@@ -321,7 +320,14 @@ document.getElementById('btnVerificarSheet').onclick = async () => {
         document.getElementById('btnVerificarSheet').style.display = 'none';
         document.getElementById('seccionConfirmarPass').style.display = 'block';
       } else {
-        alert("Acceso denegado: Tu mail no figura en la lista de entrenadores.");
+        // CAMBIO AQUÍ: En lugar de solo negar, abrimos la puerta a los padres
+        const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Deseas ingresar al Portal de Padres para subir documentación?");
+        
+        if (confirmacion) {
+            loginForm.style.display = 'none'; // Cerramos el cuadradito de login
+            document.getElementById('portal-padres').style.display = 'block'; // Mostramos el portal
+            document.querySelector('.contenido-principal').style.display = 'none'; // Ocultamos el fondo
+        }
       }
     } catch (err) {
       alert("Error de conexión con la base de datos.");
@@ -380,21 +386,16 @@ document.getElementById('btnVerificarSheet').onclick = async () => {
       const response = await fetch(`https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=${email}`);
       const data = await response.json();
 
-      if(data.autorizado) {
+if(data.autorizado) {
         sessionStorage.setItem('userEmail', email);
         sessionStorage.setItem('userName', nombre);
-
-        alert("Bienvenido entrenador: " + email);
         window.location.href = "admin.html";
       } else {
-        alert("Acceso denegado: Tu cuenta de Google no está autorizada.");
-        await signOut(auth);
+        // El desvío para padres logueados con Google
+        loginForm.style.display = 'none';
+        document.getElementById('portal-padres').style.display = 'block';
+        document.querySelector('.contenido-principal').style.display = 'none';
       }
-    } catch (err) {
-      console.error(err);
-      alert("Error con Google.");
-    }
-  };
 
   // E. Recuperar Clave
   document.getElementById('linkRecuperar').onclick = async () => {
@@ -437,6 +438,60 @@ document.getElementById('btnCerrarLogin').onclick = () => {
 // El nuevo botón de "Atrás" dentro del registro
 document.getElementById('linkVolverLogin').onclick = () => {
     resetFormulario();
+};
+
+// Variable global para guardar el patinador encontrado temporalmente
+let patinadorSesionPadre = null;
+
+// PASO 1: Verificar el DNI en todas las zonas
+window.verificarDniPadre = async () => {
+    const dniBusqueda = document.getElementById('dni-validacion').value;
+    if (!dniBusqueda) return alert("Por favor, ingresá un DNI.");
+
+    const dbRef = ref(db);
+    try {
+        // Recorremos las zonas (ajustá según cuántas tengas, del 1 al 6)
+        for (let i = 1; i <= 6; i++) {
+            const snapshot = await get(child(dbRef, `zona${i}`));
+            if (snapshot.exists()) {
+                const patinadores = snapshot.val();
+                // Buscamos dentro de la zona si algún patinador tiene ese DNI
+                for (let id in patinadores) {
+                    if (patinadores[id].DNI == dniBusqueda) {
+                        patinadorSesionPadre = { ...patinadores[id], id, zona: i };
+                        break;
+                    }
+                }
+            }
+            if (patinadorSesionPadre) break;
+        }
+
+        if (patinadorSesionPadre) {
+            document.getElementById('paso-dni').style.display = 'none';
+            document.getElementById('paso-fecha').style.display = 'block';
+        } else {
+            alert("DNI no encontrado en el padrón de LIFEPAR. Contacte a su entrenador.");
+        }
+    } catch (e) {
+        alert("Error al buscar: " + e.message);
+    }
+};
+
+// PASO 2: Validar Fecha de Nacimiento y dar bienvenida
+window.validarFechaPadre = () => {
+    const fechaIngresada = document.getElementById('fecha-validacion').value;
+    // Comparamos lo ingresado con lo que cargó el profe
+    if (fechaIngresada === patinadorSesionPadre.fechaDeNacimiento || fechaIngresada === patinadorSesionPadre.fecha_de_nacimiento) {
+        document.getElementById('paso-fecha').style.display = 'none';
+        document.getElementById('paso-carga').style.display = 'block';
+        
+        // El sentido de pertenencia: le mostramos sus datos
+        document.getElementById('nombre-hijo').innerText = `¡Bienvenido/a, ${patinadorSesionPadre.nombre}!`;
+        document.getElementById('detalle-hijo').innerText = `${patinadorSesionPadre.club} | ${patinadorSesionPadre.categoria}`;
+        document.getElementById('instruccion-padre').innerText = "Ya podés adjuntar la documentación oficial.";
+    } else {
+        alert("La fecha de nacimiento no coincide. Verificá los datos.");
+    }
 };
 </script>
 <script src="script.js"></script> 
