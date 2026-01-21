@@ -315,32 +315,51 @@ window.abrirEditorPatinador = async (numZona, id) => {
     if (snapshot.exists()) {
         const p = snapshot.val()[id];
         
-        // 1. Abrimos el formulario de siempre
         if (typeof abrirFormularioCarga === 'function') {
+            // 1. Abrimos el formulario
             abrirFormularioCarga(numZona, "1"); 
 
-            // 2. Esperamos a que el HTML exista realmente en el DOM
-            setTimeout(() => {
-                const fApe = document.getElementById('reg-apellido');
-                if (fApe) {
-                    // Rellenamos los campos
-                    fApe.value = p.apellido || "";
-                    document.getElementById('reg-nombre').value = p.nombre || "";
-                    document.getElementById('reg-dni').value = p.DNI || "";
-                    document.getElementById('reg-club').value = p.club || "";
-                    document.getElementById('reg-disciplina').value = p.disciplina || "";
-                    document.getElementById('reg-divisional').value = p.divisional || "";
-                    document.getElementById('reg-categoria').value = p.categoria || "";
+            // 2. LO TRAEMOS AL FRENTE (Z-INDEX)
+            const formContenedor = document.getElementById('contenedor-formulario-dinamico');
+            if (formContenedor) {
+                formContenedor.style.position = 'relative';
+                formContenedor.style.zIndex = '6000'; // Mayor al 5000 de las tarjetas
+            }
 
-                    // 3. CAMBIAMOS EL BOTÓN: De 'Registrar' a 'Guardar Cambios'
+            // 3. RELLENAMOS (Con un tiempo de espera más sólido)
+            setTimeout(() => {
+                console.log("📝 Intentando rellenar datos para:", p.nombre);
+                
+                // Buscamos los campos uno por uno
+                const fApe = document.getElementById('reg-apellido');
+                const fNom = document.getElementById('reg-nombre');
+                const fDni = document.getElementById('reg-dni');
+                const fClub = document.getElementById('reg-club');
+
+                if (fApe) {
+                    fApe.value = p.apellido || "";
+                    fNom.value = p.nombre || "";
+                    fDni.value = p.DNI || "";
+                    fClub.value = p.club || "";
+                    // Disciplina, Divisional y Categoría según tus IDs:
+                    if(document.getElementById('reg-disciplina')) document.getElementById('reg-disciplina').value = p.disciplina || "";
+                    if(document.getElementById('reg-divisional')) document.getElementById('reg-divisional').value = p.divisional || "";
+                    if(document.getElementById('reg-categoria')) document.getElementById('reg-categoria').value = p.categoria || "";
+
+                    // 4. CAMBIAMOS EL BOTÓN
                     const btn = document.querySelector('.btn-registrar');
                     if (btn) {
                         btn.innerText = "💾 GUARDAR CAMBIOS";
-                        btn.style.background = "#28a745"; // Un verde para diferenciar
+                        btn.style.background = "#28a745";
                         btn.onclick = () => window.guardarEdicionPatinador(numZona, id);
                     }
+                    
+                    // Subimos el scroll para que el profe vea el formulario arriba
+                    window.scrollTo(0,0);
+                } else {
+                    console.error("❌ No se encontraron los campos del formulario");
                 }
-            }, 600); // Un pelín más de tiempo para seguridad
+            }, 800); 
         }
     }
 };
