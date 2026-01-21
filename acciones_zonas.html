@@ -254,25 +254,33 @@ window.mostrarListadoAltas = async (numZona) => {
 };
 
 window.filtrarTarjetas = () => {
+    // 1. Capturamos lo que el profe eligió arriba
     const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase().trim();
-    console.log("📢 El buscador dice: Filtrando por '" + busqueda + "'"); // TESTIGO 1
     const club = document.getElementById('filtroClub').value.toLowerCase().trim();
     const cat = document.getElementById('filtroCategoria').value.toLowerCase().trim();
     
+    console.log("📢 Buscando:", busqueda, "| Club:", club, "| Cat:", cat);
+
+    // 2. Escaneamos todas las tarjetas
     const tarjetas = document.querySelectorAll('.card-alta');
     
     tarjetas.forEach(t => {
-        const infoBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
-        console.log("👀 Tarjeta encontrada. Club de esta tarjeta: " + infoClub); // TESTIGO 2
-        const infoClub = (t.getAttribute('data-club') || "").toLowerCase();
-        // El buscador ahora mira Divisional + Categoría para no fallar
-        const infoCat = (t.getAttribute('data-categoria') || "").toLowerCase();
+        // Leemos las etiquetas invisibles de la tarjeta
+        const tBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
+        const tClub = (t.getAttribute('data-club') || "").toLowerCase();
+        const tCat = (t.getAttribute('data-categoria') || "").toLowerCase();
         
-        const coincideTexto = busqueda === "" || infoBusqueda.includes(busqueda);
-        const coincideClub = club === "" || infoClub === club;
-        const coincideCat = cat === "" || infoCat.includes(cat);
+        // Comparamos lógica: ¿Coincide con lo que pidió el profe?
+        const coincideTexto = busqueda === "" || tBusqueda.includes(busqueda);
+        const coincideClub = club === "" || tClub === club;
+        const coincideCat = cat === "" || tCat.includes(cat);
 
-        t.style.display = (coincideTexto && coincideClub && coincideCat) ? 'flex' : 'none', 'important';
+        // 3. LA ACCIÓN: Si cumple todo, se queda. Si no, desaparece.
+        if (coincideTexto && coincideClub && coincideCat) {
+            t.style.display = 'flex';
+        } else {
+            t.style.display = 'none';
+        }
     });
 };
 
