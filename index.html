@@ -522,7 +522,6 @@ window.subirArchivo = async (tipo) => {
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
     
-    const storage = getStorage(app);
     const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
