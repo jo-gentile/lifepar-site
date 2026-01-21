@@ -161,36 +161,67 @@ window.mostrarListadoAltas = async (numZona) => {
             .btn-f:disabled { opacity: 0.7; cursor: not-allowed; }
         </style>
 
-        <div class="modal-altas-cuerpo">
-            <button class="btn-x-cerrar" onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'">✕</button>
-            <div class="buscador-fijo">
-                <input type="text" id="inputFiltroPatinador" style="width:100%; padding:15px; border-radius:10px; border: 1px solid #444; background:#111; color:white; font-family:Quicksand; font-size: 1rem;" placeholder="🔍 Buscar..." onkeyup="window.filtrarTarjetas()">
-            </div>
+<div class="modal-altas-cuerpo">
+    <button class="btn-x-cerrar" onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'">✕</button>
+
+    <div class="buscador-fijo">
+        <input type="text" id="inputFiltroPatinador" 
+               style="width:100%; padding:15px; border-radius:10px; border: 1px solid #444; background:#111; color:white; font-family:Quicksand; font-size: 1rem; margin-bottom: 10px;" 
+               placeholder="🔍 Buscar por nombre o DNI..." 
+               onkeyup="window.filtrarTarjetas()">
+
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+            <select id="filtroClub" onchange="window.filtrarTarjetas()" 
+                    style="flex: 1; padding: 10px; border-radius: 10px; background: #111; color: white; border: 1px solid #444; font-family: Quicksand;">
+                <option value="">Todos los Clubes</option>
+            </select>
+
+            <select id="filtroCategoria" onchange="window.filtrarTarjetas()" 
+                    style="flex: 1; padding: 10px; border-radius: 10px; background: #111; color: white; border: 1px solid #444; font-family: Quicksand;">
+                <option value="">Todas las Categorías</option>
+            </select>
+        </div>
+    </div>
             <h3 style="color:gold; text-align:center; font-family:'Anton'; margin-bottom:20px; text-transform: uppercase;">PADRÓN ZONA ${numZona}</h3>
             <div class="grid-altas" id="grillaPatinadores">`;
 
-        patinadores.forEach((p) => {
-            const esAdmin = (mailProfe === 'test@test.com');
-            const tieneAnual = p.seguroAnual === true;
-            html += `
-                <div class="card-alta" data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.club.toLowerCase()}">
-                    <div class="info-p">
-                        <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
-                        <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''}</div>
-                    </div>
-                    <div class="seccion-t">Seguros</div>
-                    <div class="fila-btns">
-                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
-                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
-                    </div>
-                    <div class="seccion-t">Asistencias</div>
-                    <div class="fila-btns">
-                        <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
-                        <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
-                        <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
-                    </div>
-                </div>`;
-        });
+patinadores.forEach((p) => {
+    const esAdmin = (mailProfe === 'test@test.com');
+    const tieneAnual = p.seguroAnual === true;
+    
+    // Agregamos data-club y data-categoria para que el buscador los encuentre
+    html += `
+        <div class="card-alta" 
+             data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.DNI || ''}" 
+             data-club="${p.club.toLowerCase()}" 
+             data-categoria="${p.categoria.toLowerCase()}"
+             style="position: relative;"> <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" 
+                    style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10;">
+                📝
+            </button>
+
+            <div class="info-p">
+                <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
+                <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''}</div>
+                
+                <div style="font-size: 0.7rem; margin-top: 5px;">
+                    ${p.linkDNI ? '✅ DNI' : '❌ DNI'} | ${p.linkMedico ? '✅ MÉDICO' : '❌ MÉDICO'}
+                </div>
+            </div>
+
+            <div class="seccion-t">Seguros</div>
+            <div class="fila-btns">
+                <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
+                <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
+            </div>
+            <div class="seccion-t">Asistencias</div>
+            <div class="fila-btns">
+                <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
+                <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
+                <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
+            </div>
+        </div>`;
+});
 
         html += `</div>
             <button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="margin-top:30px; width:100%; background:gold; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:10px; color:black; font-family:Quicksand; font-size:1.1rem;">CERRAR PADRÓN</button>
@@ -200,11 +231,31 @@ window.mostrarListadoAltas = async (numZona) => {
 };
 
 window.filtrarTarjetas = () => {
-    const texto = document.getElementById('inputFiltroPatinador').value.toLowerCase();
+    const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase();
+    const club = document.getElementById('filtroClub').value.toLowerCase();
+    const cat = document.getElementById('filtroCategoria').value.toLowerCase();
+    
     const tarjetas = document.querySelectorAll('.card-alta');
+    
     tarjetas.forEach(t => {
-        t.style.display = t.getAttribute('data-busqueda').includes(texto) ? 'flex' : 'none';
+        const infoBusqueda = t.getAttribute('data-busqueda').toLowerCase();
+        const infoClub = t.getAttribute('data-club').toLowerCase();
+        const infoCat = t.getAttribute('data-categoria').toLowerCase();
+        
+        // El patinador debe cumplir con las 3 condiciones
+        const coincideTexto = infoBusqueda.includes(busqueda);
+        const coincideClub = club === "" || infoClub === club;
+        const coincideCat = cat === "" || infoCat === cat;
+
+        t.style.display = (coincideTexto && coincideClub && coincideCat) ? 'flex' : 'none';
     });
+};
+
+window.limpiarFiltros = () => {
+    document.getElementById('inputFiltroPatinador').value = "";
+    document.getElementById('filtroClub').value = "";
+    document.getElementById('filtroCategoria').value = "";
+    filtrarTarjetas();
 };
 
 window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
