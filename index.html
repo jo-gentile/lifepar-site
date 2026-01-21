@@ -462,7 +462,7 @@ window.verificarDniPadre = async () => {
                 const patinadores = snapshot.val();
                 // Buscamos dentro de la zona si algún patinador tiene ese DNI
                 for (let id in patinadores) {
-                    if (patinadores[id].DNI == dniBusqueda) {
+                    if (String(patinadores[id].DNI).trim() === String(dniBusqueda).trim()) {
                         patinadorSesionPadre = { ...patinadores[id], id, zona: i };
                         break;
                     }
