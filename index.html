@@ -200,14 +200,20 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <button class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    🖼️ ADJUNTAR DNI (Frente/Dorso)
-                </button>
-                <button class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    ⚕️ ADJUNTAR APTO MÉDICO 2026
-                </button>
-            </div>
-        </div>
+    <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
+    <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        🖼️ ADJUNTAR DNI (Frente/Dorso)
+    </button>
+
+    <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
+    <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        ⚕️ ADJUNTAR APTO MÉDICO 2026
+    </button>
+    
+    <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+        <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+    </div>
+</div>
 
         <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
     </div>
@@ -507,6 +513,46 @@ window.validarFechaPadre = () => {
     } else {
         alert("La fecha de nacimiento no coincide. Verificá los datos.");
     }
+};
+window.subirArchivo = async (tipo) => {
+    const input = document.getElementById(`input-${tipo}`);
+    const archivo = input.files[0];
+    if (!archivo) return;
+
+    const barra = document.getElementById('barra-progreso');
+    const progreso = document.getElementById('progreso-interno');
+    
+    // El nombre del archivo será: DNI_numero_nombre.ext
+    const extension = archivo.name.split('.').pop();
+    const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
+    
+    const storage = getStorage();
+    const storageRef = sRef(storage, `documentacion/${nombreFinal}`);
+    const uploadTask = uploadBytesResumable(storageRef, archivo);
+
+    barra.style.display = 'block';
+
+    uploadTask.on('state_changed', 
+        (snapshot) => {
+            const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progreso.style.width = porcentaje + '%';
+        }, 
+        (error) => alert("Error al subir: " + error.message), 
+        async () => {
+            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+            
+            // ACTUALIZAMOS FIREBASE DATABASE CON EL LINK
+            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+            const actualizaciones = {};
+            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
+            
+            await update(dbRef, actualizaciones);
+            
+            alert("¡Archivo subido y vinculado con éxito!");
+            barra.style.display = 'none';
+            progreso.style.width = '0%';
+        }
+    );
 };
 </script>
 <script src="script.js"></script> 
