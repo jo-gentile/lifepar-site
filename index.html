@@ -528,7 +528,7 @@ window.subirArchivo = async (tipo) => {
 
     barra.style.display = 'block';
 
-    uuploadTask.on('state_changed', 
+    uploadTask.on('state_changed', 
             (snapshot) => {
                 const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 progreso.style.width = porcentaje + '%';
