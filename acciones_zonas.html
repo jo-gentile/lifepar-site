@@ -361,16 +361,51 @@ window.abrirEditorPatinador = async (numZona, id) => {
                     inputs[0].value = p.club || "";
                 }
 
-                const btn = formContenedor.querySelector('.btn-registrar');
-                if (btn) {
-                    btn.innerText = "💾 GUARDAR CAMBIOS";
-                    btn.onclick = (e) => {
-                        e.preventDefault();
-                        window.guardarEdicionPatinador(numZona, id);
-                    };
-                }
+               // Buscamos el botón de siempre
+const btnSave = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button');
+
+if (btnSave) {
+    btnSave.innerText = "💾 ACTUALIZAR DATOS"; // Cambiamos el texto
+    btnSave.style.background = "linear-gradient(to right, #28a745, #1e7e34)"; // Color verde de éxito
+    
+    // IMPORTANTE: Borramos la función vieja y le asignamos la de editar
+    btnSave.onclick = (e) => {
+        e.preventDefault(); // Evitamos que el formulario haga cualquier otra cosa
+        window.guardarEdicionPatinador(numZona, id); // Llamamos a la función de guardado real
+    };
+}
             }, 800);
         }
+    }
+};
+window.guardarEdicionPatinador = async (numZona, id) => {
+    try {
+        const form = document.getElementById('contenedor-formulario-dinamico');
+        const ins = form.querySelectorAll('input, select');
+        
+        // Mapeamos los datos del formulario (respetando el orden de tus cuadritos)
+        const datos = {
+            club: ins[0].value,
+            disciplina: ins[1].value,
+            divisional: ins[2].value,
+            categoria: ins[3].value,
+            apellido: ins[4].value.toUpperCase().trim(),
+            nombre: ins[5].value.toUpperCase().trim(),
+            DNI: ins[6].value.trim()
+        };
+
+        // El Puente: Mandamos la orden al Padre para que impacte en Firebase
+        for (let key in datos) {
+            await window.parent.actualizarAsistencia(numZona, id, key, datos[key]);
+        }
+
+        alert("✅ ¡DATOS ACTUALIZADOS EN FIREBASE!");
+        form.innerHTML = ''; // Cerramos el editor
+        window.mostrarListadoAltas(numZona); // Refrescamos las tarjetas para ver el cambio
+        
+    } catch (e) {
+        console.error("Error al editar:", e);
+        alert("No se pudo actualizar.");
     }
 };
 </script>
