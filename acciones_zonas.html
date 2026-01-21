@@ -329,25 +329,6 @@ window.abrirEditorPatinador = async (numZona, id) => {
                 formContenedor.style.border = '2px solid gold';
                 formContenedor.style.padding = '20px';
                 formContenedor.style.display = 'block';
-
-                // --- AJUSTE AQUÍ: Eliminamos la barra por completo al cerrar ---
-                let btnX = document.getElementById('btn-cerrar-editor-pro');
-                if(!btnX){
-                    btnX = document.createElement('div');
-                    btnX.id = 'btn-cerrar-editor-pro';
-                    btnX.innerHTML = '✕';
-                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10002;';
-                    
-                    btnX.onclick = () => { 
-                        formContenedor.innerHTML = ''; 
-                        formContenedor.style.display = 'none'; // <-- ESTO ELIMINA LA BARRA FANTASMA
-                    };
-                    
-                    formContenedor.style.position = 'relative'; 
-                    formContenedor.appendChild(btnX);
-                } else {
-                    btnX.style.display = 'block'; // Nos aseguramos de que se vea si ya existía
-                }
             }
 
             setTimeout(() => {
@@ -355,6 +336,23 @@ window.abrirEditorPatinador = async (numZona, id) => {
                 if(tituloH4) {
                     tituloH4.innerHTML = `📝 EDITANDO A: <span style="color:white;">${p.apellido}, ${p.nombre}</span>`;
                 }
+
+                // --- NUEVA LÓGICA PARA LA X (DENTRO DEL TIMEOUT PARA QUE NO SE TAPE) ---
+                let btnX = document.getElementById('btn-cerrar-editor-pro');
+                if(!btnX){
+                    btnX = document.createElement('div');
+                    btnX.id = 'btn-cerrar-editor-pro';
+                    btnX.innerHTML = '✕';
+                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10005;';
+                    formContenedor.style.position = 'relative'; 
+                    formContenedor.appendChild(btnX);
+                }
+                
+                btnX.onclick = () => { 
+                    formContenedor.innerHTML = ''; 
+                    formContenedor.style.cssText = 'display: none;'; // RESETEA TODO EL ESTILO (Elimina la barra fantasma)
+                };
+                // -----------------------------------------------------------------------
 
                 const btnCargaMaldito = formContenedor.querySelector('button[onclick*="enviarCargaPatinador"]');
                 if (btnCargaMaldito) btnCargaMaldito.remove(); 
@@ -387,7 +385,8 @@ window.abrirEditorPatinador = async (numZona, id) => {
                     btnSave.onclick = (e) => {
                         e.preventDefault(); 
                         window.guardarEdicionPatinador(numZona, id);
-                        formContenedor.style.display = 'none'; // También ocultamos al guardar
+                        formContenedor.innerHTML = ''; // Limpiamos al guardar exitoso
+                        formContenedor.style.cssText = 'display: none;';
                     };
                 }
             }, 800);
