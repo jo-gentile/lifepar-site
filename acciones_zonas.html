@@ -254,21 +254,21 @@ window.mostrarListadoAltas = async (numZona) => {
 };
 
 window.filtrarTarjetas = () => {
-    const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase();
-    const club = document.getElementById('filtroClub').value.toLowerCase();
-    const cat = document.getElementById('filtroCategoria').value.toLowerCase();
+    const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase().trim();
+    const club = document.getElementById('filtroClub').value.toLowerCase().trim();
+    const cat = document.getElementById('filtroCategoria').value.toLowerCase().trim();
     
     const tarjetas = document.querySelectorAll('.card-alta');
     
     tarjetas.forEach(t => {
-        const infoBusqueda = t.getAttribute('data-busqueda').toLowerCase();
-        const infoClub = t.getAttribute('data-club').toLowerCase();
-        const infoCat = t.getAttribute('data-categoria').toLowerCase();
+        const infoBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
+        const infoClub = (t.getAttribute('data-club') || "").toLowerCase();
+        // El buscador ahora mira Divisional + Categoría para no fallar
+        const infoCat = (t.getAttribute('data-categoria') || "").toLowerCase();
         
-        // El patinador debe cumplir con las 3 condiciones
-        const coincideTexto = infoBusqueda.includes(busqueda);
+        const coincideTexto = busqueda === "" || infoBusqueda.includes(busqueda);
         const coincideClub = club === "" || infoClub === club;
-        const coincideCat = cat === "" || infoCat === cat;
+        const coincideCat = cat === "" || infoCat.includes(cat);
 
         t.style.display = (coincideTexto && coincideClub && coincideCat) ? 'flex' : 'none';
     });
@@ -300,24 +300,39 @@ window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
     }
 };
 window.abrirEditorPatinador = async (numZona, id) => {
-    // En lugar de usar 'ref' que acá no existe, le pedimos al Padre los datos
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
     
     if (snapshot.exists()) {
-        const patinadores = snapshot.val();
-        const p = patinadores[id];
+        const p = snapshot.val()[id];
         
-        const nuevoNombre = prompt("Editar Nombre:", p.nombre);
-        if (nuevoNombre) {
-            // Usamos la función que el Padre ya tiene para guardar
+        // Pedimos los datos con los ejemplos reales que me pasaste
+        const nN = prompt("APELLIDO Y NOMBRE:", `${p.apellido}, ${p.nombre}`);
+        const nD = prompt("DISCIPLINA (Libre, Danza, Show, etc):", p.disciplina || "");
+        const nV = prompt("DIVISIONAL (A, B, C, Avanzado, etc):", p.divisional || "");
+        const nK = prompt("CATEGORÍA (1°, Futuros Talentos, etc):", p.categoria || "");
+        const nC = prompt("CLUB:", p.club);
+        const nG = prompt("GÉNERO (Masculino / Femenino):", p.genero || "");
+
+        if (nN) {
             try {
-                await window.parent.actualizarAsistencia(numZona, id, 'nombre', nuevoNombre);
-                alert("¡Nombre actualizado!");
-                // Recargamos el listado para ver el cambio
+                const partes = nN.split(',');
+                const ape = partes[0].trim();
+                const nom = partes[1] ? partes[1].trim() : "";
+
+                // Mandamos todas las correcciones al Padre para que impacten en Firebase
+                await window.parent.actualizarAsistencia(numZona, id, 'nombre', nom);
+                await window.parent.actualizarAsistencia(numZona, id, 'apellido', ape);
+                await window.parent.actualizarAsistencia(numZona, id, 'disciplina', nD);
+                await window.parent.actualizarAsistencia(numZona, id, 'divisional', nV);
+                await window.parent.actualizarAsistencia(numZona, id, 'categoria', nK);
+                await window.parent.actualizarAsistencia(numZona, id, 'club', nC);
+                await window.parent.actualizarAsistencia(numZona, id, 'genero', nG);
+                
+                alert("✅ Datos actualizados. El padrón se refrescará.");
                 window.mostrarListadoAltas(numZona); 
             } catch (e) {
-                alert("Error al actualizar");
+                alert("Error al guardar cambios.");
             }
         }
     }
