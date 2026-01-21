@@ -296,7 +296,7 @@ const firebaseConfig = {
   const bloqueRegistro = document.getElementById('bloqueRegistro');
   const title = document.getElementById('loginTitle');
   const db = getDatabase(app);
-
+  const storage = getStorage(app);
 
   // Abrir modo registro
   document.getElementById('linkRegistrarse').onclick = () => {
