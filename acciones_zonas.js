@@ -94,7 +94,9 @@ async function abrirFormularioCarga(numZona) {
 
 contenedor.innerHTML = `
     <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px;">
-        <h4 style="color:#ffd700;text-align:center;font-family:'Anton',sans-serif;">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+        <h4 style="color:#ffd700; text-align:center; font-family:'Anton',sans-serif; font-weight: 400; letter-spacing: 2px; font-size: 1.2rem;">
+    📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}
+</h4>
 
         <style>
             .lock-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
