@@ -315,27 +315,32 @@ window.abrirEditorPatinador = async (numZona, id) => {
     if (snapshot.exists()) {
         const p = snapshot.val()[id];
         
-        // 1. Abrimos tu formulario de carga de siempre
+        // 1. Abrimos el formulario de siempre
         if (typeof abrirFormularioCarga === 'function') {
-            abrirFormularioCarga(numZona, "1"); // Abrimos el form base
-            
-            // 2. Esperamos un milisegundo a que se dibuje y lo rellenamos
+            abrirFormularioCarga(numZona, "1"); 
+
+            // 2. Esperamos a que el HTML exista realmente en el DOM
             setTimeout(() => {
-                document.getElementById('reg-apellido').value = p.apellido || "";
-                document.getElementById('reg-nombre').value = p.nombre || "";
-                document.getElementById('reg-dni').value = p.DNI || "";
-                document.getElementById('reg-club').value = p.club || "";
-                document.getElementById('reg-disciplina').value = p.disciplina || "";
-                document.getElementById('reg-divisional').value = p.divisional || "";
-                document.getElementById('reg-categoria').value = p.categoria || "";
-                
-                // 3. Cambiamos el botón de "REGISTRAR" por uno de "ACTUALIZAR"
-                const btnOriginal = document.querySelector('.btn-registrar');
-                if(btnOriginal) {
-                    btnOriginal.innerText = "💾 GUARDAR CAMBIOS";
-                    btnOriginal.onclick = () => window.guardarEdicionPatinador(numZona, id);
+                const fApe = document.getElementById('reg-apellido');
+                if (fApe) {
+                    // Rellenamos los campos
+                    fApe.value = p.apellido || "";
+                    document.getElementById('reg-nombre').value = p.nombre || "";
+                    document.getElementById('reg-dni').value = p.DNI || "";
+                    document.getElementById('reg-club').value = p.club || "";
+                    document.getElementById('reg-disciplina').value = p.disciplina || "";
+                    document.getElementById('reg-divisional').value = p.divisional || "";
+                    document.getElementById('reg-categoria').value = p.categoria || "";
+
+                    // 3. CAMBIAMOS EL BOTÓN: De 'Registrar' a 'Guardar Cambios'
+                    const btn = document.querySelector('.btn-registrar');
+                    if (btn) {
+                        btn.innerText = "💾 GUARDAR CAMBIOS";
+                        btn.style.background = "#28a745"; // Un verde para diferenciar
+                        btn.onclick = () => window.guardarEdicionPatinador(numZona, id);
+                    }
                 }
-            }, 500);
+            }, 600); // Un pelín más de tiempo para seguridad
         }
     }
 };
