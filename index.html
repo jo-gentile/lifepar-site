@@ -200,24 +200,22 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 10px;">
-    <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
-    <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-        🖼️ ADJUNTAR DNI (Frente/Dorso)
-    </button>
+                <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
+                <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    🖼️ ADJUNTAR DNI (Frente/Dorso)
+                </button>
 
-    <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
-    <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-        ⚕️ ADJUNTAR APTO MÉDICO 2026
-    </button>
-    
-    <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
-        <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
-    </div>
-</div>
-
-        <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
-    </div>
-</div>
+                <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
+                <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    ⚕️ ADJUNTAR APTO MÉDICO 2026
+                </button>
+                
+                <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+                    <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+                </div>
+            </div>
+        </div> <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
+    </div> </div> 
 
 <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
@@ -298,6 +296,7 @@ const firebaseConfig = {
   const bloqueRegistro = document.getElementById('bloqueRegistro');
   const title = document.getElementById('loginTitle');
   const db = getDatabase(app);
+
 
   // Abrir modo registro
   document.getElementById('linkRegistrarse').onclick = () => {
