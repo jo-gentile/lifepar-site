@@ -314,55 +314,56 @@ window.abrirEditorPatinador = async (numZona, id) => {
     
     if (snapshot.exists()) {
         const p = snapshot.val()[id];
-        
         if (typeof abrirFormularioCarga === 'function') {
             abrirFormularioCarga(numZona, "1"); 
 
             const formContenedor = document.getElementById('contenedor-formulario-dinamico');
             if (formContenedor) {
-                // 1. ELIMINAMOS TRANSPARENCIA Y DAMOS PRIORIDAD
+                // SOLUCIÓN 1: Siempre arriba y visible
                 formContenedor.style.position = 'fixed';
-                formContenedor.style.top = '50%';
+                formContenedor.style.top = '10px'; // Pegado arriba para que se vea siempre
                 formContenedor.style.left = '50%';
-                formContenedor.style.transform = 'translate(-50%, -50%)';
-                formContenedor.style.zIndex = '9999';
-                formContenedor.style.background = '#111'; // Fondo sólido oscuro
-                formContenedor.style.padding = '20px';
-                formContenedor.style.borderRadius = '15px';
+                formContenedor.style.transform = 'translateX(-50%)';
+                formContenedor.style.zIndex = '10000';
+                formContenedor.style.background = '#111';
                 formContenedor.style.border = '2px solid gold';
-                formContenedor.style.boxShadow = '0 0 100px rgba(0,0,0,1)';
-                formContenedor.style.width = '90%';
-                formContenedor.style.maxWidth = '500px';
-                formContenedor.style.maxHeight = '90vh';
-                formContenedor.style.overflowY = 'auto';
+                formContenedor.style.padding = '20px';
+
+                // SOLUCIÓN 3: Agregar botón de cerrar (X)
+                const btnCerrar = document.createElement('div');
+                btnCerrar.innerHTML = '✕';
+                btnCerrar.style = 'position:absolute; top:10px; right:15px; color:white; cursor:pointer; font-size:24px; font-weight:bold;';
+                btnCerrar.onclick = () => { formContenedor.innerHTML = ''; };
+                formContenedor.appendChild(btnCerrar);
             }
 
-            // 2. RELLENAMOS LOS DATOS
+            // SOLUCIÓN 2: Rellenar y "Despertar" los menús
             setTimeout(() => {
-                console.log("📝 Rellenando formulario para:", p.nombre);
-                
-                // Buscamos los inputs dentro del formulario dinámico
                 const inputs = formContenedor.querySelectorAll('input, select');
-                
-                // Como no sabemos los IDs exactos, los llenamos por orden según tu imagen:
-                // [0] Club, [1] Disciplina, [2] Divisional, [3] Categoria, [4] Apellido, [5] Nombre, [6] DNI, [7] Género
                 if (inputs.length >= 6) {
-                    inputs[4].value = p.apellido || ""; // Apellido
-                    inputs[5].value = p.nombre || "";   // Nombre
-                    inputs[6].value = p.DNI || "";      // DNI
+                    // Llenamos los datos básicos
+                    inputs[4].value = p.apellido || "";
+                    inputs[5].value = p.nombre || "";
+                    inputs[6].value = p.DNI || "";
                     
-                    // Si los primeros son los selects:
-                    inputs[0].value = p.club || "";
+                    // Llenamos Disciplina y "disparamos" el cambio para que cargue lo demás
                     inputs[1].value = p.disciplina || "";
-                    inputs[2].value = p.divisional || "";
-                    inputs[3].value = p.categoria || "";
+                    inputs[1].dispatchEvent(new Event('change')); // <--- Esto "despierta" Divisional
+
+                    setTimeout(() => {
+                        inputs[2].value = p.divisional || "";
+                        inputs[2].dispatchEvent(new Event('change')); // <--- Esto "despierta" Categoría
+                        setTimeout(() => {
+                            inputs[3].value = p.categoria || "";
+                        }, 200);
+                    }, 200);
+
+                    inputs[0].value = p.club || "";
                 }
 
-                // 3. BOTÓN DE GUARDAR
-                const btn = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button[onclick*="registrar"]');
+                const btn = formContenedor.querySelector('.btn-registrar');
                 if (btn) {
                     btn.innerText = "💾 GUARDAR CAMBIOS";
-                    btn.style.background = "#28a745";
                     btn.onclick = (e) => {
                         e.preventDefault();
                         window.guardarEdicionPatinador(numZona, id);
