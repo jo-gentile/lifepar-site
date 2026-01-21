@@ -185,50 +185,72 @@ window.mostrarListadoAltas = async (numZona) => {
             <h3 style="color:gold; text-align:center; font-family:'Anton'; margin-bottom:20px; text-transform: uppercase;">PADRÓN ZONA ${numZona}</h3>
             <div class="grid-altas" id="grillaPatinadores">`;
 
-patinadores.forEach((p) => {
-    const esAdmin = (mailProfe === 'test@test.com');
-    const tieneAnual = p.seguroAnual === true;
-    
-    // Agregamos data-club y data-categoria para que el buscador los encuentre
-    html += `
-        <div class="card-alta" 
-             data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.DNI || ''}" 
-             data-club="${p.club.toLowerCase()}" 
-             data-categoria="${p.categoria.toLowerCase()}"
-             style="position: relative;"> <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" 
-                    style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10;">
-                📝
-            </button>
+// 1. DIBUJAMOS TODAS LAS TARJETAS
+        patinadores.forEach((p) => {
+            const esAdmin = (mailProfe === 'test@test.com');
+            const tieneAnual = p.seguroAnual === true;
+            
+            html += `
+                <div class="card-alta" 
+                     data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.DNI || ''}" 
+                     data-club="${(p.club || '').toLowerCase()}" 
+                     data-categoria="${(p.categoria || '').toLowerCase()}"
+                     style="position: relative;"> 
+                     
+                    <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" 
+                            style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10;">
+                        📝
+                    </button>
 
-            <div class="info-p">
-                <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
-                <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''}</div>
-                
-                <div style="font-size: 0.7rem; margin-top: 5px;">
-                    ${p.linkDNI ? '✅ DNI' : '❌ DNI'} | ${p.linkMedico ? '✅ MÉDICO' : '❌ MÉDICO'}
-                </div>
-            </div>
+                    <div class="info-p">
+                        <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
+                        <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''}</div>
+                        
+                        <div style="font-size: 0.7rem; margin-top: 5px;">
+                            ${p.linkDNI ? '✅ DNI' : '❌ DNI'} | ${p.linkMedico ? '✅ MÉDICO' : '❌ MÉDICO'}
+                        </div>
+                    </div>
 
-            <div class="seccion-t">Seguros</div>
-            <div class="fila-btns">
-                <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
-                <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
-            </div>
-            <div class="seccion-t">Asistencias</div>
-            <div class="fila-btns">
-                <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
-                <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
-                <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
-            </div>
-        </div>`;
-});
+                    <div class="seccion-t">Seguros</div>
+                    <div class="fila-btns">
+                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
+                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
+                    </div>
+                    <div class="seccion-t">Asistencias</div>
+                    <div class="fila-btns">
+                        <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
+                        <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
+                        <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
+                    </div>
+                </div>`;
+        });
 
+        // 2. CERRAMOS LOS DIVS Y METEMOS EL HTML AL CONTENEDOR
         html += `</div>
-            <button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="margin-top:30px; width:100%; background:gold; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:10px; color:black; font-family:Quicksand; font-size:1.1rem;">CERRAR PADRÓN</button>
-        </div>`;
+                 <button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="margin-top:30px; width:100%; background:gold; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:10px; color:black; font-family:Quicksand; font-size:1.1rem;">CERRAR PADRÓN</button>
+                 </div>`;
+        
         contenedor.innerHTML = html;
+
+        // 3. LLENAMOS LOS FILTROS (Solo una vez al final)
+        const selectClub = document.getElementById('filtroClub');
+        const selectCat = document.getElementById('filtroCategoria');
+        
+        // Resetamos por si ya tenían opciones de antes
+        selectClub.innerHTML = '<option value="">Todos los Clubes</option>';
+        selectCat.innerHTML = '<option value="">Todas las Categorías</option>';
+
+        const clubesUnicos = [...new Set(patinadores.map(p => p.club).filter(Boolean))].sort();
+        const catsUnicas = [...new Set(patinadores.map(p => p.categoria).filter(Boolean))].sort();
+
+        clubesUnicos.forEach(c => {
+            selectClub.innerHTML += `<option value="${c.toLowerCase()}">${c.toUpperCase()}</option>`;
+        });
+        catsUnicas.forEach(c => {
+            selectCat.innerHTML += `<option value="${c.toLowerCase()}">${c.toUpperCase()}</option>`;
+        });
+
     } catch (e) { console.error(e); }
-};
 
 window.filtrarTarjetas = () => {
     const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase();
@@ -277,18 +299,25 @@ window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
     }
 };
 window.abrirEditorPatinador = async (numZona, id) => {
-    const dbRef = ref(db, `ZONAS/ZONA_${numZona}/${id}`);
-    const snapshot = await get(dbRef);
+    // En lugar de usar 'ref' que acá no existe, le pedimos al Padre los datos
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
     
     if (snapshot.exists()) {
-        const p = snapshot.val();
-        // Acá mañana crearemos el cartelito (Modal) con los inputs 
-        // para que el profe cambie el nombre, club o categoría.
+        const patinadores = snapshot.val();
+        const p = patinadores[id];
+        
         const nuevoNombre = prompt("Editar Nombre:", p.nombre);
         if (nuevoNombre) {
-            await update(dbRef, { nombre: nuevoNombre });
-            alert("¡Nombre actualizado!");
-            location.reload(); // Para que se vea el cambio
+            // Usamos la función que el Padre ya tiene para guardar
+            try {
+                await window.parent.actualizarAsistencia(numZona, id, 'nombre', nuevoNombre);
+                alert("¡Nombre actualizado!");
+                // Recargamos el listado para ver el cambio
+                window.mostrarListadoAltas(numZona); 
+            } catch (e) {
+                alert("Error al actualizar");
+            }
         }
     }
 };
