@@ -456,14 +456,18 @@ window.verificarDniPadre = async () => {
     const dbRef = ref(db);
     try {
         // Recorremos las zonas (ajustá según cuántas tengas, del 1 al 6)
-        for (let i = 1; i <= 6; i++) {
+for (let i = 1; i <= 6; i++) {
             const snapshot = await get(child(dbRef, `zona${i}`));
             if (snapshot.exists()) {
-                const patinadores = snapshot.val();
-                // Buscamos dentro de la zona si algún patinador tiene ese DNI
-                for (let id in patinadores) {
-                    if (String(patinadores[id].DNI).trim() === String(dniBusqueda).trim()) {
-                        patinadorSesionPadre = { ...patinadores[id], id, zona: i };
+                const dataZonales = snapshot.val();
+                
+                // Recorremos cada ID aleatorio de la zona (-OjS...)
+                for (let clavePrincipal in dataZonales) {
+                    let registro = dataZonales[clavePrincipal];
+                    
+                    // Verificamos si el DNI coincide (asegurando que ambos sean texto)
+                    if (registro.DNI && String(registro.DNI).trim() === String(dniBusqueda).trim()) {
+                        patinadorSesionPadre = { ...registro, id: clavePrincipal, zona: i };
                         break;
                     }
                 }
