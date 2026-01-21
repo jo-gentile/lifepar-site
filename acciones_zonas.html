@@ -308,7 +308,7 @@ window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
         alert("Error al guardar"); 
     }
 };
-wwindow.abrirEditorPatinador = async (numZona, id) => {
+window.abrirEditorPatinador = async (numZona, id) => {
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
     
