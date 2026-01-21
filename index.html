@@ -450,31 +450,29 @@ let patinadorSesionPadre = null;
 
 // PASO 1: Verificar el DNI en todas las zonas
 window.verificarDniPadre = async () => {
-    const dniBusqueda = document.getElementById('dni-validacion').value;
+    const dniBusqueda = document.getElementById('dni-validacion').value.trim();
     if (!dniBusqueda) return alert("Por favor, ingresá un DNI.");
 
-    // Referencia a tu base de datos
     const dbRef = ref(db);
-    
-    // Reiniciamos el patinador de la sesión
     patinadorSesionPadre = null;
 
     try {
-        // Recorremos las zonas del 1 al 6
+        // Buscamos dentro de la carpeta 'ZONAS' que figura en tus reglas
         for (let i = 1; i <= 6; i++) {
-            // AQUÍ es donde el código consulta a Firebase
-            const snapshot = await get(child(dbRef, `zona${i}`));
+            const rutaReal = `ZONAS/ZONA_${i}`; // Ruta exacta según tus reglas
+            const snapshot = await get(child(dbRef, rutaReal));
             
             if (snapshot.exists()) {
                 const dataZonales = snapshot.val();
                 
-                // Entramos a los IDs aleatorios (como el -OjS... de tu foto)
-                for (let clavePrincipal in dataZonales) {
-                    let registro = dataZonales[clavePrincipal];
-                    
-                    // COMPARACIÓN CLAVE: Usamos 'DNI' tal cual figura en tu captura
-                    if (registro.DNI && String(registro.DNI).trim() === String(dniBusqueda).trim()) {
-                        patinadorSesionPadre = { ...registro, id: clavePrincipal, zona: i };
+                for (let id in dataZonales) {
+                    let registro = dataZonales[id];
+                    // Comparamos el DNI (limpiando puntos o espacios)
+                    const dniLimpioBase = String(registro.DNI || "").replace(/\D/g, "");
+                    const dniLimpioBusqueda = String(dniBusqueda).replace(/\D/g, "");
+
+                    if (dniLimpioBase === dniLimpioBusqueda) {
+                        patinadorSesionPadre = { ...registro, id: id, zona: rutaReal };
                         break;
                     }
                 }
@@ -483,15 +481,14 @@ window.verificarDniPadre = async () => {
         }
 
         if (patinadorSesionPadre) {
-            // Si lo encuentra, pasamos al siguiente paso
             document.getElementById('paso-dni').style.display = 'none';
             document.getElementById('paso-fecha').style.display = 'block';
         } else {
-            alert("DNI no encontrado en el padrón de LIFEPAR.");
+            alert("DNI no encontrado en el padrón oficial.");
         }
     } catch (e) {
-        console.error("Error en la llamada a Firebase:", e);
-        alert("Error de conexión: " + e.message);
+        console.error("Error de Firebase:", e);
+        alert("Error de conexión con la base de datos.");
     }
 };
 
