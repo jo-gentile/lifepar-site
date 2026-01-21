@@ -276,6 +276,22 @@ window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
         alert("Error al guardar"); 
     }
 };
+window.abrirEditorPatinador = async (numZona, id) => {
+    const dbRef = ref(db, `ZONAS/ZONA_${numZona}/${id}`);
+    const snapshot = await get(dbRef);
+    
+    if (snapshot.exists()) {
+        const p = snapshot.val();
+        // Acá mañana crearemos el cartelito (Modal) con los inputs 
+        // para que el profe cambie el nombre, club o categoría.
+        const nuevoNombre = prompt("Editar Nombre:", p.nombre);
+        if (nuevoNombre) {
+            await update(dbRef, { nombre: nuevoNombre });
+            alert("¡Nombre actualizado!");
+            location.reload(); // Para que se vea el cambio
+        }
+    }
+};
 </script>
 </body>
 </html>
