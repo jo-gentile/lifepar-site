@@ -528,27 +528,32 @@ window.subirArchivo = async (tipo) => {
 
     barra.style.display = 'block';
 
-    uploadTask.on('state_changed', 
-        (snapshot) => {
-            const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            progreso.style.width = porcentaje + '%';
-        }, 
-        (error) => alert("Error al subir: " + error.message), 
-        async () => {
-            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-            
-            // ACTUALIZAMOS FIREBASE DATABASE CON EL LINK
-            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-            const actualizaciones = {};
-            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
-            
-            await update(dbRef, actualizaciones);
-            
-            alert("¡Archivo subido y vinculado con éxito!");
-            barra.style.display = 'none';
-            progreso.style.width = '0%';
-        }
-    );
+    uuploadTask.on('state_changed', 
+            (snapshot) => {
+                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                progreso.style.width = porcentaje + '%';
+                console.log("Progreso: " + porcentaje + "%");
+            }, 
+            (error) => {
+                console.error("Error al subir:", error);
+                alert("Error al subir: " + error.message);
+            }, 
+            async () => {
+                const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+                
+                // Buscamos la ruta exacta para guardar el link en la Database
+                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+                const actualizaciones = {};
+                actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
+                
+                await update(dbRef, actualizaciones);
+                
+                // ESTO ES LO QUE TE FALTA: El aviso de éxito
+                alert("✅ ¡" + tipo.toUpperCase() + " cargado con éxito! Ya podés ver el siguiente.");
+                barra.style.display = 'none';
+                progreso.style.width = '0%';
+            }
+        );
 };
 </script>
 <script src="script.js"></script> 
