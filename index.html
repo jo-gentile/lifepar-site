@@ -453,19 +453,26 @@ window.verificarDniPadre = async () => {
     const dniBusqueda = document.getElementById('dni-validacion').value;
     if (!dniBusqueda) return alert("Por favor, ingresá un DNI.");
 
+    // Referencia a tu base de datos
     const dbRef = ref(db);
+    
+    // Reiniciamos el patinador de la sesión
+    patinadorSesionPadre = null;
+
     try {
-        // Recorremos las zonas (ajustá según cuántas tengas, del 1 al 6)
-for (let i = 1; i <= 6; i++) {
+        // Recorremos las zonas del 1 al 6
+        for (let i = 1; i <= 6; i++) {
+            // AQUÍ es donde el código consulta a Firebase
             const snapshot = await get(child(dbRef, `zona${i}`));
+            
             if (snapshot.exists()) {
                 const dataZonales = snapshot.val();
                 
-                // Recorremos cada ID aleatorio de la zona (-OjS...)
+                // Entramos a los IDs aleatorios (como el -OjS... de tu foto)
                 for (let clavePrincipal in dataZonales) {
                     let registro = dataZonales[clavePrincipal];
                     
-                    // Verificamos si el DNI coincide (asegurando que ambos sean texto)
+                    // COMPARACIÓN CLAVE: Usamos 'DNI' tal cual figura en tu captura
                     if (registro.DNI && String(registro.DNI).trim() === String(dniBusqueda).trim()) {
                         patinadorSesionPadre = { ...registro, id: clavePrincipal, zona: i };
                         break;
@@ -476,13 +483,15 @@ for (let i = 1; i <= 6; i++) {
         }
 
         if (patinadorSesionPadre) {
+            // Si lo encuentra, pasamos al siguiente paso
             document.getElementById('paso-dni').style.display = 'none';
             document.getElementById('paso-fecha').style.display = 'block';
         } else {
-            alert("DNI no encontrado en el padrón de LIFEPAR. Contacte a su entrenador.");
+            alert("DNI no encontrado en el padrón de LIFEPAR.");
         }
-      } catch (e) {
-        alert("Error al buscar: " + e.message);
+    } catch (e) {
+        console.error("Error en la llamada a Firebase:", e);
+        alert("Error de conexión: " + e.message);
     }
 };
 
