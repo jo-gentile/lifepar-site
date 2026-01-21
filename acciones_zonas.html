@@ -254,32 +254,31 @@ window.mostrarListadoAltas = async (numZona) => {
 };
 
 window.filtrarTarjetas = () => {
-    // 1. Capturamos lo que el profe eligió arriba
     const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase().trim();
     const club = document.getElementById('filtroClub').value.toLowerCase().trim();
     const cat = document.getElementById('filtroCategoria').value.toLowerCase().trim();
     
-    console.log("📢 Buscando:", busqueda, "| Club:", club, "| Cat:", cat);
+    // TESTIGO: Para ver qué capturó el jefe
+    console.log("📢 Jefe gritando: ", {busqueda, club, cat});
 
-    // 2. Escaneamos todas las tarjetas
     const tarjetas = document.querySelectorAll('.card-alta');
     
     tarjetas.forEach(t => {
-        // Leemos las etiquetas invisibles de la tarjeta
+        // 1. La tarjeta lee sus propios "cartelitos"
         const tBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
         const tClub = (t.getAttribute('data-club') || "").toLowerCase();
         const tCat = (t.getAttribute('data-categoria') || "").toLowerCase();
         
-        // Comparamos lógica: ¿Coincide con lo que pidió el profe?
+        // 2. Comparamos lógica
         const coincideTexto = busqueda === "" || tBusqueda.includes(busqueda);
         const coincideClub = club === "" || tClub === club;
         const coincideCat = cat === "" || tCat.includes(cat);
 
-        // 3. LA ACCIÓN: Si cumple todo, se queda. Si no, desaparece.
+        // 3. LA ORDEN (Esto es lo que las hace 'escuchar')
         if (coincideTexto && coincideClub && coincideCat) {
-            t.style.display = 'flex';
+            t.style.setProperty('display', 'flex', 'important'); // Se muestra
         } else {
-            t.style.display = 'none';
+            t.style.setProperty('display', 'none', 'important'); // Se esconde
         }
     });
 };
