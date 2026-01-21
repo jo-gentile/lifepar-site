@@ -318,33 +318,44 @@ window.abrirEditorPatinador = async (numZona, id) => {
             abrirFormularioCarga(numZona, "1"); 
 
             const formContenedor = document.getElementById('contenedor-formulario-dinamico');
+            
+            // --- FUERZA BRUTA PARA QUE ESTÉ ADELANTE ---
+            if (formContenedor) {
+                formContenedor.style.position = 'fixed';
+                formContenedor.style.top = '50%';
+                formContenedor.style.left = '50%';
+                formContenedor.style.transform = 'translate(-50%, -50%)';
+                formContenedor.style.zIndex = '10001'; // Le gana a los 5000 de las tarjetas
+                formContenedor.style.background = '#111';
+                formContenedor.style.border = '2px solid gold';
+                formContenedor.style.padding = '20px';
+                formContenedor.style.display = 'block';
 
-            // --- LA X DE CIERRE (FORZADA AL FRENTE) ---
-            let btnX = document.getElementById('btn-cerrar-flotante');
-            if(!btnX){
-                btnX = document.createElement('div');
-                btnX.id = 'btn-cerrar-flotante';
-                btnX.innerHTML = '✕';
-                // La ponemos fija para que no la tape nada
-                btnX.style = 'position:fixed; top:25px; right:25px; color:gold; cursor:pointer; font-size:40px; font-weight:bold; z-index:99999; text-shadow: 2px 2px 10px black;';
-                btnX.onclick = () => { 
-                    formContenedor.innerHTML = ''; 
-                    btnX.remove(); 
-                };
-                document.body.appendChild(btnX);
+                // BOTÓN CERRAR X (Dentro del contenedor para no perder el foco)
+                let btnX = document.getElementById('btn-cerrar-editor-pro');
+                if(!btnX){
+                    btnX = document.createElement('div');
+                    btnX.id = 'btn-cerrar-editor-pro';
+                    btnX.innerHTML = '✕';
+                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10002;';
+                    btnX.onclick = () => { formContenedor.innerHTML = ''; };
+                    formContenedor.style.position = 'relative'; // Para que la X se ubique respecto al cuadro
+                    formContenedor.appendChild(btnX);
+                }
             }
 
             setTimeout(() => {
-                // --- CAMBIO DE TÍTULO (Punto 1: Buscando el h4 que encontraste) ---
+                // CAMBIO DE TÍTULO (Usando el h4 que encontraste)
                 const tituloH4 = formContenedor.querySelector('h4');
                 if(tituloH4) {
-                    tituloH4.innerHTML = `📝 EDITANDO A: <span style="color:white; font-family:Quicksand;">${p.apellido}, ${p.nombre}</span>`;
+                    tituloH4.innerHTML = `📝 EDITANDO A: <span style="color:white;">${p.apellido}, ${p.nombre}</span>`;
                 }
 
-                // --- ELIMINAR BOTÓN CARGAR (Lo que ya funcionaba) ---
+                // ELIMINAR BOTÓN CARGAR (El que encontraste por el onclick)
                 const btnCargaMaldito = formContenedor.querySelector('button[onclick*="enviarCargaPatinador"]');
                 if (btnCargaMaldito) btnCargaMaldito.remove(); 
 
+                // RELLENADO DE DATOS
                 const inputs = formContenedor.querySelectorAll('input, select');
                 if (inputs.length >= 6) {
                     inputs[4].value = p.apellido || "";
@@ -366,14 +377,13 @@ window.abrirEditorPatinador = async (numZona, id) => {
                     inputs[0].value = p.club || "";
                 }
 
-                // --- NUESTRO BOTÓN VERDE ---
+                // NUESTRO BOTÓN VERDE DE ACTUALIZAR
                 const btnSave = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button');
                 if (btnSave) {
                     btnSave.innerText = "💾 ACTUALIZAR DATOS"; 
                     btnSave.style.background = "linear-gradient(to right, #28a745, #1e7e34)"; 
                     btnSave.onclick = (e) => {
                         e.preventDefault(); 
-                        if(btnX) btnX.remove(); // Borramos la X al guardar
                         window.guardarEdicionPatinador(numZona, id); 
                     };
                 }
