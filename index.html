@@ -299,9 +299,6 @@ const firebaseConfig = {
   const title = document.getElementById('loginTitle');
   const db = getDatabase(app);
 
-  window.mostrarLogin = () => { loginForm.style.display = 'block'; };
-  document.getElementById('btnCerrarLogin').onclick = () => { loginForm.style.display = 'none'; };
-
   // Abrir modo registro
   document.getElementById('linkRegistrarse').onclick = () => {
     bloqueLogin.style.display = 'none';
