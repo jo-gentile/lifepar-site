@@ -49,6 +49,36 @@
     </div>
 </div>
 
+    <div id="contenedor-clinicas" style="display: none;" class="seccion-formulario">
+    <h2 id="titulo-clinica">Inscripción a Clínica</h2>
+    
+    <div class="campo-grupo">
+        <label>Seleccionar Club:</label>
+        <select id="select-club-clinica">
+            <option value="">-- Seleccione su club --</option>
+            </select>
+    </div>
+
+    <div class="tabla-excel-container" style="overflow-x: auto; margin-top: 20px;">
+        <table id="tabla-inscripcion" style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f4f4f4;">
+                    <th style="border: 1px solid #ccc; padding: 8px;">N°</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Nombre y Apellido</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Categoría</th>
+                    <th style="border: 1px solid #ccc; padding: 8px;">Edad</th>
+                </tr>
+            </thead>
+            <tbody id="body-tabla-clinica">
+                </tbody>
+        </table>
+    </div>
+
+    <button class="btn-enviar" onclick="enviarInscripcionClinica()" style="margin-top: 20px;">
+        ENVIAR INSCRIPCIÓN
+    </button>
+</div>
+
 <script src="acciones_zonas.js?v=1.2"></script>
 
  <script>
@@ -426,6 +456,71 @@ window.guardarEdicionPatinador = async (numZona, id) => {
         alert("No se pudo actualizar.");
     }
 };
+
+// --- SECCIÓN: CLÍNICAS ---
+let clinicaActiva = ""; 
+
+function cargarZona(idClinica) {
+    document.getElementById('contenedor-clinicas').style.display = 'block';
+    clinicaActiva = idClinica;
+    
+    document.getElementById('titulo-clinica').innerText = "Inscripción: " + idClinica.toUpperCase().replace('-', ' ');
+
+    // Llamamos a tu función de clubes (ajustá el nombre si es necesario)
+    // Le pasamos el ID del select de clínicas
+    cargarClubes('select-club-clinica'); 
+
+    const tbody = document.getElementById('body-tabla-clinica');
+    tbody.innerHTML = ""; 
+    
+    for (let i = 1; i <= 20; i++) {
+        tbody.innerHTML += `
+            <tr>
+                <td style="border: 1px solid #ccc; text-align: center;">${i}</td>
+                <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla nombre" style="width: 100%; border: none; padding: 5px;"></td>
+                <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla categoria" style="width: 100%; border: none; padding: 5px;"></td>
+                <td style="border: 1px solid #ccc;"><input type="number" class="input-tabla edad" style="width: 100%; border: none; padding: 5px;"></td>
+            </tr>
+        `;
+    }
+}
+
+async function enviarInscripcionClinica() {
+    const club = document.getElementById('select-club-clinica').value;
+    if (!club) return alert("Por favor seleccioná un club");
+
+    const filas = document.querySelectorAll('#body-tabla-clinica tr');
+    let inscriptos = [];
+
+    filas.forEach(fila => {
+        const nombre = fila.querySelector('.nombre').value.trim();
+        const cat = fila.querySelector('.categoria').value.trim();
+        const edad = fila.querySelector('.edad').value.trim();
+
+        if (nombre !== "") {
+            inscriptos.push({ nombre, cat, edad });
+        }
+    });
+
+    if (inscriptos.length === 0) return alert("No hay datos para enviar");
+
+    const db = getDatabase();
+    // IMPORTANTE: Usamos set() o update() según prefieras. 
+    // Con update() pisamos la inscripción anterior de ese mismo club para esa zona.
+    const nuevaRef = ref(db, `inscripciones_clinicas/${clinicaActiva}/${club}`);
+    
+    try {
+        await update(nuevaRef, {
+            lista: inscriptos,
+            fechaRegistro: new Date().toLocaleString()
+        });
+        alert("¡Inscripción de " + club + " enviada con éxito!");
+        document.getElementById('contenedor-clinicas').style.display = 'none';
+    } catch (error) {
+        console.error(error);
+        alert("Error al guardar en Firebase");
+    }
+}
 </script>
 </body>
 </html>
