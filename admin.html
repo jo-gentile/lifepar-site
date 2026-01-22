@@ -29,31 +29,31 @@
       </div>
     </div>
 
-    <div class="menu-item">
-    <button class="menu-btn" onclick="toggleSubmenu('submenu-clinicas')">
+<div class="menu-item">
+    <button class="menu-btn" onclick="toggleArbol('submenu-clinicas')">
         <i class="fas fa-skating"></i> INSCRIPCIÓN CLÍNICAS
     </button>
-    <div id="submenu-clinicas" class="submenu" style="display: none;">
+    <div id="submenu-clinicas" class="submenu-lista" style="display: none;">
         
         <div class="menu-item-nested">
-            <button class="menu-btn-nested" onclick="toggleSubmenu('clinicas-feb')">
+            <button class="menu-btn-nested" onclick="toggleArbol('clinicas-feb')">
                 CLÍNICAS FEBRERO
             </button>
-            <div id="clinicas-feb" class="submenu-inner" style="display: none; padding-left: 20px;">
-                <button class="submenu-item" onclick="cargarZona('feb-1-3')">ZONA 1 Y 3</button>
-                <button class="submenu-item" onclick="cargarZona('feb-2-4')">ZONA 2 Y 4</button>
-                <button class="submenu-item" onclick="cargarZona('feb-5-6')">ZONA 5 Y 6</button>
+            <div id="clinicas-feb" class="submenu-lista" style="display: none; padding-left: 20px;">
+                <a href="javascript:void(0)" onclick="cargarZona('feb-1-3')">ZONA 1 Y 3</a>
+                <a href="javascript:void(0)" onclick="cargarZona('feb-2-4')">ZONA 2 Y 4</a>
+                <a href="javascript:void(0)" onclick="cargarZona('feb-5-6')">ZONA 5 Y 6</a>
             </div>
         </div>
 
         <div class="menu-item-nested">
-            <button class="menu-btn-nested" onclick="toggleSubmenu('clinicas-mar')">
+            <button class="menu-btn-nested" onclick="toggleArbol('clinicas-mar')">
                 CLÍNICAS MARZO
             </button>
-            <div id="clinicas-mar" class="submenu-inner" style="display: none; padding-left: 20px;">
-                <button class="submenu-item" onclick="cargarZona('mar-1-3')">ZONA 1 Y 3</button>
-                <button class="submenu-item" onclick="cargarZona('mar-2-4')">ZONA 2 Y 4</button>
-                <button class="submenu-item" onclick="cargarZona('mar-5-6')">ZONA 5 Y 6</button>
+            <div id="clinicas-mar" class="submenu-lista" style="display: none; padding-left: 20px;">
+                <a href="javascript:void(0)" onclick="cargarZona('mar-1-3')">ZONA 1 Y 3</a>
+                <a href="javascript:void(0)" onclick="cargarZona('mar-2-4')">ZONA 2 Y 4</a>
+                <a href="javascript:void(0)" onclick="cargarZona('mar-5-6')">ZONA 5 Y 6</a>
             </div>
         </div>
 
