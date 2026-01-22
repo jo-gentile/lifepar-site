@@ -253,24 +253,6 @@ window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscript
         throw error;
     }
 };
-// EL PADRE LE ORDENA AL HIJO MOSTRAR EL FORMULARIO DE CLÍNICAS
-// EL PADRE DISPARA LA FUNCIÓN QUE YA VIVE EN EL MISMO DOM
-window.cargarZona = (idClinica) => {
-    console.log("Activando clínica:", idClinica);
-    
-    const contenedor = document.getElementById('contenedor-acciones-zonas');
-    if (contenedor) {
-        contenedor.style.display = 'block';
-        
-        // Al estar todo en la misma página, la función ya debería estar disponible
-        if (typeof window.cargarZona === 'function') {
-            // Se usa un pequeño retraso si el HTML recién se inyectó
-            setTimeout(() => window.cargarZona(idClinica), 50);
-        } else {
-            console.warn("La función cargarZona aún no está cargada en el DOM");
-        }
-    }
-};
 
 // Cambiamos el nombre a 'activarSeccionClinica' para romper el bucle
 window.activarSeccionClinica = (idClinica) => {
