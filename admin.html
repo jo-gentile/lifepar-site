@@ -255,25 +255,19 @@ window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscript
 };
 // EL PADRE LE ORDENA AL HIJO MOSTRAR EL FORMULARIO DE CLÍNICAS
 window.cargarZona = (idClinica) => {
-    // 1. Mostramos el contenedor donde vive el formulario (o el iframe)
-    const contenedor = document.getElementById('contenedor-acciones-zonas');
-    if (contenedor) {
-        contenedor.style.display = 'block';
-    }
-
-    // 2. Buscamos el elemento que contiene las funciones del hijo
-    // Si usás iframe, el ID debe ser el que definiste (ej: 'iframe-contenido')
-    const frame = document.getElementById('iframe-contenido'); 
+    console.log("Intentando cargar clínica:", idClinica); // Esto debe aparecer en consola al hacer click
     
-    if (frame && frame.contentWindow && typeof frame.contentWindow.cargarZona === 'function') {
-        // Ejecutamos la función cargarZona que ya vive adentro del hijo
+    const contenedor = document.getElementById('contenedor-acciones-zonas');
+    if (!contenedor) return console.error("No se encontró el contenedor-acciones-zonas");
+
+    contenedor.style.display = 'block';
+
+    const frame = document.getElementById('iframe-contenido'); 
+    if (frame && frame.contentWindow) {
+        console.log("Iframe encontrado, enviando ID...");
         frame.contentWindow.cargarZona(idClinica);
     } else {
-        // Si no hay iframe y todo está en la misma página, la llama directo
-        if (typeof window.cargarZona === 'function') {
-            // Nota: Aquí evitamos un bucle infinito si la función se llama igual
-            // Solo se usa si el hijo está integrado físicamente en el mismo JS
-        }
+        console.warn("No se encontró el iframe o no tiene acceso");
     }
 };
 </script>
