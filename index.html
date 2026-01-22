@@ -516,44 +516,68 @@ window.subirArchivo = async (tipo) => {
     const archivo = input.files[0];
     if (!archivo) return;
 
+    // Referencias a los elementos de tu código base
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
+    const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
     
-    // El nombre del archivo será: DNI_numero_nombre.ext
+    // 1, 2 y 5. Preparar la barra y el estado visual
+    barra.style.display = 'block';
+    progreso.style.backgroundColor = '#3498db'; // Azul mientras carga
+    
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
     
     const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
-    barra.style.display = 'block';
-
     uploadTask.on('state_changed', 
-            (snapshot) => {
-                const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                progreso.style.width = porcentaje + '%';
-                console.log("Progreso: " + porcentaje + "%");
-            }, 
-            (error) => {
-                console.error("Error al subir:", error);
-                alert("Error al subir: " + error.message);
-            }, 
-            async () => {
-                const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-                
-                // Buscamos la ruta exacta para guardar el link en la Database
-                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-                const actualizaciones = {};
-                actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
-                
+        (snapshot) => {
+            const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progreso.style.width = porcentaje + '%';
+            // 4. Podés usar el console para ver el nombre mientras sube
+            console.log("Subiendo: " + nombreFinal + " (" + porcentaje.toFixed(0) + "%)");
+        }, 
+        (error) => {
+            console.error("Error al subir:", error);
+            // 5. Feedback de error en la barra
+            progreso.style.backgroundColor = '#e74c3c'; // Rojo error
+            alert("Error al subir: " + error.message);
+        }, 
+        async () => {
+            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+            
+            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+            const actualizaciones = {};
+            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
+            
+            // CORRECCIÓN DEL ERROR: Usamos 'update' correctamente de la Database
+            try {
+                // Importante: asegurate que 'update' esté importado de firebase/database
                 await update(dbRef, actualizaciones);
                 
-                // ESTO ES LO QUE TE FALTA: El aviso de éxito
-                alert("✅ ¡" + tipo.toUpperCase() + " cargado con éxito! Ya podés ver el siguiente.");
-                barra.style.display = 'none';
-                progreso.style.width = '0%';
+                // 1 y 5. Éxito: Barra verde total
+                progreso.style.width = '100%';
+                progreso.style.backgroundColor = '#28a745'; // Verde éxito
+                
+                // 3. Bloquear el botón para evitar re-subidas
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.innerText = "CARGADO ✅";
+
+                // 5. El tilde verde que pediste (usando un delay para que se vea el proceso)
+                setTimeout(() => {
+                    alert("✅ " + tipo.toUpperCase() + " recibido en Cloud correctamente.");
+                    // Si querés que la barra desaparezca:
+                    // barra.style.display = 'none';
+                }, 500);
+
+            } catch (err) {
+                console.error("Error en DB:", err);
+                progreso.style.backgroundColor = '#e74c3c';
             }
-        );
+        }
+    );
 };
 </script>
 <script src="script.js"></script> 

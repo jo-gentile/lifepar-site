@@ -555,48 +555,38 @@ input, textarea {
         gap: 20px !important;
     }
 }
-/* Contenedor flotante por archivo */
-.estado-flotante {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 5px 10px;
-    margin: 5px 0;
-    background: rgba(0,0,0,0.05);
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    font-family: sans-serif;
-    font-size: 14px;
-}
-
-/* Nombre del archivo */
-.nombre-archivo {
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Spinner animado */
-.spinner {
-    display: inline-block;
-    width: 18px;
-    height: 18px;
-    border: 3px solid #ccc;
-    border-top-color: #007bff;
+/* Contenedor principal de la barra (ahora es el círculo) */
+#barra-progreso {
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
-    animation: girar 1s linear infinite;
+    border: 4px solid #f3f3f3;
+    position: relative;
+    display: none; /* Se activa en JS */
+    margin: 10px auto;
+    overflow: hidden;
 }
 
-@keyframes girar {
-    to { transform: rotate(360deg); }
-}
-
-/* Icono de estado fijo al tamaño del spinner */
-.icono-estado {
-    width: 18px;
-    height: 18px;
+/* El progreso interno que llena el círculo */
+#progreso-interno {
+    width: 0%;
+    height: 100%;
+    background-color: #3498db;
+    transition: width 0.3s, background-color 0.3s;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* Animación de rotación mientras carga (opcional) */
+.cargando-anim {
+    animation: girar 2s linear infinite;
+}
+
+@keyframes girar {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
