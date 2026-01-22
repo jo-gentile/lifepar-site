@@ -262,6 +262,27 @@
         alert("¡Enviado con éxito!");
     } catch (e) { alert("Error al guardar."); }
   };
+  window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscriptos) => {
+    try {
+        const { ref, set } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+        
+        // Reemplazamos puntos por guiones bajos para evitar errores de ruta
+        const nombreClubLimpio = club.replace(/\./g, '_');
+        
+        // RUTA: INSCRIPCIONES_CLINICAS / feb-1-3 / Nombre_Del_Club
+        const clinicaRef = ref(db, `INSCRIPCIONES_CLINICAS/${idClinica}/${nombreClubLimpio}`);
+        
+        return await set(clinicaRef, {
+            lista: listaInscriptos,
+            fecha_registro: new Date().toLocaleString(),
+            ultimo_cambio: new Date().toISOString(),
+            id_clinica: idClinica,
+            club: club
+        });
+    } catch (error) {
+        throw error;
+    }
+};
 
   // Exponemos la función al objeto window para que el iframe la vea
   window.registrarClubEnFirebase = async (emailKey, clubKey) => {
