@@ -516,15 +516,31 @@ window.subirArchivo = async (tipo) => {
     const archivo = input.files[0];
     if (!archivo) return;
 
-    // Referencias a los elementos de tu código base
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
     const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
     
-    // 1, 2 y 5. Preparar la barra y el estado visual
-    barra.style.display = 'block';
-    progreso.style.backgroundColor = '#3498db'; // Azul mientras carga
+    // 4. Mostrar nombre y miniatura inmediatamente
+    // Buscamos un div para mostrar la info, si no existe lo ignoramos
+    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
     
+    // Preparar miniatura
+    if (archivo.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
+        };
+        reader.readAsDataURL(archivo);
+    } else {
+        infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
+    }
+
+    // 1 y 5. Iniciar Círculo
+    barra.style.display = 'block';
+    progreso.style.width = '0%';
+    progreso.style.backgroundColor = '#3498db';
+    progreso.innerHTML = "";
+
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
     
@@ -533,48 +549,38 @@ window.subirArchivo = async (tipo) => {
 
     uploadTask.on('state_changed', 
         (snapshot) => {
-            const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            progreso.style.width = porcentaje + '%';
-            // 4. Podés usar el console para ver el nombre mientras sube
-            console.log("Subiendo: " + nombreFinal + " (" + porcentaje.toFixed(0) + "%)");
+            const porc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            progreso.style.width = porc + '%';
         }, 
         (error) => {
+            // Error visual
+            progreso.style.backgroundColor = '#e74c3c';
+            progreso.innerHTML = "✕";
             console.error("Error al subir:", error);
-            // 5. Feedback de error en la barra
-            progreso.style.backgroundColor = '#e74c3c'; // Rojo error
-            alert("Error al subir: " + error.message);
         }, 
         async () => {
-            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-            
-            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-            const actualizaciones = {};
-            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
-            
-            // CORRECCIÓN DEL ERROR: Usamos 'update' correctamente de la Database
             try {
-                // Importante: asegurate que 'update' esté importado de firebase/database
-                await update(dbRef, actualizaciones);
+                const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
                 
-                // 1 y 5. Éxito: Barra verde total
-                progreso.style.width = '100%';
-                progreso.style.backgroundColor = '#28a745'; // Verde éxito
-                
-                // 3. Bloquear el botón para evitar re-subidas
-                btn.disabled = true;
-                btn.style.opacity = '0.5';
-                btn.innerText = "CARGADO ✅";
+                // 3. Actualizar base de datos
+                await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // 5. El tilde verde que pediste (usando un delay para que se vea el proceso)
-                setTimeout(() => {
-                    alert("✅ " + tipo.toUpperCase() + " recibido en Cloud correctamente.");
-                    // Si querés que la barra desaparezca:
-                    // barra.style.display = 'none';
-                }, 500);
+                // 5. Éxito total: Círculo verde y tilde
+                progreso.style.width = '100%';
+                progreso.style.backgroundColor = '#28a745';
+                progreso.innerHTML = "✓";
+
+                // 3. Bloquear botón
+                btn.disabled = true;
+                btn.style.backgroundColor = "#28a745";
+                btn.style.color = "white";
+                btn.innerText = "CARGADO EN NUBE";
 
             } catch (err) {
-                console.error("Error en DB:", err);
+                console.error("Error final:", err);
                 progreso.style.backgroundColor = '#e74c3c';
+                progreso.innerHTML = "✕";
             }
         }
     );
