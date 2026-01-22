@@ -199,23 +199,44 @@
                 <p id="detalle-hijo" style="font-size: 0.8rem; margin: 5px 0;"></p>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 10px;">
-                <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
-                <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    🖼️ ADJUNTAR DNI (Frente/Dorso)
-                </button>
+            <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px;">
 
-                <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
-                <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    ⚕️ ADJUNTAR APTO MÉDICO 2026
-                </button>
-                
-                <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
-                    <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
-                </div>
-            </div>
-        </div> <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
-    </div> </div> 
+    <!-- DNI -->
+    <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
+    <button onclick="document.getElementById('input-dni').click()" 
+            class="btn-subida" 
+            style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        🖼️ ADJUNTAR DNI (Frente/Dorso)
+    </button>
+    <!-- Miniatura / Info DNI -->
+    <div id="info-dni" style="display: flex; flex-direction: column; gap: 5px;"></div>
+    <!-- Mensaje de éxito DNI -->
+    <div id="mensaje-dni" style="color: #28a745; font-weight: bold;"></div>
+
+    <!-- APTO MÉDICO -->
+    <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
+    <button onclick="document.getElementById('input-medico').click()" 
+            class="btn-subida" 
+            style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+        ⚕️ ADJUNTAR APTO MÉDICO 2026
+    </button>
+    <!-- Miniatura / Info Médico -->
+    <div id="info-medico" style="display: flex; flex-direction: column; gap: 5px;"></div>
+    <!-- Mensaje de éxito Médico -->
+    <div id="mensaje-medico" style="color: #28a745; font-weight: bold;"></div>
+
+    <!-- Barra de progreso compartida -->
+    <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+        <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+    </div>
+
+    <!-- Botón para salir / volver -->
+    <button onclick="location.reload()" 
+            style="margin-top: 20px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">
+        [ SALIR / VOLVER ]
+    </button>
+</div>
+
 
 <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
@@ -518,24 +539,28 @@ window.subirArchivo = async (tipo) => {
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-    const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
+    const btn = document.querySelector(`button[onclick="document.getElementById('input-${tipo}').click()"]`);
     
-    // 4. Mostrar nombre y miniatura inmediatamente
-    // Buscamos un div para mostrar la info, si no existe lo ignoramos
-    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
+    // Divs para mostrar info y mensajes
+    const infoDiv = document.getElementById(`info-${tipo}`);
+    const mensajeDiv = document.getElementById(`mensaje-${tipo}`);
     
-    // Preparar miniatura
+    // Limpiar mensajes anteriores
+    infoDiv.innerHTML = "";
+    mensajeDiv.innerText = "";
+
+    // Preparar miniatura o nombre
     if (archivo.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
+            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa" style="max-width: 100px; border-radius: 5px;"><br><b>Archivo:</b> ${archivo.name}`;
         };
         reader.readAsDataURL(archivo);
     } else {
         infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
     }
 
-    // 1 y 5. Iniciar Círculo
+    // Mostrar barra de progreso
     barra.style.display = 'block';
     progreso.style.width = '0%';
     progreso.style.backgroundColor = '#3498db';
@@ -543,48 +568,82 @@ window.subirArchivo = async (tipo) => {
 
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
-    
-    const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
+
+    const storageRef = sRef(storage, `documentacion/${nombreFinal}`);
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
-    uploadTask.on('state_changed', 
+    uploadTask.on(
+        'state_changed',
         (snapshot) => {
             const porc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             progreso.style.width = porc + '%';
-        }, 
+        },
         (error) => {
-            // Error visual
             progreso.style.backgroundColor = '#e74c3c';
             progreso.innerHTML = "✕";
+            mensajeDiv.innerText = "❌ Error al subir el archivo";
+            mensajeDiv.style.color = "#e74c3c";
             console.error("Error al subir:", error);
-        }, 
+        },
         async () => {
             try {
                 const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
                 const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-                
-                // 3. Actualizar base de datos
+
+                // Actualizar base de datos
                 await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // 5. Éxito total: Círculo verde y tilde
+                // Barra de progreso completa
                 progreso.style.width = '100%';
                 progreso.style.backgroundColor = '#28a745';
                 progreso.innerHTML = "✓";
 
-                // 3. Bloquear botón
+                // Bloquear botón
                 btn.disabled = true;
                 btn.style.backgroundColor = "#28a745";
                 btn.style.color = "white";
                 btn.innerText = "CARGADO EN NUBE";
 
+                // Mensaje de éxito
+                mensajeDiv.innerText = "✅ Archivo cargado correctamente!";
+                mensajeDiv.style.color = "#28a745";
+
             } catch (err) {
                 console.error("Error final:", err);
                 progreso.style.backgroundColor = '#e74c3c';
                 progreso.innerHTML = "✕";
+                mensajeDiv.innerText = "❌ Error al guardar en la base de datos";
+                mensajeDiv.style.color = "#e74c3c";
             }
         }
     );
 };
+
+// Función opcional para bloquear botones si ya hay archivo subido al iniciar la página
+window.bloquearBotonesSiExiste = async () => {
+    const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+    const snapshot = await get(dbRef);
+    if (!snapshot.exists()) return;
+    const data = snapshot.val();
+
+    if (data.linkDNI) {
+        const btnDni = document.querySelector(`button[onclick="document.getElementById('input-dni').click()"]`);
+        btnDni.disabled = true;
+        btnDni.style.backgroundColor = "#28a745";
+        btnDni.style.color = "white";
+        btnDni.innerText = "CARGADO EN NUBE";
+    }
+    if (data.linkMedico) {
+        const btnMedico = document.querySelector(`button[onclick="document.getElementById('input-medico').click()"]`);
+        btnMedico.disabled = true;
+        btnMedico.style.backgroundColor = "#28a745";
+        btnMedico.style.color = "white";
+        btnMedico.innerText = "CARGADO EN NUBE";
+    }
+};
+
+window.addEventListener('DOMContentLoaded', bloquearBotonesSiExiste);
+
 </script>
 <script src="script.js"></script> 
 </body>
