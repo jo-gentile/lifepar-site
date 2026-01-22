@@ -257,10 +257,26 @@
     });
 
     if (lista.length === 0) return alert("Ingresá al menos un patinador.");
-    try {
+try {
         await window.guardarInscripcionClinicaFirebase(clinicaActiva, clubSeleccionado, lista);
         alert("¡Enviado con éxito!");
-    } catch (e) { alert("Error al guardar."); }
+
+        // --- LÓGICA DE LIMPIEZA ---
+        
+        // 1. Limpiar todos los inputs de la tabla (nombre, categoría, edad)
+        const inputs = document.querySelectorAll('#body-tabla-clinica input');
+        inputs.forEach(input => input.value = "");
+
+        // 2. Resetear el selector de clubes a la opción inicial
+        const selectClub = document.getElementById('select-club-clinica');
+        if (selectClub) selectClub.value = "";
+
+        // 3. Opcional: Volver el scroll al inicio de la tabla
+        document.getElementById('contenedor-clinicas').scrollTop = 0;
+
+    } catch (e) { 
+        alert("Error al guardar."); 
+    }
   };
   window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscriptos) => {
     try {
