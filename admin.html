@@ -254,31 +254,26 @@ window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscript
     }
 };
 
-window.activarSeccionClinica = async (idClinica) => {
+window.activarSeccionClinica = (idClinica) => {
+    console.log("Activando sección clínica:", idClinica);
+    
+    // 1. Mostramos el contenedor principal donde está todo
     const contenedor = document.getElementById('contenedor-acciones-zonas');
-    if (!contenedor) return;
-
-    contenedor.style.display = 'block';
-
-    try {
-        // 1. Traemos el contenido del archivo de clínicas
-        const respuesta = await fetch('acciones_zonas.html');
-        const html = await respuesta.text();
+    if (contenedor) {
+        contenedor.style.display = 'block';
         
-        // 2. Lo metemos en el contenedor
-        contenedor.innerHTML = html;
-
-        // 3. Ejecutamos la función de dibujo (un poquito después para que el navegador lo lea)
-        setTimeout(() => {
+        // 2. Buscamos y mostramos específicamente el bloque de clínicas
+        const bloqueClinicas = document.getElementById('contenedor-clinicas');
+        if (bloqueClinicas) {
+            bloqueClinicas.style.display = 'block';
+            
+            // 3. Llamamos a la función de dibujo que ya vive en el archivo
             if (typeof window.cargarZona === 'function') {
                 window.cargarZona(idClinica);
-            } else {
-                console.error("La función cargarZona no se encontró en el archivo cargado.");
             }
-        }, 100);
-
-    } catch (error) {
-        console.error("Error al cargar las clínicas:", error);
+        } else {
+            console.warn("No se encontró el bloque 'contenedor-clinicas' dentro del hijo.");
+        }
     }
 };
 </script>
