@@ -460,30 +460,35 @@ window.guardarEdicionPatinador = async (numZona, id) => {
 // --- SECCIÓN: CLÍNICAS ---
 let clinicaActiva = ""; 
 
-function cargarZona(idClinica) {
-    document.getElementById('contenedor-clinicas').style.display = 'block';
-    clinicaActiva = idClinica;
-    
-    document.getElementById('titulo-clinica').innerText = "Inscripción: " + idClinica.toUpperCase().replace('-', ' ');
+// Se hace global para que el Padre (Sidebar) pueda llamarla
+window.cargarZona = function(idClinica) {
+    const contenedor = document.getElementById('contenedor-clinicas');
+    if (contenedor) {
+        contenedor.style.display = 'block';
+        clinicaActiva = idClinica;
+        
+        document.getElementById('titulo-clinica').innerText = "Inscripción: " + idClinica.toUpperCase().replace('-', ' ');
 
-    // Llamamos a tu función de clubes (ajustá el nombre si es necesario)
-    // Le pasamos el ID del select de clínicas
-    cargarClubes('select-club-clinica'); 
+        // Llamamos a la función de clubes que ya existe en el hijo
+        if (typeof cargarClubes === 'function') {
+            cargarClubes('select-club-clinica'); 
+        }
 
-    const tbody = document.getElementById('body-tabla-clinica');
-    tbody.innerHTML = ""; 
-    
-    for (let i = 1; i <= 20; i++) {
-        tbody.innerHTML += `
-            <tr>
-                <td style="border: 1px solid #ccc; text-align: center;">${i}</td>
-                <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla nombre" style="width: 100%; border: none; padding: 5px;"></td>
-                <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla categoria" style="width: 100%; border: none; padding: 5px;"></td>
-                <td style="border: 1px solid #ccc;"><input type="number" class="input-tabla edad" style="width: 100%; border: none; padding: 5px;"></td>
-            </tr>
-        `;
+        const tbody = document.getElementById('body-tabla-clinica');
+        tbody.innerHTML = ""; 
+        
+        for (let i = 1; i <= 20; i++) {
+            tbody.innerHTML += `
+                <tr>
+                    <td style="border: 1px solid #ccc; text-align: center;">${i}</td>
+                    <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla nombre" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla categoria" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td style="border: 1px solid #ccc;"><input type="number" class="input-tabla edad" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+            `;
+        }
     }
-}
+};
 
 async function enviarInscripcionClinica() {
     const club = document.getElementById('select-club-clinica').value;
@@ -503,21 +508,15 @@ async function enviarInscripcionClinica() {
     });
 
     if (inscriptos.length === 0) return alert("No hay datos para enviar");
-
-    const db = getDatabase();
-    // IMPORTANTE: Usamos set() o update() según prefieras. 
-    // Con update() pisamos la inscripción anterior de ese mismo club para esa zona.
-    const nuevaRef = ref(db, `inscripciones_clinicas/${clinicaActiva}/${club}`);
     
     try {
-        await update(nuevaRef, {
-            lista: inscriptos,
-            fechaRegistro: new Date().toLocaleString()
-        });
+        // USAMOS EL PUENTE DEL PADRE para guardar en Firebase
+        await window.parent.guardarInscripcionClinicaFirebase(clinicaActiva, club, inscriptos);
+        
         alert("¡Inscripción de " + club + " enviada con éxito!");
         document.getElementById('contenedor-clinicas').style.display = 'none';
     } catch (error) {
-        console.error(error);
+        console.error("Error al guardar vía puente:", error);
         alert("Error al guardar en Firebase");
     }
 }
