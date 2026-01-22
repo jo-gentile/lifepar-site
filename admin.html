@@ -254,20 +254,39 @@ window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscript
     }
 };
 // EL PADRE LE ORDENA AL HIJO MOSTRAR EL FORMULARIO DE CLÍNICAS
+// EL PADRE DISPARA LA FUNCIÓN QUE YA VIVE EN EL MISMO DOM
 window.cargarZona = (idClinica) => {
-    console.log("Intentando cargar clínica:", idClinica); // Esto debe aparecer en consola al hacer click
+    console.log("Activando clínica:", idClinica);
     
     const contenedor = document.getElementById('contenedor-acciones-zonas');
-    if (!contenedor) return console.error("No se encontró el contenedor-acciones-zonas");
+    if (contenedor) {
+        contenedor.style.display = 'block';
+        
+        // Al estar todo en la misma página, la función ya debería estar disponible
+        if (typeof window.cargarZona === 'function') {
+            // Se usa un pequeño retraso si el HTML recién se inyectó
+            setTimeout(() => window.cargarZona(idClinica), 50);
+        } else {
+            console.warn("La función cargarZona aún no está cargada en el DOM");
+        }
+    }
+};
 
-    contenedor.style.display = 'block';
-
-    const frame = document.getElementById('iframe-contenido'); 
-    if (frame && frame.contentWindow) {
-        console.log("Iframe encontrado, enviando ID...");
-        frame.contentWindow.cargarZona(idClinica);
-    } else {
-        console.warn("No se encontró el iframe o no tiene acceso");
+// FUNCIÓN DE GRABADO (Se mantiene igual, accesible para todos)
+window.guardarInscripcionClinicaFirebase = async (idClinica, club, listaInscriptos) => {
+    try {
+        const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+        const nombreClubLimpio = club.replace(/\./g, '_');
+        const clinicaRef = ref(db, `INSCRIPCIONES_CLINICAS/${idClinica}/${nombreClubLimpio}`);
+        
+        return await update(clinicaRef, {
+            lista: listaInscriptos,
+            fecha_registro: new Date().toLocaleString(),
+            ultimo_cambio: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error("Error Firebase:", error);
+        throw error;
     }
 };
 </script>
