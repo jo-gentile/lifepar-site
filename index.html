@@ -539,28 +539,24 @@ window.subirArchivo = async (tipo) => {
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-    const btn = document.querySelector(`button[onclick="document.getElementById('input-${tipo}').click()"]`);
+    const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
     
-    // Divs para mostrar info y mensajes
-    const infoDiv = document.getElementById(`info-${tipo}`);
-    const mensajeDiv = document.getElementById(`mensaje-${tipo}`);
+    // 4. Mostrar nombre y miniatura inmediatamente
+    // Buscamos un div para mostrar la info, si no existe lo ignoramos
+    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
     
-    // Limpiar mensajes anteriores
-    infoDiv.innerHTML = "";
-    mensajeDiv.innerText = "";
-
-    // Preparar miniatura o nombre
+    // Preparar miniatura
     if (archivo.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa" style="max-width: 100px; border-radius: 5px;"><br><b>Archivo:</b> ${archivo.name}`;
+            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
         };
         reader.readAsDataURL(archivo);
     } else {
         infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
     }
 
-    // Mostrar barra de progreso
+    // 1 y 5. Iniciar Círculo
     barra.style.display = 'block';
     progreso.style.width = '0%';
     progreso.style.backgroundColor = '#3498db';
@@ -568,102 +564,48 @@ window.subirArchivo = async (tipo) => {
 
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
-
-    const storageRef = sRef(storage, `documentacion/${nombreFinal}`);
+    
+    const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
-    uploadTask.on(
-        'state_changed',
+    uploadTask.on('state_changed', 
         (snapshot) => {
             const porc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             progreso.style.width = porc + '%';
-        },
+        }, 
         (error) => {
+            // Error visual
             progreso.style.backgroundColor = '#e74c3c';
             progreso.innerHTML = "✕";
-            mensajeDiv.innerText = "❌ Error al subir el archivo";
-            mensajeDiv.style.color = "#e74c3c";
             console.error("Error al subir:", error);
-        },
+        }, 
         async () => {
             try {
                 const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
                 const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-
-                // Actualizar base de datos
+                
+                // 3. Actualizar base de datos
                 await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // Barra de progreso completa
+                // 5. Éxito total: Círculo verde y tilde
                 progreso.style.width = '100%';
                 progreso.style.backgroundColor = '#28a745';
                 progreso.innerHTML = "✓";
 
-                // Bloquear botón
+                // 3. Bloquear botón
                 btn.disabled = true;
                 btn.style.backgroundColor = "#28a745";
                 btn.style.color = "white";
                 btn.innerText = "CARGADO EN NUBE";
 
-                // Mensaje de éxito
-                mensajeDiv.innerText = "✅ Archivo cargado correctamente!";
-                mensajeDiv.style.color = "#28a745";
-
             } catch (err) {
                 console.error("Error final:", err);
                 progreso.style.backgroundColor = '#e74c3c';
                 progreso.innerHTML = "✕";
-                mensajeDiv.innerText = "❌ Error al guardar en la base de datos";
-                mensajeDiv.style.color = "#e74c3c";
             }
         }
     );
 };
-
-window.bloquearBotonesSiExiste = async () => {
-    // ✅ Salir inmediatamente si patinadorSesionPadre no está definido
-    if (!patinadorSesionPadre) {
-        console.warn("patinadorSesionPadre no definido. Se omite bloqueo de botones.");
-        return;
-    }
-
-    try {
-        const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-        const snapshot = await get(dbRef);
-
-        if (!snapshot.exists()) return;
-
-        const data = snapshot.val();
-
-        // Bloquear botón DNI si ya existe
-        if (data.linkDNI) {
-            const btnDni = document.querySelector(`button[onclick="document.getElementById('input-dni').click()"]`);
-            if (btnDni) {
-                btnDni.disabled = true;
-                btnDni.style.backgroundColor = "#28a745";
-                btnDni.style.color = "white";
-                btnDni.innerText = "CARGADO EN NUBE";
-            }
-        }
-
-        // Bloquear botón Médico si ya existe
-        if (data.linkMedico) {
-            const btnMedico = document.querySelector(`button[onclick="document.getElementById('input-medico').click()"]`);
-            if (btnMedico) {
-                btnMedico.disabled = true;
-                btnMedico.style.backgroundColor = "#28a745";
-                btnMedico.style.color = "white";
-                btnMedico.innerText = "CARGADO EN NUBE";
-            }
-        }
-
-    } catch (err) {
-        console.error("Error al verificar archivos existentes:", err);
-    }
-};
-
-// Ejecutar al cargar la página
-window.addEventListener('DOMContentLoaded', bloquearBotonesSiExiste);
-
 </script>
 <script src="script.js"></script> 
 </body>
