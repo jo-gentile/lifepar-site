@@ -461,6 +461,7 @@ window.guardarEdicionPatinador = async (numZona, id) => {
 let clinicaActiva = ""; 
 
 // Se hace global para que el Sidebar pueda encontrarla en la memoria
+// Esta función SOLO se encarga de dibujar la tabla
 window.cargarZona = function(idClinica) {
     const contenedor = document.getElementById('contenedor-clinicas');
     if (contenedor) {
@@ -470,7 +471,7 @@ window.cargarZona = function(idClinica) {
         const titulo = document.getElementById('titulo-clinica');
         if (titulo) titulo.innerText = "Inscripción: " + idClinica.toUpperCase().replace('-', ' ');
 
-        // Llamada directa a la función de clubes
+        // Carga de clubes (Sin 'parent')
         if (typeof cargarClubes === 'function') {
             cargarClubes('select-club-clinica'); 
         }
@@ -492,30 +493,22 @@ window.cargarZona = function(idClinica) {
     }
 };
 
-async function enviarInscripcionClinica() {
-    const club = document.getElementById('select-club-clinica').value;
-    if (!club) return alert("Por favor seleccioná un club");
+async function cargarClubes(idSelect) {
+    const select = document.getElementById(idSelect);
+    if (!select) return;
 
-    const filas = document.querySelectorAll('#body-tabla-clinica tr');
-    let inscriptos = [];
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    // Llamada directa a la función del padre que ya está en memoria
+    const clubes = await window.obtenerClubesFirebase(mailProfe.replace(/\./g, '_'));
 
-    filas.forEach(fila => {
-        const nombre = fila.querySelector('.nombre').value.trim();
-        const cat = fila.querySelector('.categoria').value.trim();
-        const edad = fila.querySelector('.edad').value.trim();
-        if (nombre !== "") inscriptos.push({ nombre, cat, edad });
-    });
-
-    if (inscriptos.length === 0) return alert("No hay datos para enviar");
-    
-    try {
-        // LLAMADA DIRECTA (Sin parent porque ya estás en el padre)
-        await window.guardarInscripcionClinicaFirebase(clinicaActiva, club, inscriptos);
-        alert("¡Inscripción de " + club + " enviada con éxito!");
-        document.getElementById('contenedor-clinicas').style.display = 'none';
-    } catch (error) {
-        console.error("Error al guardar:", error);
-        alert("Error al guardar en Firebase");
+    if (clubes) {
+        select.innerHTML = '<option value="">Seleccioná un club...</option>';
+        Object.keys(clubes).forEach(id => {
+            const option = document.createElement('option');
+            option.value = id;
+            option.textContent = clubes[id].nombre;
+            select.appendChild(option);
+        });
     }
 }
 </script>
