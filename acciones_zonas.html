@@ -49,33 +49,29 @@
     </div>
 </div>
 
-    <div id="contenedor-clinicas" style="display: none;" class="seccion-formulario">
-    <h2 id="titulo-clinica">Inscripción a Clínica</h2>
+    <div id="contenedor-clinicas" style="display: none; padding: 20px; background: #111; border: 2px solid gold; margin-top: 20px;">
+    <h3 id="titulo-clinica" style="color: gold; text-align: center; text-transform: uppercase;"></h3>
     
-    <div class="campo-grupo">
-        <label>Seleccionar Club:</label>
-        <select id="select-club-clinica">
-            <option value="">-- Seleccione su club --</option>
-            </select>
+    <div style="margin-bottom: 15px;">
+        <label style="color: white; display: block; margin-bottom: 5px;">Seleccionar Club:</label>
+        <select id="select-club-clinica" style="padding: 8px; width: 100%; background: #222; color: white; border: 1px solid gold;"></select>
     </div>
 
-    <div class="tabla-excel-container" style="overflow-x: auto; margin-top: 20px;">
-        <table id="tabla-inscripcion" style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: #f4f4f4;">
-                    <th style="border: 1px solid #ccc; padding: 8px;">N°</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Nombre y Apellido</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Categoría</th>
-                    <th style="border: 1px solid #ccc; padding: 8px;">Edad</th>
-                </tr>
-            </thead>
-            <tbody id="body-tabla-clinica">
-                </tbody>
-        </table>
-    </div>
+    <table style="width: 100%; border-collapse: collapse; color: white; background: #222;">
+        <thead>
+            <tr style="background: #333; color: gold;">
+                <th style="border: 1px solid #444; padding: 8px; width: 40px;">#</th>
+                <th style="border: 1px solid #444; padding: 8px;">Nombre y Apellido</th>
+                <th style="border: 1px solid #444; padding: 8px;">Categoría</th>
+                <th style="border: 1px solid #444; padding: 8px; width: 60px;">Edad</th>
+            </tr>
+        </thead>
+        <tbody id="body-tabla-clinica">
+            </tbody>
+    </table>
 
-    <button class="btn-enviar" onclick="enviarInscripcionClinica()" style="margin-top: 20px;">
-        ENVIAR INSCRIPCIÓN
+    <button onclick="enviarInscripcionClinica()" style="margin-top: 20px; padding: 12px; background: linear-gradient(to right, gold, #b8860b); color: black; font-weight: bold; cursor: pointer; border: none; width: 100%; border-radius: 4px;">
+        🚀 ENVIAR INSCRIPCIÓN FINAL
     </button>
 </div>
 
@@ -457,38 +453,37 @@ window.guardarEdicionPatinador = async (numZona, id) => {
     }
 };
 
-// --- SECCIÓN: CLÍNICAS ---
 let clinicaActiva = ""; 
 
-// Se hace global para que el Sidebar pueda encontrarla en la memoria
-// Esta función SOLO se encarga de dibujar la tabla
 window.cargarZona = function(idClinica) {
     const contenedor = document.getElementById('contenedor-clinicas');
-    if (contenedor) {
-        contenedor.style.display = 'block';
-        clinicaActiva = idClinica;
-        
-        const titulo = document.getElementById('titulo-clinica');
-        if (titulo) titulo.innerText = "Inscripción: " + idClinica.toUpperCase().replace('-', ' ');
+    if (!contenedor) return console.error("No existe 'contenedor-clinicas' en el HTML");
 
-        // Carga de clubes (Sin 'parent')
-        if (typeof cargarClubes === 'function') {
-            cargarClubes('select-club-clinica'); 
-        }
+    contenedor.style.display = 'block';
+    clinicaActiva = idClinica;
+    
+    // Seteamos el título
+    const titulo = document.getElementById('titulo-clinica');
+    if (titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, ' ');
 
-        const tbody = document.getElementById('body-tabla-clinica');
-        if (tbody) {
-            tbody.innerHTML = ""; 
-            for (let i = 1; i <= 20; i++) {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="border: 1px solid #ccc; text-align: center;">${i}</td>
-                        <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla nombre" style="width: 100%; border: none; padding: 5px;"></td>
-                        <td style="border: 1px solid #ccc;"><input type="text" class="input-tabla categoria" style="width: 100%; border: none; padding: 5px;"></td>
-                        <td style="border: 1px solid #ccc;"><input type="number" class="input-tabla edad" style="width: 100%; border: none; padding: 5px;"></td>
-                    </tr>
-                `;
-            }
+    // Cargamos los clubes del profe
+    if (typeof cargarClubes === 'function') {
+        cargarClubes('select-club-clinica'); 
+    }
+
+    // Dibujamos las 20 filas
+    const tbody = document.getElementById('body-tabla-clinica');
+    if (tbody) {
+        tbody.innerHTML = ""; 
+        for (let i = 1; i <= 20; i++) {
+            tbody.innerHTML += `
+                <tr>
+                    <td style="border: 1px solid #444; text-align: center; padding: 5px; color: gold;">${i}</td>
+                    <td style="border: 1px solid #444;"><input type="text" class="input-tabla nombre" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
+                    <td style="border: 1px solid #444;"><input type="text" class="input-tabla categoria" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
+                    <td style="border: 1px solid #444;"><input type="number" class="input-tabla edad" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
+                </tr>
+            `;
         }
     }
 };
