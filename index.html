@@ -430,21 +430,31 @@ const resetFormulario = () => {
 };
 
 // Al abrir desde el botón del Header, siempre reseteamos primero
+// 1. Aseguramos que el botón del header SIEMPRE funcione y sea público
 window.mostrarLogin = () => { 
-    resetFormulario();
-    loginForm.style.display = 'block'; 
+    const formulario = document.getElementById('loginForm');
+    if (formulario) {
+        resetFormulario(); // Limpia los campos antes de abrir
+        formulario.style.display = 'block';
+    }
 };
 
-// Al cerrar, también reseteamos para que no quede "sucio"
+// 2. Control de cierre
 document.getElementById('btnCerrarLogin').onclick = () => { 
-    loginForm.style.display = 'none';
-    resetFormulario();
+    const formulario = document.getElementById('loginForm');
+    if (formulario) {
+        formulario.style.display = 'none';
+        resetFormulario();
+    }
 };
 
-// El nuevo botón de "Atrás" dentro del registro
-document.getElementById('linkVolverLogin').onclick = () => {
-    resetFormulario();
-};
+// 3. Botón "Atrás" dentro del registro
+const linkVolver = document.getElementById('linkVolverLogin');
+if (linkVolver) {
+    linkVolver.onclick = () => {
+        resetFormulario();
+    };
+}
 
 // Variable global para guardar el patinador encontrado temporalmente
 let patinadorSesionPadre = null;
@@ -509,79 +519,59 @@ window.validarFechaPadre = () => {
         alert("La fecha de nacimiento no coincide. Verificá los datos.");
     }
 };
+// 2. Corrección de la subida para que no de error "rojo"
 window.subirArchivo = async (tipo) => {
     const input = document.getElementById(`input-${tipo}`);
-    const archivo = input.files[0];
+    const archivo = input?.files[0];
     if (!archivo) return;
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-    
-    // Corregido: Selecciona el botón que está justo después del input
-    const btn = input.nextElementSibling;
-    const infoDiv = document.getElementById(`info-${tipo}`);
+    // Buscamos el botón que está justo después del input
+    const btn = input.nextElementSibling; 
 
-    // Mostrar info del archivo si el div existe
-    if (infoDiv) {
-        if (archivo.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                infoDiv.innerHTML = `<img src="${e.target.result}" style="width:50px; border-radius:5px; margin-top:5px;"><br><b>Archivo:</b> ${archivo.name}`;
-            };
-            reader.readAsDataURL(archivo);
-        } else {
-            infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
-        }
-    }
-
-    // Reset de barra
+    // Reset visual de la barra
     barra.style.display = 'block';
     progreso.style.width = '0%';
     progreso.style.backgroundColor = '#3498db';
     progreso.innerHTML = "";
 
-    const extension = archivo.name.split('.').pop();
-    const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
-    
-    const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
-    const uploadTask = uploadBytesResumable(storageRef, archivo);
+    try {
+        const extension = archivo.name.split('.').pop();
+        const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
+        
+        const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
+        const uploadTask = uploadBytesResumable(storageRef, archivo);
 
-    uploadTask.on('state_changed', 
-        (snapshot) => {
-            const porc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            progreso.style.width = porc + '%';
-        }, 
-        (error) => {
-            progreso.style.backgroundColor = '#e74c3c';
-            progreso.innerHTML = "✕";
-            console.error("Error al subir:", error);
-        }, 
-        async () => {
-            try {
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const porc = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                progreso.style.width = porc + '%';
+            }, 
+            (error) => {
+                throw error; // Manda el error al catch de abajo
+            }, 
+            async () => {
                 const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
                 const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
                 
-                // Actualizar base de datos
                 await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // Éxito visual
+                // ÉXITO: Barra Verde
                 progreso.style.width = '100%';
                 progreso.style.backgroundColor = '#28a745';
                 progreso.innerHTML = "✓";
 
-                // Bloquear botón y cambiar estado
                 btn.disabled = true;
                 btn.style.backgroundColor = "#28a745";
-                btn.style.color = "white";
-                btn.innerText = "CARGADO CON ÉXITO";
-
-            } catch (err) {
-                console.error("Error final:", err);
-                progreso.style.backgroundColor = '#e74c3c';
-                progreso.innerHTML = "✕";
+                btn.innerText = "CARGADO";
             }
-        }
-    );
+        );
+    } catch (err) {
+        console.error("Error en la subida:", err);
+        progreso.style.backgroundColor = '#e74c3c'; // Solo aquí se pone rojo
+        progreso.innerHTML = "✕";
+    }
 };
 </script>
 <script src="script.js"></script> 
