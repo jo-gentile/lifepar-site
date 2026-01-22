@@ -121,6 +121,31 @@
 </section>
 
 <section id="contenedor-acciones-zonas" style="display: none; margin-top: 20px; width: 100%;">
+        <div id="contenedor-clinicas" style="display: none; padding: 20px; background: #111; border: 2px solid gold; margin-top: 20px;">
+    <h3 id="titulo-clinica" style="color: gold; text-align: center; text-transform: uppercase;"></h3>
+    
+    <div style="margin-bottom: 15px;">
+        <label style="color: white; display: block; margin-bottom: 5px;">Seleccionar Club:</label>
+        <select id="select-club-clinica" style="padding: 8px; width: 100%; background: #222; color: white; border: 1px solid gold;"></select>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; color: white; background: #222;">
+        <thead>
+            <tr style="background: #333; color: gold;">
+                <th style="border: 1px solid #444; padding: 8px; width: 40px;">#</th>
+                <th style="border: 1px solid #444; padding: 8px;">Nombre y Apellido</th>
+                <th style="border: 1px solid #444; padding: 8px;">Categoría</th>
+                <th style="border: 1px solid #444; padding: 8px; width: 60px;">Edad</th>
+            </tr>
+        </thead>
+        <tbody id="body-tabla-clinica">
+            </tbody>
+    </table>
+
+    <button onclick="enviarInscripcionClinica()" style="margin-top: 20px; padding: 12px; background: linear-gradient(to right, gold, #b8860b); color: black; font-weight: bold; cursor: pointer; border: none; width: 100%; border-radius: 4px;">
+        🚀 ENVIAR INSCRIPCIÓN FINAL
+    </button>
+</div>
             </section>
       
     <section class="box-oficina" id="seguros" style="display: none;">
@@ -274,6 +299,53 @@ window.activarSeccionClinica = (idClinica) => {
         } else {
             console.warn("No se encontró el bloque 'contenedor-clinicas' dentro del hijo.");
         }
+    }
+};
+
+// 1. Variable de control al inicio
+let clinicaActiva = "";
+
+// 2. La función que dispara todo desde el menú
+window.activarSeccionClinica = (idClinica) => {
+    clinicaActiva = idClinica;
+    const bloque = document.getElementById('contenedor-clinicas');
+    if (bloque) {
+        bloque.style.display = 'block';
+        cargarZona(idClinica); // Llamada local
+    }
+};
+window.enviarInscripcionClinica = async () => {
+    const selectClub = document.getElementById('select-club-clinica');
+    const clubSeleccionado = selectClub.value;
+
+    if (!clubSeleccionado) {
+        alert("Por favor, seleccioná un club.");
+        return;
+    }
+
+    const filas = document.querySelectorAll('#body-tabla-clinica tr');
+    const listaInscriptos = [];
+
+    filas.forEach(fila => {
+        const nombre = fila.querySelector('.nombre').value.trim();
+        const categoria = fila.querySelector('.categoria').value.trim();
+        const edad = fila.querySelector('.edad').value.trim();
+
+        if (nombre !== "") {
+            listaInscriptos.push({ nombre, categoria, edad });
+        }
+    });
+
+    if (listaInscriptos.length === 0) {
+        alert("Debes ingresar al menos un patinador.");
+        return;
+    }
+
+    try {
+        await guardarInscripcionClinicaFirebase(clinicaActiva, clubSeleccionado, listaInscriptos);
+        alert("Inscripción enviada con éxito.");
+    } catch (error) {
+        alert("Hubo un error al enviar la inscripción.");
     }
 };
 </script>
