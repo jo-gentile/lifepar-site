@@ -274,7 +274,7 @@
   import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
   // ESTA ES LA QUE SUMAMOS:
-  import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase, ref, get, child, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
   // 2. CONFIGURACIÓN (Extraída de tus archivos)
 const firebaseConfig = {
@@ -519,23 +519,22 @@ window.subirArchivo = async (tipo) => {
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
     const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
-    
-    // 4. Mostrar nombre y miniatura inmediatamente
-    // Buscamos un div para mostrar la info, si no existe lo ignoramos
-    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
-    
-    // Preparar miniatura
-    if (archivo.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
-        };
-        reader.readAsDataURL(archivo);
-    } else {
-        infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
+    const infoDiv = document.getElementById(`info-${tipo}`);
+
+    // 4. Mostrar miniatura y nombre antes de empezar
+    if (infoDiv) {
+        if (archivo.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                infoDiv.innerHTML = `<img src="${e.target.result}" style="width:60px; border-radius:8px; margin: 10px 0;"><br><b>${archivo.name}</b>`;
+            };
+            reader.readAsDataURL(archivo);
+        } else {
+            infoDiv.innerHTML = `📄 ${archivo.name}`;
+        }
     }
 
-    // 1 y 5. Iniciar Círculo
+    // 1 y 5. Configurar círculo (Azul carga)
     barra.style.display = 'block';
     progreso.style.width = '0%';
     progreso.style.backgroundColor = '#3498db';
@@ -553,32 +552,30 @@ window.subirArchivo = async (tipo) => {
             progreso.style.width = porc + '%';
         }, 
         (error) => {
-            // Error visual
-            progreso.style.backgroundColor = '#e74c3c';
+            progreso.style.backgroundColor = '#e74c3c'; // Rojo si falla
             progreso.innerHTML = "✕";
-            console.error("Error al subir:", error);
+            console.error("Error:", error);
         }, 
         async () => {
             try {
                 const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
                 
-                // 3. Actualizar base de datos
+                // USANDO EL 'update' QUE YA IMPORTAMOS ARRIBA
+                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
                 await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // 5. Éxito total: Círculo verde y tilde
+                // 5. Éxito: Círculo Verde y Tilde
                 progreso.style.width = '100%';
                 progreso.style.backgroundColor = '#28a745';
                 progreso.innerHTML = "✓";
 
                 // 3. Bloquear botón
                 btn.disabled = true;
-                btn.style.backgroundColor = "#28a745";
-                btn.style.color = "white";
-                btn.innerText = "CARGADO EN NUBE";
+                btn.innerText = "✓ RECIBIDO";
+                btn.style.opacity = "0.6";
 
             } catch (err) {
-                console.error("Error final:", err);
+                console.error("Error Database:", err);
                 progreso.style.backgroundColor = '#e74c3c';
                 progreso.innerHTML = "✕";
             }
