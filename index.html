@@ -517,7 +517,7 @@ window.subirArchivo = async (tipo) => {
     if (!archivo) return;
 
     // Limite de tamaño
-    const MAX_SIZE_MB = 10;
+    const MAX_SIZE_MB = 10; // podés ajustar
     if (archivo.size > MAX_SIZE_MB * 1024 * 1024) {
         alert(`❌ El archivo es muy grande. Máximo permitido: ${MAX_SIZE_MB} MB`);
         return;
@@ -525,36 +525,30 @@ window.subirArchivo = async (tipo) => {
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-
+    
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
-
-    // Contenedor de estado por archivo
-    let contenedorEstado = document.getElementById(`estado-${tipo}`);
-    if (!contenedorEstado) {
-        contenedorEstado = document.createElement('div');
-        contenedorEstado.id = `estado-${tipo}`;
-        contenedorEstado.style.display = 'flex';
-        contenedorEstado.style.alignItems = 'center';
-        contenedorEstado.style.gap = '10px';
-        contenedorEstado.style.margin = '5px 0';
-        document.body.appendChild(contenedorEstado);
-    }
-
-    // Crear elementos: nombre + icono animado
-    contenedorEstado.innerHTML = '';
-    const nombreArchivo = document.createElement('span');
-    nombreArchivo.textContent = archivo.name;
-    const icono = document.createElement('span');
-    icono.innerHTML = `<span class="spinner"></span>`; // spinner animado
-
-    contenedorEstado.appendChild(nombreArchivo);
-    contenedorEstado.appendChild(icono);
-
+    
     const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
     barra.style.display = 'block';
+
+    // --- FEEDBACK VISUAL FLOTANTE ---
+    let contenedorEstado = document.getElementById(`estado-${tipo}`);
+    if (!contenedorEstado) {
+        contenedorEstado = document.createElement('div');
+        contenedorEstado.id = `estado-${tipo}`;
+        contenedorEstado.className = 'estado-flotante';
+        document.body.appendChild(contenedorEstado);
+    }
+    contenedorEstado.innerHTML = `
+        <span class="nombre-archivo">${archivo.name}</span>
+        <span class="icono-estado"><span class="spinner"></span></span>
+    `;
+    const icono = contenedorEstado.querySelector('.icono-estado');
+
+    // ----------------------------------
 
     uploadTask.on('state_changed', 
         (snapshot) => {
@@ -563,27 +557,21 @@ window.subirArchivo = async (tipo) => {
         }, 
         (error) => {
             console.error("Error al subir:", error);
-            icono.textContent = '❌';
+            icono.innerHTML = '❌'; // fallo visual
+            alert("Error al subir: " + error.message);
         }, 
         async () => {
-            try {
-                // Confirmación de Cloud Storage
-                const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-
-                // Confirmación de Firebase Database
-                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-                const actualizaciones = {};
-                actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
-                await update(dbRef, actualizaciones);
-
-                // Éxito real confirmado
-                icono.textContent = '✅';
-                barra.style.display = 'none';
-                progreso.style.width = '0%';
-            } catch (e) {
-                console.error("Error al guardar en DB:", e);
-                icono.textContent = '❌';
-            }
+            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+            const actualizaciones = {};
+            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
+            
+            await update(dbRef, actualizaciones);
+            
+            icono.innerHTML = '✅'; // éxito visual
+            alert("✅ ¡" + tipo.toUpperCase() + " cargado con éxito! Ya podés ver el siguiente.");
+            barra.style.display = 'none';
+            progreso.style.width = '0%';
         }
     );
 };

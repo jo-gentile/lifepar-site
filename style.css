@@ -555,16 +555,48 @@ input, textarea {
         gap: 20px !important;
     }
 }
+/* Contenedor flotante por archivo */
+.estado-flotante {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    margin: 5px 0;
+    background: rgba(0,0,0,0.05);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+/* Nombre del archivo */
+.nombre-archivo {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Spinner animado */
 .spinner {
-  display: inline-block;
-  width: 18px;
-  height: 18px;
-  border: 3px solid #ccc;
-  border-top-color: #007bff; /* color azul */
-  border-radius: 50%;
-  animation: girar 1s linear infinite;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #ccc;
+    border-top-color: #007bff;
+    border-radius: 50%;
+    animation: girar 1s linear infinite;
 }
 
 @keyframes girar {
-  to { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Icono de estado fijo al tamaño del spinner */
+.icono-estado {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
