@@ -200,22 +200,20 @@
             </div>
             
             <div style="display: flex; flex-direction: column; gap: 10px;">
-                <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
-                <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    🖼️ ADJUNTAR DNI (Frente/Dorso)
-                </button>
+    <input type="file" id="input-dni" accept="image/*" style="display: none;" onchange="subirArchivo('dni')">
+    <button onclick="document.getElementById('input-dni').click()" class="btn-subida" ...>
+        🖼️ ADJUNTAR DNI (Frente/Dorso)
+    </button>
+    <div id="info-dni" style="font-size: 0.7rem; color: #fff; margin-bottom: 5px;"></div>
 
-                <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
-                <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                    ⚕️ ADJUNTAR APTO MÉDICO 2026
-                </button>
-                
-                <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
-                    <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
-                </div>
-            </div>
-        </div> <button onclick="location.reload()" style="margin-top: 30px; background: none; border: none; color: #aaa; cursor: pointer; font-size: 0.8rem;">[ SALIR / VOLVER ]</button>
-    </div> </div> 
+    <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
+    <button onclick="document.getElementById('input-medico').click()" class="btn-subida" ...>
+        ⚕️ ADJUNTAR APTO MÉDICO 2026
+    </button>
+    <div id="info-medico" style="font-size: 0.7rem; color: #fff; margin-bottom: 5px;"></div>
+    
+    ... barra de progreso ...
+</div>
 
 <footer>
     <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
@@ -518,24 +516,25 @@ window.subirArchivo = async (tipo) => {
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-    const btn = document.querySelector(`button[onclick="subirArchivo('${tipo}')"]`);
     
-    // 4. Mostrar nombre y miniatura inmediatamente
-    // Buscamos un div para mostrar la info, si no existe lo ignoramos
-    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
-    
-    // Preparar miniatura
-    if (archivo.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
-        };
-        reader.readAsDataURL(archivo);
-    } else {
-        infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
+    // Corregido: Selecciona el botón que está justo después del input
+    const btn = input.nextElementSibling;
+    const infoDiv = document.getElementById(`info-${tipo}`);
+
+    // Mostrar info del archivo si el div existe
+    if (infoDiv) {
+        if (archivo.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                infoDiv.innerHTML = `<img src="${e.target.result}" style="width:50px; border-radius:5px; margin-top:5px;"><br><b>Archivo:</b> ${archivo.name}`;
+            };
+            reader.readAsDataURL(archivo);
+        } else {
+            infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
+        }
     }
 
-    // 1 y 5. Iniciar Círculo
+    // Reset de barra
     barra.style.display = 'block';
     progreso.style.width = '0%';
     progreso.style.backgroundColor = '#3498db';
@@ -553,7 +552,6 @@ window.subirArchivo = async (tipo) => {
             progreso.style.width = porc + '%';
         }, 
         (error) => {
-            // Error visual
             progreso.style.backgroundColor = '#e74c3c';
             progreso.innerHTML = "✕";
             console.error("Error al subir:", error);
@@ -563,19 +561,19 @@ window.subirArchivo = async (tipo) => {
                 const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
                 const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
                 
-                // 3. Actualizar base de datos
+                // Actualizar base de datos
                 await update(dbRef, { [tipo === 'dni' ? 'linkDNI' : 'linkMedico']: urlDescarga });
 
-                // 5. Éxito total: Círculo verde y tilde
+                // Éxito visual
                 progreso.style.width = '100%';
                 progreso.style.backgroundColor = '#28a745';
                 progreso.innerHTML = "✓";
 
-                // 3. Bloquear botón
+                // Bloquear botón y cambiar estado
                 btn.disabled = true;
                 btn.style.backgroundColor = "#28a745";
                 btn.style.color = "white";
-                btn.innerText = "CARGADO EN NUBE";
+                btn.innerText = "CARGADO CON ÉXITO";
 
             } catch (err) {
                 console.error("Error final:", err);
