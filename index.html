@@ -517,7 +517,7 @@ window.subirArchivo = async (tipo) => {
     if (!archivo) return;
 
     // Limite de tamaño
-    const MAX_SIZE_MB = 10; // podés ajustar
+    const MAX_SIZE_MB = 10;
     if (archivo.size > MAX_SIZE_MB * 1024 * 1024) {
         alert(`❌ El archivo es muy grande. Máximo permitido: ${MAX_SIZE_MB} MB`);
         return;
@@ -525,10 +525,32 @@ window.subirArchivo = async (tipo) => {
 
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
-    
+
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
-    
+
+    // Contenedor de estado por archivo
+    let contenedorEstado = document.getElementById(`estado-${tipo}`);
+    if (!contenedorEstado) {
+        contenedorEstado = document.createElement('div');
+        contenedorEstado.id = `estado-${tipo}`;
+        contenedorEstado.style.display = 'flex';
+        contenedorEstado.style.alignItems = 'center';
+        contenedorEstado.style.gap = '10px';
+        contenedorEstado.style.margin = '5px 0';
+        document.body.appendChild(contenedorEstado);
+    }
+
+    // Crear elementos: nombre + icono animado
+    contenedorEstado.innerHTML = '';
+    const nombreArchivo = document.createElement('span');
+    nombreArchivo.textContent = archivo.name;
+    const icono = document.createElement('span');
+    icono.innerHTML = `<span class="spinner"></span>`; // spinner animado
+
+    contenedorEstado.appendChild(nombreArchivo);
+    contenedorEstado.appendChild(icono);
+
     const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 
     const uploadTask = uploadBytesResumable(storageRef, archivo);
 
@@ -538,26 +560,34 @@ window.subirArchivo = async (tipo) => {
         (snapshot) => {
             const porcentaje = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
             progreso.style.width = porcentaje + '%';
-            console.log("Progreso: " + porcentaje + "%");
         }, 
         (error) => {
             console.error("Error al subir:", error);
-            alert("Error al subir: " + error.message);
+            icono.textContent = '❌';
         }, 
         async () => {
-            const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
-            const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-            const actualizaciones = {};
-            actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
-            
-            await update(dbRef, actualizaciones);
-            
-            alert("✅ ¡" + tipo.toUpperCase() + " cargado con éxito! Ya podés ver el siguiente.");
-            barra.style.display = 'none';
-            progreso.style.width = '0%';
+            try {
+                // Confirmación de Cloud Storage
+                const urlDescarga = await getDownloadURL(uploadTask.snapshot.ref);
+
+                // Confirmación de Firebase Database
+                const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+                const actualizaciones = {};
+                actualizaciones[tipo === 'dni' ? 'linkDNI' : 'linkMedico'] = urlDescarga;
+                await update(dbRef, actualizaciones);
+
+                // Éxito real confirmado
+                icono.textContent = '✅';
+                barra.style.display = 'none';
+                progreso.style.width = '0%';
+            } catch (e) {
+                console.error("Error al guardar en DB:", e);
+                icono.textContent = '❌';
+            }
         }
     );
 };
+
 
 </script>
 <script src="script.js"></script> 
