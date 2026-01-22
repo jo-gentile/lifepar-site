@@ -619,29 +619,49 @@ window.subirArchivo = async (tipo) => {
     );
 };
 
-// Función opcional para bloquear botones si ya hay archivo subido al iniciar la página
 window.bloquearBotonesSiExiste = async () => {
-    const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
-    const snapshot = await get(dbRef);
-    if (!snapshot.exists()) return;
-    const data = snapshot.val();
-
-    if (data.linkDNI) {
-        const btnDni = document.querySelector(`button[onclick="document.getElementById('input-dni').click()"]`);
-        btnDni.disabled = true;
-        btnDni.style.backgroundColor = "#28a745";
-        btnDni.style.color = "white";
-        btnDni.innerText = "CARGADO EN NUBE";
+    // ✅ Salir inmediatamente si patinadorSesionPadre no está definido
+    if (!patinadorSesionPadre) {
+        console.warn("patinadorSesionPadre no definido. Se omite bloqueo de botones.");
+        return;
     }
-    if (data.linkMedico) {
-        const btnMedico = document.querySelector(`button[onclick="document.getElementById('input-medico').click()"]`);
-        btnMedico.disabled = true;
-        btnMedico.style.backgroundColor = "#28a745";
-        btnMedico.style.color = "white";
-        btnMedico.innerText = "CARGADO EN NUBE";
+
+    try {
+        const dbRef = ref(db, `${patinadorSesionPadre.zona}/${patinadorSesionPadre.id}`);
+        const snapshot = await get(dbRef);
+
+        if (!snapshot.exists()) return;
+
+        const data = snapshot.val();
+
+        // Bloquear botón DNI si ya existe
+        if (data.linkDNI) {
+            const btnDni = document.querySelector(`button[onclick="document.getElementById('input-dni').click()"]`);
+            if (btnDni) {
+                btnDni.disabled = true;
+                btnDni.style.backgroundColor = "#28a745";
+                btnDni.style.color = "white";
+                btnDni.innerText = "CARGADO EN NUBE";
+            }
+        }
+
+        // Bloquear botón Médico si ya existe
+        if (data.linkMedico) {
+            const btnMedico = document.querySelector(`button[onclick="document.getElementById('input-medico').click()"]`);
+            if (btnMedico) {
+                btnMedico.disabled = true;
+                btnMedico.style.backgroundColor = "#28a745";
+                btnMedico.style.color = "white";
+                btnMedico.innerText = "CARGADO EN NUBE";
+            }
+        }
+
+    } catch (err) {
+        console.error("Error al verificar archivos existentes:", err);
     }
 };
 
+// Ejecutar al cargar la página
 window.addEventListener('DOMContentLoaded', bloquearBotonesSiExiste);
 
 </script>
