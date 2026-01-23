@@ -250,8 +250,8 @@ window.subirArchivo = async (tipo) => {
     const input = document.getElementById(`input-${tipo}`);
     const archivo = input.files[0];
     if (!archivo) return;
-    const barra = document.getElementById('barra-progreso');
-    const progreso = document.getElementById('progreso-interno');
+    const barra = document.getElementById(`barra-${tipo}`);
+    const progreso = document.getElementById(`progreso-${tipo}`);
     const btn = input.nextElementSibling;
     const infoDiv = document.getElementById(`info-${tipo}`);
         if (infoDiv) {
@@ -265,10 +265,10 @@ window.subirArchivo = async (tipo) => {
         infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
       }
     }
-    barra.style.display = 'block';
-    progreso.style.width = '0%';
-    progreso.style.backgroundColor = '#3498db';
-    progreso.innerHTML = "";
+    progreso.style.width = '100%';
+progreso.style.backgroundColor = '#28a745';
+btn.disabled = true;
+btn.innerText = 'CARGADO EN NUBE';
     const extension = archivo.name.split('.').pop();
     const nombreFinal = `${tipo.toUpperCase()}_${patinadorSesionPadre.DNI}_${patinadorSesionPadre.nombre}.${extension}`;
     const storageRef = sRef(storage, `documentacion/${nombreFinal}`); 

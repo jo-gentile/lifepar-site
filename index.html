@@ -210,16 +210,17 @@
                     🖼️ ADJUNTAR DNI (Frente/Dorso)
                 </button>
                 <div id="info-dni" style="font-size: 0.8rem; color: #ffd700; text-align: center; margin-bottom: 5px;"></div>
-
+                <div id="barra-dni" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+                        <div id="progreso-dni" style="width: 0%; background: #3498db; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+                </div>
                 <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
                 <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
                     ⚕️ ADJUNTAR APTO MÉDICO 2026
                 </button>
                 <div id="info-medico" style="font-size: 0.8rem; color: #ffd700; text-align: center; margin-bottom: 5px;"></div>
-
-                <div id="barra-progreso" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
-                    <div id="progreso-interno" style="width: 0%; background: #ffd700; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
-                </div>
+                <div id="barra-medico" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+               <div id="progreso-medico" style="width: 0%; background: #3498db; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+               </div>
             </div>
         </div>
     </div>
