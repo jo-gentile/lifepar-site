@@ -43,3 +43,4 @@ if (btnToggle && slider) {
         }
     };
 }
+console.log("LOGIN MOSTRADO");
