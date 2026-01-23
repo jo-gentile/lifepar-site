@@ -314,15 +314,8 @@ window.subirArchivo = async (tipo) => {
         }
     );
 };
+const btnCerrar = document.getElementById('cerrarContacto');
 
-const linkContacto = document.getElementById('linkContacto');
-const contactoSection = document.getElementById('contacto');
-const btnCerrarContacto = document.getElementById('cerrarContacto');
-
-linkContacto.addEventListener('click', () => {
-    contactoSection.style.display = 'block';
-});
-
-btnCerrarContacto.addEventListener('click', () => {
-    contactoSection.style.display = 'none';
+btnCerrar.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 });
