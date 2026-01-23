@@ -4,52 +4,6 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, Go
 import { getDatabase, ref, get, child, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-/* ============================================================
-   1. FUNCIÓN VER ZONA (Fusión de HTML + JS)
-   ============================================================ */
-window.verZona = function(numero) {
-    console.log("Cargando zona número:", numero);
-    const contenedorCentro = document.getElementById('panel-cristal');
-    const infoABuscar = document.getElementById('detalle-zona' + numero);
-
-    if (contenedorCentro && infoABuscar) {
-        contenedorCentro.innerHTML = ''; 
-        
-        // Clonamos la zona para que no desaparezca del menú lateral
-        const clon = infoABuscar.cloneNode(true);
-        
-        // QUITAMOS EL ID: Esto evita que el botón falle al segundo click
-        clon.removeAttribute('id'); 
-        clon.classList.remove('oculto');
-        clon.classList.add('visible');
-        
-        contenedorCentro.appendChild(clon);
-
-        // USAMOS TU SCROLL DEL HTML: Sube suave al principio para ver la info
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-        console.error("No encontré el panel o la zona:", numero);
-    }
-};
-
-/* ============================================================
-   2. BOTÓN DE FONDO (Pasado del HTML al JS)
-   ============================================================ */
-// Buscamos el botón y el slider
-const btnToggle = document.getElementById('toggle-bg');
-const slider = document.querySelector('.background-slider');
-
-if (btnToggle && slider) {
-    btnToggle.onclick = () => {
-        // Si está visible, lo oculta; si está oculto, lo muestra
-        if (slider.style.display === 'none') {
-            slider.style.display = 'block';
-        } else {
-            slider.style.display = 'none';
-        }
-    };
-}
-
 // 2. CONFIGURACIÓN DE FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
@@ -72,107 +26,6 @@ const loginForm = document.getElementById('loginForm');
 const bloqueLogin = document.getElementById('bloqueLogin');
 const bloqueRegistro = document.getElementById('bloqueRegistro');
 const title = document.getElementById('loginTitle');
-
-// Abrir modo registro
-document.getElementById('linkRegistrarse').onclick = () => {
-    bloqueLogin.style.display = 'none';
-    bloqueRegistro.style.display = 'block';
-    title.innerText = "NUEVO ENTRENADOR";
-};
-
-// 4. LÓGICA DE NEGOCIO (SHEETS + FIREBASE)
-document.getElementById('btnVerificarSheet').onclick = async () => {
-    const emailNormal = document.getElementById('emailManual').value.trim().toLowerCase();
-    const emailFirebase = emailNormal.replace(/\./g, '_'); 
-    if(!emailNormal.includes("@")) return alert("Ingresá un mail válido.");
-    const dbRef = ref(db);
-    try {
-        const snapshot = await get(child(dbRef, `listaBlanca/${emailFirebase}`));
-        if (snapshot.exists()) {
-            alert("¡Autorizado! Ahora configurá tu contraseña de acceso.");
-            document.getElementById('btnVerificarSheet').style.display = 'none';
-            document.getElementById('seccionConfirmarPass').style.display = 'block';
-        } else {
-            const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Deseas ingresar al Portal de Padres para subir documentación?");
-            if (confirmacion) {
-                loginForm.style.display = 'none';
-                document.getElementById('portal-padres').style.display = 'block';
-                document.querySelector('.contenido-principal').style.display = 'none';
-            }
-        }
-    } catch (err) {
-        alert("Error de conexión con la base de datos.");
-    }
-};
-
-// Registro Final en Firebase
-document.getElementById('btnFinalizarRegistro').onclick = async () => {
-    const email = document.getElementById('emailManual').value;
-    const p1 = document.getElementById('passNuevo').value;
-    const p2 = document.getElementById('passConfirmar').value;
-    if(p1.length < 6) return alert("La clave debe tener al menos 6 caracteres.");
-    if(p1 !== p2) return alert("Las claves no coinciden.");
-    try {
-        await createUserWithEmailAndPassword(auth, email, p1);
-        alert("¡Cuenta creada con éxito!");
-        location.reload();
-    } catch (err) {
-        alert("Error al crear cuenta: " + err.message);
-    }
-};
-
-// Ingreso con Email y Clave
-document.getElementById('btnEntrar').onclick = async () => {
-    const email = document.getElementById('emailLogin').value;
-    const pass = document.getElementById('passLogin').value;
-    if(!email || !pass) return alert("Completá todos los campos.");
-    try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        sessionStorage.setItem('userEmail', email);
-        sessionStorage.setItem('userName', "Entrenador Lifepar"); 
-        alert("Ingreso exitoso.");
-        loginForm.style.display = 'none';
-        window.location.href = "admin.html";
-    } catch (err) {
-        console.error("Error Firebase:", err.code);
-        alert("Credenciales incorrectas o usuario no encontrado.");
-    }
-};
-
-// Ingreso con Google + Check de Lista Blanca
-document.getElementById('btnGoogle').onclick = async () => {
-    try {
-        const result = await signInWithPopup(auth, provider);
-        const email = result.user.email;
-        const nombre = result.user.displayName || "Entrenador";
-        const response = await fetch(`${URL_SHEET}?email=${email}`);
-        const data = await response.json();
-        if(data.autorizado) {
-            sessionStorage.setItem('userEmail', email);
-            sessionStorage.setItem('userName', nombre);
-            window.location.href = "admin.html";
-        } else {
-            loginForm.style.display = 'none';
-            document.getElementById('portal-padres').style.display = 'block';
-            document.querySelector('.contenido-principal').style.display = 'none';
-        }
-    } catch (err) {
-        console.error(err);
-        alert("Error con Google.");
-    }
-};
-
-// Recuperar Clave
-document.getElementById('linkRecuperar').onclick = async () => {
-    const email = document.getElementById('emailLogin').value || document.getElementById('emailManual').value;
-    if(!email) return alert("Escribí tu email primero.");
-    try {
-        await sendPasswordResetEmail(auth, email);
-        alert("Te enviamos un link a tu correo.");
-    } catch (err) {
-        alert("Error al enviar: " + err.message);
-    }
-};
 
 // FUNCIONES DE INTERFAZ
 const resetFormulario = () => {
@@ -200,9 +53,143 @@ document.getElementById('btnCerrarLogin').onclick = () => {
     resetFormulario();
 };
 
+// Conectar botón de acceso a entrenadores
+document.getElementById('btnAccesoEntrenadores').onclick = () => {
+    mostrarLogin();
+};
+
+// Ingreso con Email y Clave
+document.getElementById('btnEntrar').onclick = async () => {
+    const email = document.getElementById('emailLogin').value;
+    const pass = document.getElementById('passLogin').value;
+    if(!email || !pass) return alert("Completá todos los campos.");
+    try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        sessionStorage.setItem('userEmail', email);
+        sessionStorage.setItem('userName', "Entrenador Lifepar"); 
+        alert("Ingreso exitoso.");
+        loginForm.style.display = 'none';
+        window.location.href = "admin.html";
+    } catch (err) {
+        console.error("Error Firebase:", err.code);
+        alert("Credenciales incorrectas o usuario no encontrado.");
+    }
+};
+
+
+// Ingreso con Google + Check de Lista Blanca
+document.getElementById('btnGoogle').onclick = async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const email = result.user.email;
+        const nombre = result.user.displayName || "Entrenador";
+        const response = await fetch(`${URL_SHEET}?email=${email}`);
+        const data = await response.json();
+
+        if(data.autorizado) {
+            // Entrenador autorizado: acceso al admin
+            sessionStorage.setItem('userEmail', email);
+            sessionStorage.setItem('userName', nombre);
+            window.location.href = "admin.html";
+
+        } else {
+            // No autorizado: preguntar si es padre
+            loginForm.style.display = 'none';
+            const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Querés ingresar al Portal de Padres para subir documentación?");
+
+            if (confirmacion) {
+                // Padre dice sí → portal padres
+                document.getElementById('portal-padres').style.display = 'block';
+                document.querySelector('.contenido-principal').style.display = 'none';
+            } else {
+                // Padre dice no → volver a mostrar login
+                mostrarLogin();
+            }
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Error con Google.");
+    }
+};
+
+
 // Atrás en registro
 document.getElementById('linkVolverLogin').onclick = () => {
     resetFormulario();
+};
+
+// Abrir modo registro
+document.getElementById('linkRegistrarse').onclick = () => {
+    bloqueLogin.style.display = 'none';
+    bloqueRegistro.style.display = 'block';
+    title.innerText = "NUEVO ENTRENADOR";
+};
+
+// 4. LÓGICA DE NEGOCIO (SHEETS + FIREBASE)
+document.getElementById('btnVerificarSheet').onclick = async () => {
+    const emailNormal = document.getElementById('emailManual').value.trim().toLowerCase();
+    const emailFirebase = emailNormal.replace(/\./g, '_'); 
+    if(!emailNormal.includes("@")) return alert("Ingresá un mail válido.");
+
+    const dbRef = ref(db);
+    try {
+        const snapshot = await get(child(dbRef, `listaBlanca/${emailFirebase}`));
+
+        if (snapshot.exists()) {
+            // ✅ Mail autorizado: abrir sección para crear contraseña
+            alert("¡Autorizado! Ahora configurá tu contraseña de acceso.");
+            document.getElementById('btnVerificarSheet').style.display = 'none';
+            document.getElementById('seccionConfirmarPass').style.display = 'block';
+
+        } else {
+            // ❌ Mail no autorizado: preguntar si es padre
+            const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Querés ingresar al Portal de Padres para subir documentación?");
+
+            if (confirmacion) {
+                // Padre dice sí → portal padres
+                loginForm.style.display = 'none';
+                document.getElementById('portal-padres').style.display = 'block';
+                document.querySelector('.contenido-principal').style.display = 'none';
+            } else {
+                // Padre dice no → volver a mostrar login
+                mostrarLogin();
+            }
+        }
+    } catch (err) {
+        alert("Error de conexión con la base de datos.");
+    }
+};
+
+// Registro Final en Firebase
+document.getElementById('btnFinalizarRegistro').onclick = async () => {
+    const email = document.getElementById('emailManual').value;
+    const p1 = document.getElementById('passNuevo').value;
+    const p2 = document.getElementById('passConfirmar').value;
+
+    if(p1.length < 6) return alert("La clave debe tener al menos 6 caracteres.");
+    if(p1 !== p2) return alert("Las claves no coinciden.");
+
+    try {
+        await createUserWithEmailAndPassword(auth, email, p1);
+        alert("¡Cuenta creada con éxito!");
+        window.location.href = "admin.html"; // redirige directo al admin después de crear la cuenta
+    } catch (err) {
+        alert("Error al crear cuenta: " + err.message);
+    }
+};
+
+
+// Recuperar Clave
+document.getElementById('linkRecuperar').onclick = async () => {
+    const email = document.getElementById('emailLogin').value || document.getElementById('emailManual').value;
+    if(!email) return alert("Escribí tu email primero.");
+    try {
+        await sendPasswordResetEmail(auth, email);
+        alert("Te enviamos un link a tu correo.");
+    } catch (err) {
+        alert("Error al enviar: " + err.message);
+    }
 };
 
 // Variable global para patinador
@@ -314,8 +301,62 @@ window.subirArchivo = async (tipo) => {
         }
     );
 };
+
+// Atrás en registro
+document.getElementById('linkVolverLogin').onclick = () => {
+    resetFormulario();
+};
+
 const btnCerrar = document.getElementById('cerrarContacto');
 
 btnCerrar.addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
+
+
+/* ============================================================
+   1. FUNCIÓN VER ZONA (Fusión de HTML + JS)
+   ============================================================ */
+window.verZona = function(numero) {
+    console.log("Cargando zona número:", numero);
+    const contenedorCentro = document.getElementById('panel-cristal');
+    const infoABuscar = document.getElementById('detalle-zona' + numero);
+
+    if (contenedorCentro && infoABuscar) {
+        contenedorCentro.innerHTML = ''; 
+        
+        // Clonamos la zona para que no desaparezca del menú lateral
+        const clon = infoABuscar.cloneNode(true);
+        
+        // QUITAMOS EL ID: Esto evita que el botón falle al segundo click
+        clon.removeAttribute('id'); 
+        clon.classList.remove('oculto');
+        clon.classList.add('visible');
+        
+        contenedorCentro.appendChild(clon);
+
+        // USAMOS TU SCROLL DEL HTML: Sube suave al principio para ver la info
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+        console.error("No encontré el panel o la zona:", numero);
+    }
+};
+
+/* ============================================================
+   2. BOTÓN DE FONDO (Pasado del HTML al JS)
+   ============================================================ */
+// Buscamos el botón y el slider
+const btnToggle = document.getElementById('toggle-bg');
+const slider = document.querySelector('.background-slider');
+
+if (btnToggle && slider) {
+    btnToggle.onclick = () => {
+        // Si está visible, lo oculta; si está oculto, lo muestra
+        if (slider.style.display === 'none') {
+            slider.style.display = 'block';
+        } else {
+            slider.style.display = 'none';
+        }
+    };
+}
+
