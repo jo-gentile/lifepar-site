@@ -380,42 +380,33 @@ document.getElementById('btnVerificarSheet').onclick = async () => {
     }
   };
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  const btnGoogle = document.getElementById("btnGoogle");
-  const portalPadres = document.getElementById("portal-padres");
-
-  if (!btnGoogle || !portalPadres) {
-    console.error("Faltan elementos del DOM");
-    return;
-  }
-
-  btnGoogle.addEventListener("click", async () => {
+// D. Ingreso con Google + Check de Lista Blanca
+  document.getElementById('btnGoogle').onclick = async () => {
     try {
       const result = await signInWithPopup(auth, provider);
       const email = result.user.email;
       const nombre = result.user.displayName || "Entrenador";
 
+      // --- FIJATE QUE ESTA LÍNEA ESTÉ COMPLETA ---
       const response = await fetch(`https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec?email=${email}`);
       const data = await response.json();
 
-      if (data.autorizado) {
+if(data.autorizado) {
         sessionStorage.setItem('userEmail', email);
         sessionStorage.setItem('userName', nombre);
         window.location.href = "admin.html";
       } else {
-        portalPadres.style.display = "block";
-        document.querySelector('.contenido-principal')?.style.display = "none";
+        // El desvío para padres logueados con Google
+        loginForm.style.display = 'none';
+        document.getElementById('portal-padres').style.display = 'block';
+        document.querySelector('.contenido-principal').style.display = 'none';
       }
-
-    } catch (err) {
+    } catch (err) { // <--- ESTO ES LO QUE TE FALTA
       console.error(err);
       alert("Error con Google.");
     }
-  });
-
-});
-
+};
+ 
   // E. Recuperar Clave
   document.getElementById('linkRecuperar').onclick = async () => {
     const email = document.getElementById('emailLogin').value || document.getElementById('emailManual').value;
@@ -445,8 +436,14 @@ const resetFormulario = () => {
 // Al abrir desde el botón del Header, siempre reseteamos primero
 window.mostrarLogin = () => { 
     resetFormulario();
+
+    // 🔴 ESTO FALTABA
+    document.getElementById('portal-padres').style.display = 'none';
+    document.querySelector('.contenido-principal').style.display = 'block';
+
     loginForm.style.display = 'block'; 
 };
+
 
 // Al cerrar, también reseteamos para que no quede "sucio"
 document.getElementById('btnCerrarLogin').onclick = () => { 
