@@ -315,3 +315,13 @@ window.subirArchivo = async (tipo) => {
     );
 };
 
+// Mostrar la sección contacto al presionar el enlace
+document.querySelector('a[href="#contacto"]').addEventListener('click', function(e){
+    e.preventDefault(); // Evita que haga scroll
+    document.getElementById('contacto').style.display = 'block';
+});
+
+// Ocultar la sección contacto con el botón de cerrar
+document.getElementById('cerrarContacto').addEventListener('click', function(){
+    document.getElementById('contacto').style.display = 'none';
+});

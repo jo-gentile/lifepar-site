@@ -28,19 +28,30 @@
         </div>
     </div>
 
-    <nav>
-        <ul>
-            <li><a href="#zonas">Zonas</a></li>
-            <li><a href="#calendario">Calendario</a></li>
-            <li><a href="#contacto">Contacto</a></li>
-            <li>
-                <button id="btnAccesoEntrenadores" class="admin-button">
-    Acceso Entrenadores
-</button>
+  <nav>
+    <ul>
+        <li><a href="#zonas">Zonas</a></li>
+        <li><a href="#calendario">Calendario</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li>
+            <button id="btnAccesoEntrenadores" class="admin-button">Acceso Entrenadores</button>
+        </li>
+    </ul>
+</nav>
 
-            </li>
-        </ul>
-     </nav> 
+<!-- Sección de contacto fuera del nav -->
+<section id="contacto" class="info" style="display: none;">
+    <h3>Contacto Directo</h3>
+    <div class="contacto-form">
+        <form>
+            <input type="text" placeholder="Tu nombre" style="width: 100%; padding: 10px; margin-bottom: 10px;" />
+            <input type="email" placeholder="Tu correo" style="width: 100%; padding: 10px; margin-bottom: 10px;" />
+            <textarea placeholder="Tu mensaje" style="width: 100%; padding: 10px; margin-bottom: 10px; height: 100px;"></textarea>
+            <button type="submit" style="padding: 10px 20px; background: #222; color: #fff; border: none; cursor: pointer;">Enviar Mensaje</button>
+        </form>
+    </div>
+    <button id="cerrarContacto" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer; font-size: 0.8rem;">[ CERRAR ]</button>
+</section>
 </header>
 
 <div class="header-spacer"></div>
@@ -51,7 +62,7 @@
     <p>Las nuevas tendencias, fechas y eventos actualizados. Enterate todo acá!</p>
   </div>
 
-  <section class="contenedor-competencia">
+<section class="contenedor-competencia">
     
     <div class="columna-zonas izquierda">
         <div class="zona-card roja" onclick="verZona(1)">ZONA 1</div>
