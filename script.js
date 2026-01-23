@@ -253,8 +253,9 @@ window.subirArchivo = async (tipo) => {
     const barra = document.getElementById('barra-progreso');
     const progreso = document.getElementById('progreso-interno');
     const btn = input.nextElementSibling;
-    const infoDiv = document.getElementById(`info-${tipo}`) || {}; 
-    if (archivo.type.startsWith('image/')) {
+    const infoDiv = document.getElementById(`info-${tipo}`);
+        if (infoDiv) {
+        if (archivo.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
             infoDiv.innerHTML = `<img src="${e.target.result}" class="mini-previa"><br><b>Archivo:</b> ${archivo.name}`;
@@ -262,6 +263,7 @@ window.subirArchivo = async (tipo) => {
         reader.readAsDataURL(archivo);
     } else {
         infoDiv.innerHTML = `<br><b>Documento:</b> ${archivo.name}`;
+      }
     }
     barra.style.display = 'block';
     progreso.style.width = '0%';
@@ -292,12 +294,12 @@ window.subirArchivo = async (tipo) => {
                 btn.disabled = true;
                 btn.style.backgroundColor = "#6c757d";
                 btn.style.cursor = "not-allowed";
-                btn.innerText = "CARGADO EN NUBE";
-            } catch (err) {
-                console.error("Error final:", err);
-                progreso.style.backgroundColor = '#e74c3c';
-                progreso.innerHTML = "✕";
+                 btn.innerText = "CARGADO EN NUBE";
+             } catch (err) {
+                    console.error("Error en DB, pero archivo subido:", err);
+                    // No cambiamos la barra ni marcamos error visual
             }
+
         }
     );
 };
