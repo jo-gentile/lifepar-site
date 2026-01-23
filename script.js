@@ -43,9 +43,3 @@ if (btnToggle && slider) {
         }
     };
 }
-document.addEventListener("DOMContentLoaded", () => {
-    const btn = document.getElementById("btnAccesoEntrenadores");
-    btn?.addEventListener("click", () => {
-        window.mostrarLogin(); // ahora sí funciona
-    });
-});

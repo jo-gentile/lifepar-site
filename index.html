@@ -588,6 +588,13 @@ window.subirArchivo = async (tipo) => {
         }
     );
 };
+const btnAcceso = document.getElementById("btnAccesoEntrenadores");
+if (btnAcceso) {
+  btnAcceso.addEventListener("click", () => {
+    mostrarLogin();
+  });
+}
+
 </script>
 <script src="script.js"></script> 
 </body>
