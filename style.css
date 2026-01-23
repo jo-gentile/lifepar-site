@@ -259,6 +259,16 @@ nav li a:hover {
     -webkit-backdrop-filter: blur(20px) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
 }
+/* Ahora: bloque que empieza oculto y se muestra al hacer clic */
+.detalle-zona {
+    display: none; /* todos empiezan ocultos */
+}
+
+.detalle-zona.visible {
+    display: flex; /* o block según tu diseño */
+    flex-direction: row;
+    gap: 20px;
+}
 
 .dirigente-foto {
     width: 110px !important;
