@@ -130,3 +130,26 @@ window.mostrarClinica = async function (idClinica) {
   };
   document.body.appendChild(script);
 };
+window.guardarInscripcionClinicaFirebase = async function (
+  idClinica,
+  club,
+  lista
+) {
+  const { getDatabase, ref, set } = await import(
+    "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
+  );
+
+  const db = getDatabase();
+
+  const clubKey = club.replace(/\./g, "_");
+
+  const ruta = `INSCRIPCIONES_CLINICAS/${idClinica}/${clubKey}`;
+
+  return await set(ref(db, ruta), {
+    lista,
+    fecha_registro: new Date().toISOString(),
+    id_clinica: idClinica,
+    club: club
+  });
+};
+
