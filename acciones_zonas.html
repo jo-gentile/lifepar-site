@@ -49,8 +49,6 @@
     </div>
 </div>
 
-<script src="acciones_zonas.js?v=1.2"></script>
-
  <script>
     // 1. Detección de zona (Aseguramos que existan antes de usarlas)
     const urlParams = new URLSearchParams(window.location.search);
@@ -427,9 +425,6 @@ window.guardarEdicionPatinador = async (numZona, id) => {
     }
 };
 
-
-</script>
-<script>
   document.querySelectorAll('.nav-item').forEach(a => {
     a.addEventListener('click', e => {
       const id = a.getAttribute('onclick')?.match(/'([^']+)'/);
@@ -440,6 +435,6 @@ window.guardarEdicionPatinador = async (numZona, id) => {
     });
   });
 </script>
-
+<script src="acciones_zonas.js?v=1.2"></script>
 </body>
 </html>
