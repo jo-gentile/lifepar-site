@@ -172,37 +172,6 @@
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
 
-  let clinicaActiva = "";
-
-  // --- NUEVAS FUNCIONES INTEGRADAS ---
-
-  window.cargarZona = function(idClinica) {
-    const contenedor = document.getElementById('contenedor-clinicas');
-    if (!contenedor) return;
-
-    contenedor.style.display = 'block';
-    clinicaActiva = idClinica;
-    
-    const titulo = document.getElementById('titulo-clinica');
-    if (titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, ' ');
-
-    cargarClubes('select-club-clinica'); 
-
-    const tbody = document.getElementById('body-tabla-clinica');
-    if (tbody) {
-        tbody.innerHTML = ""; 
-        for (let i = 1; i <= 20; i++) {
-            tbody.innerHTML += `
-                <tr>
-                    <td style="border: 1px solid #444; text-align: center; padding: 5px; color: gold;">${i}</td>
-                    <td style="border: 1px solid #444;"><input type="text" class="input-tabla nombre" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
-                    <td style="border: 1px solid #444;"><input type="text" class="input-tabla categoria" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
-                    <td style="border: 1px solid #444;"><input type="number" class="input-tabla edad" style="width: 95%; background: transparent; color: white; border: none; padding: 5px;"></td>
-                </tr>`;
-        }
-    }
-  };
-
   async function cargarClubes(idSelect) {
     const select = document.getElementById(idSelect);
     if (!select) return;
