@@ -429,5 +429,17 @@ window.guardarEdicionPatinador = async (numZona, id) => {
 
 
 </script>
+<script>
+  document.querySelectorAll('.nav-item').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('onclick')?.match(/'([^']+)'/);
+      if(id){
+        const el = document.getElementById(id[1]);
+        if(el) el.style.display = el.style.display==='block'?'none':'block';
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
