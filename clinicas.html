@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Clínicas LIFEPAR</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: transparent;
+      color: white;
+    }
+
+    #clinicas-container {
+      padding: 20px;
+      background: #111;
+      border: 2px solid gold;
+      border-radius: 8px;
+    }
+
+    #titulo-clinica {
+      text-align: center;
+      color: gold;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .campo {
+      margin-bottom: 15px;
+    }
+
+    .campo label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ccc;
+    }
+
+    .campo select {
+      width: 100%;
+      padding: 8px;
+      background: #222;
+      color: white;
+      border: 1px solid gold;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: #222;
+    }
+
+    thead {
+      background: #333;
+      color: gold;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+
+    td input {
+      width: 95%;
+      background: transparent;
+      border: none;
+      color: white;
+      padding: 5px;
+      outline: none;
+    }
+
+    td input[type="number"] {
+      text-align: center;
+    }
+
+    #btn-enviar-clinica {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, gold, #b8860b);
+      color: black;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #btn-enviar-clinica:hover {
+      filter: brightness(1.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<section id="clinicas-container">
+
+  <h3 id="titulo-clinica">Inscripción Clínica</h3>
+
+  <div class="campo">
+    <label for="select-club-clinica">Seleccionar Club</label>
+    <select id="select-club-clinica">
+      <option value="">Cargando clubes...</option>
+    </select>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:40px">#</th>
+        <th>Nombre y Apellido</th>
+        <th>Categoría</th>
+        <th style="width:70px">Edad</th>
+      </tr>
+    </thead>
+    <tbody id="body-tabla-clinica">
+      <!-- filas generadas por JS -->
+    </tbody>
+  </table>
+
+  <button id="btn-enviar-clinica">
+    🚀 ENVIAR INSCRIPCIÓN FINAL
+  </button>
+
+</section>
+
+<script src="clinicas.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
