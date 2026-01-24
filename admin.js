@@ -115,8 +115,20 @@ function cerrarModalClub() {
     document.body.style.overflow = "auto";
 }
 window.mostrarClinica = function(idClinica) {
-  console.log("Mostrando clínica:", idClinica);
-
   const vista = document.getElementById("vista-dinamica");
-  vista.innerHTML = `Cargando clínica ${idClinica}...`;
+
+  vista.innerHTML = "Cargando clínica...";
+
+  fetch("clinicas.html")
+    .then(res => res.text())
+    .then(html => {
+      vista.innerHTML = html;
+
+      // ahora sí inicializamos la lógica
+      initClinica(idClinica);
+    })
+    .catch(err => {
+      vista.innerHTML = "Error al cargar la clínica";
+      console.error(err);
+    });
 };

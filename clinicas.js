@@ -8,8 +8,11 @@ window.initClinica = async function (idClinica) {
 
   await cargarClubes();
   construirTabla();
-};
 
+  document
+    .getElementById("btn-enviar-clinica")
+    .addEventListener("click", enviarClinica);
+};
 async function cargarClubes() {
   const select = document.getElementById("select-club-clinica");
   select.innerHTML = '<option value="">Seleccioná un club...</option>';
@@ -46,10 +49,6 @@ function construirTabla() {
     `;
   }
 }
-
-document
-  .getElementById("btn-enviar-clinica")
-  .addEventListener("click", enviarClinica);
 
 async function enviarClinica() {
   const club = document.getElementById("select-club-clinica").value;
