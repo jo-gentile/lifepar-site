@@ -114,3 +114,9 @@ function cerrarModalClub() {
     modal.style.display = "none";
     document.body.style.overflow = "auto";
 }
+window.mostrarClinica = function(idClinica) {
+  console.log("Mostrando clínica:", idClinica);
+
+  const vista = document.getElementById("vista-dinamica");
+  vista.innerHTML = `Cargando clínica ${idClinica}...`;
+};
