@@ -217,6 +217,7 @@ window.enviarCargaPatinador = async (numZona) => {
         edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
         mailProfe: userEmail
     };
+}
 
     if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
