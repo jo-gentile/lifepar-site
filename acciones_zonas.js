@@ -221,10 +221,17 @@ window.enviarCargaPatinador = async (numZona) => {
     if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
     try {
-        await window.parent.puenteFirebase('push', `ZONAS/ZONA_${numZona}`, { ...datos, fecha_registro: new Date().toISOString() });
-        alert("✅ Guardado con éxito.");
-        // Limpieza de campos (mantené tu función limpiarCamposPostCarga)
-    } catch (e) { alert("❌ Error: " + e.message); }
+        // Usamos el nombre exacto del puente que pusimos en admin.js
+        await window.parent.puenteFirebase('push', `ZONAS/ZONA_${numZona}`, { 
+            ...datos, 
+            fecha_registro: new Date().toISOString() 
+        });
+        
+        alert("✅ ¡Registro guardado con éxito!");
+        limpiarCamposPostCarga(numZona);
+    } catch (error) {
+        console.error("Error en el puente:", error);
+        alert("❌ Error de permisos o conexión. Revisá el admin.js");
 };
 
 window.toggleAsistencia = async (numZona, id, campo, boton) => {
