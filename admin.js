@@ -1,41 +1,30 @@
+// --- 1. GESTIÓN DE SESIÓN Y USUARIO ---
+const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
+const userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
 
-// Buscamos en Session y en Local por las dudas
-let userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
-let userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
+if(document.getElementById('display-email')) document.getElementById('display-email').innerText = userEmail;
+if(document.getElementById('display-name')) document.getElementById('display-name').innerText = userName;
 
-// Los imprimimos
-if(document.getElementById('display-email')) {
-    document.getElementById('display-email').innerText = userEmail;
-}
-
-if(document.getElementById('display-name')) {
-    document.getElementById('display-name').innerText = userName;
-}
-// 1. Salir de la oficina
 function logout() {
+    sessionStorage.clear();
     localStorage.clear();
     window.location.href = "index.html";
 }
 
-// 2. Barra lateral elástica
+// --- 2. INTERFAZ Y NAVEGACIÓN ---
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const mainContent = document.getElementById('main-content');
-
     sidebar.classList.toggle('collapsed');
     mainContent.classList.toggle('expanded');
-
-    document.body.classList.toggle('layout-collapsed'); // ← ESTA ES LA CLAVE
+    document.body.classList.toggle('layout-collapsed');
 }
 
-
-// 3. Abrir/Cerrar el árbol de Zonas
 function toggleArbol(id) {
     const lista = document.getElementById(id);
-    const flecha = document.getElementById('flecha-zonas');
+    const flecha = document.getElementById('flecha-zonas'); // Solo si es el de zonas
     
-    // Si está cerrado, lo ponemos en flex, si está abierto lo ocultamos
-    if (lista.style.display === "flex") {
+    if (lista.style.display === "flex" || lista.style.display === "block") {
         lista.style.display = "none";
         if(flecha) flecha.style.transform = "rotate(0deg)";
     } else {
@@ -44,112 +33,68 @@ function toggleArbol(id) {
     }
 }
 
-function mostrarAccionesZona(numeroZona) {
-    // CAMBIO: Antes decía 'contenedor-acciones-zonas', ahora dice 'vista-dinamica'
-    const contenedor = document.getElementById('vista-dinamica'); 
-    
-    if (contenedor) {
-        contenedor.innerHTML = ''; 
-        contenedor.style.display = 'block';
+// --- 3. CONTROLADORES DE CONTENIDO (VISTAS) ---
 
-        contenedor.innerHTML = `
-         <iframe src="acciones_zonas.html?zona=${numeroZona}" 
-            scrolling="no" 
-            style="width: 100%; min-height: 2000px; border: none; background: transparent; overflow: hidden;">
-          </iframe>
-        `;
-
-        // Ocultamos las otras secciones por si estaban abiertas
-        if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
-        if (document.getElementById('copa-federal')) document.getElementById('copa-federal').style.display = 'none';
-
-        contenedor.scrollIntoView({ behavior: 'smooth' });
+// Función Maestra para limpiar secciones fijas antes de mostrar un Iframe
+function limpiarPantalla() {
+    if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
+    if (document.getElementById('copa-federal')) document.getElementById('copa-federal').style.display = 'none';
+    const vista = document.getElementById('vista-dinamica');
+    if (vista) {
+        vista.innerHTML = '';
+        vista.style.display = 'block';
     }
 }
 
-function mostrarSeguros() {
-    // 1. Vaciamos y ocultamos el contenedor de zonas
-    const contenedorZonas = document.getElementById('contenedor-acciones-zonas');
-    if (contenedorZonas) {
-        contenedorZonas.innerHTML = ''; // Limpiamos el iframe
-        contenedorZonas.style.display = 'none';
-    }
-    
-    // 2. Ocultamos Copa Federal
-    if (document.getElementById('copa-federal')) document.getElementById('copa-federal').style.display = 'none';
+function mostrarAccionesZona(numeroZona) {
+    limpiarPantalla();
+    const contenedor = document.getElementById('vista-dinamica');
+    contenedor.innerHTML = `
+        <iframe src="acciones_zonas.html?zona=${numeroZona}" 
+            allowtransparency="true"
+            style="width: 100%; min-height: 2000px; border: none; background: transparent; overflow: hidden;">
+        </iframe>
+    `;
+    contenedor.scrollIntoView({ behavior: 'smooth' });
+}
 
-    // 3. Mostramos Seguros
-    const boxSeguros = document.getElementById('seguros');
-    if (boxSeguros) {
-        boxSeguros.style.display = 'block';
-    }
+window.mostrarClinica = async function (idClinica) {
+    limpiarPantalla();
+    const vista = document.getElementById("vista-dinamica");
+    vista.innerHTML = `
+        <iframe src="clinicas.html?id=${idClinica}" 
+            allowtransparency="true" 
+            style="width: 100%; min-height: 1200px; border: none; background: transparent;">
+        </iframe>
+    `;
+};
+
+function mostrarSeguros() {
+    limpiarPantalla();
+    document.getElementById('vista-dinamica').style.display = 'none';
+    const box = document.getElementById('seguros');
+    if (box) box.style.display = 'block';
 }
 
 function mostrarCopa() {
-    // 1. Vaciamos y ocultamos el contenedor de zonas
-    const contenedorZonas = document.getElementById('contenedor-acciones-zonas');
-    if (contenedorZonas) {
-        contenedorZonas.innerHTML = ''; // Limpiamos el iframe
-        contenedorZonas.style.display = 'none';
-    }
-
-    // 2. Ocultamos Seguros
-    if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
-
-    // 3. Mostramos la Copa Federal
-    const boxCopa = document.getElementById('copa-federal');
-    if (boxCopa) {
-        boxCopa.style.display = 'block';
-    }
-}
-// --- FUNCIONES PARA EL MODAL DE CLUBES (Deben estar en el Rey) ---
-function abrirModalClub() {
-    const modal = document.getElementById("ModalClub");
-    modal.style.display = "flex";
-    document.body.style.overflow = "hidden";
+    limpiarPantalla();
+    document.getElementById('vista-dinamica').style.display = 'none';
+    const box = document.getElementById('copa-federal');
+    if (box) box.style.display = 'block';
 }
 
-function cerrarModalClub() {
-    const modal = document.getElementById("ModalClub");
-    modal.style.display = "none";
-    document.body.style.overflow = "auto";
-}
-window.mostrarClinica = async function (idClinica) {
-  const vista = document.getElementById("vista-dinamica");
+// --- 4. EL PUENTE MAESTRO DE FIREBASE (El Corazón del Sistema) ---
+// Esta función la llaman los HIJOS con: window.parent.puenteFirebase(...)
+window.puenteFirebase = async (operacion, ruta, datos) => {
+    const { getDatabase, ref, set, push, update, get } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
+    const db = getDatabase();
+    const dbRef = ref(db, ruta);
 
-  // 1. Inyectamos el iframe con transparencia activa
-  vista.innerHTML = `
-    <iframe src="clinicas.html?id=${idClinica}" 
-      allowtransparency="true" 
-      style="width: 100%; min-height: 800px; border: none; background: transparent;">
-    </iframe>
-  `;
-
-  // 2. Cargamos el script (Corregido para que esté dentro de la función)
-  const script = document.createElement("script");
-  script.src = "clinicas.js";
-  script.onload = () => {
-    if (typeof window.initClinica === 'function') {
-        window.initClinica(idClinica);
+    switch(operacion) {
+        case 'set': return await set(dbRef, datos);
+        case 'push': return await push(dbRef, datos);
+        case 'update': return await update(dbRef, datos);
+        case 'get': return await get(dbRef);
+        default: throw new Error("Operación no válida");
     }
-  };
-  document.body.appendChild(script);
 };
-
-window.guardarInscripcionClinicaFirebase = async function (idClinica, club, lista) {
-  const { getDatabase, ref, set } = await import(
-    "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
-  );
-
-  const db = getDatabase();
-  const clubKey = club.replace(/\./g, "_");
-  const ruta = `INSCRIPCIONES_CLINICAS/${idClinica}/${clubKey}`;
-
-  return await set(ref(db, ruta), {
-    lista,
-    fecha_registro: new Date().toISOString(),
-    id_clinica: idClinica,
-    club: club
-  });
-};
-

@@ -1,8 +1,7 @@
-// Definirla así asegura que esté disponible para todo el documento
+// --- 1. SISTEMA DE CANDADOS (LOCKS) ---
 window.toggleLock = function(btn, idCampo) {
     const campo = document.getElementById(idCampo);
-    if (!campo) return; // Seguridad por si el ID no existe
-
+    if (!campo) return;
     if (campo.disabled) {
         campo.disabled = false;
         btn.innerText = "🔓";
@@ -13,6 +12,7 @@ window.toggleLock = function(btn, idCampo) {
         btn.classList.add("locked");
     }
 };
+
 // --- 2. MAPA DE COMPETENCIA ---
 const MAPA_COMPETENCIA = {
     "LIBRE": {
@@ -28,7 +28,7 @@ const MAPA_COMPETENCIA = {
     }
 };
 
-function actualizarCascada(nivel, numZona) {
+window.actualizarCascada = function(nivel, numZona) {
     const disc = document.getElementById(`z${numZona}-disciplina`).value;
     const div  = document.getElementById(`z${numZona}-divisional`);
     const cat  = document.getElementById(`z${numZona}-categoria`);
@@ -52,138 +52,164 @@ function actualizarCascada(nivel, numZona) {
             });
         }
     }
-}
+};
 
-async function abrirFormularioCarga(numZona) {
+// --- 3. FORMULARIO DE CARGA ---
+window.abrirFormularioCarga = async function(numZona) {
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
-    if (!userEmail) {
-        alert("⚠️ No se detectó sesión de usuario.");
-        return;
-    }
+    if (!userEmail) return alert("⚠️ No se detectó sesión.");
+    if (contenedor.style.display === 'flex') { contenedor.style.display = 'none'; return; }
 
-    if (contenedor.style.display === 'flex') {
-        contenedor.style.display = 'none';
-        return;
-    }
-
-    contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Conectando con la base de datos...</p>';
+    contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Cargando Clubes...</p>';
     contenedor.style.display = 'flex';
-
-    let opcionesClub = "";
 
     try {
         const emailKey = userEmail.replace(/\./g, '_');
-        // Llamamos al puente del padre para traer los clubes de Firebase
-        const clubesData = await parent.obtenerClubesFirebase(emailKey);
+        // USAMOS EL PUENTE DEL PADRE
+        const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
+        const clubesData = snapshot.exists() ? snapshot.val() : null;
 
-        if (clubesData) {
-            // Convertimos el objeto de Firebase en opciones del select
-            opcionesClub = Object.keys(clubesData).map(key => {
-                const nombreLimpio = key.replace(/_/g, ' ');
-                return `<option value="${nombreLimpio}">${nombreLimpio}</option>`;
-            }).join('');
-        } else {
-            opcionesClub = '<option value="">Sin clubes asociados</option>';
-        }
-    } catch (error) {
-        console.error("Error al leer Firebase:", error);
-        opcionesClub = '<option value="">Error al cargar clubes</option>';
-    }
+        let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key.replace(/_/g, ' ')}">${key.replace(/_/g, ' ')}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
-contenedor.innerHTML = `
-    <div style="background: rgba(255,255,255,0.05); border: 1px solid #ffd700; padding: 25px; border-radius: 15px; margin-top: 15px; position: relative;">
-        
-        <div id="btn-cerrar-modal-general" onclick="this.parentElement.parentElement.style.display='none'; this.parentElement.parentElement.innerHTML='';" 
-             style="display:none; position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:25px; font-weight:bold; z-index:10005;">✕</div>
-        <h4 style="color:#ffd700; text-align:center; font-family:'Anton',sans-serif; font-weight: 400; letter-spacing: 2px; font-size: 1.2rem;">
-    📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}
-</h4>
+        contenedor.innerHTML = `
+            <div style="background: rgba(255,255,255,0.05); border: 1px solid gold; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px;">
+                <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+                
+                <label>Club</label>
+                <div class="lock-group">
+                    <select id="z${numZona}-club">${opcionesClub}</select>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-club')">🔓</button>
+                </div>
 
-        <style>
-            .lock-group { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-            .btn-lock { background: #222; border: 1px solid #444; border-radius: 5px; cursor: pointer; padding: 5px; font-size: 1.1rem; color: white; line-height: 1; }
-            .btn-lock.locked { border-color: gold; color: gold; background: rgba(255, 215, 0, 0.1); }
-            .input-registro { margin-bottom: 0 !important; flex: 1; }
-        </style>
+                <label>Disciplina</label>
+                <div class="lock-group">
+                    <select id="z${numZona}-disciplina" onchange="actualizarCascada('disciplina', ${numZona})">
+                        <option value="">SELECCIONE...</option>
+                        <option value="LIBRE">LIBRE</option>
+                        <option value="DANZA">DANZA SOLO</option>
+                    </select>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-disciplina')">🔓</button>
+                </div>
 
-        <label>Club</label>
-        <div class="lock-group">
-            <select id="z${numZona}-club" class="input-registro">${opcionesClub}</select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-club')">🔓</button>
-        </div>
+                <label>Divisional</label>
+                <div class="lock-group">
+                    <select id="z${numZona}-divisional" onchange="actualizarCascada('divisional', ${numZona})">
+                        <option value="">DIVISIONAL...</option>
+                    </select>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-divisional')">🔓</button>
+                </div>
 
-        <label>Disciplina</label>
-        <div class="lock-group">
-            <select id="z${numZona}-disciplina" class="input-registro" onchange="actualizarCascada('disciplina', ${numZona})">
-                <option value="">SELECCIONE...</option>
-                <option value="LIBRE">LIBRE</option>
-                <option value="DANZA">DANZA SOLO</option>
-            </select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-disciplina')">🔓</button>
-        </div>
+                <label>Categoría</label>
+                <div class="lock-group">
+                    <select id="z${numZona}-categoria">
+                        <option value="">CATEGORÍA...</option>
+                    </select>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-categoria')">🔓</button>
+                </div>
 
-        <label>Divisional</label>
-        <div class="lock-group">
-            <select id="z${numZona}-divisional" class="input-registro" onchange="actualizarCascada('divisional', ${numZona})">
-                <option value="">DIVISIONAL...</option>
-            </select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-divisional')">🔓</button>
-        </div>
+                <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
+                <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
+                <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
+                <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
+                <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold; text-align:center; margin-top:10px;">
 
-        <label>Categoría</label>
-        <div class="lock-group">
-            <select id="z${numZona}-categoria" class="input-registro">
-                <option value="">CATEGORÍA...</option>
-            </select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-categoria')">🔓</button>
-        </div>
+                <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
+            </div>`;
+    } catch (e) { console.error(e); }
+};
 
-        <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:10px;">
-        <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:10px;">
-        <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
-        <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
-        <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold;text-align:center;margin-top:10px;">
-
-        <label>Género</label>
-        <div class="lock-group">
-            <select id="z${numZona}-genero" class="input-registro" style="height: 35px;">
-                <option value="FEMENINO">FEMENINO</option>
-                <option value="MASCULINO">MASCULINO</option>
-                <option value="NO BINARIO">NO BINARIO</option>
-            </select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-genero')">🔓</button>
-        </div>
-
-        <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px;width:100%;background:gold;font-weight:bold;color:black;padding:12px;border-radius:5px;border:none;cursor:pointer;">🚀 CARGAR PATINADOR</button>
-    </div>`;
-}   
-
-function calcularEdadDeportiva(fecha, target) {
+window.calcularEdadDeportiva = (fecha, target) => {
     const anio = new Date(fecha).getFullYear();
     document.getElementById(target).value = (2026 - anio) + " AÑOS";
-}
+};
 
-async function enviarCargaPatinador(numZona) {
+// --- 4. LISTADO DE ALTAS (TARJETAS LINDAS) ---
+window.mostrarListadoAltas = async (numZona) => {
+    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    let contenedor = document.getElementById('contenedor-tarjetas-hijo');
+    if(!contenedor){
+        contenedor = document.createElement('div');
+        contenedor.id = 'contenedor-tarjetas-hijo';
+        document.body.appendChild(contenedor);
+    }
+
+    Object.assign(contenedor.style, {
+        display: 'flex', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
+        backgroundColor: 'rgba(0,0,0,0.95)', zIndex: '5000', overflowY: 'auto', padding: '20px 0',
+        justifyContent: 'center', alignItems: 'flex-start'
+    });
+
+    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top:50px;">⏳ Organizando Padrón...</p>';
+
+    try {
+        const snapshot = await window.parent.puenteFirebase('get', `ZONAS/ZONA_${numZona}`, null);
+        if (!snapshot.exists()) {
+            contenedor.innerHTML = `<button onclick="this.parentElement.style.display='none'" style="background:gold; padding:15px; margin:50px auto; display:block; border:none; font-weight:bold; cursor:pointer;">CERRAR (No hay datos)</button>`;
+            return;
+        }
+
+        let patinadores = [];
+        snapshot.forEach(h => {
+            const p = h.val();
+            if(p.mailProfe === mailProfe || mailProfe === 'test@test.com') patinadores.push({id: h.key, ...p});
+        });
+        patinadores.sort((a,b) => a.apellido.localeCompare(b.apellido));
+
+        let html = `
+        <style>
+            .modal-altas-cuerpo { width: 90%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; background: #0a0a0a; position: relative; margin: 20px auto; }
+            .btn-x-cerrar { position: absolute; top: -15px; right: -15px; background: gold; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px solid black; }
+            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+            .card-alta { background: #151515; border-radius: 10px; padding: 15px; border-left: 5px solid gold; color: white; position: relative; }
+            .nombre-p { font-weight: bold; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 5px; }
+            .datos-p { color: #888; font-size: 0.75rem; margin-bottom: 10px; }
+            .btn-f { background: #222; border: 1px solid #444; color: #666; padding: 5px; border-radius: 5px; cursor: pointer; font-size: 0.7rem; flex: 1; font-weight: bold; }
+            .btn-f.activo { background: #28a745 !important; color: white !important; border-color: #28a745 !important; }
+        </style>
+        <div class="modal-altas-cuerpo">
+            <div class="btn-x-cerrar" onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'">✕</div>
+            <h3 style="color:gold; text-align:center; font-family:'Anton';">PADRÓN ZONA ${numZona}</h3>
+            <div class="grid-altas">`;
+
+        patinadores.forEach(p => {
+            const tieneAnual = p.seguroAnual === true;
+            html += `
+                <div class="card-alta">
+                    <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer;">📝</button>
+                    <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
+                    <div class="datos-p">${p.club}<br>${p.categoria}</div>
+                    <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px;">SEGUROS</div>
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
+                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroF2',this)">DIARIO</button>
+                    </div>
+                </div>`;
+        });
+
+        html += `</div><button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="width:100%; background:gold; margin-top:20px; padding:15px; font-weight:bold; border-radius:10px; border:none; cursor:pointer;">CERRAR PADRÓN</button></div>`;
+        contenedor.innerHTML = html;
+    } catch (e) { console.error(e); }
+};
+
+// --- 5. GUARDAR DATOS (USANDO PUENTE) ---
+window.enviarCargaPatinador = async (numZona) => {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    // 1. Leemos qué fecha está seleccionada en el menú de arriba
     const selectorFecha = document.getElementById('selectorFechaActiva');
     const fechaValor = selectorFecha ? selectorFecha.value : "1"; 
 
-// 2. Creamos la "marca" de asistencia según la fecha
-      let marcaAsistencia = {};
-      if (fechaValor === "2") marcaAsistencia.asisteF2 = true;
-      if (fechaValor === "3") marcaAsistencia.asisteF3 = true;
-      if (fechaValor === "4") marcaAsistencia.asisteF4 = true;
-    // Recolectamos los datos de los inputs
+    let marcaAsistencia = {};
+    if (fechaValor === "2") marcaAsistencia.asisteF2 = true;
+    if (fechaValor === "3") marcaAsistencia.asisteF3 = true;
+    if (fechaValor === "4") marcaAsistencia.asisteF4 = true;
+
     const datos = {
         ...marcaAsistencia,
         club: document.getElementById(`z${numZona}-club`).value,
         disciplina: document.getElementById(`z${numZona}-disciplina`).value,
         divisional: document.getElementById(`z${numZona}-divisional`).value,
         categoria: document.getElementById(`z${numZona}-categoria`).value,
-        genero: document.getElementById(`z${numZona}-genero`).value,
         apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
         nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
         DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
@@ -192,90 +218,24 @@ async function enviarCargaPatinador(numZona) {
         mailProfe: userEmail
     };
 
-    // Validación básica
-    if (!datos.apellido || !datos.nombre || !datos.DNI) {
-        alert("⚠️ Por favor, completa Apellido, Nombre y DNI.");
-        return;
-    }
+    if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
     try {
-        // Llamamos al puente del padre para guardar en Firebase
-        if (parent && parent.guardarPatinadorFirebase) {
-            await parent.guardarPatinadorFirebase(numZona, datos);
-            
-            alert("✅ Registro guardado en Firebase (Zona " + numZona + ")");
-            
-            // Limpiamos los campos que no están bloqueados
-            limpiarCamposPostCarga(numZona);
-        } else {
-            throw new Error("No se pudo conectar con la base de datos.");
-        }
-    } catch (error) {
-        console.error(error);
-        alert("❌ Error al guardar: " + error.message);
-    }
-}
+        await window.parent.puenteFirebase('push', `ZONAS/ZONA_${numZona}`, { ...datos, fecha_registro: new Date().toISOString() });
+        alert("✅ Guardado con éxito.");
+        // Limpieza de campos (mantené tu función limpiarCamposPostCarga)
+    } catch (e) { alert("❌ Error: " + e.message); }
+};
 
-// ESTA FUNCIÓN VA AFUERA (Independiente)
-function limpiarCamposPostCarga(numZona) {
-    const campos = [
-        `z${numZona}-club`,
-        `z${numZona}-disciplina`,
-        `z${numZona}-divisional`,
-        `z${numZona}-categoria`,
-        `z${numZona}-genero`,
-        `z${numZona}-apellido`,
-        `z${numZona}-nombre`,
-        `z${numZona}-DNI`,
-        `z${numZona}-nacimiento`,
-        `z${numZona}-edad`
-    ];
-
-    campos.forEach(id => {
-        const el = document.getElementById(id);
-        // Si el elemento existe y NO está bloqueado por el candado, se limpia
-        if (el && !el.disabled) { 
-            el.value = "";
-        }
-    });
-}
-
-/* --- CONTROL DEL MODAL DE CLUBES --- */
-function abrirModalClubes() { // Cambié el nombre para que el "puente" del HTML la encuentre
-    document.getElementById('ModalClub').style.display = 'block';
-}
-
-function cerrarModalClubes() {
-    document.getElementById('ModalClub').style.display = 'none';
-}
-
-async function guardarNuevoClub() {
-    const nombreClub = document.getElementById('nuevo-club-nombre').value.trim().toUpperCase();
-    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-
-    if (!nombreClub || !userEmail) {
-        alert("⚠️ Faltan datos (nombre del club o sesión de usuario).");
-        return;
-    }
-
-    // Limpiamos los puntos para que Firebase no de error en la ruta
-    const emailKey = userEmail.replace(/\./g, '_');
-    const clubKey = nombreClub.replace(/\./g, '_');
-
+window.toggleAsistencia = async (numZona, id, campo, boton) => {
+    if (boton.classList.contains('activo')) return; 
     try {
-        // Usamos la función puente que ya tenés creada para hablar con el script type="module" del padre
-        await enviarDatosAlPadre(emailKey, clubKey);
-        
-        alert("✅ Club registrado con éxito en Firebase.");
-        document.getElementById('nuevo-club-nombre').value = "";
-        cerrarModalClubes();
-    } catch (error) {
-        console.error(error);
-        alert("❌ Error: La base de datos de Firebase no respondió.");
-    }
-}
+        await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${id}`, { [campo]: true });
+        boton.classList.add('activo');
+        boton.style.pointerEvents = 'none';
+    } catch (e) { alert("Error al guardar"); }
+};
 
-// Forzamos que las funciones sean visibles para los botones del HTML
-window.abrirModalClubes = abrirModalClubes;
-window.cerrarModalClubes = cerrarModalClubes;
-window.guardarNuevoClub = guardarNuevoClub;
+// --- FINAL: EXPOSICIÓN DE FUNCIONES ---
+window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
+window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';

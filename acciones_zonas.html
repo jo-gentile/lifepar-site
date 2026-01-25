@@ -2,23 +2,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="admin.css"> <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Estilos mínimos para que el iframe se vea integrado */
-        body { background: transparent !important; padding: 10px; color: white; overflow: visible !important; height: auto !important; }
+        html, body { background: transparent !important; margin: 0; padding: 0; }
+        body { padding: 10px; color: white; overflow: visible !important; height: auto !important; font-family: 'Quicksand'; }
         .menu-zona { display: block !important; margin: auto; max-width: 1000px; width: 95%; }
         .btn-accion { width: 100%; margin: 10px 0; cursor: pointer; }
-        select { background: #333; color: white; border-radius: 5px; padding: 5px; width: 100%; }
+        select { background: #111; color: white; border-radius: 5px; padding: 5px; width: 100%; border: 1px solid gold; }
     </style>
 </head>
 <body>
 
-   <div class="menu-zona">
+<div class="menu-zona">
     <h4 id="dinamico-titulo">Acciones para Zona ...</h4>
     
     <div style="margin-bottom: 15px; padding: 10px; border: 1px solid #444; border-radius: 8px; background: rgba(0,0,0,0.3);">
-        <label style="color: gold; font-size: 0.8rem; display: block; margin-bottom: 5px; font-family: 'Quicksand';">SELECCIONAR FECHA DE TRABAJO:</label>
-        <select id="selectorFechaActiva" style="width: 100%; padding: 8px; background: #111; color: white; border: 1px solid gold; border-radius: 5px; font-family: 'Quicksand';">
+        <label style="color: gold; font-size: 0.8rem; display: block; margin-bottom: 5px;">SELECCIONAR FECHA DE TRABAJO:</label>
+        <select id="selectorFechaActiva">
             <option value="1">Padrón Base (Fecha 1)</option>
             <option value="2">Fecha 2</option>
             <option value="3">Fecha 3</option>
@@ -35,406 +36,49 @@
 
 <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;"></div>
 
-    <div id="ModalClub" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding-top: 100px;">
+<div id="ModalClub" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding-top: 100px;">
     <div style="background: #1a1a1a; margin: auto; padding: 20px; border: 1px solid gold; border-radius: 15px; width: 80%; max-width: 400px; text-align: center; color: white;">
         <h3 style="color: gold; font-family: 'Anton', sans-serif;">ASOCIAR NUEVO CLUB</h3>
-        <p style="font-size: 0.8rem; margin-bottom: 15px;">Escribí el nombre del club para solicitar el alta:</p>
-        
-        <input type="text" id="nuevo-club-nombre" placeholder="NOMBRE DEL CLUB" class="input-registro" style="width: 100%; margin-bottom: 20px; text-transform: uppercase;">
-        
+        <input type="text" id="nuevo-club-nombre" placeholder="NOMBRE DEL CLUB" style="width: 100%; margin-bottom: 20px; text-transform: uppercase; padding: 10px; background: #222; color: white; border: 1px solid #444;">
         <div style="display: flex; gap: 10px;">
-            <button onclick="window.guardarNuevoClub()" style="flex: 1; padding: 10px; background: gold; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">ENVIAR</button> 
+            <button onclick="window.guardarNuevoClub()" style="flex: 1; padding: 10px; background: gold; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">ENVIAR</button> 
             <button onclick="window.cerrarModalClubes()" style="flex: 1; padding: 10px; background: #444; color: white; border: none; border-radius: 5px; cursor: pointer;">CANCELAR</button>
         </div>
     </div>
 </div>
-<script src="acciones_zonas.js?v=1.2"></script>
- <script>
-    // 1. Detección de zona (Aseguramos que existan antes de usarlas)
+
+<script src="acciones_zonas.js?v=1.3"></script>
+
+<script>
+    // 1. Detección de zona
     const urlParams = new URLSearchParams(window.location.search);
     const zonaSaca = urlParams.get('zona'); 
-    
-    // Las guardamos en window para que el .js las vea
     window.zonaActivaNum = zonaSaca; 
     window.zonaActiva = "ZONA " + zonaSaca; 
 
-    // Seteamos el título
     const titulo = document.getElementById('dinamico-titulo');
     if (titulo) titulo.innerText = `Acciones para Zona ${zonaSaca}`;
 
-    // 2. Funciones Puente
-function ejecutarCargaConFecha() {
-    // 1. Leemos qué fecha eligió el profe en el selector
-    const selector = document.getElementById('selectorFechaActiva');
-    const fechaSeleccionada = selector ? selector.value : "1"; // "1" es el Padrón Base
-    
-    // 2. Obtenemos el número de zona que ya tenemos guardado
-    const numZona = window.zonaActivaNum;
-    
-    console.log("Iniciando carga para Zona " + numZona + " en la Fecha " + fechaSeleccionada);
-    
-    // 3. Abrimos el formulario de carga pasándole ambos datos
-    if (typeof abrirFormularioCarga === 'function') {
-        abrirFormularioCarga(numZona, fechaSeleccionada); 
-    }
-}
-
-    function ejecutarVerDatos() {
-        alert("Visualizando datos de " + window.zonaActiva);
-    }
-
-
-  // Esta función le grita al padre lo que tiene que guardar
-  async function enviarDatosAlPadre(emailKey, clubKey) {
-    if (parent && parent.registrarClubEnFirebase) {
-      await parent.registrarClubEnFirebase(emailKey, clubKey);
-    } else {
-      throw new Error("Conexión no lista");
-    }
-  }
-
-function ejecutarModalClubes() {
-    if (typeof window.abrirModalClubes === 'function') {
-        window.abrirModalClubes();
-    } else {
-        alert("La función de clubes todavía se está cargando. Esperá un momento.");
-    }
-}
-
-// EL HIJO DIBUJA TODO
-window.mostrarListadoAltas = async (numZona) => {
-    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
-    // CREAMOS EL CONTENEDOR DENTRO DEL HIJO PARA QUE NO FLOTE EN EL PADRE
-    let contenedor = document.getElementById('contenedor-tarjetas-hijo');
-    if(!contenedor){
-        contenedor = document.createElement('div');
-        contenedor.id = 'contenedor-tarjetas-hijo';
-        document.body.appendChild(contenedor);
-    }
-
-    // Mantenemos tus estilos EXACTOS
-    contenedor.style.display = 'flex';
-    contenedor.style.position = 'fixed';
-    contenedor.style.top = '0';
-    contenedor.style.left = '0';
-    contenedor.style.width = '100%';
-    contenedor.style.height = '100%';
-    contenedor.style.backgroundColor = 'rgba(0, 0, 0, 0.95)'; 
-    contenedor.style.zIndex = '5000';
-    contenedor.style.justifyContent = 'center';
-    contenedor.style.alignItems = 'flex-start';
-    contenedor.style.overflowY = 'auto';
-    contenedor.style.padding = '20px 0';
-
-    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top: 50px;">⏳ Organizando Padrón...</p>';
-
-    try {
-        // EL PUENTE: Le pedimos los datos al Padre
-        const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
-
-        if (!snapshot.exists()) {
-            contenedor.innerHTML = `<button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="background:gold; border:none; padding:15px; margin-top:50px; cursor:pointer; font-weight:bold;">CERRAR</button>`;
-            return;
-        }
-
-        let patinadores = [];
-        snapshot.forEach((hijo) => { patinadores.push({ id: hijo.key, ...hijo.val() }); });
-        patinadores.sort((a, b) => a.apellido.localeCompare(b.apellido));
-
-        let html = `
-        <style>
-            .modal-altas-cuerpo { width: 80%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; position: relative; margin: 20px auto; box-shadow: 0 0 50px #000; }
-            .btn-x-cerrar { position: absolute; top: -15px; right: -15px; background: gold; color: black; border: 2px solid black; width: 35px; height: 35px; border-radius: 50%; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 6000; }
-            .buscador-fijo { position: sticky; top: -25px; background: #0a0a0a; padding: 15px 0; z-index: 100; border-bottom: 1px solid #333; margin-bottom: 20px; }
-            .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 210px)); gap: 15px; width: 100%; }
-            .card-alta { background: #151515; border-radius: 10px; padding: 15px; border-left: 5px solid gold; display: flex !important; flex-direction: column; align-items: center; min-height: 200px; width: 100%; box-sizing: border-box; }
-            .info-p { margin: 0; width: 100%; text-align: center; }
-            .nombre-p { color: white; font-family: 'Quicksand'; font-size: 0.95rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; }
-            .datos-p { color: #888; font-size: 0.75rem; margin-bottom: 10px; line-height: 1.2; }
-            .seccion-t { font-size: 0.65rem; color: #444; font-weight: bold; text-transform: uppercase; margin-top: 10px; width: 100%; border-top: 1px solid #222; padding-top: 5px; }
-            .fila-btns { display: flex; gap: 4px; width: 100%; margin-top: 5px; justify-content: center; }
-            .btn-f { background: #222; border: 1px solid #333; color: #666; padding: 8px 2px; border-radius: 5px; cursor: pointer; flex: 1; font-weight: bold; font-size: 0.75rem; transition: 0.2s; }
-            .btn-f.activo { background: #28a745 !important; color: white !important; border-color: #28a745 !important; }
-            .btn-f:disabled { opacity: 0.7; cursor: not-allowed; }
-        </style>
-
-<div class="modal-altas-cuerpo">
-    <button class="btn-x-cerrar" onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'">✕</button>
-
-    <div class="buscador-fijo">
-        <input type="text" id="inputFiltroPatinador" 
-               style="width:100%; padding:15px; border-radius:10px; border: 1px solid #444; background:#111; color:white; font-family:Quicksand; font-size: 1rem; margin-bottom: 10px;" 
-               placeholder="🔍 Buscar por nombre o DNI..." 
-               onkeyup="window.filtrarTarjetas()">
-
-        <div style="display: flex; gap: 10px; margin-top: 5px;">
-            <select id="filtroClub" onchange="window.filtrarTarjetas()" 
-                    style="flex: 1; padding: 10px; border-radius: 10px; background: #111; color: white; border: 1px solid #444; font-family: Quicksand;">
-                <option value="">Todos los Clubes</option>
-            </select>
-
-            <select id="filtroCategoria" onchange="window.filtrarTarjetas()" 
-                    style="flex: 1; padding: 10px; border-radius: 10px; background: #111; color: white; border: 1px solid #444; font-family: Quicksand;">
-                <option value="">Todas las Categorías</option>
-            </select>
-        </div>
-    </div>
-            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin-bottom:20px; text-transform: uppercase;">PADRÓN ZONA ${numZona}</h3>
-            <div class="grid-altas" id="grillaPatinadores">`;
-
-// 1. DIBUJAMOS TODAS LAS TARJETAS
-        patinadores.forEach((p) => {
-            const esAdmin = (mailProfe === 'test@test.com');
-            const tieneAnual = p.seguroAnual === true;
-            
-            html += `
-                <div class="card-alta" 
-                     data-busqueda="${p.apellido.toLowerCase()} ${p.nombre.toLowerCase()} ${p.DNI || ''}" 
-                     data-club="${(p.club || '').toLowerCase()}" 
-                     data-categoria="${(p.categoria || '').toLowerCase()}"
-                     style="position: relative;"> 
-                     
-                    <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" 
-                            style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.1); border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1rem; z-index: 10;">
-                        📝
-                    </button>
-
-                    <div class="info-p">
-                        <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
-                        <div class="datos-p">${p.club} | ${p.divisional} ${p.categoria}<br>${p.edadDeportiva || ''}</div>
-                        
-                        <div style="font-size: 0.7rem; margin-top: 5px;">
-                            ${p.linkDNI ? '✅ DNI' : '❌ DNI'} | ${p.linkMedico ? '✅ MÉDICO' : '❌ MÉDICO'}
-                        </div>
-                    </div>
-
-                    <div class="seccion-t">Seguros</div>
-                    <div class="fila-btns">
-                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" ${(tieneAnual && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroAnual',this)">S. ANUAL</button>
-                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" ${((tieneAnual || p.seguroF2) && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','seguroF2',this)">S. DIARIO</button>
-                    </div>
-                    <div class="seccion-t">Asistencias</div>
-                    <div class="fila-btns">
-                        <button class="btn-f ${p.asisteF2 ? 'activo' : ''}" ${(p.asisteF2 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF2',this)">F2</button>
-                        <button class="btn-f ${p.asisteF3 ? 'activo' : ''}" ${(p.asisteF3 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF3',this)">F3</button>
-                        <button class="btn-f ${p.asisteF4 ? 'activo' : ''}" ${(p.asisteF4 && !esAdmin) ? 'disabled' : ''} onclick="window.toggleBotonAsistencia('${numZona}','${p.id}','asisteF4',this)">F4</button>
-                    </div>
-                </div>`;
-        });
-
-        // 2. CERRAMOS LOS DIVS Y METEMOS EL HTML AL CONTENEDOR
-        html += `</div>
-                 <button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="margin-top:30px; width:100%; background:gold; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:10px; color:black; font-family:Quicksand; font-size:1.1rem;">CERRAR PADRÓN</button>
-                 </div>`;
-        
-        contenedor.innerHTML = html;
-
-        // 3. LLENAMOS LOS FILTROS (Solo una vez al final)
-        const selectClub = document.getElementById('filtroClub');
-        const selectCat = document.getElementById('filtroCategoria');
-        
-        // Resetamos por si ya tenían opciones de antes
-        selectClub.innerHTML = '<option value="">Todos los Clubes</option>';
-        selectCat.innerHTML = '<option value="">Todas las Categorías</option>';
-
-        const clubesUnicos = [...new Set(patinadores.map(p => p.club).filter(Boolean))].sort();
-        const catsUnicas = [...new Set(patinadores.map(p => p.categoria).filter(Boolean))].sort();
-
-        clubesUnicos.forEach(c => {
-            selectClub.innerHTML += `<option value="${c.toLowerCase()}">${c.toUpperCase()}</option>`;
-        });
-        catsUnicas.forEach(c => {
-            selectCat.innerHTML += `<option value="${c.toLowerCase()}">${c.toUpperCase()}</option>`;
-        });
-
-    } catch (e) { console.error(e); }
-};
-
-window.filtrarTarjetas = () => {
-    const busqueda = document.getElementById('inputFiltroPatinador').value.toLowerCase().trim();
-    const club = document.getElementById('filtroClub').value.toLowerCase().trim();
-    const cat = document.getElementById('filtroCategoria').value.toLowerCase().trim();
-    
-    // TESTIGO: Para ver qué capturó el jefe
-    console.log("📢 Jefe gritando: ", {busqueda, club, cat});
-
-    const tarjetas = document.querySelectorAll('.card-alta');
-    
-    tarjetas.forEach(t => {
-        // 1. La tarjeta lee sus propios "cartelitos"
-        const tBusqueda = (t.getAttribute('data-busqueda') || "").toLowerCase();
-        const tClub = (t.getAttribute('data-club') || "").toLowerCase();
-        const tCat = (t.getAttribute('data-categoria') || "").toLowerCase();
-        
-        // 2. Comparamos lógica
-        const coincideTexto = busqueda === "" || tBusqueda.includes(busqueda);
-        const coincideClub = club === "" || tClub === club;
-        const coincideCat = cat === "" || tCat.includes(cat);
-
-        // 3. LA ORDEN (Esto es lo que las hace 'escuchar')
-        if (coincideTexto && coincideClub && coincideCat) {
-            t.style.setProperty('display', 'flex', 'important'); // Se muestra
-        } else {
-            t.style.setProperty('display', 'none', 'important'); // Se esconde
-        }
-    });
-};
-
-window.limpiarFiltros = () => {
-    document.getElementById('inputFiltroPatinador').value = "";
-    document.getElementById('filtroClub').value = "";
-    document.getElementById('filtroCategoria').value = "";
-    filtrarTarjetas();
-};
-
-window.toggleBotonAsistencia = async (numZona, id, campo, boton) => {
-    // BLOQUEO: Si ya es verde, salimos de la función y no hacemos nada
-    if (boton.classList.contains('activo')) return; 
-
-    const nuevoEstado = !boton.classList.contains('activo');
-    try {
-        // LE AVISAMOS AL PADRE QUE GRABE (Mandará 'true' siempre debido al bloqueo anterior)
-        await window.parent.actualizarAsistencia(numZona, id, campo, nuevoEstado);
-        
-        // Lo ponemos activo y le quitamos el cursor de clic para que se note el bloqueo
-        boton.classList.add('activo');
-        boton.style.pointerEvents = 'none'; 
-        boton.style.cursor = 'default';
-        
-    } catch (e) { 
-        alert("Error al guardar"); 
-    }
-};
-window.abrirEditorPatinador = async (numZona, id) => {
-    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    const snapshot = await window.parent.obtenerDatosFirebase(numZona, mailProfe);
-    
-    if (snapshot.exists()) {
-        const p = snapshot.val()[id];
+    // 2. Funciones de Interfaz Locales
+    function ejecutarCargaConFecha() {
+        const selector = document.getElementById('selectorFechaActiva');
+        const fecha = selector ? selector.value : "1";
         if (typeof abrirFormularioCarga === 'function') {
-            // Llamamos a tu función base
-            abrirFormularioCarga(numZona, "1"); 
-
-            const formContenedor = document.getElementById('contenedor-formulario-dinamico');
-            
-            if (formContenedor) {
-                formContenedor.style.position = 'fixed';
-                formContenedor.style.top = '50%';
-                formContenedor.style.left = '50%';
-                formContenedor.style.transform = 'translate(-50%, -50%)';
-                formContenedor.style.zIndex = '10001'; 
-                formContenedor.style.background = '#111';
-                formContenedor.style.border = '2px solid gold';
-                formContenedor.style.padding = '20px';
-                formContenedor.style.display = 'block';
-            }
-
-            // Usamos el mismo tiempo de espera para que los campos ya existan
-            setTimeout(() => {
-                const tituloH4 = formContenedor.querySelector('h4');
-                if(tituloH4) {
-                    tituloH4.innerHTML = `📝 EDITANDO A: <span style="color:white;">${p.apellido}, ${p.nombre}</span>`;
-                }
-
-                // --- SOLUCIÓN PARA LA X: Inyectar al final para que no sea tapada ---
-                let btnX = document.getElementById('btn-cerrar-editor-pro');
-                if(!btnX){
-                    btnX = document.createElement('div');
-                    btnX.id = 'btn-cerrar-editor-pro';
-                    btnX.innerHTML = '✕';
-                    // Z-INDEX alto para que esté por encima de todo el formulario base
-                    btnX.style = 'position:absolute; top:10px; right:15px; color:gold; cursor:pointer; font-size:30px; font-weight:bold; z-index:10010;';
-                    
-                    btnX.onclick = () => { 
-                        formContenedor.innerHTML = ''; 
-                        formContenedor.style.cssText = 'display: none;'; // Mata la barra fantasma
-                    };
-                    
-                    formContenedor.style.position = 'relative'; 
-                    formContenedor.appendChild(btnX);
-                }
-
-                const btnCargaMaldito = formContenedor.querySelector('button[onclick*="enviarCargaPatinador"]');
-                if (btnCargaMaldito) btnCargaMaldito.remove(); 
-
-                const inputs = formContenedor.querySelectorAll('input, select');
-                if (inputs.length >= 6) {
-                    inputs[4].value = p.apellido || "";
-                    inputs[5].value = p.nombre || "";
-                    inputs[6].value = p.DNI || "";
-                    if(inputs[7] && p.fechaNacimiento) inputs[7].value = p.fechaNacimiento;
-                    
-                    inputs[1].value = p.disciplina || "";
-                    inputs[1].dispatchEvent(new Event('change')); 
-
-                    setTimeout(() => {
-                        inputs[2].value = p.divisional || "";
-                        inputs[2].dispatchEvent(new Event('change')); 
-                        setTimeout(() => {
-                            inputs[3].value = p.categoria || "";
-                        }, 200);
-                    }, 200);
-
-                    inputs[0].value = p.club || "";
-                }
-
-                const btnSave = formContenedor.querySelector('.btn-registrar') || formContenedor.querySelector('button');
-                if (btnSave) {
-                    btnSave.innerText = "💾 ACTUALIZAR DATOS"; 
-                    btnSave.style.background = "linear-gradient(to right, #28a745, #1e7e34)"; 
-                    btnSave.onclick = (e) => {
-                        e.preventDefault(); 
-                        window.guardarEdicionPatinador(numZona, id);
-                        formContenedor.innerHTML = ''; 
-                        formContenedor.style.cssText = 'display: none;';
-                    };
-                }
-            }, 850); // Un pelín más de tiempo para asegurar que el HTML base terminó de cargar
+            abrirFormularioCarga(window.zonaActivaNum, fecha); 
         }
     }
-};
-window.guardarEdicionPatinador = async (numZona, id) => {
-    try {
-        const form = document.getElementById('contenedor-formulario-dinamico');
-        const ins = form.querySelectorAll('input, select');
-        
-        // Mapeamos los datos del formulario (respetando el orden de tus cuadritos)
-        const datos = {
-            club: ins[0].value,
-            disciplina: ins[1].value,
-            divisional: ins[2].value,
-            categoria: ins[3].value,
-            apellido: ins[4].value.toUpperCase().trim(),
-            nombre: ins[5].value.toUpperCase().trim(),
-            DNI: ins[6].value.trim()
-        };
 
-        // El Puente: Mandamos la orden al Padre para que impacte en Firebase
-        for (let key in datos) {
-            await window.parent.actualizarAsistencia(numZona, id, key, datos[key]);
-        }
-
-        alert("✅ ¡DATOS ACTUALIZADOS EN FIREBASE!");
-        form.innerHTML = ''; // Cerramos el editor
-        window.mostrarListadoAltas(numZona); // Refrescamos las tarjetas para ver el cambio
-        
-    } catch (e) {
-        console.error("Error al editar:", e);
-        alert("No se pudo actualizar.");
+    function ejecutarModalClubes() {
+        const modal = document.getElementById('ModalClub');
+        if(modal) modal.style.display = 'flex';
     }
-};
 
-  document.querySelectorAll('.nav-item').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('onclick')?.match(/'([^']+)'/);
-      if(id){
-        const el = document.getElementById(id[1]);
-        if(el) el.style.display = el.style.display==='block'?'none':'block';
-      }
-    });
-  });
+    window.cerrarModalClubes = () => {
+        document.getElementById('ModalClub').style.display = 'none';
+    };
+
+    // EL HIJO YA NO TIENE FUNCIONES DE FIREBASE AQUÍ. 
+    // TODO PASA AL .JS QUE USA EL PUENTE DEL PADRE.
 </script>
-
 </body>
 </html>

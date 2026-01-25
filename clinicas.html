@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <title>Clínicas LIFEPAR</title>
-
-<style>
-    /* Aplicar a las dos capas raíz */
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* 1. MATAMOS EL BLANCO DEFINITIVO */
     html, body {
       margin: 0;
       padding: 0;
@@ -16,14 +16,17 @@
     body {
       font-family: 'Quicksand', sans-serif;
       color: white;
+      padding: 10px;
     }
 
+    /* 2. TU CAJA GRIS CON BORDE DORADO */
     #clinicas-container {
       padding: 20px;
-      background: #111; /* Tu gris oscuro */
+      background: #111; 
       border: 2px solid gold;
       border-radius: 8px;
-      margin: 10px;
+      margin: 0 auto;
+      max-width: 800px;
     }
 
     #titulo-clinica {
@@ -33,23 +36,16 @@
       text-transform: uppercase;
     }
 
-    .campo {
-      margin-bottom: 15px;
-    }
-
-    .campo label {
-      display: block;
-      margin-bottom: 5px;
-      color: #ccc;
-    }
+    .campo label { display: block; margin-bottom: 5px; color: #ccc; }
 
     .campo select {
       width: 100%;
-      padding: 8px;
+      padding: 10px;
       background: #222;
       color: white;
       border: 1px solid gold;
       border-radius: 4px;
+      font-family: 'Quicksand';
     }
 
     table {
@@ -59,28 +55,16 @@
       background: #222;
     }
 
-    thead {
-      background: #333;
-      color: gold;
-    }
-
-    th, td {
-      border: 1px solid #444;
-      padding: 8px;
-      text-align: center;
-    }
+    thead { background: #333; color: gold; }
+    th, td { border: 1px solid #444; padding: 10px; text-align: center; }
 
     td input {
-      width: 95%;
+      width: 90%;
       background: transparent;
       border: none;
       color: white;
-      padding: 5px;
-      outline: none;
-    }
-
-    td input[type="number"] {
       text-align: center;
+      outline: none;
     }
 
     #btn-enviar-clinica {
@@ -90,50 +74,42 @@
       background: linear-gradient(to right, gold, #b8860b);
       color: black;
       font-weight: bold;
-      font-size: 1rem;
       border: none;
       border-radius: 6px;
       cursor: pointer;
-    }
-
-    #btn-enviar-clinica:hover {
-      filter: brightness(1.1);
     }
   </style>
 </head>
 
 <body>
+  <section id="clinicas-container">
+    <h3 id="titulo-clinica">Inscripción Clínica</h3>
 
-<section id="clinicas-container">
+    <div class="campo">
+      <label for="select-club-clinica">Seleccionar Club</label>
+      <select id="select-club-clinica">
+        <option value="">Cargando clubes...</option>
+      </select>
+    </div>
 
-  <h3 id="titulo-clinica">Inscripción Clínica</h3>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Nombre y Apellido</th>
+          <th>Categoría</th>
+          <th style="width:70px">Edad</th>
+        </tr>
+      </thead>
+      <tbody id="body-tabla-clinica">
+        </tbody>
+    </table>
 
-  <div class="campo">
-    <label for="select-club-clinica">Seleccionar Club</label>
-    <select id="select-club-clinica">
-      <option value="">Cargando clubes...</option>
-    </select>
-  </div>
+    <button id="btn-enviar-clinica">
+      🚀 ENVIAR INSCRIPCIÓN FINAL
+    </button>
+  </section>
 
-  <table>
-    <thead>
-      <tr>
-        <th style="width:40px">#</th>
-        <th>Nombre y Apellido</th>
-        <th>Categoría</th>
-        <th style="width:70px">Edad</th>
-      </tr>
-    </thead>
-    <tbody id="body-tabla-clinica">
-      <!-- filas generadas por JS -->
-    </tbody>
-  </table>
-
-  <button id="btn-enviar-clinica">
-    🚀 ENVIAR INSCRIPCIÓN FINAL
-  </button>
-
-</section>
-<script src="clinicas.js"></script>
+  <script src="clinicas.js"></script>
 </body>
 </html>

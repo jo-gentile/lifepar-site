@@ -145,10 +145,7 @@
             <a href="#" target="_blank" class="btn-link-fino">📝 Formulario inscripción</a>
         </div>
     </section>
-    </main> 
- </div>
- 
-    <footer class="footer-premium">
+    </main> </div> <footer class="footer-premium"> <p>© 2026 <span class="brand">LIFEPAR</span> - Todos los derechos reservados</p>
     <p>© 2026 <span class="brand">LIFEPAR</span> - Todos los derechos reservados</p>
     <div class="footer-contact">
         <a href="https://instagram.com/ligalifepar" target="_blank">📸 @ligalifepar</a>
@@ -158,7 +155,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
@@ -172,89 +169,6 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getDatabase(app);
-
-  async function cargarClubes(idSelect) {
-    const select = document.getElementById(idSelect);
-    if (!select) return;
-    const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    const clubes = await window.obtenerClubesFirebase(mailProfe.replace(/\./g, '_'));
-    if (clubes) {
-        select.innerHTML = '<option value="">Seleccioná un club...</option>';
-        Object.keys(clubes).forEach(id => {
-            const option = document.createElement('option');
-            option.value = id;
-            option.textContent = clubes[id].nombre;
-            select.appendChild(option);
-        });
-    }
-  }
-
-  // Exponemos la función al objeto window para que el iframe la vea
-  window.registrarClubEnFirebase = async (emailKey, clubKey) => {
-    const clubRef = ref(db, `CLUBES/${emailKey}/${clubKey}`);
-    return await set(clubRef, {
-      nombre: clubKey.replace(/_/g, ' '),
-      estado: "pendiente",
-      fecha: new Date().toLocaleDateString()
-    });
-  };
-
-  window.obtenerClubesFirebase = async (emailKey) => {
-    const { getDatabase, ref, get } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const db = getDatabase();
-    const snapshot = await get(ref(db, `CLUBES/${emailKey}`));
-    if (snapshot.exists()) {
-        return snapshot.val(); // Retorna el objeto con todos los clubes del profe
-    }
-    return null;
-};
-  // Dentro del script type="module" del HTML principal
-window.guardarPatinadorFirebase = async (numZona, datos) => {
-    const { getDatabase, ref, push } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const db = getDatabase();
-    
-    // Creamos la ruta ZONAS/ZONA_1, ZONAS/ZONA_2, etc.
-    const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
-    
-    // Usamos push para que cada patinador tenga un ID único y no se pisen
-    return await push(zonaRef, {
-        ...datos,
-        fecha_registro: new Date().toISOString()
-    });
-};
-
-// --- PUENTE DE ALTA PRIORIDAD PARA EL HIJO ---
-
-window.obtenerPatinadoresPorClub = async (numZona, mailProfe) => {
-    try {
-        const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-        // Usamos la 'db' que ya inicializaste al principio del script
-        const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
-        const consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
-        const snapshot = await get(consulta);
-        
-        return snapshot.exists() ? snapshot.val() : {};
-    } catch (error) {
-        console.error("Error en Puente Padre:", error);
-        return null;
-    }
-};
-
-// EL PADRE SOLO CONECTA Y GRABA
-window.actualizarAsistencia = async (numZona, id, campo, nuevoEstado) => {
-    const { ref, update } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const patinadorRef = ref(db, `ZONAS/ZONA_${numZona}/${id}`);
-    await update(patinadorRef, { [campo]: nuevoEstado });
-};
-
-// El Padre solo le "presta" Firebase al hijo cuando este lo pide
-window.obtenerDatosFirebase = async (numZona, mailProfe) => {
-    const { ref, get, query, orderByChild, equalTo } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const zonaRef = ref(db, `ZONAS/ZONA_${numZona}`);
-    let consulta = query(zonaRef, orderByChild("mailProfe"), equalTo(mailProfe));
-    
-    return await get(consulta);
-};
 
 </script>
 <script src="admin.js"></script>
