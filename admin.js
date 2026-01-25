@@ -1,7 +1,21 @@
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
+  const firebaseConfig = {
+    apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
+    authDomain: "web-lifepar.firebaseapp.com",
+    databaseURL: "https://web-lifepar-default-rtdb.firebaseio.com",
+    projectId: "web-lifepar",
+    storageBucket: "web-lifepar.firebasestorage.app",
+    messagingSenderId: "140850288146",
+    appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log("✅ Sesión de Firebase confirmada:", user.email);
     } else {
