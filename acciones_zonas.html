@@ -12,7 +12,76 @@
         select { background: #111; color: white; border-radius: 5px; padding: 5px; width: 100%; border: 1px solid gold; }
     </style>
     <script src="acciones_zonas.js?v=1.1"></script>
+    <style>
+    /* ... mantén tus reglas anteriores de body y menu-zona ... */
     
+    .lock-group { 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        margin-top: 5px; 
+        margin-bottom: 15px; 
+    }
+
+    /* Evita que los desplegables ocupen el 100% y dejen espacio al candado */
+    .lock-group select { 
+        flex: 1; 
+        max-width: 300px; 
+        background: #111; 
+        color: white; 
+        border: 1px solid gold; 
+        padding: 8px; 
+        border-radius: 5px;
+    }
+
+    /* Botón de candado con apariencia interactiva */
+    .btn-lock {
+        background: #222;
+        border: 1px solid gold;
+        border-radius: 4px;
+        padding: 6px 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 40px;
+    }
+
+    .btn-lock.locked { background: rgba(255, 215, 0, 0.3); }
+    
+    label { color: gold; display: block; margin-top: 10px; font-weight: 600; }
+    .input-registro { width: 100%; max-width: 400px; padding: 10px; margin-top: 5px; background: #222; color: white; border: 1px solid #444; border-radius: 5px; }
+    /* 1. Achica el selector para que entre el candado al lado */
+#contenedor-formulario-dinamico select {
+    display: inline-block !important;
+    width: 75% !important;
+    max-width: 300px !important;
+    vertical-align: middle;
+    margin-bottom: 10px;
+}
+
+/* 2. Estiliza el botón que tu JS pone después del select */
+#contenedor-formulario-dinamico select + button {
+    display: inline-block !important;
+    vertical-align: middle;
+    width: 40px !important;
+    height: 35px !important;
+    margin-left: 5px !important;
+    padding: 0 !important;
+    background: #222;
+    border: 1px solid gold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* 3. Mantiene las etiquetas en su propia línea arriba */
+#contenedor-formulario-dinamico label {
+    display: block;
+    width: 100%;
+    color: gold;
+    margin-top: 10px;
+}
+</style>
 </head>
 <body>
 
