@@ -244,7 +244,18 @@ window.toggleAsistencia = async (numZona, id, campo, boton) => {
         boton.style.pointerEvents = 'none';
     } catch (e) { alert("Error al guardar"); }
 };
+// --- 6. CONEXIÓN CON EL HTML (BOTONES) ---
+window.ejecutarCargaConFecha = function() {
+    const selector = document.getElementById('selectorFechaActiva');
+    const fecha = selector ? selector.value : "1";
+    // Llama a la función que ya tenés en el punto 3
+    window.abrirFormularioCarga(window.zonaActivaNum, fecha); 
+};
 
+window.ejecutarModalClubes = function() {
+    const modal = document.getElementById('ModalClub');
+    if(modal) modal.style.display = 'flex';
+};
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
 window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';
