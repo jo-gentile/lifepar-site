@@ -49,36 +49,6 @@
 
 <script src="acciones_zonas.js?v=1.1"></script>
 
-<script>
-    // 1. Detección de zona
-    const urlParams = new URLSearchParams(window.location.search);
-    const zonaSaca = urlParams.get('zona'); 
-    window.zonaActivaNum = zonaSaca; 
-    window.zonaActiva = "ZONA " + zonaSaca; 
 
-    const titulo = document.getElementById('dinamico-titulo');
-    if (titulo) titulo.innerText = `Acciones para Zona ${zonaSaca}`;
-
-    // 2. Funciones de Interfaz Locales
-    function ejecutarCargaConFecha() {
-        const selector = document.getElementById('selectorFechaActiva');
-        const fecha = selector ? selector.value : "1";
-        if (typeof abrirFormularioCarga === 'function') {
-            abrirFormularioCarga(window.zonaActivaNum, fecha); 
-        }
-    }
-
-    function ejecutarModalClubes() {
-        const modal = document.getElementById('ModalClub');
-        if(modal) modal.style.display = 'flex';
-    }
-
-    window.cerrarModalClubes = () => {
-        document.getElementById('ModalClub').style.display = 'none';
-    };
-
-    // EL HIJO YA NO TIENE FUNCIONES DE FIREBASE AQUÍ. 
-    // TODO PASA AL .JS QUE USA EL PUENTE DEL PADRE.
-</script>
 </body>
 </html>

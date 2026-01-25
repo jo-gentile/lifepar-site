@@ -68,9 +68,10 @@ window.abrirFormularioCarga = async function(numZona) {
     try {
         const emailKey = userEmail.replace(/\./g, '_');
         // USAMOS EL PUENTE DEL PADRE
-        const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
-        const clubesData = snapshot.exists() ? snapshot.val() : null;
-
+        // CAMBIO: El puente ahora devuelve el Snapshot directamente
+const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
+// snapshot ya trae el método .val() de la librería Compat del padre
+const clubesData = (snapshot && typeof snapshot.val === 'function') ? snapshot.val() : null;
         let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key.replace(/_/g, ' ')}">${key.replace(/_/g, ' ')}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
         contenedor.innerHTML = `
