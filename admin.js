@@ -18,6 +18,7 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
         console.log("✅ Sesión de Firebase confirmada:", user.email);
+        console.log("TOKEN REAL:", user.accessToken);
     } else {
         // Si alguien entra al admin sin loguearse, lo mandamos afuera
         window.location.href = "index.html";
@@ -137,3 +138,4 @@ window.puenteFirebase = async (operacion, ruta, datos) => {
 window.toggleSidebar = toggleSidebar;
 window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;
+window.mostrarAccionesZona = mostrarAccionesZona;
