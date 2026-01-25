@@ -85,16 +85,26 @@ function mostrarCopa() {
 
 // --- 4. EL PUENTE MAESTRO DE FIREBASE (El Corazón del Sistema) ---
 // Esta función la llaman los HIJOS con: window.parent.puenteFirebase(...)
+// Este código va en admin.js (El Padre)
 window.puenteFirebase = async (operacion, ruta, datos) => {
+    // IMPORTANTE: Usamos la 'db' que se inicializó con el login del Padre
     const { getDatabase, ref, set, push, update, get } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    const db = getDatabase();
+    
+    // Aquí es donde Firebase reconoce que el REY (Padre) es el que manda
+    const db = getDatabase(); 
     const dbRef = ref(db, ruta);
 
-    switch(operacion) {
-        case 'set': return await set(dbRef, datos);
-        case 'push': return await push(dbRef, datos);
-        case 'update': return await update(dbRef, datos);
-        case 'get': return await get(dbRef);
-        default: throw new Error("Operación no válida");
+    try {
+        console.log(`Firmando operación ${operacion} para ruta: ${ruta}`);
+        switch(operacion) {
+            case 'set': return await set(dbRef, datos);
+            case 'push': return await push(dbRef, datos);
+            case 'update': return await update(dbRef, datos);
+            case 'get': return await get(dbRef);
+            default: throw new Error("Operación no válida");
+        }
+    } catch (error) {
+        console.error("Firebase rechazó la firma del Padre:", error);
+        throw error;
     }
 };
