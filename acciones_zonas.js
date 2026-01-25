@@ -84,58 +84,73 @@ window.abrirFormularioCarga = async function(numZona) {
         let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key}">${key}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
         // Usamos zonaReal en todo el template de abajo
-        contenedor.innerHTML = `
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid gold; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px;">
-                <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${zonaReal}</h4>
-                
-                <label>Club</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-club">${opcionesClub}</select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-club')">🔓</button>
-                </div>
+        // Dentro de abrirFormularioCarga en acciones_zonas.js
+contenedor.innerHTML = `
+    <div style="background: rgba(255,255,255,0.05); border: 1px solid gold; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px;">
+        <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+        
+        <label>Club</label>
+        <div class="lock-group">
+            <select id="z${numZona}-club">${opcionesClub}</select>
+            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-club')">🔓</button>
+        </div>
 
-                <label>Disciplina</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})">
-                        <option value="">SELECCIONE...</option>
-                        <option value="LIBRE">LIBRE</option>
-                        <option value="DANZA">DANZA SOLO</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-disciplina')">🔓</button>
-                </div>
+        <label>Disciplina</label>
+        <div class="lock-group">
+            <select id="z${numZona}-disciplina" onchange="actualizarCascada('disciplina', ${numZona})">
+                <option value="">SELECCIONE...</option>
+                <option value="LIBRE">LIBRE</option>
+                <option value="DANZA">DANZA SOLO</option>
+            </select>
+            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-disciplina')">🔓</button>
+        </div>
 
-                <label>Divisional</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})">
-                        <option value="">DIVISIONAL...</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-divisional')">🔓</button>
-                </div>
+        <label>Divisional</label>
+        <div class="lock-group">
+            <select id="z${numZona}-divisional" onchange="actualizarCascada('divisional', ${numZona})">
+                <option value="">DIVISIONAL...</option>
+            </select>
+            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-divisional')">🔓</button>
+        </div>
 
-                <label>Categoría</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-categoria">
-                        <option value="">CATEGORÍA...</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-categoria')">🔓</button>
-                </div>
+        <label>Categoría</label>
+        <div class="lock-group">
+            <select id="z${numZona}-categoria">
+                <option value="">CATEGORÍA...</option>
+            </select>
+            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-categoria')">🔓</button>
+        </div>
 
-                <input id="z${zonaReal}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
-                <input id="z${zonaReal}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
-                <input id="z${zonaReal}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
-                <input type="date" id="z${zonaReal}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')">
-                <input id="z${zonaReal}-edad" readonly class="input-registro" style="color:gold; text-align:center; margin-top:10px;">
+        <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="width: calc(50% - 5px); margin-top:10px; text-transform:uppercase;">
+        <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="width: calc(50% - 5px); margin-top:10px; text-transform:uppercase;">
+        <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro" style="width: 100%; margin-top:10px;">
+        <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="width: 100%; margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
+        <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold; text-align:center; width: 100%; margin-top:10px; background:transparent; border:none;">
 
-                <button type="button" onclick="enviarCargaPatinador(${zonaReal})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
-            </div>`;
+        <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
+    </div>`;
     } catch (e) { console.error(e); }
 };
 
 window.limpiarCamposPostCarga = function(numZona) {
-    const campos = ['apellido', 'nombre', 'DNI', 'nacimiento', 'edad'];
-    campos.forEach(campo => {
-        const el = document.getElementById(`z${numZona}-${campo}`);
-        if (el) el.value = "";
+    // Listado de todos los IDs que pueden tener datos
+    const campos = [
+        'club', 'disciplina', 'divisional', 'categoria', 
+        'apellido', 'nombre', 'DNI', 'nacimiento', 'edad'
+    ];
+
+    campos.forEach(id => {
+        const el = document.getElementById(`z${numZona}-${id}`);
+        
+        // REGLA: Solo limpia si el campo existe y NO está bloqueado (disabled)
+        if (el && !el.disabled) {
+            // Si es un select, vuelve a la primera opción, si es input, vacía el texto
+            if (el.tagName === 'SELECT') {
+                el.selectedIndex = 0;
+            } else {
+                el.value = "";
+            }
+        }
     });
 };
 
