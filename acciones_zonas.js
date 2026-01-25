@@ -72,7 +72,7 @@ window.abrirFormularioCarga = async function(numZona) {
     if (contenedor.style.display === 'flex') { contenedor.style.display = 'none'; return; }
 
     contenedor.innerHTML = '<p style="color:gold; text-align:center;">⏳ Cargando Clubes...</p>';
-    contenedor.style.display = 'flex';
+    contenedor.style.display = 'block';
 
     try {
         const emailKey = userEmail.replace(/\./g, '_');

@@ -592,3 +592,7 @@ body.layout-collapsed .footer-premium {
         font-size: 16px !important; /* Evita que el iPhone haga zoom automático al clickear */
     }
 }
+#vista-dinamica {
+  height: auto !important;
+  overflow: visible !important;
+}
