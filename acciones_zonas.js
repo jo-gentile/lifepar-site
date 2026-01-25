@@ -217,7 +217,6 @@ window.enviarCargaPatinador = async (numZona) => {
         edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
         mailProfe: userEmail
     }
-};
 
     if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
@@ -233,6 +232,7 @@ window.enviarCargaPatinador = async (numZona) => {
     } catch (error) {
         console.error("Error en el puente:", error);
         alert("❌ Error de permisos o conexión. Revisá el admin.js");
+    }
 };
 
 window.toggleAsistencia = async (numZona, id, campo, boton) => {
