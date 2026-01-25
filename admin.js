@@ -133,3 +133,7 @@ window.puenteFirebase = async (operacion, ruta, datos) => {
         throw error;
     }
 };
+
+window.toggleSidebar = toggleSidebar;
+window.toggleArbol = toggleArbol;
+window.mostrarCopa = mostrarCopa;
