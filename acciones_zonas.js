@@ -143,10 +143,7 @@ contenedor.innerHTML = `
     <option value="Femenino" selected>Femenino</option>
     <option value="Masculino">Masculino</option>
   </select>
-
-  <button type="button" onclick="toggleCandado('genero', this)">
-    🔒
-  </button>
+  <button onclick="toggleLock(this,'z${zonaReal}-categoria')">🔓</button>
 </div>
 
 
