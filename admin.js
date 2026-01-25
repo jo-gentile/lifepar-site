@@ -117,32 +117,32 @@ function cerrarModalClub() {
 window.mostrarClinica = async function (idClinica) {
   const vista = document.getElementById("vista-dinamica");
 
-  vista.innerHTML = "Cargando clínica...";
+  // 1. Inyectamos el iframe con transparencia activa
+  vista.innerHTML = `
+    <iframe src="clinicas.html?id=${idClinica}" 
+      allowtransparency="true" 
+      style="width: 100%; min-height: 800px; border: none; background: transparent;">
+    </iframe>
+  `;
 
-  const resp = await fetch("clinicas.html");
-  const html = await resp.text();
-  vista.innerHTML = html;
-
+  // 2. Cargamos el script (Corregido para que esté dentro de la función)
   const script = document.createElement("script");
   script.src = "clinicas.js";
   script.onload = () => {
-    window.initClinica(idClinica);
+    if (typeof window.initClinica === 'function') {
+        window.initClinica(idClinica);
+    }
   };
   document.body.appendChild(script);
 };
-window.guardarInscripcionClinicaFirebase = async function (
-  idClinica,
-  club,
-  lista
-) {
+
+window.guardarInscripcionClinicaFirebase = async function (idClinica, club, lista) {
   const { getDatabase, ref, set } = await import(
     "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js"
   );
 
   const db = getDatabase();
-
   const clubKey = club.replace(/\./g, "_");
-
   const ruta = `INSCRIPCIONES_CLINICAS/${idClinica}/${clubKey}`;
 
   return await set(ref(db, ruta), {
