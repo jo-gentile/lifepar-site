@@ -83,7 +83,7 @@ window.abrirFormularioCarga = async function(numZona) {
 
 // Bloque a insertar en el innerHTML de tu función abrirFormularioCarga
 contenedor.innerHTML = `
-<div style="background: rgba(0,0,0,0.85); border: 1px solid gold; border-radius: 15px; padding: 12px; width: 95%; max-width: 450px; margin: auto;">
+<div style="background: rgba(0,0,0,0.85); border: 1px solid gold; border-radius: 15px; padding: 12px; width: 95%; max-width: 560px; margin: auto;">
 
   <h4 style="color: gold; text-align: center; font-family: 'Anton'; margin-bottom: 10px;">
     📝 INSCRIPCIÓN ZONA ${zonaReal}
@@ -137,14 +137,20 @@ contenedor.innerHTML = `
       </div>
     </div>
 
-    <label for="genero">Género</label>
-<div class="campo-flex">
-  <select id="z${zonaReal}-genero" class="campo-form">
-    <option value="Femenino" selected>Femenino</option>
-    <option value="Masculino">Masculino</option>
-  </select>
-  <button onclick="toggleLock(this,'z${zonaReal}-genero')">🔓</button>
+<!-- GENERO (INDEPENDIENTE) -->
+<div>
+  <label>GÉNERO</label>
+  <div class="campo-flex">
+    <select id="z${zonaReal}-genero" class="campo-form">
+      <option value="">GÉNERO...</option>
+      <option value="FEMENINO">FEMENINO</option>
+      <option value="MASCULINO">MASCULINO</option>
+      <option value="NO BINARIO">NO BINARIO</option>
+    </select>
+    <button onclick="toggleLock(this,'z${zonaReal}-genero')">🔓</button>
+  </div>
 </div>
+
 
 
   <!-- APELLIDO / NOMBRE -->
