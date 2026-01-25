@@ -139,7 +139,7 @@ contenedor.innerHTML = `
 
     <label for="genero">Género</label>
 <div class="campo-flex">
-  <select id="genero" class="input-registro" disabled>
+  <select id="z${zonaReal}-genero" class="campo-form">
     <option value="Femenino" selected>Femenino</option>
     <option value="Masculino">Masculino</option>
   </select>
