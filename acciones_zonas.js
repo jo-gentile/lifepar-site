@@ -81,59 +81,52 @@ window.abrirFormularioCarga = async function(numZona) {
         
         let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key}">${key}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
-        contenedor.innerHTML = `
-            <div style="background: rgba(255,255,255,0.05); border: 1px solid gold; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px;">
-                <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${zonaReal}</h4>
-                
-                <label>CLUB</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-club">${opcionesClub}</select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-club')">🔓</button>
-                </div>
+// Bloque a insertar en el innerHTML de tu función abrirFormularioCarga
+contenedor.innerHTML = `
+    <div style="background: rgba(0,0,0,0.8); border: 1px solid gold; border-radius: 10px; width: 98%; max-width: 450px;">
+        <h4>📝 INSCRIPCIÓN ZONA ${zonaReal}</h4>
+        
+        <label>CLUB</label>
+        <div style="margin-bottom:4px;"><select id="z${zonaReal}-club">${opcionesClub}</select><button type="button" onclick="toggleLock(this, 'z${zonaReal}-club')">🔓</button></div>
 
-                <label>DISCIPLINA</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})">
-                        <option value="">SELECCIONE...</option>
-                        <option value="LIBRE">LIBRE</option>
-                        <option value="DANZA">DANZA SOLO</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-disciplina')">🔓</button>
-                </div>
+        <label>DISCIPLINA / DIVISIONAL</label>
+        <div class="grid-campos">
+            <select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})">
+                <option value="">DISCIPLINA...</option><option value="LIBRE">LIBRE</option><option value="DANZA">DANZA SOLO</option>
+            </select>
+            <select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})">
+                <option value="">DIVISIONAL...</option>
+            </select>
+        </div>
 
-                <label>DIVISIONAL</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})">
-                        <option value="">DIVISIONAL...</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-divisional')">🔓</button>
-                </div>
+        <label>CATEGORÍA / GÉNERO</label>
+        <div class="grid-campos">
+            <select id="z${zonaReal}-categoria"><option value="">CATEGORÍA...</option></select>
+            <select id="z${zonaReal}-genero">
+                <option value="">GÉNERO...</option>
+                <option value="MASCULINO">MASCULINO</option>
+                <option value="FEMENINO">FEMENINO</option>
+                <option value="NO BINARIO">NO BINARIO</option>
+            </select>
+        </div>
 
-                <label>CATEGORÍA</label>
-                <div class="lock-group">
-                    <select id="z${zonaReal}-categoria">
-                        <option value="">CATEGORÍA...</option>
-                    </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-categoria')">🔓</button>
-                </div>
+        <div class="grid-campos">
+            <div><label>APELLIDO</label><input id="z${zonaReal}-apellido" class="input-registro" style="width:100%; text-transform:uppercase;"></div>
+            <div><label>NOMBRE</label><input id="z${zonaReal}-nombre" class="input-registro" style="width:100%; text-transform:uppercase;"></div>
+        </div>
 
-                <label>APELLIDO</label>
-                <input id="z${zonaReal}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:5px; text-transform:uppercase; width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;">
-                
-                <label>NOMBRE</label>
-                <input id="z${zonaReal}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:5px; text-transform:uppercase; width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;">
-                
-                <label>DNI</label>
-                <input id="z${zonaReal}-DNI" placeholder="DNI" class="input-registro" style="margin-top:5px; width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;">
-                
-                <label>FECHA DE NACIMIENTO</label>
-                <input type="date" id="z${zonaReal}-nacimiento" class="input-registro" style="margin-top:5px; width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #444; border-radius: 5px;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')">
-                
-                <label>EDAD DEPORTIVA</label>
-                <input id="z${zonaReal}-edad" readonly class="input-registro" style="color:gold; text-align:center; margin-top:5px; width: 100%; padding: 10px; background: transparent; border: none;">
+        <div class="grid-campos">
+            <div><label>DNI</label><input id="z${zonaReal}-DNI" class="input-registro" style="width:100%;"></div>
+            <div><label>NACIMIENTO</label><input type="date" id="z${zonaReal}-nacimiento" class="input-registro" style="width:100%;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')"></div>
+        </div>
 
-                <button type="button" onclick="enviarCargaPatinador(${zonaReal})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
-            </div>`;
+        <div style="text-align:center;">
+            <label>EDAD DEPORTIVA</label>
+            <input id="z${zonaReal}-edad" readonly style="background:transparent; border:none; color:gold; font-weight:bold; text-align:center; width:50px;">
+        </div>
+
+        <button type="button" onclick="enviarCargaPatinador(${zonaReal})" style="width:100%; background:gold; font-weight:bold; padding:8px; border:none; border-radius:5px; cursor:pointer; margin-top:5px;">🚀 CARGAR</button>
+    </div>`;
     } catch (e) { console.error(e); }
 };
 
