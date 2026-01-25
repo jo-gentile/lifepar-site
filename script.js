@@ -1,6 +1,6 @@
 // 1. IMPORTACIÓN DE MÓDULOS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, setPersistence, browserSessionPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, get, child, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
@@ -58,61 +58,62 @@ document.getElementById('btnAccesoEntrenadores').onclick = () => {
     mostrarLogin();
 };
 
-// Ingreso con Email y Clave
+// 1. Botón de Ingreso con Email/Clave
 document.getElementById('btnEntrar').onclick = async () => {
     const email = document.getElementById('emailLogin').value;
     const pass = document.getElementById('passLogin').value;
     if(!email || !pass) return alert("Completá todos los campos.");
+    
     try {
+        // Mantenemos la sesión activa al cambiar de página
+        await setPersistence(auth, browserSessionPersistence);
         await signInWithEmailAndPassword(auth, email, pass);
+        
         sessionStorage.setItem('userEmail', email);
         sessionStorage.setItem('userName', "Entrenador Lifepar"); 
-        alert("Ingreso exitoso.");
-        loginForm.style.display = 'none';
+        
         window.location.href = "admin.html";
     } catch (err) {
-        console.error("Error Firebase:", err.code);
-        alert("Credenciales incorrectas o usuario no encontrado.");
+        alert("Credenciales incorrectas.");
     }
 };
 
 
 // Ingreso con Google + Check de Lista Blanca
+// 2. Botón de Ingreso con Google (Tu lógica real)
 document.getElementById('btnGoogle').onclick = async () => {
     try {
+        await setPersistence(auth, browserSessionPersistence);
         const result = await signInWithPopup(auth, provider);
         const email = result.user.email;
         const nombre = result.user.displayName || "Entrenador";
-        const response = await fetch(`${URL_SHEET}?email=${email}`);
-        const data = await response.json();
 
-        if(data.autorizado) {
-            // Entrenador autorizado: acceso al admin
+        // VALIDACIÓN EN FIREBASE (Tu carpeta listaBlanca)
+        const emailKey = email.replace(/\./g, '_');
+        const snapshot = await get(child(ref(db), `listaBlanca/${emailKey}`));
+
+        if(snapshot.exists()) {
+            // ES ENTRENADOR: Vamos al admin
             sessionStorage.setItem('userEmail', email);
             sessionStorage.setItem('userName', nombre);
             window.location.href = "admin.html";
-
         } else {
-            // No autorizado: preguntar si es padre
+            // NO ES ENTRENADOR: Tu lógica de confirmación para Padres
             loginForm.style.display = 'none';
-            const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Querés ingresar al Portal de Padres para subir documentación?");
+            const confirmacion = confirm("Tu mail no está en la lista de entrenadores. ¿Querés ingresar al Portal de Padres?");
 
             if (confirmacion) {
-                // Padre dice sí → portal padres
                 document.getElementById('portal-padres').style.display = 'block';
                 document.querySelector('.contenido-principal').style.display = 'none';
             } else {
-                // Padre dice no → volver a mostrar login
                 mostrarLogin();
             }
         }
-
     } catch (err) {
         console.error(err);
         alert("Error con Google.");
     }
 };
-
 
 // Atrás en registro
 document.getElementById('linkVolverLogin').onclick = () => {

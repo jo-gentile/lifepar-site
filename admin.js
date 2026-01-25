@@ -1,3 +1,14 @@
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        console.log("✅ Sesión de Firebase confirmada:", user.email);
+    } else {
+        // Si alguien entra al admin sin loguearse, lo mandamos afuera
+        window.location.href = "index.html";
+    }
+});
 // --- 1. GESTIÓN DE SESIÓN Y USUARIO ---
 const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
 const userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
