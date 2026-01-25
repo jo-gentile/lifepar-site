@@ -45,21 +45,21 @@ function toggleArbol(id) {
 }
 
 function mostrarAccionesZona(numeroZona) {
-    const contenedor = document.getElementById('contenedor-acciones-zonas');
+    // CAMBIO: Antes decía 'contenedor-acciones-zonas', ahora dice 'vista-dinamica'
+    const contenedor = document.getElementById('vista-dinamica'); 
+    
     if (contenedor) {
-        // 1. Limpiamos cualquier cosa previa y mostramos
         contenedor.innerHTML = ''; 
         contenedor.style.display = 'block';
 
-        // 2. Cargamos el nuevo sistema de iframe
-         contenedor.innerHTML = `
+        contenedor.innerHTML = `
          <iframe src="acciones_zonas.html?zona=${numeroZona}" 
             scrolling="no" 
             style="width: 100%; min-height: 2000px; border: none; background: transparent; overflow: hidden;">
           </iframe>
-       `;
+        `;
 
-        // 3. Ocultamos Seguros y Copa para que no se pisen
+        // Ocultamos las otras secciones por si estaban abiertas
         if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
         if (document.getElementById('copa-federal')) document.getElementById('copa-federal').style.display = 'none';
 
