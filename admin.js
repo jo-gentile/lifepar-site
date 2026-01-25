@@ -1,8 +1,5 @@
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getDatabase } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-  const firebaseConfig = {
+  // CONFIGURACIÓN GLOBAL
+const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
     databaseURL: "https://web-lifepar-default-rtdb.firebaseio.com",
@@ -10,17 +7,20 @@
     storageBucket: "web-lifepar.firebasestorage.app",
     messagingSenderId: "140850288146",
     appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
-  };
+};
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
-  const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
+// Inicialización versión Compat
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+const auth = firebase.auth();
+
+// GESTIÓN DE SESIÓN RE REAL
+auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log("✅ Sesión de Firebase confirmada:", user.email);
-        console.log("TOKEN REAL:", user.accessToken);
+        console.log("✅ Sesión confirmada:", user.email);
+        if(document.getElementById('display-email')) document.getElementById('display-email').innerText = user.email;
+        if(document.getElementById('display-name')) document.getElementById('display-name').innerText = user.displayName || "Entrenador";
     } else {
-        // Si alguien entra al admin sin loguearse, lo mandamos afuera
         window.location.href = "index.html";
     }
 });
@@ -109,28 +109,19 @@ function mostrarCopa() {
     if (box) box.style.display = 'block';
 }
 
-// --- 4. EL PUENTE MAESTRO DE FIREBASE (El Corazón del Sistema) ---
-// Esta función la llaman los HIJOS con: window.parent.puenteFirebase(...)
-// Este código va en admin.js (El Padre)
 window.puenteFirebase = async (operacion, ruta, datos) => {
-    // IMPORTANTE: Usamos la 'db' que se inicializó con el login del Padre
-    const { getDatabase, ref, set, push, update, get } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js");
-    
-    // Aquí es donde Firebase reconoce que el REY (Padre) es el que manda
-    const db = getDatabase(); 
-    const dbRef = ref(db, ruta);
-
+    const dbRef = firebase.database().ref(ruta);
     try {
-        console.log(`Firmando operación ${operacion} para ruta: ${ruta}`);
+        console.log(`Ejecutando ${operacion} en: ${ruta}`);
         switch(operacion) {
-            case 'set': return await set(dbRef, datos);
-            case 'push': return await push(dbRef, datos);
-            case 'update': return await update(dbRef, datos);
-            case 'get': return await get(dbRef);
+            case 'set': return await dbRef.set(datos);
+            case 'push': return await dbRef.push(datos);
+            case 'update': return await dbRef.update(datos);
+            case 'get': return await dbRef.once('value');
             default: throw new Error("Operación no válida");
         }
     } catch (error) {
-        console.error("Firebase rechazó la firma del Padre:", error);
+        console.error("Error en el Puente:", error);
         throw error;
     }
 };
