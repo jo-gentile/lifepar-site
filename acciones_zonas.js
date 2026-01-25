@@ -143,7 +143,7 @@ contenedor.innerHTML = `
     <option value="Femenino" selected>Femenino</option>
     <option value="Masculino">Masculino</option>
   </select>
-  <button onclick="toggleLock(this,'z${zonaReal}-categoria')">🔓</button>
+  <button onclick="toggleLock(this,'z${zonaReal}-genero')">🔓</button>
 </div>
 
 
