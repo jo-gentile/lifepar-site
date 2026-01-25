@@ -313,19 +313,20 @@ window.enviarCargaPatinador = async (numZona) => {
     if (fechaValor === "3") marcaAsistencia.asisteF3 = true;
     if (fechaValor === "4") marcaAsistencia.asisteF4 = true;
 
-    const datos = {
-        ...marcaAsistencia,
-        club: document.getElementById(`z${numZona}-club`).value,
-        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
-        divisional: document.getElementById(`z${numZona}-divisional`).value,
-        categoria: document.getElementById(`z${numZona}-categoria`).value,
-        apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
-        nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
-        DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
-        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
-        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: userEmail
-    }
+const datos = {
+  ...marcaAsistencia,
+  club: document.getElementById(`z${numZona}-club`).value,
+  disciplina: document.getElementById(`z${numZona}-disciplina`).value,
+  divisional: document.getElementById(`z${numZona}-divisional`).value,
+  categoria: document.getElementById(`z${numZona}-categoria`).value,
+  genero: document.getElementById(`z${numZona}-genero`).value,
+  apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
+  nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
+  DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
+  fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
+  edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
+  mailProfe: userEmail
+};
 
     if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
