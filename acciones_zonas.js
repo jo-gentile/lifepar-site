@@ -83,59 +83,111 @@ window.abrirFormularioCarga = async function(numZona) {
 
 // Bloque a insertar en el innerHTML de tu función abrirFormularioCarga
 contenedor.innerHTML = `
-    <div style="background: rgba(0,0,0,0.8); border: 1px solid gold; padding: 10px; border-radius: 15px; width: 95%; max-width: 450px; margin: auto;">
-        <h4 style="color:gold; text-align:center; font-family:'Anton'; margin: 0 0 10px 0; font-size: 1rem;">📝 INSCRIPCIÓN ZONA ${zonaReal}</h4>
-        
-        <label>CLUB</label>
-        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
-            <select id="z${zonaReal}-club" style="flex: 1; height: 28px; background: #111; color: white; border: 1px solid gold;">${opcionesClub}</select>
-            <button type="button" onclick="toggleLock(this, 'z${zonaReal}-club')" style="width: 35px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
-        </div>
+<div style="background: rgba(0,0,0,0.85); border: 1px solid gold; border-radius: 15px; padding: 12px; width: 95%; max-width: 450px; margin: auto;">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div style="display: flex; align-items: flex-end; gap: 5px;">
-                <div style="flex: 1;"><label>DISCIPLINA</label><select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
-                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-disciplina')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
-            </div>
-            <div style="display: flex; align-items: flex-end; gap: 5px;">
-                <div style="flex: 1;"><label>DIVISIONAL</label><select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
-                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-divisional')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
-            </div>
-        </div>
+  <h4 style="color: gold; text-align: center; font-family: 'Anton'; margin-bottom: 10px;">
+    📝 INSCRIPCIÓN ZONA ${zonaReal}
+  </h4>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div style="display: flex; align-items: flex-end; gap: 5px;">
-                <div style="flex: 1;"><label>CATEGORÍA</label><select id="z${zonaReal}-categoria" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
-                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-categoria')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
-            </div>
-            <div style="flex: 1;"><label>GÉNERO</label>
-                <select id="z${zonaReal}-genero" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;">
-                    <option value="">GÉNERO...</option>
-                    <option value="MASCULINO">MASCULINO</option>
-                    <option value="FEMENINO">FEMENINO</option>
-                    <option value="NO BINARIO">NO BINARIO</option>
-                    <button type="button" onclick="toggleLock(this, 'z${zonaReal}-categoria')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
-                </select>
-            </div>
-        </div>
+  <!-- CLUB -->
+  <label>CLUB</label>
+  <div style="display:flex; gap:5px; margin-bottom:6px;">
+    <select id="z${zonaReal}-club" class="campo-form">
+      ${opcionesClub}
+    </select>
+    <button onclick="toggleLock(this,'z${zonaReal}-club')">🔓</button>
+  </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div><label>APELLIDO</label><input id="z${zonaReal}-apellido" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444; text-transform: uppercase;"></div>
-            <div><label>NOMBRE</label><input id="z${zonaReal}-nombre" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444; text-transform: uppercase;"></div>
-        </div>
+  <!-- DISCIPLINA / DIVISIONAL -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+    <div>
+      <label>DISCIPLINA</label>
+      <div style="display:flex; gap:5px;">
+        <select id="z${zonaReal}-disciplina" class="campo-form"
+          onchange="actualizarCascada('disciplina', ${zonaReal})">
+          <option value="">DISCIPLINA...</option>
+          <option value="LIBRE">LIBRE</option>
+          <option value="DANZA">DANZA</option>
+        </select>
+        <button onclick="toggleLock(this,'z${zonaReal}-disciplina')">🔓</button>
+      </div>
+    </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div><label>DNI</label><input id="z${zonaReal}-DNI" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444;"></div>
-            <div><label>NACIMIENTO</label><input type="date" id="z${zonaReal}-nacimiento" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')"></div>
-        </div>
+    <div>
+      <label>DIVISIONAL</label>
+      <div style="display:flex; gap:5px;">
+        <select id="z${zonaReal}-divisional" class="campo-form"
+          onchange="actualizarCascada('divisional', ${zonaReal})">
+          <option value="">DIVISIONAL...</option>
+        </select>
+        <button onclick="toggleLock(this,'z${zonaReal}-divisional')">🔓</button>
+      </div>
+    </div>
+  </div>
 
-        <div style="text-align: center; margin-top: 5px;">
-            <label>EDAD DEPORTIVA</label>
-            <input id="z${zonaReal}-edad" readonly style="background: transparent; border: none; color: gold; font-weight: bold; text-align: center; width: 50px;">
-        </div>
+  <!-- CATEGORIA / GENERO -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+    <div>
+      <label>CATEGORÍA</label>
+      <div style="display:flex; gap:5px;">
+        <select id="z${zonaReal}-categoria" class="campo-form">
+          <option value="">CATEGORÍA...</option>
+        </select>
+        <button onclick="toggleLock(this,'z${zonaReal}-categoria')">🔓</button>
+      </div>
+    </div>
 
-        <button type="button" onclick="enviarCargaPatinador(${zonaReal})" style="width: 100%; background: gold; color: black; font-weight: bold; padding: 10px; border: none; border-radius: 5px; cursor: pointer; margin-top: 10px;">🚀 CARGAR</button>
-    </div>`;
+    <div>
+      <label>GÉNERO</label>
+      <select id="z${zonaReal}-genero" class="campo-form">
+        <option value="">GÉNERO...</option>
+        <option value="MASCULINO">MASCULINO</option>
+        <option value="FEMENINO">FEMENINO</option>
+        <option value="NO BINARIO">NO BINARIO</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- APELLIDO / NOMBRE -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+    <div>
+      <label>APELLIDO</label>
+      <input id="z${zonaReal}-apellido" class="campo-form" style="text-transform:uppercase;">
+    </div>
+    <div>
+      <label>NOMBRE</label>
+      <input id="z${zonaReal}-nombre" class="campo-form" style="text-transform:uppercase;">
+    </div>
+  </div>
+
+  <!-- DNI / NACIMIENTO -->
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
+    <div>
+      <label>DNI</label>
+      <input id="z${zonaReal}-DNI" class="campo-form">
+    </div>
+    <div>
+      <label>NACIMIENTO</label>
+      <input type="date" id="z${zonaReal}-nacimiento" class="campo-form"
+        onchange="calcularEdadDeportiva(this.value,'z${zonaReal}-edad')">
+    </div>
+  </div>
+
+  <!-- EDAD -->
+  <div style="text-align:center; margin-top:6px;">
+    <label>EDAD DEPORTIVA</label>
+    <input id="z${zonaReal}-edad" readonly
+      style="background:none; border:none; color:gold; font-weight:bold; text-align:center;">
+  </div>
+
+  <button onclick="enviarCargaPatinador(${zonaReal})"
+    style="width:100%; margin-top:10px; background:gold; color:black; font-weight:bold; padding:10px; border:none; border-radius:6px;">
+    🚀 CARGAR
+  </button>
+
+</div>
+`;
+
     } catch (e) { console.error(e); }
 };
 

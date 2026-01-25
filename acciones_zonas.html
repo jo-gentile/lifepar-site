@@ -13,31 +13,84 @@
     </style>
     <script src="acciones_zonas.js?v=1.1"></script>
     <style>
-    html, body { background: transparent !important; margin: 0; padding: 0; }
-    body { padding: 5px; color: white; overflow: visible !important; height: auto !important; font-family: 'Quicksand'; font-size: 12px; }
-    
-    /* Compactación extrema de contenedores */
-    #contenedor-formulario-dinamico div { padding: 8px !important; margin: auto; }
-    #contenedor-formulario-dinamico h4 { margin: 0 0 8px 0 !important; font-size: 0.9rem; color: gold; text-align: center; font-family: 'Anton'; }
-    
-    label { color: gold; display: block; margin-top: 2px; font-weight: 600; font-size: 0.7rem; text-transform: uppercase; }
-    
-    /* Inputs y Selects bajos */
-    .input-registro, #contenedor-formulario-dinamico select { 
-        background: #111; color: white; border: 1px solid #444; border-radius: 4px; 
-        padding: 3px 6px !important; height: 26px !important; font-size: 12px;
-    }
-    
-    /* Candados alineados */
-    #contenedor-formulario-dinamico select { display: inline-block !important; width: 80% !important; vertical-align: middle; border-color: gold; }
-    #contenedor-formulario-dinamico select + button { 
-        display: inline-block !important; width: 32px !important; height: 26px !important; 
-        vertical-align: middle; margin-left: 2px; background: #222; border: 1px solid gold; border-radius: 4px; cursor: pointer;
-    }
+    html, body { 
+  background: transparent !important; 
+  margin: 0; 
+  padding: 0; 
+}
 
-    /* Grilla para que los campos de texto ocupen menos alto */
-    .grid-campos { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 5px; }
-    
+body { 
+  padding: 5px; 
+  color: white; 
+  overflow: visible !important; 
+  height: auto !important; 
+  font-family: 'Quicksand'; 
+  font-size: 12px; 
+}
+
+/* Contenedor principal */
+#contenedor-formulario-dinamico div { 
+  padding: 0; 
+  margin: 0; 
+}
+
+#contenedor-formulario-dinamico h4 { 
+  margin: 0 0 8px 0 !important; 
+  font-size: 0.9rem; 
+  color: gold; 
+  text-align: center; 
+  font-family: 'Anton'; 
+}
+
+/* Labels */
+label { 
+  color: gold; 
+  display: block; 
+  margin-top: 2px; 
+  font-weight: 600; 
+  font-size: 0.7rem; 
+  text-transform: uppercase; 
+}
+
+/* Inputs y selects */
+#contenedor-formulario-dinamico select,
+#contenedor-formulario-dinamico input {
+  background: #111; 
+  color: white; 
+  border: 1px solid gold; 
+  border-radius: 4px; 
+  padding: 3px 6px; 
+  height: 26px; 
+  font-size: 12px;
+  width: 100%;
+}
+
+/* Bloques flex (select + candado) */
+#contenedor-formulario-dinamico .campo-flex {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+/* Candados */
+#contenedor-formulario-dinamico .campo-flex button {
+  width: 32px;
+  height: 26px;
+  background: #222;
+  border: 1px solid gold;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Grillas */
+.grid-campos,
+#contenedor-formulario-dinamico .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  margin-top: 5px;
+}
 </style>
 </head>
 <body>
