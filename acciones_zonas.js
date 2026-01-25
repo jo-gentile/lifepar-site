@@ -230,13 +230,16 @@ window.mostrarListadoAltas = async (numZona) => {
     if(!contenedor){
         contenedor = document.createElement('div');
         contenedor.id = 'contenedor-tarjetas-hijo';
-        document.body.appendChild(contenedor);
+        const contenedor = document.getElementById('vista-dinamica');
     }
 
     Object.assign(contenedor.style, {
-        display: 'flex', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.95)', zIndex: '5000', overflowY: 'auto', padding: '20px 0',
-        justifyContent: 'center', alignItems: 'flex-start'
+        Object.assign(contenedor.style, {
+  display: 'block',
+  padding: '20px',
+  background: 'transparent'
+});
+
     });
 
     contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top:50px;">⏳ Organizando Padrón...</p>';
@@ -257,7 +260,7 @@ window.mostrarListadoAltas = async (numZona) => {
 
         let html = `
         <style>
-            .modal-altas-cuerpo { width: 90%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; background: #0a0a0a; position: relative; margin: 20px auto; }
+            .modal-altas-cuerpo { overflow: visible; max-height: none; width: 90%; max-width: 1100px; border: 2px solid gold; border-radius: 15px; padding: 25px; background: #0a0a0a; position: relative; margin: 20px auto; }
             .btn-x-cerrar { position: absolute; top: -15px; right: -15px; background: gold; width: 35px; height: 35px; border-radius: 50%; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; border: 2px solid black; }
             .grid-altas { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
             .card-alta { background: #151515; border-radius: 10px; padding: 15px; border-left: 5px solid gold; color: white; position: relative; }
