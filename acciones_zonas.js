@@ -87,54 +87,46 @@ contenedor.innerHTML = `
         <h4 style="color:gold; text-align:center; font-family:'Anton'; margin: 0 0 10px 0; font-size: 1rem;">📝 INSCRIPCIÓN ZONA ${zonaReal}</h4>
         
         <label>CLUB</label>
-        <div class="lock-group" style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
+        <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 5px;">
             <select id="z${zonaReal}-club" style="flex: 1; height: 28px; background: #111; color: white; border: 1px solid gold;">${opcionesClub}</select>
-            <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-club')" style="width: 35px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
+            <button type="button" onclick="toggleLock(this, 'z${zonaReal}-club')" style="width: 35px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
         </div>
 
-        <div class="grid-campos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-            <div>
-                <label>DISCIPLINA</label>
-                <select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;">
-                    <option value="">DISCIPLINA...</option>
-                    <option value="LIBRE">LIBRE</option>
-                    <option value="DANZA">DANZA SOLO</option>
-                </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="display: flex; align-items: flex-end; gap: 5px;">
+                <div style="flex: 1;"><label>DISCIPLINA</label><select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
+                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-disciplina')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
             </div>
-            <div>
-                <label>DIVISIONAL</label>
-                <select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;">
-                    <option value="">DIVISIONAL...</option>
-                </select>
+            <div style="display: flex; align-items: flex-end; gap: 5px;">
+                <div style="flex: 1;"><label>DIVISIONAL</label><select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
+                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-divisional')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
             </div>
         </div>
 
-        <div class="grid-campos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div>
-                <label>CATEGORÍA</label>
-                <select id="z${zonaReal}-categoria" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;">
-                    <option value="">CATEGORÍA...</option>
-                </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
+            <div style="display: flex; align-items: flex-end; gap: 5px;">
+                <div style="flex: 1;"><label>CATEGORÍA</label><select id="z${zonaReal}-categoria" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;"><option value="">...</option></select></div>
+                <button type="button" onclick="toggleLock(this, 'z${zonaReal}-categoria')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
             </div>
-            <div>
-                <label>GÉNERO</label>
+            <div style="flex: 1;"><label>GÉNERO</label>
                 <select id="z${zonaReal}-genero" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid gold;">
                     <option value="">GÉNERO...</option>
                     <option value="MASCULINO">MASCULINO</option>
                     <option value="FEMENINO">FEMENINO</option>
                     <option value="NO BINARIO">NO BINARIO</option>
+                    <button type="button" onclick="toggleLock(this, 'z${zonaReal}-categoria')" style="width: 32px; height: 28px; background: #222; border: 1px solid gold; cursor: pointer;">🔓</button>
                 </select>
             </div>
         </div>
 
-        <div class="grid-campos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div><label>APELLIDO</label><input id="z${zonaReal}-apellido" class="input-registro" style="width: 100%; height: 28px; text-transform: uppercase;"></div>
-            <div><label>NOMBRE</label><input id="z${zonaReal}-nombre" class="input-registro" style="width: 100%; height: 28px; text-transform: uppercase;"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
+            <div><label>APELLIDO</label><input id="z${zonaReal}-apellido" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444; text-transform: uppercase;"></div>
+            <div><label>NOMBRE</label><input id="z${zonaReal}-nombre" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444; text-transform: uppercase;"></div>
         </div>
 
-        <div class="grid-campos" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
-            <div><label>DNI</label><input id="z${zonaReal}-DNI" class="input-registro" style="width: 100%; height: 28px;"></div>
-            <div><label>NACIMIENTO</label><input type="date" id="z${zonaReal}-nacimiento" class="input-registro" style="width: 100%; height: 28px;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')"></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
+            <div><label>DNI</label><input id="z${zonaReal}-DNI" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444;"></div>
+            <div><label>NACIMIENTO</label><input type="date" id="z${zonaReal}-nacimiento" style="width: 100%; height: 28px; background: #111; color: white; border: 1px solid #444;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')"></div>
         </div>
 
         <div style="text-align: center; margin-top: 5px;">
