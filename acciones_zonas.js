@@ -283,6 +283,17 @@ window.mostrarListadoAltas = async (numZona) => {
                         <button class="btn-f ${tieneAnual ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
                         <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroF2',this)">DIARIO</button>
                     </div>
+                    <div style="display:flex; gap:5px; margin-top:5px;">
+  <button class="btn-f ${p.F2 ? 'activo' : ''}"
+    onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
+
+  <button class="btn-f ${p.F3 ? 'activo' : ''}"
+    onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
+
+  <button class="btn-f ${p.F4 ? 'activo' : ''}"
+    onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
+</div>
+
                 </div>`;
         });
 
