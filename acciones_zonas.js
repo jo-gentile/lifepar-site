@@ -1,3 +1,12 @@
+// Captura la zona de la URL (ej: ?zona=1)
+const urlParams = new URLSearchParams(window.location.search);
+window.zonaActivaNum = urlParams.get('zona'); 
+
+// Si por alguna razón la URL no tiene la zona, intentamos recuperarla del título
+if (!window.zonaActivaNum) {
+    const titulo = document.getElementById('dinamico-titulo');
+    if (titulo) window.zonaActivaNum = titulo.innerText.replace(/[^0-9]/g, '');
+}
 // --- 1. SISTEMA DE CANDADOS (LOCKS) ---
 window.toggleLock = function(btn, idCampo) {
     const campo = document.getElementById(idCampo);
@@ -54,8 +63,10 @@ window.actualizarCascada = function(nivel, numZona) {
     }
 };
 
-// --- 3. FORMULARIO DE CARGA ---
 window.abrirFormularioCarga = async function(numZona) {
+    // Si numZona viene vacío o undefined, usamos la variable global
+    const zonaReal = numZona || window.zonaActivaNum;
+    
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
 
@@ -67,58 +78,65 @@ window.abrirFormularioCarga = async function(numZona) {
 
     try {
         const emailKey = userEmail.replace(/\./g, '_');
-        // USAMOS EL PUENTE DEL PADRE
-        // CAMBIO: El puente ahora devuelve el Snapshot directamente
-const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
-// snapshot ya trae el método .val() de la librería Compat del padre
-const clubesData = (snapshot && typeof snapshot.val === 'function') ? snapshot.val() : null;
-        let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key.replace(/_/g, ' ')}">${key.replace(/_/g, ' ')}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
+        const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
+        const clubesData = (snapshot && typeof snapshot.val === 'function') ? snapshot.val() : null;
+        
+        let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key}">${key}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
+        // Usamos zonaReal en todo el template de abajo
         contenedor.innerHTML = `
             <div style="background: rgba(255,255,255,0.05); border: 1px solid gold; padding: 25px; border-radius: 15px; width: 100%; max-width: 500px;">
-                <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${numZona}</h4>
+                <h4 style="color:gold; text-align:center; font-family:'Anton';">📝 NUEVA INSCRIPCIÓN - ZONA ${zonaReal}</h4>
                 
                 <label>Club</label>
                 <div class="lock-group">
-                    <select id="z${numZona}-club">${opcionesClub}</select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-club')">🔓</button>
+                    <select id="z${zonaReal}-club">${opcionesClub}</select>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-club')">🔓</button>
                 </div>
 
                 <label>Disciplina</label>
                 <div class="lock-group">
-                    <select id="z${numZona}-disciplina" onchange="actualizarCascada('disciplina', ${numZona})">
+                    <select id="z${zonaReal}-disciplina" onchange="actualizarCascada('disciplina', ${zonaReal})">
                         <option value="">SELECCIONE...</option>
                         <option value="LIBRE">LIBRE</option>
                         <option value="DANZA">DANZA SOLO</option>
                     </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-disciplina')">🔓</button>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-disciplina')">🔓</button>
                 </div>
 
                 <label>Divisional</label>
                 <div class="lock-group">
-                    <select id="z${numZona}-divisional" onchange="actualizarCascada('divisional', ${numZona})">
+                    <select id="z${zonaReal}-divisional" onchange="actualizarCascada('divisional', ${zonaReal})">
                         <option value="">DIVISIONAL...</option>
                     </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-divisional')">🔓</button>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-divisional')">🔓</button>
                 </div>
 
                 <label>Categoría</label>
                 <div class="lock-group">
-                    <select id="z${numZona}-categoria">
+                    <select id="z${zonaReal}-categoria">
                         <option value="">CATEGORÍA...</option>
                     </select>
-                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${numZona}-categoria')">🔓</button>
+                    <button type="button" class="btn-lock" onclick="toggleLock(this, 'z${zonaReal}-categoria')">🔓</button>
                 </div>
 
-                <input id="z${numZona}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
-                <input id="z${numZona}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
-                <input id="z${numZona}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
-                <input type="date" id="z${numZona}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${numZona}-edad')">
-                <input id="z${numZona}-edad" readonly class="input-registro" style="color:gold; text-align:center; margin-top:10px;">
+                <input id="z${zonaReal}-apellido" placeholder="APELLIDO" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
+                <input id="z${zonaReal}-nombre" placeholder="NOMBRE" class="input-registro" style="margin-top:10px; text-transform:uppercase;">
+                <input id="z${zonaReal}-DNI" placeholder="DNI" class="input-registro" style="margin-top:10px;">
+                <input type="date" id="z${zonaReal}-nacimiento" class="input-registro" style="margin-top:10px;" onchange="calcularEdadDeportiva(this.value, 'z${zonaReal}-edad')">
+                <input id="z${zonaReal}-edad" readonly class="input-registro" style="color:gold; text-align:center; margin-top:10px;">
 
-                <button type="button" onclick="enviarCargaPatinador(${numZona})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
+                <button type="button" onclick="enviarCargaPatinador(${zonaReal})" style="margin-top:20px; width:100%; background:gold; font-weight:bold; padding:12px; border:none; border-radius:5px; cursor:pointer;">🚀 CARGAR PATINADOR</button>
             </div>`;
     } catch (e) { console.error(e); }
+};
+
+window.limpiarCamposPostCarga = function(numZona) {
+    const campos = ['apellido', 'nombre', 'DNI', 'nacimiento', 'edad'];
+    campos.forEach(campo => {
+        const el = document.getElementById(`z${numZona}-${campo}`);
+        if (el) el.value = "";
+    });
 };
 
 window.calcularEdadDeportiva = (fecha, target) => {
