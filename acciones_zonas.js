@@ -137,16 +137,18 @@ contenedor.innerHTML = `
       </div>
     </div>
 
-    <div>
-      <label>GÉNERO</label>
-      <select id="z${zonaReal}-genero" class="campo-form">
-        <option value="">GÉNERO...</option>
-        <option value="MASCULINO">MASCULINO</option>
-        <option value="FEMENINO">FEMENINO</option>
-        <option value="NO BINARIO">NO BINARIO</option>
-      </select>
-    </div>
-  </div>
+    <label for="genero">Género</label>
+<div class="campo-flex">
+  <select id="genero" class="input-registro" disabled>
+    <option value="Femenino" selected>Femenino</option>
+    <option value="Masculino">Masculino</option>
+  </select>
+
+  <button type="button" onclick="toggleCandado('genero', this)">
+    🔒
+  </button>
+</div>
+
 
   <!-- APELLIDO / NOMBRE -->
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:6px;">
