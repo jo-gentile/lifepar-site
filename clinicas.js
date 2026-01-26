@@ -3,19 +3,21 @@ let clinicaActiva = "";
 window.initClinica = async function (idClinica) {
     clinicaActiva = idClinica;
 
-    // Seteamos el título
     const titulo = document.getElementById("titulo-clinica");
     if(titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, " ").toUpperCase();
 
-    // Cargamos los clubes y preparamos la tabla
-    await cargarClubes();
+    // 1. PRIMERO construimos la tabla (es instantáneo)
     construirTabla();
 
-    // Evento del botón de enviar
-    const btnEnviar = document.getElementById("btn-enviar-clinica");
-    if(btnEnviar) {
-        btnEnviar.onclick = enviarClinica; // Usamos onclick para evitar duplicados
+    // 2. DESPUÉS cargamos los clubes (puede tardar)
+    try {
+        await cargarClubes();
+    } catch (e) {
+        console.error("Error al cargar clubes:", e);
     }
+
+    const btnEnviar = document.getElementById("btn-enviar-clinica");
+    if(btnEnviar) btnEnviar.onclick = enviarClinica;
 };
 
 async function cargarClubes() {

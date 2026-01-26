@@ -122,21 +122,21 @@ window.mostrarClinica = function (idClinica) {
         </iframe>
     `;
 
-    const iframe = document.getElementById("iframe-clinica");
-
-    // REGLA MAESTRA: Solo si el iframe se encontró, aplicamos el resto
-    if (iframe) {
-        iframe.onload = () => {
-            try {
-                // Verificamos acceso al contenido interno
-                if (iframe.contentWindow && iframe.contentWindow.document.body) {
-                    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    // Esperamos 100ms para asegurar que el DOM procesó el innerHTML
+    setTimeout(() => {
+        const iframe = document.getElementById("iframe-clinica");
+        if (iframe) {
+            iframe.onload = () => {
+                try {
+                    if (iframe.contentWindow && iframe.contentWindow.document.body) {
+                        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+                    }
+                } catch(e) {
+                    iframe.style.height = "1500px";
                 }
-            } catch(e) {
-                iframe.style.height = "1200px"; // Fallback por seguridad
-            }
-        };
-    }
+            };
+        }
+    }, 100);
 
     vista.scrollIntoView({ behavior: 'smooth' });
 };
