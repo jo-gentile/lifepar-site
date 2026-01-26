@@ -3,19 +3,22 @@ let clinicaActiva = "";
 window.initClinica = async function (idClinica) {
     clinicaActiva = idClinica;
 
-    const titulo = document.getElementById("titulo-clinica");
-    if(titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, " ").toUpperCase();
+    // Pequeña espera para asegurar que el HTML se renderizó
+    setTimeout(async () => {
+        const titulo = document.getElementById("titulo-clinica");
+        if(titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, " ").toUpperCase();
 
-    // 1. PRIMERO construimos la tabla (Ahora es realmente instantáneo)
-    construirTabla();
+        // 1. DIBUJAMOS LA TABLA
+        construirTabla();
 
-    // 2. DESPUÉS cargamos los clubes (en segundo plano, sin trabar la tabla)
-    cargarClubes(); 
+        // 2. CARGAMOS CLUBES
+        await cargarClubes();
 
-    const btnEnviar = document.getElementById("btn-enviar-clinica");
-    if(btnEnviar) btnEnviar.onclick = enviarClinica;
+        const btnEnviar = document.getElementById("btn-enviar-clinica");
+        if(btnEnviar) btnEnviar.onclick = enviarClinica;
+        
+    }, 100); // 100ms son suficientes para que el ID aparezca
 };
-
 async function cargarClubes() {
     const select = document.getElementById("select-club-clinica");
     if(!select) return;
