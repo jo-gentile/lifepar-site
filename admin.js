@@ -178,18 +178,28 @@ window.puenteFirebase = async (operacion, ruta, datos) => {
         throw error;
     }
 };
+// 1. La función de ajuste (se queda igual pero con una protección extra)
 function ajustarAlturaIframe(iframe) {
-    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    try {
+        if (iframe && iframe.contentWindow && iframe.contentWindow.document.body) {
+            iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+        }
+    } catch (e) {
+        iframe.style.height = "1500px"; // Fallback si hay error de carga
+    }
 }
 
-// Cada vez que cargues el iframe:
-const iframe = document.querySelector('#vista-dinamica iframe');
-iframe.onload = () => ajustarAlturaIframe(iframe);
+// 2. Función segura para usar desde cualquier lado
 function autoAjustarIframes() {
-    document.querySelectorAll('#vista-dinamica iframe').forEach(iframe => {
-        iframe.onload = () => iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
-    });
+    const iframes = document.querySelectorAll('#vista-dinamica iframe');
+    if (iframes.length > 0) {
+        iframes.forEach(iframe => {
+            iframe.onload = () => ajustarAlturaIframe(iframe);
+        });
+    }
 }
+
+// IMPORTANTE: No dejes líneas sueltas con querySelector al inicio del archivo.
 window.guardarNuevoClub = async function() {
     const nombreClub = document.getElementById('nuevo-nombre-club').value.trim().toUpperCase();
     const userEmail = sessionStorage.getItem('userEmail');

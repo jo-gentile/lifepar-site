@@ -6,15 +6,11 @@ window.initClinica = async function (idClinica) {
     const titulo = document.getElementById("titulo-clinica");
     if(titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, " ").toUpperCase();
 
-    // 1. PRIMERO construimos la tabla (es instantáneo)
+    // 1. PRIMERO construimos la tabla (Ahora es realmente instantáneo)
     construirTabla();
 
-    // 2. DESPUÉS cargamos los clubes (puede tardar)
-    try {
-        await cargarClubes();
-    } catch (e) {
-        console.error("Error al cargar clubes:", e);
-    }
+    // 2. DESPUÉS cargamos los clubes (en segundo plano, sin trabar la tabla)
+    cargarClubes(); 
 
     const btnEnviar = document.getElementById("btn-enviar-clinica");
     if(btnEnviar) btnEnviar.onclick = enviarClinica;
