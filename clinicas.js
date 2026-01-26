@@ -110,4 +110,4 @@ async function enviarClinica() {
         alert("❌ Error al enviar. Revisá la conexión.");
     }
 }
-window.initClinica("clinica-test"); 
+
