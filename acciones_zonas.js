@@ -464,21 +464,28 @@ window.actualizarPatinador = async function(numZona, idPatinador) {
 
 try {
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${idPatinador}`, datosModificados);
-        alert("✅ Datos actualizados.");
-
-        // --- RESTABLECER INTERFAZ ---
-        document.getElementById('btn-actualizar-dinamico').style.display = 'none';
         
+        // 1. Ocultamos el formulario de edición
+        document.getElementById('contenedor-formulario-dinamico').style.display = 'none';
+
+        // 2. Restablecemos los botones para la próxima carga
+        document.getElementById('btn-actualizar-dinamico').style.display = 'none';
         const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
         if (btnCargarOriginal) btnCargarOriginal.style.display = 'block';
 
+        // 3. Limpiamos los campos
         limpiarCamposPostCarga(numZona);
 
-        // --- VOLVER AL PADRÓN AUTOMÁTICAMENTE ---
-        // Llamamos a la función que dibuja las tarjetas para ver el cambio
-        window.mostrarListadoAltas(numZona);
+        // 4. Forzamos la apertura del padrón
+        // Usamos un pequeño delay para asegurar que el DOM se actualice
+        setTimeout(() => {
+            window.mostrarListadoAltas(numZona);
+        }, 300);
+
+        alert("✅ Datos actualizados con éxito.");
 
     } catch (e) { 
+        console.error(e);
         alert("❌ Error al actualizar."); 
     }
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
