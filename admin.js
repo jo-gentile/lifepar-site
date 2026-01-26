@@ -1,4 +1,5 @@
-  // CONFIGURACIÓN GLOBAL
+
+// CONFIGURACIÓN GLOBAL
 const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
@@ -9,32 +10,37 @@ const firebaseConfig = {
     appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
 };
 
-// Inicialización versión Compat
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
-const auth = firebase.auth();
-
-// GESTIÓN DE SESIÓN RE REAL
+// 1. VERIFICACIÓN DE SESIÓN (Única fuente de verdad)
 auth.onAuthStateChanged((user) => {
     if (user) {
         console.log("✅ Sesión confirmada:", user.email);
-        if(document.getElementById('display-email')) document.getElementById('display-email').innerText = user.email;
-        if(document.getElementById('display-name')) document.getElementById('display-name').innerText = user.displayName || "Entrenador";
+        
+        // Actualizamos la interfaz solo con datos reales
+        if(document.getElementById('display-email')) {
+            document.getElementById('display-email').innerText = user.email;
+        }
+        if(document.getElementById('display-name')) {
+            document.getElementById('display-name').innerText = user.displayName || "Entrenador";
+        }
+        
+        // Aseguramos que el email esté en session para los iframes
+        sessionStorage.setItem('userEmail', user.email);
+
     } else {
+        // Si no hay sesión, limpiamos todo y fuera
+        sessionStorage.clear();
+        localStorage.clear();
         window.location.href = "index.html";
     }
 });
-// --- 1. GESTIÓN DE SESIÓN Y USUARIO ---
-const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail') || "Email no detectado";
-const userName = sessionStorage.getItem('userName') || localStorage.getItem('userName') || "Usuario";
 
-if(document.getElementById('display-email')) document.getElementById('display-email').innerText = userEmail;
-if(document.getElementById('display-name')) document.getElementById('display-name').innerText = userName;
-
+// Función de salida manual
 function logout() {
-    sessionStorage.clear();
-    localStorage.clear();
-    window.location.href = "index.html";
+    auth.signOut().then(() => {
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = "index.html";
+    });
 }
 
 // --- 2. INTERFAZ Y NAVEGACIÓN ---
@@ -63,12 +69,18 @@ function toggleArbol(id) {
 
 // Función Maestra para limpiar secciones fijas antes de mostrar un Iframe
 function limpiarPantalla() {
-    if (document.getElementById('seguros')) document.getElementById('seguros').style.display = 'none';
-    if (document.getElementById('copa-federal')) document.getElementById('copa-federal').style.display = 'none';
+    // Ocultar secciones que no son la vista dinámica
+    const secciones = ['seguros', 'copa-federal'];
+    secciones.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    });
+
+    // Mantener el contenedor de la vista dinámica visible
     const vista = document.getElementById('vista-dinamica');
     if (vista) {
-        vista.innerHTML = '';
-        vista.style.display = 'block';
+        vista.style.display = 'flex'; // Siempre visible y con flex para centrar
+        // NO borramos innerHTML aquí, lo hacemos en la función que carga el iframe
     }
 }
 
@@ -76,35 +88,69 @@ function mostrarAccionesZona(numeroZona) {
     limpiarPantalla();
     const contenedor = document.getElementById('vista-dinamica');
     contenedor.innerHTML = `
-        <iframe src="acciones_zonas.html?zona=${numeroZona}" 
-            allowtransparency="true"
-            style="width: 100%; min-height: 2000px; border: none; background: transparent; overflow: hidden;">
-        </iframe>
+        <iframe id="iframe-zona" src="acciones_zonas.html?zona=${numeroZona}" 
+            style="width:100%; border:none;" scrolling="no"></iframe>
     `;
-    contenedor.scrollIntoView({ behavior: 'smooth' });
+    
+    const iframe = document.getElementById('iframe-zona');
+    iframe.onload = () => {
+        try {
+            // Ajusta altura según contenido real
+            iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+        } catch (e) {
+            // Si es cross-origin no puede leer scrollHeight
+            iframe.style.height = "2000px"; // fallback
+        }
+    };
 }
 
-window.mostrarClinica = async function (idClinica) {
+
+// Mostrar clínica
+window.mostrarClinica = function (idClinica) {
     limpiarPantalla();
     const vista = document.getElementById("vista-dinamica");
+    if (!vista) return;
+
+    // Creamos el iframe con id para poder manipularlo
     vista.innerHTML = `
-        <iframe src="clinicas.html?id=${idClinica}" 
-            allowtransparency="true" 
-            style="width: 100%; min-height: 1200px; border: none; background: transparent;">
+        <iframe id="iframe-clinica" src="clinicas.html?id=${idClinica}" 
+            allowtransparency="true"
+            style="width:100%; border:none; background:transparent;" scrolling="no">
         </iframe>
     `;
+
+    const iframe = document.getElementById("iframe-clinica");
+
+    // Ajuste de altura automático al cargar
+    iframe.onload = () => {
+        try {
+            iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+        } catch(e) {
+            // Si hay problema por cross-origin
+            iframe.style.height = "1200px"; // fallback
+        }
+    };
+
+    vista.scrollIntoView({ behavior: 'smooth' });
 };
 
+
+// Mostrar seguros (oculta la vista dinámica)
 function mostrarSeguros() {
     limpiarPantalla();
-    document.getElementById('vista-dinamica').style.display = 'none';
+    const vista = document.getElementById('vista-dinamica');
+    if (vista) vista.style.display = 'none';
+
     const box = document.getElementById('seguros');
     if (box) box.style.display = 'block';
 }
 
+// Mostrar copa federal (oculta la vista dinámica)
 function mostrarCopa() {
     limpiarPantalla();
-    document.getElementById('vista-dinamica').style.display = 'none';
+    const vista = document.getElementById('vista-dinamica');
+    if (vista) vista.style.display = 'none';
+
     const box = document.getElementById('copa-federal');
     if (box) box.style.display = 'block';
 }
@@ -125,7 +171,22 @@ window.puenteFirebase = async (operacion, ruta, datos) => {
         throw error;
     }
 };
+function ajustarAlturaIframe(iframe) {
+    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+}
 
+// Cada vez que cargues el iframe:
+const iframe = document.querySelector('#vista-dinamica iframe');
+iframe.onload = () => ajustarAlturaIframe(iframe);
+function autoAjustarIframes() {
+    document.querySelectorAll('#vista-dinamica iframe').forEach(iframe => {
+        iframe.onload = () => iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+    });
+}
+
+
+// Llamamos cada vez que agregamos un iframe
+window.ajustarAlturaIframes = ajustarAlturaIframes;
 window.toggleSidebar = toggleSidebar;
 window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;

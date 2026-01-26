@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
         html, body { background: transparent !important; margin: 0; padding: 0; }
-        body { padding: 10px; color: white; overflow: visible !important; height: auto !important; font-family: 'Quicksand'; }
+        body { padding: 10px; color: white;  height: auto !important; font-family: 'Quicksand'; }
         .menu-zona { display: block !important; margin: auto; max-width: 1000px; width: 95%; }
         .btn-accion { width: 100%; margin: 10px 0; cursor: pointer; }
         select { background: #111; color: white; border-radius: 5px; padding: 5px; width: 100%; border: 1px solid gold; }
@@ -22,7 +22,6 @@
 body { 
   padding: 5px; 
   color: white; 
-  overflow: visible !important; 
   height: auto !important; 
   font-family: 'Quicksand'; 
   font-size: 12px; 
@@ -123,7 +122,19 @@ label {
 
 <div id="contenedor-formulario-dinamico" style="display: none; margin-top: 20px;"></div>
 
-<div id="ModalClub" style="display:none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); padding-top: 100px;">
+<div id="ModalClub" style="
+    display: none; 
+    position: fixed; 
+    top: 50px; 
+    left: 50%; 
+    transform: translateX(-50%);
+    z-index: 1000; 
+    width: 80%; 
+    max-width: 400px;
+    background-color: rgba(0,0,0,0.8); 
+    padding: 20px; 
+    border-radius: 15px;
+">
     <div style="background: #1a1a1a; margin: auto; padding: 20px; border: 1px solid gold; border-radius: 15px; width: 80%; max-width: 400px; text-align: center; color: white;">
         <h3 style="color: gold; font-family: 'Anton', sans-serif;">ASOCIAR NUEVO CLUB</h3>
         <input type="text" id="nuevo-club-nombre" placeholder="NOMBRE DEL CLUB" style="width: 100%; margin-bottom: 20px; text-transform: uppercase; padding: 10px; background: #222; color: white; border: 1px solid #444;">
@@ -133,17 +144,5 @@ label {
         </div>
     </div>
 </div>
-<div class="card-alta">
-  <div class="nombre-p">APELLIDO NOMBRE</div>
-  <div class="datos-p">CATEGORÍA · GÉNERO · EDAD</div>
-
-  <!-- BOTONES FECHAS -->
-  <div class="acciones-f">
-    <button class="btn-f" onclick="marcarFecha('${id}','F2', this)">F2</button>
-    <button class="btn-f" onclick="marcarFecha('${id}','F3', this)">F3</button>
-    <button class="btn-f" onclick="marcarFecha('${id}','F4', this)">F4</button>
-  </div>
-</div>
-
 </body>
 </html>

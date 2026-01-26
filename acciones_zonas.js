@@ -235,7 +235,7 @@ window.mostrarListadoAltas = async (numZona) => {
 
     Object.assign(contenedor.style, {
         display: 'flex', position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
-        backgroundColor: 'rgba(0,0,0,0.95)', zIndex: '5000', overflowY: 'auto', padding: '20px 0',
+        backgroundColor: 'rgba(0,0,0,0.95)', zIndex: '5000', padding: '20px 0',
         justifyContent: 'center', alignItems: 'flex-start'
     });
 
@@ -365,6 +365,7 @@ window.ejecutarModalClubes = function() {
     const modal = document.getElementById('ModalClub');
     if(modal) modal.style.display = 'flex';
 };
+
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
 window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';

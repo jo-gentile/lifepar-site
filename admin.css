@@ -14,8 +14,7 @@ body {
     background-size: 400% 400%;
     animation: movimientoFino 40s ease infinite;
     background-attachment: fixed;
-    overflow-y: auto;
-    overflow-x: hidden;
+    
 }
 
 /* --- 2. EL SIDEBAR (MENÚ LATERAL) --- */
@@ -33,7 +32,6 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 2000;
-    overflow-y: auto;
     box-sizing: border-box; /* Fundamental para que el padding no sume ancho */
 }
 
@@ -96,7 +94,7 @@ body {
     background: rgba(255, 255, 255, 0.03);
     margin-left: 15px; /* Sangría de árbol */
     border-left: 1px solid rgba(255, 255, 255, 0.1); /* Línea guía visual */
-    overflow: hidden;
+    
 }
 
 .submenu-lista a {
@@ -133,7 +131,7 @@ body {
     flex-grow: 1;
     box-sizing: border-box;
     /* Liberamos el flujo para que el iframe crezca */
-    overflow: visible !important; 
+    
 }
 
 /* Ajuste para Sidebar colapsado */
@@ -144,12 +142,12 @@ body {
 
 /* Impedir desbordes sin forzar scroll lateral */
 .zona-derecha > *, 
-#contenedor-acciones-zonas, 
+#vista-dinamica, 
 .menu-zona,
 .box-oficina {
     max-width: 100% !important;
     box-sizing: border-box !important;
-    overflow: visible !important;
+    
 }
 
 /* --- AJUSTE PARA CELULARES (Media Query) --- */
@@ -160,7 +158,7 @@ body {
         padding: 75px 8px 20px 8px !important;
         display: flex !important;
         flex-direction: column !important;
-        overflow: visible !important;
+        
     }
 }
 
@@ -198,7 +196,7 @@ body {
     justify-content: space-between;
     padding: 0 30px;
     box-sizing: border-box;
-    overflow: hidden; /* RECORTA el brillo dentro de la cápsula */
+    
 }
 
 /* Ajuste del Header colapsado */
@@ -336,23 +334,28 @@ body.layout-collapsed .header-admin {
     vertical-align: middle;
 }
 
-/* --- AJUSTE CONTENEDOR DE ACCIONES --- */
-#contenedor-acciones-zonas {
+/* Contenedor de vista dinámica más compacto */
+#vista-dinamica {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    width: 100%;
-    max-width: 1200px; /* Un poco más de aire para las tarjetas */
+    width: 50%;
+    max-width: 900px;   /* ancho reducido */
     margin: 0 auto !important;
+    padding: 20px;      /* espacio interno */
+    box-sizing: border-box;
 }
 
-#contenedor-acciones-zonas iframe {
+/* Iframe que se ajusta al ancho y crece suavemente con contenido */
+#vista-dinamica iframe {
     width: 100% !important;
-    min-height: 1800px !important; /* Altura mínima inicial generosa */
-    height: auto !important; /* Que intente crecer solo */
+    min-height: 800px;  /* altura inicial razonable */
+    height: auto !important;
     border: none !important;
-    overflow: hidden !important; /* Prohibido el scroll interno */
+    background: transparent !important;
 }
+
+
 
 .menu-zona {
     display: none;
@@ -368,7 +371,7 @@ body.layout-collapsed .header-admin {
     text-align: center;
     animation: entradaSuave 0.5s ease;
     opacity: 1 !important;
-    overflow: visible !important; /* Evita scrolls internos */
+    
 }
 
 .menu-zona h4 {
@@ -433,8 +436,7 @@ body.layout-collapsed .header-admin {
     padding: 15px !important;
     margin: 10px auto !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    overflow: visible !important;
-    height: auto !important;
+        height: auto !important;
 }
 
 #seguros {
@@ -514,8 +516,7 @@ body.layout-collapsed .footer-premium {
     padding: 25px;
     border-radius: 20px;
     max-height: 85vh;
-    overflow-y: auto;
-}
+    }
 
 /* --- 7. ANIMACIONES --- */
 @keyframes shineHeader { 100% { left: 125%; } }
