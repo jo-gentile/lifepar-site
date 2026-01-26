@@ -35,10 +35,11 @@ async function cargarClubes() {
         
         if (snapshot.exists()) {
             const clubes = snapshot.val();
-            Object.keys(clubes).forEach(id => {
+            // 'clubes' es un objeto donde las llaves son los nombres de los clubes
+            Object.keys(clubes).forEach(nombreDelClub => {
                 const op = document.createElement("option");
-                op.value = id;
-                op.textContent = clubes[id].nombre;
+                op.value = nombreDelClub; // La llave es el nombre (ej: "CLUB PATIN")
+                op.textContent = nombreDelClub;
                 select.appendChild(op);
             });
         }
