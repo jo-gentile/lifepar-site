@@ -12,20 +12,20 @@ const firebaseConfig = {
 
 auth.onAuthStateChanged((user) => {
     if (user) {
-        // 1. PRIMERO LA LLAVE (Para que los hijos vean el mail rápido)
+        // 1. PRIMERO LA IDENTIDAD: Guardamos el mail para que el "Puente" sepa quién es
         sessionStorage.setItem('userEmail', user.email);
+        sessionStorage.setItem('userName', user.displayName || "Entrenador");
 
-        // 2. DESPUÉS LA PARTE VISUAL
-        const elEmail = document.getElementById('display-email');
-        const elNombre = document.getElementById('display-name');
+        // 2. DESPUÉS LA VISIBILIDAD: Escribimos en el HTML para que vos lo veas
+        const txtNombre = document.getElementById('display-name');
+        const txtEmail = document.getElementById('display-email');
         
-        if(elEmail) elEmail.innerText = user.email;
-        if(elNombre) elNombre.innerText = user.displayName || "Entrenador";
+        if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
+        if (txtEmail) txtEmail.innerText = user.email;
 
-        console.log("✅ Sesión confirmada y guardada:", user.email);
+        console.log("✅ Sesión activa de:", user.email);
     } else {
-        sessionStorage.clear();
-        localStorage.clear();
+        // Si Firebase dice que NO hay nadie, volvemos al inicio
         window.location.href = "index.html";
     }
 });
