@@ -115,7 +115,6 @@ window.mostrarClinica = function (idClinica) {
     const vista = document.getElementById("vista-dinamica");
     if (!vista) return;
 
-    // Creamos el iframe con id para poder manipularlo
     vista.innerHTML = `
         <iframe id="iframe-clinica" src="clinicas.html?id=${idClinica}" 
             allowtransparency="true"
@@ -125,15 +124,19 @@ window.mostrarClinica = function (idClinica) {
 
     const iframe = document.getElementById("iframe-clinica");
 
-    // Ajuste de altura automático al cargar
-    iframe.onload = () => {
-        try {
-            iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
-        } catch(e) {
-            // Si hay problema por cross-origin
-            iframe.style.height = "1200px"; // fallback
-        }
-    };
+    // REGLA MAESTRA: Solo si el iframe se encontró, aplicamos el resto
+    if (iframe) {
+        iframe.onload = () => {
+            try {
+                // Verificamos acceso al contenido interno
+                if (iframe.contentWindow && iframe.contentWindow.document.body) {
+                    iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+                }
+            } catch(e) {
+                iframe.style.height = "1200px"; // Fallback por seguridad
+            }
+        };
+    }
 
     vista.scrollIntoView({ behavior: 'smooth' });
 };
