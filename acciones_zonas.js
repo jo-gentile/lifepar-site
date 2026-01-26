@@ -449,34 +449,45 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
 };
 
 // Función para guardar los cambios
+// Función para guardar los cambios
 window.actualizarPatinador = async function(numZona, idPatinador) {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     
-    // Recolección de datos... (mantené lo que ya tenías)
     const datosModificados = {
         club: document.getElementById(`z${numZona}-club`).value,
+        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
+        divisional: document.getElementById(`z${numZona}-divisional`).value,
+        categoria: document.getElementById(`z${numZona}-categoria`).value,
+        genero: document.getElementById(`z${numZona}-genero`).value,
         apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
         nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
         DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
-        // ... resto de los campos ...
+        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
+        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
+        mailProfe: userEmail,
         ultima_edicion: new Date().toISOString()
     };
 
     try {
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${idPatinador}`, datosModificados);
-        alert("✅ Datos actualizados.");
-
-        // --- RESTABLECER INTERFAZ ---
-        // 1. Ocultamos el botón verde de actualizar
+        
+        // Ocultamos formulario y botón verde
+        document.getElementById('contenedor-formulario-dinamico').style.display = 'none';
         document.getElementById('btn-actualizar-dinamico').style.display = 'none';
         
-        // 2. Volvemos a mostrar el botón de CARGAR (el del cohete)
+        // Mostramos el cohete de nuevo
         const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
         if (btnCargarOriginal) btnCargarOriginal.style.display = 'block';
 
         limpiarCamposPostCarga(numZona);
-    } catch (e) { alert("❌ Error al actualizar."); }
-};
+        alert("✅ Datos actualizados.");
+
+        // Volvemos a las tarjetas
+        setTimeout(() => { window.mostrarListadoAltas(numZona); }, 300);
+    } catch (e) { 
+        alert("❌ Error al actualizar."); 
+    }
+}; // <--- ASEGURATE DE QUE ESTA LLAVE ESTÉ
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
 window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';
