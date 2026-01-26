@@ -10,26 +10,12 @@ const firebaseConfig = {
     appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
 };
 
-// 1. VERIFICACIÓN DE SESIÓN (Única fuente de verdad)
 auth.onAuthStateChanged((user) => {
     if (user) {
         console.log("✅ Sesión confirmada:", user.email);
-        
-        // Actualizamos la interfaz solo con datos reales
-        if(document.getElementById('display-email')) {
-            document.getElementById('display-email').innerText = user.email;
-        }
-        if(document.getElementById('display-name')) {
-            document.getElementById('display-name').innerText = user.displayName || "Entrenador";
-        }
-        
-        // Aseguramos que el email esté en session para los iframes
-        sessionStorage.setItem('userEmail', user.email);
-
+        if(document.getElementById('display-email')) document.getElementById('display-email').innerText = user.email;
+        if(document.getElementById('display-name')) document.getElementById('display-name').innerText = user.displayName || "Entrenador";
     } else {
-        // Si no hay sesión, limpiamos todo y fuera
-        sessionStorage.clear();
-        localStorage.clear();
         window.location.href = "index.html";
     }
 });
