@@ -366,6 +366,37 @@ window.ejecutarModalClubes = function() {
     if(modal) modal.style.display = 'flex';
 };
 
+window.guardarNuevoClub = async function() {
+    // Corregimos el ID para que sea igual al de tu HTML
+    const input = document.getElementById('nuevo-club-nombre');
+    const nombreClub = input ? input.value.trim().toUpperCase() : "";
+    const userEmail = sessionStorage.getItem('userEmail');
+
+    if (!nombreClub || !userEmail) return alert("⚠️ Datos incompletos");
+
+    const emailKey = userEmail.replace(/\./g, '_');
+
+    try {
+        // Orden al padre para escribir
+        await window.parent.puenteFirebase('update', `CLUBES/${emailKey}`, {
+            [nombreClub]: true
+        });
+
+        alert("✅ Club '" + nombreClub + "' guardado correctamente.");
+        
+        // Limpiar y cerrar
+        input.value = "";
+        window.cerrarModalClubes();
+        
+        // Refrescar el selector de inscripción
+        if (typeof window.abrirFormularioCarga === 'function') {
+            window.abrirFormularioCarga(window.zonaActivaNum);
+        }
+    } catch (e) {
+        console.error(e);
+        alert("❌ Error al guardar el club.");
+    }
+};
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
 window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';
