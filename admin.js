@@ -109,7 +109,6 @@ function mostrarAccionesZona(numeroZona) {
 }
 
 
-// Mostrar clínica
 window.mostrarClinica = function (idClinica) {
     limpiarPantalla();
     const vista = document.getElementById("vista-dinamica");
@@ -122,16 +121,22 @@ window.mostrarClinica = function (idClinica) {
         </iframe>
     `;
 
-    // Esperamos 100ms para asegurar que el DOM procesó el innerHTML
     setTimeout(() => {
         const iframe = document.getElementById("iframe-clinica");
         if (iframe) {
             iframe.onload = () => {
                 try {
+                    // 1. Ajuste de altura (Usá el nombre de función que tengas, con o sin S)
                     if (iframe.contentWindow && iframe.contentWindow.document.body) {
                         iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
                     }
+
+                    // 2. ORDEN DE ARRANQUE (Esto es lo que te faltaba)
+                    if (iframe.contentWindow && iframe.contentWindow.initClinica) {
+                        iframe.contentWindow.initClinica(idClinica);
+                    }
                 } catch(e) {
+                    console.error("Error en comunicación con iframe:", e);
                     iframe.style.height = "1500px";
                 }
             };
