@@ -179,7 +179,7 @@ window.puenteFirebase = async (operacion, ruta, datos) => {
     }
 };
 // 1. La función de ajuste (se queda igual pero con una protección extra)
-function ajustarAlturaIframe(iframe) {
+function ajustarAlturaIframes(iframe) {
     try {
         if (iframe && iframe.contentWindow && iframe.contentWindow.document.body) {
             iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
