@@ -1,5 +1,5 @@
 
-// CONFIGURACIÓN GLOBAL
+// 1. CONFIGURACIÓN GLOBAL
 const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
@@ -10,22 +10,30 @@ const firebaseConfig = {
     appId: "1:140850288146:web:fe1d35bac4c30c39b3aacb"
 };
 
+// 2. INICIALIZACIÓN (Esto es lo que te faltaba)
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.database();
+
+// 3. GESTIÓN DE SESIÓN
 auth.onAuthStateChanged((user) => {
     if (user) {
-        // 1. PRIMERO LA IDENTIDAD: Guardamos el mail para que el "Puente" sepa quién es
+        console.log("✅ Sesión activa de:", user.email);
+        
+        // 1. Guardamos la llave para los hijos
         sessionStorage.setItem('userEmail', user.email);
         sessionStorage.setItem('userName', user.displayName || "Entrenador");
 
-        // 2. DESPUÉS LA VISIBILIDAD: Escribimos en el HTML para que vos lo veas
+        // 2. Actualizamos la interfaz
         const txtNombre = document.getElementById('display-name');
         const txtEmail = document.getElementById('display-email');
         
         if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
         if (txtEmail) txtEmail.innerText = user.email;
 
-        console.log("✅ Sesión activa de:", user.email);
     } else {
-        // Si Firebase dice que NO hay nadie, volvemos al inicio
         window.location.href = "index.html";
     }
 });
