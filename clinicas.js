@@ -1,7 +1,9 @@
 let clinicaActiva = "";
 
 window.initClinica = async function (idClinica) {
+    console.log("🚀 MOTOR CLÍNICAS INICIADO PARA:", idClinica); // SI ESTO NO SALE EN CONSOLA, EL ERROR ES DEL PADRE
     clinicaActiva = idClinica;
+    
 
     // Pequeña espera para asegurar que el HTML se renderizó
     setTimeout(async () => {
