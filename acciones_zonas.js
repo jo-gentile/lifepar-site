@@ -398,31 +398,24 @@ window.guardarNuevoClub = async function() {
     }
 };
 window.abrirEditorPatinador = async function(numZona, idPatinador) {
-    // 1. Cerramos el padrón para ver el formulario que está detrás
     document.getElementById('contenedor-tarjetas-hijo').style.display = 'none';
     
-    // 2. Abrimos el formulario de carga (si no está abierto)
     if (document.getElementById('contenedor-formulario-dinamico').style.display !== 'flex') {
         await window.abrirFormularioCarga(numZona);
     }
 
     try {
-        // 3. Buscamos los datos exactos de ese patinador
         const snapshot = await window.parent.puenteFirebase('get', `ZONAS/ZONA_${numZona}/${idPatinador}`, null);
         const p = snapshot.val();
 
         if (p) {
-            // 4. Llenamos cada campo del formulario
+            // Llenado de campos... (mantené lo que ya tenías)
             document.getElementById(`z${numZona}-club`).value = p.club || "";
             document.getElementById(`z${numZona}-disciplina`).value = p.disciplina || "";
-            
-            // Disparamos la cascada manualmente para que cargue divisionales y categorías
             window.actualizarCascada('disciplina', numZona);
             document.getElementById(`z${numZona}-divisional`).value = p.divisional || "";
-            
             window.actualizarCascada('divisional', numZona);
             document.getElementById(`z${numZona}-categoria`).value = p.categoria || "";
-            
             document.getElementById(`z${numZona}-genero`).value = p.genero || "";
             document.getElementById(`z${numZona}-apellido`).value = p.apellido || "";
             document.getElementById(`z${numZona}-nombre`).value = p.nombre || "";
@@ -430,60 +423,59 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
             document.getElementById(`z${numZona}-nacimiento`).value = p.fecha_de_nacimiento || "";
             document.getElementById(`z${numZona}-edad`).value = p.edadDeportiva || "";
 
-            // 5. CAMBIO CLAVE: Transformamos el botón de "CARGAR" en "ACTUALIZAR"
-            const btnCargar = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
-            if (btnCargar) {
-                btnCargar.innerText = "💾 ACTUALIZAR DATOS";
-                btnCargar.style.backgroundColor = "#28a745"; // Color verde para diferenciar
-                btnCargar.style.color = "white";
-                // Le cambiamos la función para que use una de "update" en lugar de "push"
-                btnCargar.onclick = () => window.actualizarPatinador(numZona, idPatinador);
+            // --- MANEJO DE BOTONES ---
+            // 1. Buscamos el botón de CARGAR (el del cohete) y lo ocultamos
+            const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
+            if (btnCargarOriginal) btnCargarOriginal.style.display = 'none';
+
+            // 2. Buscamos si ya existe un botón de ACTUALIZAR para no duplicarlo
+            let btnAct = document.getElementById('btn-actualizar-dinamico');
+            if (!btnAct) {
+                btnAct = document.createElement('button');
+                btnAct.id = 'btn-actualizar-dinamico';
+                btnAct.style = "width:100%; margin-top:10px; background:#28a745; color:white; font-weight:bold; padding:10px; border:none; border-radius:6px; cursor:pointer;";
+                // Insertamos el botón verde debajo de la edad
+                const contenedor = document.querySelector('#contenedor-formulario-dinamico > div');
+                contenedor.appendChild(btnAct);
             }
             
-            // Scroll suave hacia el formulario para editar
+            btnAct.innerText = "💾 ACTUALIZAR DATOS";
+            btnAct.style.display = 'block'; // Aseguramos que se vea
+            btnAct.onclick = () => window.actualizarPatinador(numZona, idPatinador);
+
             document.getElementById('contenedor-formulario-dinamico').scrollIntoView({ behavior: 'smooth' });
         }
-    } catch (e) {
-        console.error("Error al recuperar patinador:", e);
-        alert("❌ Error al cargar los datos para editar.");
-    }
+    } catch (e) { console.error(e); }
 };
 
 // Función para guardar los cambios
 window.actualizarPatinador = async function(numZona, idPatinador) {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     
+    // Recolección de datos... (mantené lo que ya tenías)
     const datosModificados = {
         club: document.getElementById(`z${numZona}-club`).value,
-        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
-        divisional: document.getElementById(`z${numZona}-divisional`).value,
-        categoria: document.getElementById(`z${numZona}-categoria`).value,
-        genero: document.getElementById(`z${numZona}-genero`).value,
         apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
         nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
         DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
-        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
-        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: userEmail,
+        // ... resto de los campos ...
         ultima_edicion: new Date().toISOString()
     };
 
     try {
-        // Usamos 'update' en la ruta exacta del patinador para no crear uno nuevo
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${idPatinador}`, datosModificados);
-        alert("✅ Datos actualizados correctamente.");
+        alert("✅ Datos actualizados.");
+
+        // --- RESTABLECER INTERFAZ ---
+        // 1. Ocultamos el botón verde de actualizar
+        document.getElementById('btn-actualizar-dinamico').style.display = 'none';
         
-        // Volvemos el formulario a su estado original (Cargar)
-        const btnAct = document.querySelector(`#contenedor-formulario-dinamico button`);
-        btnAct.innerText = "🚀 CARGAR";
-        btnAct.style.backgroundColor = "gold";
-        btnAct.style.color = "black";
-        btnAct.onclick = () => window.enviarCargaPatinador(numZona);
-        
+        // 2. Volvemos a mostrar el botón de CARGAR (el del cohete)
+        const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
+        if (btnCargarOriginal) btnCargarOriginal.style.display = 'block';
+
         limpiarCamposPostCarga(numZona);
-    } catch (e) {
-        alert("❌ Error al actualizar.");
-    }
+    } catch (e) { alert("❌ Error al actualizar."); }
 };
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
