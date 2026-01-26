@@ -118,36 +118,36 @@ body {
     transition: 0.3s;
 }
 
-/* --- ZONA DERECHA UNIFICADA Y LIBRE DE SCROLL --- */
+/* 1. El contenedor PADRE: Flexible para que se estire */
 .zona-derecha {
     margin-left: var(--sidebar-width) !important;
     width: calc(100% - var(--sidebar-width)) !important;
-    min-height: 100vh;
+    min-height: 100vh !important;
+    height: auto !important; /* Que crezca según el contenido */
     padding: 40px;
-    padding-bottom: 120px;
-    transition: margin-left 0.3s ease;
-    position: relative;
-    display: block;
-    flex-grow: 1;
+    padding-bottom: 150px; /* Espacio para que el footer no tape nada */
+    display: block !important;
+    overflow: visible !important; /* Permite que el hijo "empuje" hacia abajo */
     box-sizing: border-box;
-    /* Liberamos el flujo para que el iframe crezca */
-    
 }
 
-/* Ajuste para Sidebar colapsado */
-.layout-collapsed .zona-derecha {
-    margin-left: var(--sidebar-width-collapsed) !important;
-    width: calc(100% - var(--sidebar-width-collapsed)) !important;
-}
-
-/* Impedir desbordes sin forzar scroll lateral */
+/* 2. Elementos internos: SIN altura fija */
 .zona-derecha > *, 
 #vista-dinamica, 
 .menu-zona,
 .box-oficina {
     max-width: 100% !important;
     box-sizing: border-box !important;
-    
+    height: auto !important; /* Quitamos los 1500px de acá */
+    overflow: visible !important; 
+}
+
+/* 3. El IFRAME: A este sí le damos altura para que no scrollee por dentro */
+#vista-dinamica iframe {
+    width: 100% !important;
+    height: 1600px !important; /* Altura generosa solo al iframe */
+    border: none !important;
+    overflow: hidden !important; /* Matamos el scroll interno del iframe */
 }
 
 /* --- AJUSTE PARA CELULARES (Media Query) --- */
