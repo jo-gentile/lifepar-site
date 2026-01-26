@@ -462,21 +462,25 @@ window.actualizarPatinador = async function(numZona, idPatinador) {
         ultima_edicion: new Date().toISOString()
     };
 
-    try {
+try {
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${idPatinador}`, datosModificados);
         alert("✅ Datos actualizados.");
 
         // --- RESTABLECER INTERFAZ ---
-        // 1. Ocultamos el botón verde de actualizar
         document.getElementById('btn-actualizar-dinamico').style.display = 'none';
         
-        // 2. Volvemos a mostrar el botón de CARGAR (el del cohete)
         const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
         if (btnCargarOriginal) btnCargarOriginal.style.display = 'block';
 
         limpiarCamposPostCarga(numZona);
-    } catch (e) { alert("❌ Error al actualizar."); }
-};
+
+        // --- VOLVER AL PADRÓN AUTOMÁTICAMENTE ---
+        // Llamamos a la función que dibuja las tarjetas para ver el cambio
+        window.mostrarListadoAltas(numZona);
+
+    } catch (e) { 
+        alert("❌ Error al actualizar."); 
+    }
 // --- FINAL: EXPOSICIÓN DE FUNCIONES ---
 window.abrirModalClubes = () => document.getElementById('ModalClub').style.display = 'block';
 window.cerrarModalClubes = () => document.getElementById('ModalClub').style.display = 'none';
