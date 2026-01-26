@@ -187,6 +187,38 @@ function autoAjustarIframes() {
         iframe.onload = () => iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
     });
 }
+window.guardarNuevoClub = async function() {
+    const nombreClub = document.getElementById('nuevo-nombre-club').value.trim().toUpperCase();
+    const userEmail = sessionStorage.getItem('userEmail');
+
+    if (!nombreClub) return alert("⚠️ Ingresá el nombre del club.");
+    if (!userEmail) return alert("⚠️ Sesión no detectada.");
+
+    try {
+        // Convertimos el mail a una llave válida para Firebase (sin puntos)
+        const emailKey = userEmail.replace(/\./g, '_');
+        
+        // Estructura: CLUBES -> mail_usuario -> NOMBRE DEL CLUB: true
+        // Usamos 'update' para no borrar los clubes que ya tenías guardados
+        await window.parent.puenteFirebase('update', `CLUBES/${emailKey}`, {
+            [nombreClub]: true
+        });
+
+        alert("✅ Club registrado correctamente.");
+        
+        // Limpiamos y cerramos
+        document.getElementById('nuevo-nombre-club').value = "";
+        window.cerrarModalClubes();
+        
+        // Opcional: Recargar el formulario para que el nuevo club aparezca en la lista
+        if (typeof window.abrirFormularioCarga === 'function') {
+            window.abrirFormularioCarga(window.zonaActivaNum);
+        }
+    } catch (error) {
+        console.error("Error al guardar club:", error);
+        alert("❌ No se pudo guardar el club. Revisá la conexión.");
+    }
+};
 
 
 // Llamamos cada vez que agregamos un iframe
