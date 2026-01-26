@@ -12,10 +12,20 @@ const firebaseConfig = {
 
 auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log("✅ Sesión confirmada:", user.email);
-        if(document.getElementById('display-email')) document.getElementById('display-email').innerText = user.email;
-        if(document.getElementById('display-name')) document.getElementById('display-name').innerText = user.displayName || "Entrenador";
+        // 1. PRIMERO LA LLAVE (Para que los hijos vean el mail rápido)
+        sessionStorage.setItem('userEmail', user.email);
+
+        // 2. DESPUÉS LA PARTE VISUAL
+        const elEmail = document.getElementById('display-email');
+        const elNombre = document.getElementById('display-name');
+        
+        if(elEmail) elEmail.innerText = user.email;
+        if(elNombre) elNombre.innerText = user.displayName || "Entrenador";
+
+        console.log("✅ Sesión confirmada y guardada:", user.email);
     } else {
+        sessionStorage.clear();
+        localStorage.clear();
         window.location.href = "index.html";
     }
 });
