@@ -281,18 +281,27 @@ window.mostrarListadoAltas = async (numZona) => {
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px;">SEGUROS</div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
                         <button class="btn-f ${tieneAnual ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
-                        <button class="btn-f ${p.seguroF2 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroF2',this)">DIARIO</button>
+                        <div style="display:flex; gap:3px;">
+                          <button class="btn-f ${p.seguroSD1 ? 'activo' : ''}" style="padding:4px 2px; font-size:0.6rem; flex:1;" 
+                             onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD1',this)">SD1</button>
+                          <button class="btn-f ${p.seguroSD2 ? 'activo' : ''}" style="padding:4px 2px; font-size:0.6rem; flex:1;" 
+                              onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD2',this)">SD2</button>
+                          <button class="btn-f ${p.seguroSD3 ? 'activo' : ''}" style="padding:4px 2px; font-size:0.6rem; flex:1;" 
+                             onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD3',this)">SD3</button>
+                          <button class="btn-f ${p.seguroSD4 ? 'activo' : ''}" style="padding:4px 2px; font-size:0.6rem; flex:1;" 
+                           onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD4',this)">SD4</button>
+                    </div>
                     </div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
-  <button class="btn-f ${p.F2 ? 'activo' : ''}"
-    onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
+                    <button class="btn-f ${p.F2 ? 'activo' : ''}"
+                    onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
 
-  <button class="btn-f ${p.F3 ? 'activo' : ''}"
-    onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
+                    <button class="btn-f ${p.F3 ? 'activo' : ''}"
+                     onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
 
-  <button class="btn-f ${p.F4 ? 'activo' : ''}"
-    onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
-</div>
+                    <button class="btn-f ${p.F4 ? 'activo' : ''}"
+                     onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
+                    </div>
 
                 </div>`;
         });
@@ -346,27 +355,29 @@ const datos = {
 };
 
 window.toggleAsistencia = async (numZona, id, campo, boton) => {
-    // Si ya está activo, no hacemos nada (según tu lógica actual)
-    if (boton.classList.contains('activo')) return; 
+    const estaActivo = boton.classList.contains('activo');
+    const nuevoEstado = !estaActivo; // Ahora permitimos DESMARCAR (mejor para errores)
 
-    let actualizaciones = { [campo]: true };
+    let actualizaciones = { [campo]: nuevoEstado };
 
-    // REGLA: Si activo uno, apago el otro
-    if (campo === 'seguroAnual') {
-        actualizaciones['seguroF2'] = false;
-    } else if (campo === 'seguroF2') {
+    // REGLA MAESTRA DE SEGUROS
+    if (campo === 'seguroAnual' && nuevoEstado === true) {
+        // Si pongo ANUAL, apago todos los diarios
+        actualizaciones['seguroSD1'] = false;
+        actualizaciones['seguroSD2'] = false;
+        actualizaciones['seguroSD3'] = false;
+        actualizaciones['seguroSD4'] = false;
+    } 
+    else if (campo.startsWith('seguroSD') && nuevoEstado === true) {
+        // Si pongo cualquier Diario (SD), apago el Anual
         actualizaciones['seguroAnual'] = false;
     }
 
     try {
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${id}`, actualizaciones);
-        
-        // En lugar de solo pintar el botón, refrescamos el listado 
-        // para que el otro botón se apague visualmente
         window.mostrarListadoAltas(numZona);
-        
-    } catch (e) { 
-        alert("Error al guardar"); 
+    } catch (e) {
+        alert("Error al actualizar");
     }
 };
 // --- 6. CONEXIÓN CON EL HTML (BOTONES) ---
