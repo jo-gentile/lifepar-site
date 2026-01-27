@@ -30,11 +30,51 @@ const MAPA_COMPETENCIA = {
         "C": ["1°", "2°", "3°", "4°", "5°", "Escuela Formativa"],
         "D": ["Principiantes A", "Principiantes B", "Incentivación", "Futuros Talentos"]
     },
-    "DANZA": {
+    "FREE DANCE": {
         "Lifedance": ["Advanced", "Elemental"],
-        "Gonzalez Molina": ["Avanzado"],
-        "Nacional": ["Basico", "Avanzado"]
-    }
+        "Gonzalez Molina": ["Basico", "Avanzado"],
+        "Nacional": ["Basico", "Intermedio", "Promocional WS"],
+        "Nacional Elite": ["Junior B", "Senior B", "Leyenda"],
+        "WS": ["WS"]
+    },
+    "DUOS": {
+        "C": ["Bronce", "Plata", "Oro", "Platinum"]
+    },
+    "TRIOS": {
+        "C": ["Bronce", "Plata", "Oro", "Platinum"]
+    },
+    "GRUPOS": {
+        "LIFEPAR": ["Exhibicion"],
+        "SMALL NACIONAL": ["Infantil", "Junior", "Senior"],
+        "LARGE NACIONAL": ["Cadete", "Senior"],
+        "CUARTETO NACIONAL": ["Infantil", "Junior", "Senior"],
+        "PRECISION NACIONAL": ["Infantil", "Junior", "Senior"]
+    },
+    "GRUPOS WS": {
+        "SMALL WS": ["Junior", "Senior"],
+        "LARGE WS": ["Junior", "Senior"],
+        "PRECISION WS": ["Junior", "Senior"],
+        "CUARTETO WS": ["Cadete", "Junior", "Senior"]
+    },
+    "PAREJAS DANZA": {
+        "Lifedance": ["Advanced", "Elemental"],
+        "Gonzalez Molina": ["Basico", "Avanzado"],
+        "Nacional": ["Basico", "Intermedio", "Promocional WS"],
+        "Nacional Elite": ["Junior B", "Senior B", "Leyenda"],
+        "WS": ["WS"]
+    },
+    "PAREJAS MIXTA": {
+        "Roberto Rodriguez": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
+        "Gonzalez Molina": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
+        "Sub B" : ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
+        "Sub A" :["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil/Youth", "Junior", "Senior"],
+        "WS" : ["Junior", "Senior"]
+    },
+    "IN LINE": {
+        "C": ["Basico", "Preliminar"],
+        "B": ["Intermedio"],
+        "A": ["Avanzado"]
+    },
 };
 
 window.actualizarCascada = function(nivel, numZona) {
