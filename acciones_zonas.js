@@ -279,7 +279,7 @@ window.mostrarListadoAltas = async (numZona) => {
                     <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
                     <div class="datos-p">
                        ${p.club}<br>
-                        ${p.categoria} — <span style="color:gold;">${p.edadDeportiva} años</span>
+                        ${p.categoria} — <span style="color:gold;">${p.edadDeportiva} </span>
                     </div>
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px;">SEGUROS</div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
