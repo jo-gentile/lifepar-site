@@ -144,11 +144,10 @@ contenedor.innerHTML = `
       <label>DISCIPLINA</label>
       <div style="display:flex; gap:5px;">
         <select id="z${zonaReal}-disciplina" class="campo-form"
-          onchange="actualizarCascada('disciplina', ${zonaReal})">
-          <option value="">DISCIPLINA...</option>
-          <option value="LIBRE">LIBRE</option>
-          <option value="DANZA">DANZA</option>
-        </select>
+              onchange="actualizarCascada('disciplina', ${zonaReal})">
+              <option value="">DISCIPLINA...</option>
+              ${Object.keys(MAPA_COMPETENCIA).map(d => `<option value="${d}">${d}</option>`).join('')}
+              </select>>
         <button onclick="toggleLock(this,'z${zonaReal}-disciplina')">🔓</button>
       </div>
     </div>
