@@ -346,12 +346,28 @@ const datos = {
 };
 
 window.toggleAsistencia = async (numZona, id, campo, boton) => {
+    // Si ya está activo, no hacemos nada (según tu lógica actual)
     if (boton.classList.contains('activo')) return; 
+
+    let actualizaciones = { [campo]: true };
+
+    // REGLA: Si activo uno, apago el otro
+    if (campo === 'seguroAnual') {
+        actualizaciones['seguroF2'] = false;
+    } else if (campo === 'seguroF2') {
+        actualizaciones['seguroAnual'] = false;
+    }
+
     try {
-        await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${id}`, { [campo]: true });
-        boton.classList.add('activo');
-        boton.style.pointerEvents = 'none';
-    } catch (e) { alert("Error al guardar"); }
+        await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${id}`, actualizaciones);
+        
+        // En lugar de solo pintar el botón, refrescamos el listado 
+        // para que el otro botón se apague visualmente
+        window.mostrarListadoAltas(numZona);
+        
+    } catch (e) { 
+        alert("Error al guardar"); 
+    }
 };
 // --- 6. CONEXIÓN CON EL HTML (BOTONES) ---
 window.ejecutarCargaConFecha = function() {
