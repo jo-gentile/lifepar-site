@@ -277,7 +277,10 @@ window.mostrarListadoAltas = async (numZona) => {
                 <div class="card-alta">
                     <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer;">📝</button>
                     <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
-                    <div class="datos-p">${p.club}<br>${p.categoria}</div>
+                    <div class="datos-p">
+                       ${p.club}<br>
+                        ${p.categoria} — <span style="color:gold;">${p.edadDeportiva} años</span>
+                    </div>
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px;">SEGUROS</div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
                         <button class="btn-f ${tieneAnual ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
