@@ -295,13 +295,12 @@ window.mostrarListadoAltas = async (numZona) => {
                            onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD4',this)">SD4</button>
                     </div>
                     </div>
+                    <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px;">FECHAS</div>
                     <div style="display:flex; gap:5px; margin-top:5px;">
                     <button class="btn-f ${p.F2 ? 'activo' : ''}"
                     onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
-
                     <button class="btn-f ${p.F3 ? 'activo' : ''}"
                      onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
-
                     <button class="btn-f ${p.F4 ? 'activo' : ''}"
                      onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
                     </div>
