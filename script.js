@@ -373,3 +373,15 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('Error al registrar SW', err));
   });
 }
+async function chequearBiometria() {
+  if (window.PublicKeyCredential) {
+    const disponible = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    if (disponible) {
+      console.log("Este dispositivo soporta huella/patrón");
+      // Acá podrías mostrar el botón de "Vincular Huella"
+    } else {
+      console.log("Biometría no disponible");
+    }
+  }
+}
+chequearBiometria();

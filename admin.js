@@ -272,8 +272,58 @@ document.querySelectorAll('.nav-item').forEach(item => {
         }
     });
 });
+/* ... todo tu código actual de admin.js ... */
 
+// AL FINAL DEL ARCHIVO:
 
+async function ofrecerHuella() {
+    // 1. Chequeo de hardware (Nativo)
+    if (!window.PublicKeyCredential) return;
+    const disponible = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+    if (!disponible) return;
+
+    // 2. Datos del usuario logueado
+    const email = sessionStorage.getItem('userEmail');
+    if (!email) return;
+
+    // 3. CARTEL CON TÍTULO GENERAL
+    if (confirm("¿Querés activar el acceso rápido (Huella, PIN o Patrón) para entrar directo en este equipo?")) {
+        try {
+            const options = {
+                publicKey: {
+                    challenge: crypto.getRandomValues(new Uint8Array(32)),
+                    rp: { name: "Lifepar" },
+                    user: {
+                        id: Uint8Array.from(email, c => c.charCodeAt(0)),
+                        name: email,
+                        displayName: sessionStorage.getItem('userName') || "Entrenador"
+                    },
+                    pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+                    authenticatorSelection: { authenticatorAttachment: "platform" },
+                    timeout: 60000
+                }
+            };
+
+            const credential = await navigator.credentials.create(options);
+            
+            // 4. GUARDADO EN DATABASE (Usando tu lógica de listaBlanca)
+            const emailKey = email.replace(/\./g, '_');
+            const updates = {};
+            updates[`listaBlanca/${emailKey}/huellaID`] = credential.id;
+            
+            const dbRef = firebase.database().ref(); 
+            await dbRef.update(updates);
+
+            alert("¡Configurado! Ya podés usar el acceso rápido en este dispositivo.");
+            console.log("ID vinculado:", credential.id);
+
+        } catch (err) {
+            console.error("Proceso cancelado:", err);
+        }
+    }
+}
+
+ofrecerHuella();
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;
 window.toggleSidebar = toggleSidebar;
