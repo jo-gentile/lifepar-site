@@ -277,16 +277,20 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // AL FINAL DEL ARCHIVO:
 
 async function ofrecerHuella() {
-    // 1. Chequeo de hardware (Nativo)
     if (!window.PublicKeyCredential) return;
     const disponible = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
     if (!disponible) return;
 
-    // 2. Datos del usuario logueado
     const email = sessionStorage.getItem('userEmail');
     if (!email) return;
 
-    // 3. CARTEL CON TÍTULO GENERAL
+    const emailKey = email.replace(/\./g, '_');
+    
+    // 1. Chequeamos si ya está en la base de datos para no molestar
+    const dbRef = firebase.database().ref();
+    const snapshot = await dbRef.child(`listaBlanca/${emailKey}/huellaID`).get();
+    if (snapshot.exists()) return;
+
     if (confirm("¿Querés activar el acceso rápido (Huella, PIN o Patrón) para entrar directo en este equipo?")) {
         try {
             const options = {
@@ -296,7 +300,7 @@ async function ofrecerHuella() {
                     user: {
                         id: Uint8Array.from(email, c => c.charCodeAt(0)),
                         name: email,
-                        displayName: sessionStorage.getItem('userName') || "Entrenador"
+                        displayName: "Entrenador"
                     },
                     pubKeyCredParams: [{ alg: -7, type: "public-key" }],
                     authenticatorSelection: { authenticatorAttachment: "platform" },
@@ -306,19 +310,19 @@ async function ofrecerHuella() {
 
             const credential = await navigator.credentials.create(options);
             
-            // 4. GUARDADO EN DATABASE (Usando tu lógica de listaBlanca)
-            const emailKey = email.replace(/\./g, '_');
-            const updates = {};
-            updates[`listaBlanca/${emailKey}/huellaID`] = credential.id;
-            
-            const dbRef = firebase.database().ref(); 
-            await dbRef.update(updates);
+            // 2. GUARDAMOS EN FIREBASE
+            await dbRef.child(`listaBlanca/${emailKey}`).update({
+                huellaID: credential.id
+            });
 
-            alert("¡Configurado! Ya podés usar el acceso rápido en este dispositivo.");
-            console.log("ID vinculado:", credential.id);
+            // 3. GUARDAMOS EL MAIL LOCALMENTE (Lo que me preguntaste)
+            // Esto sirve para que el index.js sepa a quién pedirle la huella después
+            localStorage.setItem('mailVinculado', email);
+
+            alert("¡Configurado! Ya podés usar el acceso rápido.");
 
         } catch (err) {
-            console.error("Proceso cancelado:", err);
+            console.error("Error:", err);
         }
     }
 }
@@ -329,4 +333,5 @@ window.ajustarAlturaIframes = ajustarAlturaIframes;
 window.toggleSidebar = toggleSidebar;
 window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;
+
 window.mostrarAccionesZona = mostrarAccionesZona;
