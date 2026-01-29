@@ -107,7 +107,7 @@ window.abrirFormularioCarga = async function(numZona) {
     const zonaReal = numZona || window.zonaActivaNum;
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-
+    
     if (!userEmail) return alert("⚠️ No se detectó sesión.");
     if (contenedor.style.display === 'flex') { contenedor.style.display = 'none'; return; }
 
@@ -147,7 +147,7 @@ contenedor.innerHTML = `
               onchange="actualizarCascada('disciplina', ${zonaReal})">
               <option value="">DISCIPLINA...</option>
               ${Object.keys(MAPA_COMPETENCIA).map(d => `<option value="${d}">${d}</option>`).join('')}
-              </select>>
+              </select>
         <button onclick="toggleLock(this,'z${zonaReal}-disciplina')">🔓</button>
       </div>
     </div>

@@ -16,6 +16,11 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.database();
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    auth.useEmulator("http://127.0.0.1:9099");
+    console.log("Conectado al emulador local de Lifepar");
+}
+
 
 // 3. GESTIÓN DE SESIÓN
 auth.onAuthStateChanged((user) => {
@@ -237,6 +242,36 @@ window.guardarNuevoClub = async function() {
         alert("❌ No se pudo guardar el club. Revisá la conexión.");
     }
 };
+document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+
+    // Solo aplicamos el clic de expansión si la pantalla es chica
+    sidebar.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.toggle('mobile-expanded');
+        }
+    });
+
+    // Opcional: Cerrar el sidebar si tocás fuera de él (en la zona derecha)
+    document.querySelector('.zona-derecha').addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            sidebar.classList.remove('mobile-expanded');
+        }
+    });
+});
+// Manejo de clics en móviles
+document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            // Si tiene submenú, prevenimos que se cierre el sidebar y toggleamos el submenú
+            const submenu = item.nextElementSibling;
+            if (submenu && submenu.classList.contains('submenu-lista')) {
+                e.stopPropagation(); // Evita que el clic llegue al sidebar y lo cierre
+                item.classList.toggle('active');
+            }
+        }
+    });
+});
 
 
 // Llamamos cada vez que agregamos un iframe
