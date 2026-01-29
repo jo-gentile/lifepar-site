@@ -286,47 +286,49 @@ async function ofrecerHuella() {
 
     const emailKey = email.replace(/\./g, '_');
     
-    // 1. Chequeamos si ya está en la base de datos para no molestar
-    const dbRef = firebase.database().ref();
-    const snapshot = await dbRef.child(`listaBlanca/${emailKey}/huellaID`).get();
-    if (snapshot.exists()) return;
+    // 1. Chequeamos usando la sintaxis global de Firebase que ya tenés
+    const dbRef = firebase.database().ref(`listaBlanca/${emailKey}/huellaID`);
+    
+    dbRef.once('value').then(async (snapshot) => {
+        if (snapshot.exists()) return; // Si ya existe, no hace nada
 
-    if (confirm("¿Querés activar el acceso rápido (Huella, PIN o Patrón) para entrar directo en este equipo?")) {
-        try {
-            const options = {
-                publicKey: {
-                    challenge: crypto.getRandomValues(new Uint8Array(32)),
-                    rp: { name: "Lifepar" },
-                    user: {
-                        id: Uint8Array.from(email, c => c.charCodeAt(0)),
-                        name: email,
-                        displayName: "Entrenador"
-                    },
-                    pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-                    authenticatorSelection: { authenticatorAttachment: "platform" },
-                    timeout: 60000
-                }
-            };
+        if (confirm("¿Querés activar el acceso rápido (Huella, PIN o Patrón) para entrar directo en este equipo?")) {
+            try {
+                const options = {
+                    publicKey: {
+                        challenge: crypto.getRandomValues(new Uint8Array(32)),
+                        rp: { name: "Lifepar" },
+                        user: {
+                            id: Uint8Array.from(email, c => c.charCodeAt(0)),
+                            name: email,
+                            displayName: "Entrenador"
+                        },
+                        pubKeyCredParams: [{ alg: -7, type: "public-key" }],
+                        authenticatorSelection: { authenticatorAttachment: "platform" },
+                        timeout: 60000
+                    }
+                };
 
-            const credential = await navigator.credentials.create(options);
-            
-            // 2. GUARDAMOS EN FIREBASE
-            await dbRef.child(`listaBlanca/${emailKey}`).update({
-                huellaID: credential.id
-            });
+                const credential = await navigator.credentials.create(options);
+                
+                // 2. GUARDAMOS EN FIREBASE usando tu método tradicional
+                await firebase.database().ref(`listaBlanca/${emailKey}`).update({
+                    huellaID: credential.id
+                });
 
-            // 3. GUARDAMOS EL MAIL LOCALMENTE (Lo que me preguntaste)
-            // Esto sirve para que el index.js sepa a quién pedirle la huella después
-            localStorage.setItem('mailVinculado', email);
+                // 3. GUARDAMOS EL MAIL LOCALMENTE
+                localStorage.setItem('mailVinculado', email);
 
-            alert("¡Configurado! Ya podés usar el acceso rápido.");
+                alert("¡Configurado! Ya podés usar el acceso rápido.");
 
-        } catch (err) {
-            console.error("Error:", err);
+            } catch (err) {
+                console.error("Error en biometría:", err);
+            }
         }
-    }
+    });
 }
 
+// Ejecución
 ofrecerHuella();
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;
@@ -335,3 +337,4 @@ window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;
 
 window.mostrarAccionesZona = mostrarAccionesZona;
+
