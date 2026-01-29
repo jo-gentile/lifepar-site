@@ -33,6 +33,8 @@ body {
     flex-direction: column;
     z-index: 2000;
     box-sizing: border-box; /* Fundamental para que el padding no sume ancho */
+    overflow-y: auto !important; /* Permite scroll vertical si las opciones exceden el alto */
+    overflow-x: hidden !important; /* Evita que se mueva hacia los costados */
 }
 
 /* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
@@ -157,18 +159,6 @@ body {
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
     gap: 20px; 
     width: 100%;
-}
-
-/* --- AJUSTE PARA CELULARES (Media Query) --- */
-@media (max-width: 350px) {
-    .zona-derecha {
-        margin-left: 0 !important;
-        width: 100% !important;
-        padding: 75px 8px 20px 8px !important;
-        display: flex !important;
-        flex-direction: column !important;
-        
-    }
 }
 
 /* --- 6. ELEMENTOS DE INTERFAZ --- */
@@ -546,59 +536,143 @@ body.layout-collapsed .footer-premium {
     0% { background-position: 0% center; } 
     100% { background-position: 300% center; } 
 }
+/* --- AJUSTES PARA CELULARES --- */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 45px; /* Escondemos el sidebar en móvil por defecto */
+    }
 
-/* --- AJUSTE QUIRÚRGICO FINAL (MAX 400px) --- */
-@media (max-width: 350px) {
-    
-    /* 1. EL BOTÓN "RESCATE": Siempre visible arriba a la izquierda */
-    .toggle-btn {
-        position: fixed !important;
-        top: 12px !important;
-        left: 8px !important;
-        z-index: 9999 !important; 
+    /* Estado inicial: solo iconos */
+    .sidebar {
+        width: 45px !important;
+        left: 0 !important;
+        overflow: hidden;
+        transition: width 0.3s ease; /* Animación de apertura */
+        padding: 80px 10px 20px 10px !important;
+        background: rgba(20, 5, 26, 0.95) !important; /* Un lila muy oscuro y traslúcido */
+        overflow-y: auto !important; /* Permite scroll vertical si las opciones exceden el alto */
+        overflow-x: hidden !important; /* Evita que se mueva hacia los costados */
+        backdrop-filter: blur(10px); /* Mantiene el efecto de vidrio de la web */
+    }
+
+    /* Cuando tocamos el sidebar, se expande */
+    .sidebar.mobile-expanded {
+        width: 240px !important;
+        z-index: 3000; /* Por encima de todo */
+        font-size: 0.8rem !important; /* Achicamos el texto de los botones principales */
+        padding: 80px 10px 20px 10px !important; /* Menos aire entre botones */
+        align-items: flex-start !important; /* Centrado a la izquierda para el texto */
+    }
+    .sidebar.mobile-expanded .submenu-lista {
+        display: none !important; /* Que sigan ocultos por defecto */
+        background: rgba(0, 0, 0, 0.2);
+        width: 100%;
+    }
+
+    /* Mostramos el texto SOLO cuando está expandido */
+    .sidebar.mobile-expanded .nav-item span,
+    .sidebar.mobile-expanded .flecha {
+        display: inline-block !important;
+    }
+    /* 3. Solo mostrar el submenú si el ítem padre está activo */
+    .sidebar.mobile-expanded .nav-item.active + .submenu-lista {
         display: flex !important;
-        width: 40px !important;
-        height: 40px !important;
-        background: #000 !important;
-        border: 1.5px solid #ffd700 !important;
-        border-radius: 8px !important;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        flex-direction: column;
     }
-
-    /* 2. EL SIDEBAR: Se convierte en una cortina que sale del todo */
-    #sidebar {
-        width: 290px !important; /* Deja un margen para ver el fondo y no marear */
-        position: fixed !important;
-        left: 0 !important;
-        top: 0 !important;
-        height: 100vh !important;
-        z-index: 9000 !important;
-        transform: translateX(0); 
-        transition: transform 0.3s ease-in-out !important;
-    }
-
-    /* Escondido total en lugar de 80px */
-    #sidebar.collapsed {
-        transform: translateX(-100%) !important;
-        width: 290px !important;
-    }
-
-    /* 4. EL FOOTER: Clavado al fondo del formulario */
-    footer, .footer-premium {
-        position: relative !important;
-        margin-top: auto !important;
+    /* 4. Centrado de los ítems con texto */
+    .sidebar.mobile-expanded .nav-item {
+        justify-content: flex-start !important;
+        gap: 15px !important;
         width: 100% !important;
-        left: 0 !important;
-        padding: 15px 0 !important;
-        background: #000 !important;
-        font-size: 0.8rem !important; /* Achicamos un pelín la letra para que entre */
+        padding: 12px 15px !important;
+        font-size: 0.85rem !important;
+    }
+    .sidebar.mobile-expanded .submenu-lista a {
+    font-size: 0.75rem !important; /* Submenús aún más pequeños */
+    padding: 8px 10px 8px 40px !important; /* Ajustamos la sangría */
+    }
+    /* Ajuste de iconos para que no bailen */
+    .nav-item i, .nav-item span:first-child {
+        min-width: 25px;
+        text-align: center;
+    }
+    .sidebar::-webkit-scrollbar {
+    width: 0px; /* Esconde la barra pero permite scrollear con el dedo */
+    }
+    /* Ajuste para que los iconos no se muevan al expandir */
+    .nav-item {
+        justify-content: flex-start !important; /* Mueve el contenido al inicio (izquierda) */
+    padding-left: 5px !important;            /* Controlá acá qué tan pegado al borde lo querés */
+    width: 100% !important;                  /* Asegura que el ítem ocupe todo el ancho */
+    margin-left: 0 !important;               /* Elimina márgenes externos izquierdos */
+    }
+    .header-spacer {
+        height: 10px !important; 
+    }
+  /* Ajustamos la zona derecha para que empiece donde termina el sidebar */
+    .zona-derecha {
+        margin-left: var(--sidebar-width) !important;
+        width: calc(100% - var(--sidebar-width)) !important;
+        padding: 0px !important;
+        padding-top: 80px !important;
     }
 
-    /* 5. INPUTS Y SELECTS: Los hacemos aptos para dedos */
-    input, select, .menu-zona button {
-        height: 48px !important; /* Tamaño estándar de Apple/Google para touch */
-        font-size: 16px !important; /* Evita que el iPhone haga zoom automático al clickear */
+    /* HEADER: Lo hacemos más compacto para que entre todo */
+    .header-admin {
+        left: calc(var(--sidebar-width) + 10px) !important;
+        right: 10px !important;
+        top: 10px !important;
+        height: 55px;
+        padding: 0 10px;
     }
+    .slogan { display: none !important; } /* Chau slogan en móvil */
+    
+    .logo-img { height: 30px !important; }
+    
+    .logo h1 { font-size: 1rem !important; }
+    .header-admin nav ul {
+        gap: 5px !important; /* Pegamos más los botones */
+    }
+    .header-admin nav ul li a, 
+    .btn-cerrar-sesion {
+        padding: 6px 10px !important;
+        font-size: 0.65rem !important;
+    }
+    .logo-img {
+        height: 30px !important; /* Logo más pequeño */
+    }
+
+    /* El contenedor del iframe al 100% en móvil */
+    #vista-dinamica {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    /* El iframe debe ser capaz de crecer verticalmente */
+    #vista-dinamica iframe {
+        min-height: 1800px !important; /* Forzalo a ser largo para que la tabla aparezca */
+        min-height: 1800px !important; /* Altura suficiente para mostrar el botón de enviar */
+        width: 100% !important;
+    }
+
+    /* Footer ajustado */
+    .footer-premium {
+        left: 0 !important;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 10px;
+    }
+
+    /* Achicamos un poco el título de bienvenida */
+    .bienvenida-seccion h2 {
+        font-size: 1.8rem !important;
+    }
+    .toggle-btn {
+    padding-left: 5px !important;  /* Ajuste fino para alinearlo con los iconos */
+    margin-left: 0 !important;     /* Elimina cualquier espacio externo */
+    width: auto !important;        /* Para que no ocupe más espacio del necesario */
+    display: flex !important;
+    justify-content: flex-start !important;
+}
 }

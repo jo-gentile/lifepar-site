@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Anton&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -95,6 +96,83 @@ label {
   width: 100%;
   margin: 0 auto;
 }
+@media (max-width: 768px) {
+  @media (max-width: 768px) {
+  #contenedor-scroll-celular {
+    /* ELIMINAMOS CUALQUIER RESTRICCIÓN DE ALTURA */
+    height: auto !important;
+    max-height: none !important; 
+    min-height: 100vh !important;
+    width: 70% !important;
+    /* FORZAMOS QUE SE MUESTRE TODO EL CONTENIDO */
+    overflow: visible !important; 
+    display: block !important;
+    
+    /* ESPACIO PARA QUE EL PADRE SE ESTIRE REALMENTE */
+    padding-bottom: 100px !important; 
+    position: relative !important;
+  }
+
+  /* Aseguramos que el fondo dorado/negro también se estire */
+  div[style*="background: rgba(0,0,0,0.85)"] {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+    .campo-form {
+      width: 85% !important;
+      height: 20px; /* Más alto para que sea fácil tocar con el dedo */
+      background: #222;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 5px;
+      padding: 10px;
+      box-sizing: border-box;
+      font-size: 13px; /* Evita que iOS haga zoom automático */
+      flex-grow: 1;
+      flex: 1 !important;
+    min-width: 0 !important;
+    }
+    /* Longitud de los campos: hace que ocupen todo el ancho disponible */
+  .campo-form, select, input {
+    flex: 1; /* El campo de texto o select se estira para llenar el espacio */
+    min-width: 0; /* Evita que el select empuje al candado fuera de la pantalla */
+    height: 35px !important; /* Tamaño para pulgar */
+  }
+    .campo-flex, div[style*="display:flex"] {
+    display: flex !important;
+    flex-direction: row !important; /* Mantiene el candado al lado, no abajo */
+    gap: 10px !important;
+    align-items: center;
+    width: 100%;
+  }
+    /* Ajuste para que los botones de candado no se amontonen */
+    div[style*="display:grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+    div[style*="grid-template-columns:1fr 1fr"],
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important; /* Más espacio entre filas para que no se peguen */
+  }
+
+    button[onclick*="toggleLock"] {
+      min-width: 45px;
+      height: 45px;
+      background: #333;
+      border: 1px solid gold;
+      border-radius: 5px;
+    }
+
+    /* Etiquetas pequeñas para ahorrar espacio vertical */
+    label {
+      font-size: 11px !important;
+      margin-bottom: 2px !important;
+      display: block;
+    }
+  }
 
 </style>
 </head>
