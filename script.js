@@ -373,15 +373,54 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('Error al registrar SW', err));
   });
 }
+// Tu función actual de chequeo
 async function chequearBiometria() {
   if (window.PublicKeyCredential) {
     const disponible = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
     if (disponible) {
       console.log("Este dispositivo soporta huella/patrón");
-      // Acá podrías mostrar el botón de "Vincular Huella"
     } else {
       console.log("Biometría no disponible");
     }
   }
 }
 chequearBiometria();
+
+// NUEVA FUNCIÓN: Inicio rápido automático
+async function iniciarConHuella() {
+    const mailGuardado = localStorage.getItem('mailVinculado');
+    if (!mailGuardado) return; 
+
+    try {
+        const emailKey = mailGuardado.replace(/\./g, '_');
+        // Buscamos en tu listaBlanca
+        const snapshot = await get(child(ref(db), `listaBlanca/${emailKey}`));
+        
+        if (snapshot.exists() && snapshot.val().huellaID) {
+            const challenge = crypto.getRandomValues(new Uint8Array(32));
+            const assertion = await navigator.credentials.get({
+                publicKey: {
+                    challenge: challenge,
+                    timeout: 60000,
+                    allowCredentials: [{
+                        id: Uint8Array.from(atob(snapshot.val().huellaID), c => c.charCodeAt(0)),
+                        type: 'public-key'
+                    }],
+                    userVerification: 'required'
+                }
+            });
+
+            if (assertion) {
+                // Si la huella es correcta, sesión iniciada
+                sessionStorage.setItem('userEmail', mailGuardado);
+                sessionStorage.setItem('userName', "Entrenador Lifepar"); 
+                window.location.href = "admin.html";
+            }
+        }
+    } catch (err) {
+        console.log("Inicio rápido no disponible o cancelado.");
+    }
+}
+
+// Ejecutar el intento de entrada automática
+iniciarConHuella();
