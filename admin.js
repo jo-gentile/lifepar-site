@@ -27,41 +27,32 @@ let cargandoSesion = true;
 
 let validandoBiometria = true;
 
-auth.onAuthStateChanged((user) => {
-    const tieneSesionLocal = sessionStorage.getItem('userEmail');
+auth.onAuthStateChanged(async (user) => {
+    if (!user) {
+        window.location.href = "index.html";
+        return;
+    }
 
-    if (user) {
-        validandoBiometria = false;
-        document.getElementById('display-name').innerText = user.displayName || "Entrenador";
-        document.getElementById('display-email').innerText = user.email;
+    document.getElementById('display-name').innerText =
+        user.displayName || "Entrenador";
+    document.getElementById('display-email').innerText =
+        user.email;
 
-        // Si no tiene huella registrada en este navegador, se la pedimos
-        setTimeout(() => {
-            if (!localStorage.getItem('credencial_biometrica')) {
-                activarHuella();
-            }
-        }, 4000);
-
-    } else {
-        // Si venimos de la huella, esperamos 5 segundos a que Firebase conecte
-        if (tieneSesionLocal && validandoBiometria) {
-            setTimeout(() => {
-                if (!auth.currentUser) {
-                    window.location.href = "index.html";
-                }
-            }, 5000);
-            validandoBiometria = false; 
-        } else if (!tieneSesionLocal) {
-            window.location.href = "index.html";
-        }
+    // Pedir huella SOLO si ya hay sesión y no está registrada
+    if (!localStorage.getItem('credencial_biometrica')) {
+        setTimeout(() => activarHuella(), 3000);
     }
 });
 
+
 // Función de salida: Solo redirige, NO destruye la sesión de Firebase
 function logout() {
-    sessionStorage.clear(); 
-    window.location.href = "index.html";
+    firebase.auth().signOut().then(() => {
+        sessionStorage.clear(); // si querés dejarlo, no molesta
+        window.location.href = "index.html";
+    });
 }
+
 
 // --- 2. INTERFAZ Y NAVEGACIÓN ---
 function toggleSidebar() {

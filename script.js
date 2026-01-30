@@ -1,8 +1,9 @@
 // 1. IMPORTACIÓN DE MÓDULOS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getAuth, setPersistence, browserSessionPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, connectAuthEmulator } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, connectAuthEmulator } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getDatabase, ref, get, child, update, } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+
 
 // 2. CONFIGURACIÓN DE FIREBASE
 const firebaseConfig = {
@@ -70,7 +71,8 @@ document.getElementById('btnEntrar').onclick = async () => {
     
     try {
         // Mantenemos la sesión activa al cambiar de página
-        await setPersistence(auth, browserSessionPersistence);
+        await setPersistence(auth, browserLocalPersistence);
+
         await signInWithEmailAndPassword(auth, email, pass);
         
         sessionStorage.setItem('userEmail', email);
@@ -87,7 +89,8 @@ document.getElementById('btnEntrar').onclick = async () => {
 // 2. Botón de Ingreso con Google (Tu lógica real)
 document.getElementById('btnGoogle').onclick = async () => {
     try {
-        await setPersistence(auth, browserSessionPersistence);
+        await setPersistence(auth, browserLocalPersistence);
+
         const result = await signInWithPopup(auth, provider);
         const email = result.user.email;
         const nombre = result.user.displayName || "Entrenador";
@@ -406,4 +409,3 @@ async function loginBiometrico() {
         console.log("Error en biometría o cancelación.");
     }
 }
-loginBiometrico();
