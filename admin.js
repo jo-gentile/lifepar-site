@@ -21,12 +21,9 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     console.log("Conectado al emulador local de Lifepar");
 }
 
-
-// 3. GESTIÓN DE SESIÓN
 // 3. GESTIÓN DE SESIÓN
 auth.onAuthStateChanged((user) => {
     if (user) {
-        console.log("✅ Sesión activa de:", user.email);
         sessionStorage.setItem('userEmail', user.email);
         sessionStorage.setItem('userName', user.displayName || "Entrenador");
 
@@ -34,6 +31,9 @@ auth.onAuthStateChanged((user) => {
         const txtEmail = document.getElementById('display-email');
         if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
         if (txtEmail) txtEmail.innerText = user.email;
+
+        // ESTA ES LA LLAMADA QUE DISPARA EL CARTEL
+        activarHuella(); 
         
     } else {
         window.location.href = "index.html";
@@ -272,19 +272,24 @@ document.querySelectorAll('.nav-item').forEach(item => {
 /* ... todo tu código actual de admin.js ... */
 async function activarHuella() {
     if (!window.PublicKeyCredential) return;
+    
     const email = sessionStorage.getItem('userEmail');
     if (!email) return;
 
+    // Si ya está registrada en este navegador, no molestar al usuario
     if (localStorage.getItem('credencial_biometrica')) return;
 
-    // Título y pregunta profesional
-    if (confirm("¿Desea activar el acceso mediante datos biométricos en este dispositivo?")) {
+    if (confirm("¿Desea activar el acceso mediante datos biométricos (Huella/PIN) en este dispositivo?")) {
         try {
             const options = {
                 publicKey: {
                     challenge: crypto.getRandomValues(new Uint8Array(32)),
                     rp: { name: "Lifepar" },
-                    user: { id: Uint8Array.from(email, c => c.charCodeAt(0)), name: email, displayName: "Entrenador" },
+                    user: { 
+                        id: Uint8Array.from(email, c => c.charCodeAt(0)), 
+                        name: email, 
+                        displayName: "Entrenador" 
+                    },
                     pubKeyCredParams: [{ alg: -7, type: "public-key" }],
                     authenticatorSelection: { authenticatorAttachment: "platform" },
                     timeout: 60000
@@ -293,15 +298,22 @@ async function activarHuella() {
 
             const credential = await navigator.credentials.create(options);
             
-            const emailKey = email.replace(/\./g, '_');
-            firebase.database().ref(`listaBlanca/${emailKey}`).update({ huellaID: credential.id })
-                .catch(() => console.log("Registro guardado localmente."));
+            if (credential) {
+                const emailKey = email.replace(/\./g, '_');
+                
+                // Usamos la variable 'db' que ya tenés inicializada
+                db.ref(`listaBlanca/${emailKey}`).update({ huellaID: credential.id })
+                    .then(() => console.log("Huella sincronizada con base de datos."))
+                    .catch(() => console.log("Guardado solo localmente."));
 
-            localStorage.setItem('mailVinculado', email);
-            localStorage.setItem('credencial_biometrica', credential.id); 
-            
-            alert("Acceso biométrico configurado correctamente.");
-        } catch (err) { console.log("Registro cancelado."); }
+                localStorage.setItem('mailVinculado', email);
+                localStorage.setItem('credencial_biometrica', credential.id); 
+                
+                alert("✅ Acceso biométrico configurado correctamente.");
+            }
+        } catch (err) { 
+            console.error("Error o registro cancelado:", err); 
+        }
     }
 }
 
