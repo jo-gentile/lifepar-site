@@ -32,14 +32,10 @@ auth.onAuthStateChanged((user) => {
 
     if (user) {
         validandoBiometria = false;
-        
-        // Llenar datos de interfaz
-        const txtNombre = document.getElementById('display-name');
-        const txtEmail = document.getElementById('display-email');
-        if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
-        if (txtEmail) txtEmail.innerText = user.email;
+        document.getElementById('display-name').innerText = user.displayName || "Entrenador";
+        document.getElementById('display-email').innerText = user.email;
 
-        // Verificar registro de huella con margen de tiempo
+        // Si no tiene huella registrada en este navegador, se la pedimos
         setTimeout(() => {
             if (!localStorage.getItem('credencial_biometrica')) {
                 activarHuella();
@@ -47,31 +43,23 @@ auth.onAuthStateChanged((user) => {
         }, 4000);
 
     } else {
-        // El "Escudo": Si hay mail local, esperamos a que Firebase despierte
+        // Si venimos de la huella, esperamos 5 segundos a que Firebase conecte
         if (tieneSesionLocal && validandoBiometria) {
-            console.log("⏳ Aguardando validación de servidor...");
-            
             setTimeout(() => {
                 if (!auth.currentUser) {
-                    sessionStorage.clear();
                     window.location.href = "index.html";
                 }
-            }, 5000); // 5 segundos de espera
-
+            }, 5000);
             validandoBiometria = false; 
         } else if (!tieneSesionLocal) {
-            // Si no hay nada, expulsión inmediata
             window.location.href = "index.html";
         }
     }
 });
 
-// Función de salida manual
+// Función de salida: Solo redirige, NO destruye la sesión de Firebase
 function logout() {
-    // Solo salimos de la página hacia el index
-    // NO ejecutamos auth.signOut() para que la sesión quede "viva"
-    // NO borramos el localStorage para que la huella no se pierda
-    sessionStorage.clear(); // Limpiamos solo el rastro de la pestaña actual
+    sessionStorage.clear(); 
     window.location.href = "index.html";
 }
 

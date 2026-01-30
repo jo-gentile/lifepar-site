@@ -395,8 +395,7 @@ async function loginBiometrico() {
         });
 
         if (authResponse) {
-            // ESTA LÍNEA ES LA CLAVE: 
-            // Le dice a Firebase que use la sesión guardada en el disco del celu
+            // ✅ PERSISTENCIA LOCAL: Hace que la sesión no se borre al cerrar la pestaña
             await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
             
             sessionStorage.setItem('userEmail', mail);
@@ -404,8 +403,7 @@ async function loginBiometrico() {
             window.location.href = "admin.html";
         }
     } catch (err) {
-        console.error("Error en Biometría:", err);
+        console.log("Error en biometría o cancelación.");
     }
 }
-// Ejecución automática
 loginBiometrico();
