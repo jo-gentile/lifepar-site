@@ -381,10 +381,7 @@ async function loginBiometrico() {
     const mail = localStorage.getItem('mailVinculado');
     const credID = localStorage.getItem('credencial_biometrica');
 
-    if (!mail || !credID) {
-        console.log("No hay credenciales guardadas.");
-        return;
-    }
+    if (!mail || !credID) return;
 
     try {
         const idBuffer = Uint8Array.from(atob(credID.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
@@ -398,18 +395,16 @@ async function loginBiometrico() {
         });
 
         if (authResponse) {
-            console.log("✅ Huella reconocida");
+            // ESTA LÍNEA ES LA CLAVE: 
+            // Le dice a Firebase que use la sesión guardada en el disco del celu
+            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
             
-            // Guardamos en sessionStorage para que el Admin sepa que venimos de la huella
             sessionStorage.setItem('userEmail', mail);
             sessionStorage.setItem('userName', "Entrenador Lifepar"); 
-
-            // Redirección inmediata
             window.location.href = "admin.html";
         }
     } catch (err) {
         console.error("Error en Biometría:", err);
-        // No alertar aquí para no molestar si el usuario solo canceló
     }
 }
 // Ejecución automática
