@@ -20,10 +20,19 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     auth.useEmulator("http://127.0.0.1:9099");
     console.log("Conectado al emulador local de Lifepar");
 }
-
+let chequeoInicial = true;
 // 3. GESTIÓN DE SESIÓN
+// 1. Variable para evitar el rebote inmediato
+let cargandoSesion = true;
+
 auth.onAuthStateChanged((user) => {
+    const mailLocal = sessionStorage.getItem('userEmail');
+
     if (user) {
+        // ✅ Caso 1: Firebase confirmó al usuario
+        cargandoSesion = false;
+        console.log("✅ Sesión confirmada:", user.email);
+        
         sessionStorage.setItem('userEmail', user.email);
         sessionStorage.setItem('userName', user.displayName || "Entrenador");
 
@@ -32,11 +41,27 @@ auth.onAuthStateChanged((user) => {
         if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
         if (txtEmail) txtEmail.innerText = user.email;
 
-        // ESTA ES LA LLAMADA QUE DISPARA EL CARTEL
         activarHuella(); 
         
     } else {
-        window.location.href = "index.html";
+        // ⏳ Caso 2: No hay usuario en Firebase todavía
+        // Si existe un mail en sessionStorage, es porque venís de poner la huella
+        if (mailLocal && cargandoSesion) {
+            console.log("⏳ Esperando validación de Firebase...");
+            
+            // Damos 3 segundos de cortesía antes de patear al usuario
+            setTimeout(() => {
+                if (!auth.currentUser) {
+                    console.log("🚫 Tiempo de espera agotado, al inicio.");
+                    window.location.href = "index.html";
+                }
+            }, 3000);
+
+            cargandoSesion = false; // Evitamos que el timeout se cree mil veces
+        } else {
+            // Caso 3: No hay usuario ni rastro de sesión local, afuera.
+            window.location.href = "index.html";
+        }
     }
 });
 
