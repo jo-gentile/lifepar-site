@@ -25,41 +25,42 @@ let chequeoInicial = true;
 // 1. Variable para evitar el rebote inmediato
 let cargandoSesion = true;
 
+let validandoBiometria = true;
+
 auth.onAuthStateChanged((user) => {
-    const mailLocal = sessionStorage.getItem('userEmail');
+    const tieneSesionLocal = sessionStorage.getItem('userEmail');
 
     if (user) {
-        // ✅ Caso 1: Firebase confirmó al usuario
-        cargandoSesion = false;
-        console.log("✅ Sesión confirmada:", user.email);
+        validandoBiometria = false;
         
-        sessionStorage.setItem('userEmail', user.email);
-        sessionStorage.setItem('userName', user.displayName || "Entrenador");
-
+        // Llenar datos de interfaz
         const txtNombre = document.getElementById('display-name');
         const txtEmail = document.getElementById('display-email');
         if (txtNombre) txtNombre.innerText = user.displayName || "Entrenador";
         if (txtEmail) txtEmail.innerText = user.email;
 
-        activarHuella(); 
-        
+        // Verificar registro de huella con margen de tiempo
+        setTimeout(() => {
+            if (!localStorage.getItem('credencial_biometrica')) {
+                activarHuella();
+            }
+        }, 4000);
+
     } else {
-        // ⏳ Caso 2: No hay usuario en Firebase todavía
-        // Si existe un mail en sessionStorage, es porque venís de poner la huella
-        if (mailLocal && cargandoSesion) {
-            console.log("⏳ Esperando validación de Firebase...");
+        // El "Escudo": Si hay mail local, esperamos a que Firebase despierte
+        if (tieneSesionLocal && validandoBiometria) {
+            console.log("⏳ Aguardando validación de servidor...");
             
-            // Damos 3 segundos de cortesía antes de patear al usuario
             setTimeout(() => {
                 if (!auth.currentUser) {
-                    console.log("🚫 Tiempo de espera agotado, al inicio.");
+                    sessionStorage.clear();
                     window.location.href = "index.html";
                 }
-            }, 3000);
+            }, 5000); // 5 segundos de espera
 
-            cargandoSesion = false; // Evitamos que el timeout se cree mil veces
-        } else {
-            // Caso 3: No hay usuario ni rastro de sesión local, afuera.
+            validandoBiometria = false; 
+        } else if (!tieneSesionLocal) {
+            // Si no hay nada, expulsión inmediata
             window.location.href = "index.html";
         }
     }
