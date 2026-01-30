@@ -37,21 +37,17 @@ auth.onAuthStateChanged(async (user) => {
         user.displayName || "Entrenador";
     document.getElementById('display-email').innerText =
         user.email;
-
-    // Pedir huella SOLO si ya hay sesión y no está registrada
-    if (!localStorage.getItem('credencial_biometrica')) {
-        setTimeout(() => activarHuella(), 3000);
-    }
 });
 
 
-// Función de salida: Solo redirige, NO destruye la sesión de Firebase
+// Función de salida: cierra la sesión de Firebase
 function logout() {
     firebase.auth().signOut().then(() => {
-        sessionStorage.clear(); // si querés dejarlo, no molesta
+        sessionStorage.clear(); // opcional, no molesta
         window.location.href = "index.html";
     });
 }
+
 
 
 // --- 2. INTERFAZ Y NAVEGACIÓN ---
@@ -274,57 +270,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
         }
     });
 });
-/* ... todo tu código actual de admin.js ... */
-async function activarHuella() {
-    if (!window.PublicKeyCredential) return;
-    
-    const email = sessionStorage.getItem('userEmail');
-    if (!email) return;
 
-    // Si ya está registrada en este navegador, no molestar al usuario
-    if (localStorage.getItem('credencial_biometrica')) return;
-
-    if (confirm("¿Desea activar el acceso mediante datos biométricos (Huella/PIN) en este dispositivo?")) {
-        try {
-            const options = {
-                publicKey: {
-                    challenge: crypto.getRandomValues(new Uint8Array(32)),
-                    rp: { name: "Lifepar" },
-                    user: { 
-                        id: Uint8Array.from(email, c => c.charCodeAt(0)), 
-                        name: email, 
-                        displayName: "Entrenador" 
-                    },
-                    pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-                    authenticatorSelection: { authenticatorAttachment: "platform" },
-                    timeout: 60000
-                }
-            };
-
-            const credential = await navigator.credentials.create(options);
-            
-            if (credential) {
-                // 1. GUARDADO LOCAL INMEDIATO (Prioridad para que no vuelva a preguntar)
-                localStorage.setItem('mailVinculado', email);
-                localStorage.setItem('credencial_biometrica', credential.id); 
-                
-                const emailKey = email.replace(/\./g, '_');
-                
-                // 2. SINCRONIZACIÓN CON FIREBASE
-                db.ref(`listaBlanca/${emailKey}`).update({ 
-                    huellaID: credential.id,
-                    huellaActiva: true 
-                })
-                .then(() => console.log("Huella sincronizada con base de datos."))
-                .catch((e) => console.log("Error en DB, pero guardado en navegador:", e));
-
-                alert("✅ Acceso biométrico configurado correctamente.");
-            }
-        } catch (err) { 
-            console.error("Error o registro cancelado:", err); 
-        }
-    }
-}
 
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;

@@ -376,36 +376,4 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('Error al registrar SW', err));
   });
 }
-/* ============================================================
-   LÓGICA DE ACCESO BIOMÉTRICO (HUELLA)
-   ============================================================ */
 
-async function loginBiometrico() {
-    const mail = localStorage.getItem('mailVinculado');
-    const credID = localStorage.getItem('credencial_biometrica');
-
-    if (!mail || !credID) return;
-
-    try {
-        const idBuffer = Uint8Array.from(atob(credID.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
-
-        const authResponse = await navigator.credentials.get({
-            publicKey: {
-                challenge: crypto.getRandomValues(new Uint8Array(32)),
-                allowCredentials: [{ id: idBuffer, type: 'public-key' }],
-                userVerification: 'required'
-            }
-        });
-
-        if (authResponse) {
-            // ✅ PERSISTENCIA LOCAL: Hace que la sesión no se borre al cerrar la pestaña
-            await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-            
-            sessionStorage.setItem('userEmail', mail);
-            sessionStorage.setItem('userName', "Entrenador Lifepar"); 
-            window.location.href = "admin.html";
-        }
-    } catch (err) {
-        console.log("Error en biometría o cancelación.");
-    }
-}
