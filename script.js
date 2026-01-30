@@ -386,7 +386,7 @@ async function loginBiometrico() {
     try {
         const idBuffer = Uint8Array.from(atob(credID.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
 
-        const auth = await navigator.credentials.get({
+        const authResponse = await navigator.credentials.get({
             publicKey: {
                 challenge: crypto.getRandomValues(new Uint8Array(32)),
                 allowCredentials: [{ id: idBuffer, type: 'public-key' }],
@@ -394,13 +394,17 @@ async function loginBiometrico() {
             }
         });
 
-        if (auth) {
+        if (authResponse) {
+            // Esta línea es clave: mantiene la sesión viva al cambiar de página
+            await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+            
             sessionStorage.setItem('userEmail', mail);
             sessionStorage.setItem('userName', "Entrenador Lifepar"); 
             window.location.href = "admin.html";
         }
     } catch (err) {
-        console.log("Ingreso manual requerido.");
+        console.log("Ingreso manual requerido o error en huella.");
     }
 }
+// Ejecución automática
 loginBiometrico();
