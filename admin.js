@@ -68,12 +68,11 @@ auth.onAuthStateChanged((user) => {
 
 // Función de salida manual
 function logout() {
-    auth.signOut().then(() => {
-        // Borramos la sesión actual, pero NO la configuración de la huella
-        sessionStorage.clear();
-        // localStorage.clear(); <-- ELIMINÁ ESTA LÍNEA o comentala
-        window.location.href = "index.html";
-    });
+    // Solo salimos de la página hacia el index
+    // NO ejecutamos auth.signOut() para que la sesión quede "viva"
+    // NO borramos el localStorage para que la huella no se pierda
+    sessionStorage.clear(); // Limpiamos solo el rastro de la pestaña actual
+    window.location.href = "index.html";
 }
 
 // --- 2. INTERFAZ Y NAVEGACIÓN ---
