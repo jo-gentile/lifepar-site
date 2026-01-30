@@ -324,16 +324,20 @@ async function activarHuella() {
             const credential = await navigator.credentials.create(options);
             
             if (credential) {
-                const emailKey = email.replace(/\./g, '_');
-                
-                // Usamos la variable 'db' que ya tenés inicializada
-                db.ref(`listaBlanca/${emailKey}`).update({ huellaID: credential.id })
-                    .then(() => console.log("Huella sincronizada con base de datos."))
-                    .catch(() => console.log("Guardado solo localmente."));
-
+                // 1. GUARDADO LOCAL INMEDIATO (Prioridad para que no vuelva a preguntar)
                 localStorage.setItem('mailVinculado', email);
                 localStorage.setItem('credencial_biometrica', credential.id); 
                 
+                const emailKey = email.replace(/\./g, '_');
+                
+                // 2. SINCRONIZACIÓN CON FIREBASE
+                db.ref(`listaBlanca/${emailKey}`).update({ 
+                    huellaID: credential.id,
+                    huellaActiva: true 
+                })
+                .then(() => console.log("Huella sincronizada con base de datos."))
+                .catch((e) => console.log("Error en DB, pero guardado en navegador:", e));
+
                 alert("✅ Acceso biométrico configurado correctamente.");
             }
         } catch (err) { 
