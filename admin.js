@@ -150,16 +150,6 @@ window.mostrarClinica = function (idClinica) {
 };
 
 
-// Mostrar seguros (oculta la vista dinámica)
-function mostrarSeguros() {
-    limpiarPantalla();
-    const vista = document.getElementById('vista-dinamica');
-    if (vista) vista.style.display = 'none';
-
-    const box = document.getElementById('seguros');
-    if (box) box.style.display = 'block';
-}
-
 // Mostrar copa federal (oculta la vista dinámica)
 function mostrarCopa() {
     limpiarPantalla();
