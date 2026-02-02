@@ -530,6 +530,25 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
             if (!btnAct) {
                 btnAct = document.createElement('button');
                 btnAct.id = 'btn-actualizar-dinamico';
+                btnAct.style = "width:100%; margin-top:10px; background:#28a745; color:white; font-weight:bold; padding:10px; border:none; border-radius:6px; cursor:pointer;";
+                // Insertamos el botón verde debajo de la edad
+                const contenedor = document.querySelector('#contenedor-formulario-dinamico > div');
+                contenedor.appendChild(btnAct);
+            }
+            
+            btnAct.innerText = "💾 ACTUALIZAR DATOS";
+            btnAct.style.display = 'block'; 
+            btnAct.onclick = () => window.actualizarPatinador(numZona, idPatinador);
+
+            document.getElementById('contenedor-formulario-dinamico').scrollIntoView({ behavior: 'smooth' });
+        }
+    } catch (e) { console.error(e); }
+};
+
+// Función para guardar los cambios
+window.actualizarPatinador = async function(numZona, idPatinador) {
+    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
+    
     // Si soy admin, respeto el mailProfe original si existe
     let finalMailProfe = userEmail;
     if (window.parent.isAdmin && window.editingPatinadorMailProfe) {
@@ -547,27 +566,7 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
         DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
         fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
         edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: finalMailProfe
-    } catch (e) { console.error(e); }
-};
-
-// Función para guardar los cambios
-// Función para guardar los cambios
-window.actualizarPatinador = async function(numZona, idPatinador) {
-    const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
-    const datosModificados = {
-        club: document.getElementById(`z${numZona}-club`).value,
-        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
-        divisional: document.getElementById(`z${numZona}-divisional`).value,
-        categoria: document.getElementById(`z${numZona}-categoria`).value,
-        genero: document.getElementById(`z${numZona}-genero`).value,
-        apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
-        nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
-        DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
-        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
-        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-        mailProfe: userEmail,
+        mailProfe: finalMailProfe,
         ultima_edicion: new Date().toISOString()
     };
 
