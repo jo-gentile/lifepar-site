@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIFEPAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Baloo+2:wght@600&family=Dancing+Script&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+</head>
+<body>
+  <div class="background-slider">
+  <div class="slide" style="background-image: url('img/foto1.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto2.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto3.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto4.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto5.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto6.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto7.jpg');"></div>
+  <div class="slide" style="background-image: url('img/foto8.jpg');"></div>
+</div>
+  <header>
+    <div class="logo">
+        <img src="img/logo.png" class="logo-img">
+        <div class="textos-col"> 
+            <h1>LIFEPAR</h1>
+            <span class="slogan">es una realidad</span>
+        </div>
+    </div>
+
+  <nav>
+    <ul>
+        <li><a href="#zonas">Zonas</a></li>
+        <li><a href="#calendario">Calendario</a></li>
+        <li><a href="#contacto">Contacto</a></li>
+        <li>
+            <button id="btnAccesoEntrenadores" class="admin-button">Acceso Entrenadores</button>
+        </li>
+    </ul>
+</nav>
+</header>
+
+<div class="header-spacer"></div>
+    
+    <main class="contenido-principal">
+  <div class="info">
+    <img src="img/logonuevo.png" class="logo-seccion" alt="Lifepar Competencia">
+    <p>Las nuevas tendencias, fechas y eventos actualizados. Enterate todo acá!</p>
+  </div>
+
+<section class="contenedor-competencia">
+    
+    <div class="columna-zonas izquierda">
+        <div class="zona-card roja" onclick="verZona(1)">ZONA 1</div>
+        <div class="zona-card azul" onclick="verZona(2)">ZONA 2</div>
+        <div class="zona-card roja" onclick="verZona(3)">ZONA 3</div>
+        <div class="zona-card dorada">FECHAS</div>
+        <div class="zona-card plata">FOTOS</div>
+    </div>
+
+    <div class="centro-informacion" id="panel-cristal">
+        <div id="mensaje-guia">
+            <img src="img/logonuevo.png" class="logo-seccion" style="max-height: 100px; display: block; margin: 0 auto 15px;">
+            <h3></h3>
+        </div>
+    </div>
+
+    <div class="columna-zonas derecha">
+        <div class="zona-card roja" onclick="verZona(4)">ZONA 4</div>
+        <div class="zona-card azul" onclick="verZona(5)">ZONA 5</div>
+        <div class="zona-card roja" onclick="verZona(6)">ZONA 6</div>
+        <div class="zona-card plata">COPA OPEN</div>
+        <div class="zona-card dorada">LIFEPAR SPORTS</div>
+    </div>
+</section> 
+</section> 
+<div id="deposito-detalles" style="display: none;">
+      <div id="detalle-zona1" class="detalle-zona">
+         <div class="dirigente-info">
+             <img src="img/dirigente1.png" alt="Daniela Chiaramoni" class="dirigente-foto">
+             <div class="datos-dirigente">
+                  <h4>ZONA 1 (zona sur del Gran Buenos Aires)</h4>
+                  <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
+                  <p><strong>Cargo:</strong> Coordinadora General ZONA 1</p>
+                  <p><strong>Contacto:</strong> 11-5323-9629</p>
+                  <p><strong>Ubicación:</strong> Turdera; Lomas de Zamora, Monte Grande, Longchamps, Glew, Guernica, etc...</p>
+                  <p><strong>Torneos:</strong> Colegio Santa Inés, Turdera.</p>
+              </div>
+          </div>
+      </div>
+    </div>  
+
+    <div id="detalle-zona2" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente2.png" alt="Fabio Gigli" class="dirigente-foto">
+            <div class="datos-dirigente">
+                <h4>ZONA 2 (zona La Matanza)</h4>
+                <p><strong>Nombre:</strong> Fabio Gigli</p>
+                <p><strong>Cargo:</strong> Coordinador General ZONA 2</p>
+                <p><strong>Contacto:</strong> 11-3069-2456</p>
+                <p><strong>Ubicación:</strong> La Matanza</p>
+                <p><strong>Torneos:</strong> Colegio San Carlos Borromeo, Villa Madero.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalle-zona3" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente3.png" alt="Iara Agnus" class="dirigente-foto">
+            <div class="datos-dirigente">
+                <h4>ZONA 3 (zona Ezeiza-Cañuelas)</h4>
+                <p><strong>Nombre:</strong> Iara Agnus</p>
+                <p><strong>Cargo:</strong> Coordinadora General ZONA 3</p>
+                <p><strong>Contacto:</strong> 11 3913-0849</p>
+                <p><strong>Ubicación:</strong> Ezeiza-Cañuelas (y alrededores)</p>
+                <p><strong>Torneos:</strong> A confirmar</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalle-zona4" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente4.png" alt="Natalia Reale" class="dirigente-foto">
+            <div class="datos-dirigente">
+                <h4>ZONA 4 (zona oeste del Gran Buenos Aires)</h4>
+                <p><strong>Nombre:</strong> Natalia Reale</p>
+                <p><strong>Cargo:</strong> Coordinadora General Zona 4</p>
+                <p><strong>Contacto:</strong> 11-4960-5313</p>
+                <p><strong>Ubicación:</strong> Castelar, Ituzaingó, Hurlingham, Moreno, San Miguel, Jose C Paz, Etc</p>
+                <p><strong>Torneos:</strong> Club La Catedral</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalle-zona5" class="detalle-zona">
+        <div class="dirigente-info">
+            <img src="img/dirigente5.png" alt="Luján Manolio" class="dirigente-foto">
+            <div class="datos-dirigente">
+                <h4>ZONA 5 (zona C.A.B.A.)</h4>
+                <p><strong>Nombre:</strong> Luján Manolio</p>
+                <p><strong>Cargo:</strong> Coordinadora General zona 5</p>
+                <p><strong>Contacto:</strong> 11 2046-2725</p>
+                <p><strong>Ubicación:</strong> Ciudad Autónoma de Buenos Aires</p>
+                <p><strong>Torneos:</strong> Club Pintitas</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detalle-zona6" class="detalle-zona">
+       <div class="dirigente-info">
+            <img src="img/dirigente6.png" alt="Daniela Chiaramoni" class="dirigente-foto">
+            <div class="datos-dirigente">
+                <h4>ZONA 6 (zona sur del Gran Buenos Aires)</h4>
+                <p><strong>Nombre:</strong> Daniela Chiaramoni</p>
+                <p><strong>Cargo:</strong> Coordinadora General zona 6</p>
+                <p><strong>Contacto:</strong> 11-5323-9629</p>
+                <p><strong>Ubicación:</strong> Quilmes, Avellaneda, Florencio Varela, Berazategui, Solano, Lanus, Etc</p>
+                <p><strong>Torneos:</strong> Sociedad de fomento Barrio La Carne</p>
+            </div>
+        </div>
+    </div>
+</section>
+      <!-- Sección de contacto fuera del nav -->
+<section id="contacto">
+  <h3>Contacto Directo</h3>
+  <div class="contacto-form">
+    <form>
+      <input type="text" placeholder="Tu nombre" />
+      <input type="email" placeholder="Tu correo" />
+      <textarea placeholder="Tu mensaje"></textarea>
+      <button type="submit">Enviar Mensaje</button>
+    </form>
+  </div>
+  <button id="cerrarContacto">[ CERRAR ]</button>
+</section>
+    </main>
+
+<div id="portal-padres" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(10px); overflow-y: auto;">
+    <div class="card-padre" style="max-width: 500px; margin: 50px auto; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 30px; text-align: center; color: white; font-family: 'Quicksand'; box-shadow: 0 8px 32px rgba(0,0,0,0.37);">
+
+        <img src="img/logo.png" style="width: 80px; margin-bottom: 10px;">
+        <h2 style="font-family: 'Anton'; letter-spacing: 1px;">CENTRO DE DOCUMENTACIÓN</h2>
+        <p id="instruccion-padre" style="font-size: 0.9rem; margin-bottom: 20px;">Por seguridad, validá los datos del patinador para continuar.</p>
+
+        <!-- PASO 1: DNI -->
+        <div id="paso-dni" style="display: block;">
+            <input type="number" id="dni-validacion" placeholder="DNI del Patinador" style="width: 80%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; font-size: 1.1rem;">
+            <br>
+            <button onclick="verificarDniPadre()" style="background: #ffd700; color: #000; padding: 10px 25px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer;">VERIFICAR DNI</button>
+        </div>
+
+        <!-- PASO 2: Fecha de nacimiento -->
+        <div id="paso-fecha" style="display: none; margin-top: 20px;">
+            <p style="font-size: 0.8rem; color: #ffd700;">DNI Encontrado. Ahora ingresá su fecha de nacimiento:</p>
+            <input type="date" id="fecha-validacion" style="width: 80%; padding: 12px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center;">
+            <br>
+            <button onclick="validarFechaPadre()" style="background: #ffd700; color: #000; padding: 10px 25px; border-radius: 20px; border: none; font-weight: bold; cursor: pointer;">VALIDAR IDENTIDAD</button>
+        </div>
+
+        <!-- PASO 3: Carga de documentos -->
+        <div id="paso-carga" style="display: none; margin-top: 20px;">
+            <div id="ficha-bienvenida" style="background: rgba(255,255,255,0.1); padding: 15px; border-radius: 15px; margin-bottom: 20px;">
+                <h3 id="nombre-hijo" style="margin: 0; color: #ffd700;"></h3>
+                <p id="detalle-hijo" style="font-size: 0.8rem; margin: 5px 0;"></p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <input type="file" id="input-dni" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('dni')">
+                <button onclick="document.getElementById('input-dni').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    🖼️ ADJUNTAR DNI (Frente/Dorso)
+                </button>
+                <div id="info-dni" style="font-size: 0.8rem; color: #ffd700; text-align: center; margin-bottom: 5px;"></div>
+                <div id="barra-dni" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+                        <div id="progreso-dni" style="width: 0%; background: #3498db; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+                </div>
+                <input type="file" id="input-medico" accept="image/*,.pdf" style="display: none;" onchange="subirArchivo('medico')">
+                <button onclick="document.getElementById('input-medico').click()" class="btn-subida" style="background: #fff; color: #333; padding: 15px; border-radius: 10px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    ⚕️ ADJUNTAR APTO MÉDICO 2026
+                </button>
+                <div id="info-medico" style="font-size: 0.8rem; color: #ffd700; text-align: center; margin-bottom: 5px;"></div>
+                <div id="barra-medico" style="display:none; width: 100%; background: #eee; border-radius: 10px; height: 10px; margin-top: 10px;">
+               <div id="progreso-medico" style="width: 0%; background: #3498db; height: 100%; border-radius: 10px; transition: 0.3s;"></div>
+               </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<footer>
+    <p>© 2025 LIFEPAR - Todos los derechos reservados</p>
+    <div class="footer-contact">
+        <a href="https://instagram.com/ligalifepar" target="_blank">📸 @ligalifepar</a>
+        <a href="https://wa.me/541158512121" target="_blank">📱 11-5851-2121</a>
+    </div>
+</footer>
+    <button id="toggle-bg" class="btn-flotante" title="Activar/Desactivar fondo">
+    <span class="icono-bg">🖼️</span>
+</button>
+
+<div id="loginForm" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 340px; background: white; padding: 30px; border-radius: 15px; z-index: 1001; text-align: center; box-shadow: 0 10px 50px rgba(0,0,0,1);">
+    <img src="img/logo.png" alt="Lifepar" style="width: 80px; margin-bottom: 15px;">
+    <h2 id="loginTitle" style="font-family: 'Anton'; margin-bottom: 20px;">ACCESO PERSONAL</h2>
+
+    <!-- BLOQUE LOGIN -->
+    <div id="bloqueLogin">
+        <input type="email" id="emailLogin" placeholder="Tu Email de Entrenador" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <input type="password" id="passLogin" placeholder="Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <button id="btnEntrar" style="width: 100%; background: #000; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">INGRESAR</button>
+        
+        <p style="margin: 15px 0; font-size: 0.9rem;">O también podés</p>
+        <button id="btnGoogle" style="width: 100%; background: white; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Quicksand'; font-weight: bold; margin-top: 10px;">
+            <svg width="18" height="18" viewBox="0 0 18 18">
+                <path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.49h4.84a4.14 4.14 0 0 1-1.8 2.71v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z" fill="#4285F4"/>
+                <path d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.8.54-1.83.86-3.05.86-2.34 0-4.32-1.58-5.03-3.71H.95v2.3A8.99 8.99 0 0 0 9 18z" fill="#34A853"/>
+                <path d="M3.97 10.71c-.18-.54-.28-1.12-.28-1.71s.1-1.17.28-1.71V4.99H.95A8.99 8.99 0 0 0 0 9c0 1.45.35 2.82.95 4.01l3.02-2.3z" fill="#FBBC05"/>
+                <path d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.47.89 11.43 0 9 0 5.48 0 2.44 2.02.95 4.99l3.02 2.31c.71-2.13 2.69-3.72 5.03-3.72z" fill="#EA4335"/>
+            </svg>
+            Continuar con Google
+        </button>
+
+        <!-- LINKS VISIBLES -->
+        <div style="margin-top: 15px; font-size: 0.8rem;">
+            <a href="javascript:void(0)" id="linkRegistrarse" style="color: #666; text-decoration: none; margin-right: 15px;">Registrarse</a>
+            <a href="javascript:void(0)" id="linkRecuperar" style="color: #666; text-decoration: none;">Olvidé mi clave</a>
+        </div>
+    </div>
+
+    <!-- BLOQUE REGISTRO (solo para verificación de mail y contraseña) -->
+    <div id="bloqueRegistro" style="display: none; margin-top: 10px;">
+        <input type="email" id="emailManual" placeholder="Ingresa tu email" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+        <button id="btnVerificarSheet" style="width: 100%; background: #28a745; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">VERIFICAR ENTRENADOR</button>
+        
+        <div style="margin-top: 15px;">
+            <a href="javascript:void(0)" id="linkVolverLogin" style="color: #007bff; text-decoration: none; font-size: 0.8rem;">← Volver al inicio de sesión</a>
+        </div>
+
+        <div id="seccionConfirmarPass" style="display: none; margin-top: 10px;">
+            <input type="password" id="passNuevo" placeholder="Elegí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <input type="password" id="passConfirmar" placeholder="Repetí Contraseña" style="width: 100%; padding: 12px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 8px;">
+            <button id="btnFinalizarRegistro" style="width: 100%; background: #000; color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">REGISTRARME</button>
+        </div> 
+    </div>          
+
+    <!-- BOTÓN CERRAR -->
+    <button id="btnCerrarLogin" style="margin-top: 15px; background: none; border: none; color: red; cursor: pointer; font-size: 0.8rem;">[ CERRAR ]</button>
+</div>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>

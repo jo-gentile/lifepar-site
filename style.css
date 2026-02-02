@@ -1,0 +1,664 @@
+﻿/* ============================================================
+   1. ESTILOS GLOBALES Y CUERPO (INTACTO)
+   ============================================================ */
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  background: linear-gradient(135deg, #000000 0%, #2c2c2c 50%, #2a0a4d 100%) !important;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+  padding-top: 110px; 
+  user-select: none;            /* Evita la selección de texto en toda la web */
+  -webkit-user-select: none;     /* Para Chrome y Safari */
+  -moz-user-select: none;        /* Para Firefox */
+  -ms-user-select: none;         /* Para Internet Explorer */
+}
+
+/* ============================================================
+   2. ENCABEZADO (MANTENIDO SEGÚN TU BASE)
+   ============================================================ */
+header {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+  padding: 0px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  position: fixed;
+  z-index: 1000;
+  overflow: hidden;
+  backdrop-filter: blur(15px); 
+  -webkit-backdrop-filter: blur(15px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1200px;
+  height: 70px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shineHeader 3s infinite;
+}
+
+@keyframes shineHeader { 
+100% { left: 125%; } 
+}
+@keyframes text-gradient-move { 
+0% { background-position: 0% center; } 
+100% { background-position: 300% center; } 
+}
+
+.logo { 
+display: flex; 
+flex-direction: row; 
+align-items: center; gap: 12px; margin: 0; 
+}
+.textos-col { 
+display: flex; 
+flex-direction: column; 
+justify-content: center; 
+align-items: flex-start; 
+}
+.logo-img { height: 50px; 
+width: auto; 
+transition: transform 0.5s ease;
+}
+.logo-img:hover { transform: rotate(360deg); 
+}
+
+.logo h1 {
+  font-family: 'Anton', sans-serif;
+  font-size: 1.4rem;
+  margin: 0;
+  line-height: 1;
+  background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
+  background-size: 300% auto;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-move 12s linear infinite;
+}
+
+.slogan {
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1;
+  display: block;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* ============================================================
+   3. NAVEGACIÓN Y BOTONES
+   ============================================================ */
+nav ul { 
+list-style: none; 
+display: flex; 
+gap: 0.5rem; 
+margin: 0; 
+padding: 0; 
+}
+nav li a {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 4px 12px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+nav li a:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #ff0080;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-button {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 18px;
+  border-radius: 12px;
+  background-color: transparent;
+  color: #c0c0c0;
+  border: 2px solid #c0c0c0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-left: 20px;
+  text-transform: uppercase;
+  font-weight: 600;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+.admin-button:hover {
+  background-color: #c0c0c0;
+  color: #222;
+  box-shadow: 0 0 15px rgba(224, 224, 224, 0.8);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   4. SECCIÓN COMPETENCIA (ZONAS RECUPERADAS)
+   ============================================================ */
+.header-spacer {
+  height: 0px;    /* El tamaño justo para que nada quede tapado */
+  width: 100%;
+  display: block;   /* Asegura que ocupe su lugar */
+}
+
+.contenedor-competencia {
+  position: center;
+  width: 100%;
+  min-height: 100px;
+  display: flex;
+  flex-direction: row; /* Para que los bloques se apilen uno debajo de otro */
+  justify-content: space-between; 
+  align-items: center;    /* Centra los textos y botones horizontalmente */
+  padding-top: 20px !important; /* Esto empuja las letras y botones hacia abajo */
+  margin-top: 0;    /* Quitamos el margen para que el fondo blanco no se separe */
+  background: transparent !important; /* Fondo blanco casi transparente */     
+  border: none !important; /* Un borde finito como de cristal 
+  border-radius: 20px;                /* Bordes redondeados para que sea suave */
+  padding: 0 40px;
+  margin: 20px auto;
+  max-width: none;
+  box-shadow: none
+}
+/* --- ESTILO PARA EL NUEVO LOGO DEL CUERPO --- */
+.logo-seccion {
+  max-width: 200px;  /* Ajustá este valor según qué tan grande quieras que se vea */
+  width: 100%;       /* Para que sea responsivo y se achique en el celular */
+  height: auto;
+  margin-bottom: 5px; /* Separa el logo del texto de abajo */
+  display: block;
+  margin-left: auto;
+  margin-right: auto; /* Estos dos márgenes centran la imagen */
+  
+  /* Un toque opcional: una sombra suave para que flote */
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+}
+
+.info {
+    color: #ffffff; /* Blanco puro */
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    /* Esta sombra hace que aunque la foto de fondo sea clara en alguna parte, se lea igual */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); 
+    margin-top: 0px;
+    line-height: 1.2;
+}
+
+.columna-zonas {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  z-index: 100;
+}
+
+/* TUS POSICIONES ORIGINALES */
+.columna-zonas.izquierda { left: -120px; }
+.columna-zonas.derecha { right: -20px; }
+
+.zona-card {
+  height: 60px !important; 
+  width: 380px !important; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white !important;
+  font-family: 'Quicksand', sans-serif !important; 
+  font-weight: bold !important;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.1) !important; 
+  backdrop-filter: blur(15px) !important;
+  border-radius: 50px !important; 
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+  transition: all 0.4s ease !important;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 60);
+}
+
+.zona-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -75%; width: 50%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shineHeader 4s infinite;
+}
+
+/* --- TU BLOQUE DE CENTRO CORREGIDO (SOLO LO QUE PEDISTE) --- */
+.centro-informacion {
+    width: 480px !important; /* VOLVEMOS A TU TAMAÑO */
+    margin: 20px auto !important;
+    padding: 30px !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+/* Ahora: bloque que empieza oculto y se muestra al hacer clic */
+.detalle-zona {
+    display: none; /* todos empiezan ocultos */
+}
+
+.detalle-zona.visible {
+    display: flex; /* o block según tu diseño */
+    flex-direction: row;
+    gap: 20px;
+}
+
+.dirigente-foto {
+    width: 110px !important;
+    height: 110px !important;
+    border-radius: 0% !important;
+    border: none !important; /* CHAU BORDE NEGRO */
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+    
+}
+/* Esto fuerza a que el texto NO empuje a la foto aunque sea largo */
+.datos-dirigente {
+    flex: 1 !important; /* Toma el espacio que sobra pero no más */
+    min-width: 0 !important; /* Truco vital para que el texto largo no rompa el flex */
+    word-wrap: break-word !important; /* Si no entra, que salte de línea */
+}
+
+.dirigente-info {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important; /* PROHIBIDO que la foto se vaya arriba */
+    align-items: center !important;
+}
+
+.centro-informacion h4 { color: #ffd700 !important; margin-bottom: 10px !important; }
+.datos-dirigente p { color: #ffffff !important; margin: 5px 0 !important; }
+.datos-dirigente p strong { color: #ffd700 !important; }
+
+/* ============================================================
+   6. FOOTER Y SLIDER (INTACTO)
+   ============================================================ */
+/* --- PERFECCIÓN EN EL FOOTER --- */
+
+footer {
+    width: 100%;
+    padding: 60px 0 40px 0 !important;
+    margin-top: 100px !important;
+    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.9)) !important;
+    text-align: center;
+}
+
+/* Contenedor de las redes para que queden centradas y niveladas */
+.footer-contact {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 40px !important; /* Espacio generoso entre redes */
+    margin-top: 15px !important;
+}
+
+/* Mata el azul, el subrayado y alinea ícono con texto */
+.footer-contact a, 
+footer a {
+    color: #ffd700 !important; /* Dorado Lifepar */
+    text-decoration: none !important; /* Chau subrayado */
+    font-weight: bold !important;
+    font-size: 1.1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Tamaño de los íconos para que no desnivelen la línea */
+.footer-contact img {
+    width: 24px !important;
+    height: 24px !important;
+    display: block !important;
+}
+
+.footer-contact a:hover {
+    color: #ffffff !important;
+    transform: translateY(-3px) !important;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5) !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+.background-slider {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Esto lo manda al fondo de todo */
+  overflow: hidden;
+  background-color: black; /* Por si las moscas, fondo base negro */
+}
+footer p {
+    font-size: 0.85rem !important;
+    opacity: 0.7;
+    margin-bottom: 15px;
+    letter-spacing: 1px;
+}
+.slide {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  animation: fadeSlider 45s infinite; /* 15 segundos dura todo el ciclo */
+  filter: blur(6px) brightness(0.8); /*Esto hace que las fotos se vean artísticas y no distraigan 
+  transform: scale(1.1); /* Evita que se vean bordes blancos por el blur */
+}
+
+.background-slider::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.50); /* Oscurece la foto un 50% */
+  z-index: 10; /* Se asegura de estar POR ENCIMA de las fotos */
+  pointer-events: none;
+}
+.slide:nth-child(1) { animation-delay: 0s; }
+.slide:nth-child(2) { animation-delay: 5s; }
+.slide:nth-child(3) { animation-delay: 10s; }
+.slide:nth-child(4) { animation-delay: 15s; }
+.slide:nth-child(5) { animation-delay: 20s; }
+.slide:nth-child(6) { animation-delay: 25s; }
+.slide:nth-child(7) { animation-delay: 30s; }
+.slide:nth-child(8) { animation-delay: 35s; }
+
+@keyframes fadeSlider {
+  0% { opacity: 0; }
+  10% { opacity: 1; }
+  33% { opacity: 1; }
+  43% { opacity: 0; }
+  100% { opacity: 0; }
+}
+
+@keyframes aparecerSuave {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- AJUSTES PARA CELULAR (Mobile) --- */
+@media (max-width: 768px) {
+    
+
+    /* 2. Los óvalos dejan de venir "de afuera" para que no tapen todo */
+    .zona-card {
+        width: 100% !important;   /* Ocupan el ancho del contenedor */
+        max-width: 300px;
+        margin: 10px auto !important; /* Se apilan uno abajo del otro */
+        height: 60px !important;
+        font-size: 1.1em !important;
+        mask-image: none !important; /* Quitamos el desvanecimiento lateral */
+    }
+
+    /* 3. Reordenamos las columnas para que sea una sola fila vertical */
+    .contenedor-opciones {
+        flex-direction: column !important; /* Uno arriba del otro */
+        height: auto !important;
+        gap: 15px; /* Espacio entre óvalos */
+    }
+
+    /* 4. Quitamos los márgenes negativos que los sacaban de la pantalla */
+    .columna-zonas.izquierda .zona-card,
+    .columna-zonas.derecha .zona-card {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        padding: 0 !important;
+    }
+}
+
+body.no-background {
+    background-color: #0a0a0a; /* Un color oscuro elegante de reemplazo */
+}
+
+.btn-accesibilidad {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid white;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    transition: 0.3s;
+}
+/* ESTO VA AL FINAL DEL ARCHIVO CSS */
+.btn-flotante {
+    position: fixed !important;
+    bottom: 30px !important;
+    left: 30px !important; /* Valor positivo para que entre en pantalla */
+    width: 60px !important;
+    height: 60px !important;
+    z-index: 999999 !important; /* Más alto que el z-index 1000 del header */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    cursor: pointer !important;
+    font-size: 1.8rem !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+    
+    /* Reseteo total para que no herede nada del header */
+    transform: none !important;
+    top: auto !important;
+    right: auto !important;
+    margin: 0 !important;
+}
+
+/* Animación para que no se pegue al pasar el mouse */
+.btn-flotante:hover {
+    transform: scale(1.1) !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+}
+.btn-flotante:active {
+    transform: scale(0.9);
+}
+input, textarea {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* --- ADAPTACIÓN TOTAL PARA CELULAR (INDEX LIFEPAR) --- */
+@media (max-width: 768px) {
+    /* 1. Ajuste del Header: lo hacemos un poco más chico para que no tape tanto */
+    header {
+        width: 95% !important;
+        height: auto !important;
+        padding: 10px 15px !important;
+        flex-direction: column !important; /* Apilamos logo y botones */
+        top: 10px !important;
+        border-radius: 25px !important;
+    }
+
+    .logo-img { height: 35px !important; }
+    .logo h1 { font-size: 1.1rem !important; }
+    .slogan { font-size: 0.9rem !important; }
+
+    nav ul { margin-top: 10px !important; gap: 5px !important; }
+    .admin-button { margin: 10px 0 0 0 !important; padding: 5px 12px !important; font-size: 0.75rem !important; }
+
+    /* 2. El contenedor de competencia deja de ser absoluto */
+    .contenedor-competencia {
+        flex-direction: column !important;
+        padding: 120px 10px 40px 10px !important; /* Espacio para que el header no tape el contenido */
+    }
+
+    /* 3. COLUMNAS DE ZONAS: Las sacamos de su posición lateral */
+    .columna-zonas {
+        position: relative !important; /* Ya no flotan a los costados */
+        left: auto !important;
+        right: auto !important;
+        width: 100% !important;
+        margin-bottom: 20px !important;
+    }
+
+    .zona-card {
+        width: 90% !important; /* Que ocupen casi todo el ancho del celu */
+        max-width: 320px !important;
+        margin: 10px auto !important;
+        height: 55px !important;
+        font-size: 0.9rem !important;
+    }
+
+    /* 4. CENTRO DE INFORMACIÓN: Ya no puede medir 480px */
+    .centro-informacion {
+        width: 95% !important; /* Se ajusta a la pantalla */
+        max-width: 350px !important;
+        padding: 15px !important;
+        margin: 20px auto !important;
+    }
+
+    .dirigente-info {
+        flex-direction: column !important; /* Foto arriba, texto abajo en el celu */
+        text-align: center !important;
+    }
+
+    .dirigente-foto {
+        margin-bottom: 15px !important;
+    }
+
+    /* 5. FOOTER: Alineamos las redes en vertical para que no se pisen */
+    footer {
+        margin-top: 50px !important;
+        padding: 30px 10px !important;
+    }
+
+    .footer-contact {
+        flex-direction: column !important;
+        gap: 20px !important;
+    }
+}
+html {
+  scroll-behavior: smooth; /* scroll suave para todos los anchors */
+}
+
+#contacto {
+  margin: 40px auto;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+#contacto h3 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#contacto input,
+#contacto textarea,
+#contacto button {
+  border-radius: 10px;
+}
+
+#contacto input,
+#contacto textarea {
+  border: 1px solid #ccc;
+  padding: 12px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+
+#contacto button {
+  width: 100%;
+  padding: 12px;
+  background: #222;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+#cerrarContacto {
+  margin-top: 15px;
+  background: none;
+  border: none;
+  color: red;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+#loginForm { 
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%);
+  z-index: 9999; /* mucho más alto que el header */
+}
+.mini-previa {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+#barra-progreso {
+  display: none;
+  width: 100%;
+  background: rgba(255,255,255,0.2);
+  border-radius: 10px;
+  height: 12px; /* un poquito más alta */
+  margin-top: 10px;
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.5);
+}
+
+#progreso-interno {
+  width: 0%;
+  background: #28a745; /* verde por defecto */
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.4s ease-in-out, background-color 0.3s ease;
+}
+.btn-subida[disabled] {
+  background-color: #6c757d !important;
+  color: #fff !important;
+  cursor: not-allowed !important;
+  opacity: 0.8;
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.3);
+}
+#info-dni, #info-medico {
+  font-size: 0.8rem;
+  color: #ffd700;
+  text-align: center;
+  margin-bottom: 5px;
+  background: rgba(0,0,0,0.3);
+  padding: 5px 10px;
+  border-radius: 8px;
+  overflow-wrap: break-word;
+}

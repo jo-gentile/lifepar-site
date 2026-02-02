@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clínicas LIFEPAR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* 1. MATAMOS EL BLANCO DEFINITIVO */
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent !important;
+      background-color: transparent !important;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      color: white;
+      padding: 10px;
+    }
+
+* { 
+  box-sizing: border-box; 
+}
+
+#clinicas-container {
+  padding: 15px;
+  background: #111; 
+  border: 2px solid gold;
+  border-radius: 8px;
+  margin: 10px auto; 
+  width: 100%; /* Ahora sí podés usar casi todo el ancho */
+}
+
+    #titulo-clinica {
+      text-align: center;
+      color: gold;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .campo label { display: block; margin-bottom: 5px; color: #ccc; }
+
+    .campo select {
+      width: 100%;
+      padding: 10px;
+      background: #222;
+      color: white;
+      border: 1px solid gold;
+      border-radius: 4px;
+      font-family: 'Quicksand';
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background: #222;
+      /* Por defecto: ESTILO ESCRITORIO */
+      display: table;
+      white-space: normal;
+    }
+
+    /* SOLO PARA MÓVILES: Comportamiento de scroll horizontal */
+    @media (max-width: 768px) {
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+    }
+
+    thead { background: #333; color: gold; }
+    th, td { border: 1px solid #444; padding: 2px; text-align: center; }
+
+    td input {
+      width: 90%;
+      background: transparent;
+      border: none;
+      color: white;
+      text-align: center;
+      outline: none;
+    }
+    th, td { 
+  border: 1px solid #444; 
+  padding: 3px; /* Aumentamos de 4 a 6 para que no esté tan apretado */
+  text-align: center; 
+  font-size: 0.9rem; /* Un pelín más grande para legibilidad */
+}
+
+/* Ajuste específico para que los inputs no toquen los bordes */
+td input {
+  width: 100%;
+  padding: 2px;
+}
+
+    #btn-enviar-clinica {
+      margin-top: 20px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(to right, gold, #b8860b);
+      color: black;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <section id="clinicas-container">
+    <h3 id="titulo-clinica">Inscripción Clínica</h3>
+
+    <div class="campo">
+      <label for="select-club-clinica">Seleccionar Club</label>
+      <select id="select-club-clinica">
+        <option value="">Cargando clubes...</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>Nombre y Apellido</th>
+          <th>Categoría</th>
+          <th style="width:70px">Edad</th>
+        </tr>
+      </thead>
+      <tbody id="body-tabla-clinica">
+        </tbody>
+    </table>
+
+    <button id="btn-enviar-clinica">
+      🚀 ENVIAR INSCRIPCIÓN FINAL
+    </button>
+  </section>
+
+  <script src="clinicas.js"></script>
+</body>
+</html>

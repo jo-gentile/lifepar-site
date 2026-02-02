@@ -1,0 +1,725 @@
+:root {
+    --sidebar-width: 260px;
+    --sidebar-width-collapsed: 80px;
+}
+
+/* --- 1. FONDO Y ESTRUCTURA GENERAL --- */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: 'Quicksand', sans-serif;
+    color: #e0e0e0;
+    background: linear-gradient(135deg, #000000, #121212, #14051a, #121212, #000000);
+    background-size: 400% 400%;
+    animation: movimientoFino 40s ease infinite;
+    background-attachment: fixed;
+    
+}
+
+/* --- 2. EL SIDEBAR (MENÚ LATERAL) --- */
+.sidebar {
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4); /* Más oscuro para que los nombres resalten */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 100px 20px 20px 20px; /* 100px arriba para que baje y no choque con el logo */
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+    box-sizing: border-box; /* Fundamental para que el padding no sume ancho */
+    overflow-y: auto !important; /* Permite scroll vertical si las opciones exceden el alto */
+    overflow-x: hidden !important; /* Evita que se mueva hacia los costados */
+}
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el hamburguesa y el perfil */
+    padding: 10px;
+}
+
+.perfil-btn-nav {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.perfil-btn-nav:hover {
+    transform: scale(1.1);
+    color: #28a745; /* Color verde para resaltar al pasar el mouse */
+}
+
+/* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
+.sidebar.collapsed {
+    width: var(--sidebar-width-collapsed); /* Mantenemos el ancho finito */
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+    align-items: center; /* Centramos los iconos */
+}
+
+/* Cuando el sidebar está colapsado, apilamos los botones del header verticalmente */
+.sidebar.collapsed .sidebar-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ESCONDEMOS EL TEXTO Y LAS FLECHAS */
+/* Buscamos cualquier texto dentro de los enlaces del sidebar colapsado */
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .nav-item .flecha,
+.sidebar.collapsed .submenu-lista {
+    display: none !important; /* Desaparecen sin dejar rastro */
+}
+
+/* CENTRADO DE ICONOS */
+.sidebar.collapsed .nav-item {
+    justify-content: center !important; /* El icono queda en el centro de la bolilla */
+    padding: 15px 0 !important;
+    width: 50px; /* Área de clic redonda/cuadrada perfecta */
+    margin: 5px auto !important; /* Centra el botón en la columna */
+    font-size: 1.5rem !important; /* Un pelín más grandes los iconos para que luzcan */
+    gap: 0 !important;
+}
+
+/* RECORTE DE SEGURIDAD */
+.sidebar.collapsed {
+    overflow: hidden; /* Evita que cualquier letra se escape por el costado */
+}
+
+.nav-item {
+    font-family: 'Quicksand', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration: none;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.nav-item.active {
+    background: rgba(255, 215, 0, 0.1);
+    color: #ffd700 !important;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.submenu-lista {
+    display: none; /* Empieza cerrado */
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.03);
+    margin-left: 15px; /* Sangría de árbol */
+    border-left: 1px solid rgba(255, 255, 255, 0.1); /* Línea guía visual */
+    
+}
+
+.submenu-lista a {
+    padding: 12px 20px 12px 55px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    border-radius: 12px;
+    margin: 2px 0;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.submenu-lista a:hover {
+    color: White;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.flecha {
+    float: right;
+    font-size: 0.7rem;
+    transition: 0.3s;
+}
+
+/* 1. CONTENEDOR PRINCIPAL: Flexible y sin recortes */
+.zona-derecha {
+    margin-left: var(--sidebar-width) !important;
+    width: calc(100% - var(--sidebar-width)) !important;
+    min-height: 100vh !important;
+    height: auto !important; 
+    padding: 40px;
+    padding-top: 110px; /* Espacio para que el contenido no nazca debajo del header fijo */
+    padding-bottom: 150px; 
+    display: block !important;
+    overflow: visible !important; 
+    box-sizing: border-box;
+    transition: margin-left 0.3s ease;
+}
+
+/* 2. ELEMENTOS DE INTERFAZ: Miden solo lo que necesitan */
+.menu-zona,
+.box-oficina,
+#vista-dinamica {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important; 
+    overflow: visible !important;
+    box-sizing: border-box !important;
+}
+
+/* 3. EL IFRAME: Altura grande para eliminar el scroll interno */
+#vista-dinamica iframe {
+    width: 100% !important;
+    height: 2000px !important; /* Altura de sobra para que entren todas las tarjetas */
+    border: none !important;
+    overflow: hidden !important; /* Bloquea la barrita de scroll dentro del cuadro */
+}
+.grid-altas { 
+    display: grid; 
+    /* Esto hace que se acomoden solas: si hay espacio, entran 3 o 4 */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 20px; 
+    width: 100%;
+}
+
+/* --- 6. ELEMENTOS DE INTERFAZ --- */
+.header-spacer {
+    height: 75px !important; /* Probá con 75px, que es casi lo mismo que tu header */
+    width: 100%;
+    display: block !important;
+}
+
+.toggle-btn {
+    background: none;
+    border: none;
+    color: #ffd700;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 15px;
+}
+
+.header-admin {
+    position: fixed;
+    top: 20px;
+    left: calc(var(--sidebar-width) + 20px);
+    height: 70px;
+    right: 20px; /* margen derecho visual */
+    z-index: 1500;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-sizing: border-box;
+    
+}
+
+/* Ajuste del Header colapsado */
+body.layout-collapsed .header-admin {
+    left: calc(var(--sidebar-width-collapsed) + 20px);
+}
+/* El brillo del header */
+.header-admin::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shineHeader 45s infinite;
+}
+
+/* --- 4. LOGO Y TIPOGRAFÍA --- */
+.logo { display: flex; flex-direction: row; align-items: center; gap: 12px; }
+
+.logo-img { height: 45px !important; width: auto !important; transition: transform 0.5s ease; }
+.logo-img:hover { transform: rotate(360deg); }
+
+.logo h1 {
+    font-family: 'Anton', sans-serif;
+    font-size: 1.4rem;
+    margin: 0;
+    background: linear-gradient(90deg, #ff0080, #7928ca, #2afadf, #ff0080);
+    background-size: 300% auto;
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: text-gradient-move 12s linear infinite;
+}
+
+.slogan {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1rem;
+    color: #ffffff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* --- 5. BOTONES DEL NAV (Con puntos agregados) --- */
+.header-admin nav ul {
+    list-style: none !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.header-admin nav ul li a, 
+.btn-cerrar-sesion {
+    display: inline-block !important;
+    padding: 8px 20px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 50px !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    font-family: 'Quicksand', sans-serif !important;
+}
+
+.header-admin nav ul li a:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #fff !important;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2) !important;
+}
+
+.btn-cerrar-sesion {
+    background: rgba(220, 53, 69, 0.1) !important;
+    color: #ff8a8a !important;
+    border: 1px solid rgba(220, 53, 69, 0.4) !important;
+}
+
+.btn-cerrar-sesion:hover {
+    background: #dc3545 !important;
+    color: white !important;
+    box-shadow: 0 0 15px rgba(220, 53, 69, 0.3) !important;
+}
+
+.contenedor-principal {
+    /* Si dice min-height: 100vh; BORRALO */
+    min-height: auto !important; 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Esto empuja todo hacia arriba */
+    padding-top: 0; 
+}
+
+.bienvenida-seccion {
+    margin: 0 !important;
+    padding: 0 !important; /* Eliminamos rellenos internos */
+    height: auto !important;
+    min-height: 0 !important; /* Evita que mantenga una altura mínima */
+    display: block !important;
+    text-align: center;
+}
+
+.bienvenida-seccion h2 {
+    /* La Anton es robusta y deportiva, ideal para LIFEPAR */
+    font-family: 'Anton', sans-serif !important; 
+    font-size: 2.8rem !important;
+    text-transform: uppercase; /* Mayúsculas para que imponga respeto */
+    letter-spacing: 2px;
+    background: linear-gradient(to bottom, #ffd700, #ffb800); /* Un degradado sutil para que no sea un blanco aburrido */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0px !important;
+    text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.7);
+    line-height: 1 !important;
+    margin: 0 !important;
+    padding-top: 10px !important; /* Solo un toque para que no choque con la cápsula */
+    line-height: 1.1 !important; /* Compacta el alto de la línea de texto */
+}
+
+.frase-fina {
+    font-family: 'Dancing Script', cursive !important;
+    font-size: 1.8rem !important;
+    text-transform: none !important; /* Cancela las mayúsculas del padre */
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+    background: none !important;
+    opacity: 1 !important;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8);
+    margin-left: 15px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Contenedor de vista dinámica más compacto */
+#vista-dinamica {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 50%;
+    max-width: 900px;   /* ancho reducido */
+    margin: 0 auto !important;
+    padding: 20px;      /* espacio interno */
+    box-sizing: border-box;
+}
+
+/* Iframe que se ajusta al ancho y crece suavemente con contenido */
+#vista-dinamica iframe {
+    width: 100% !important;
+    min-height: 800px;  /* altura inicial razonable */
+    height: auto !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+
+
+.menu-zona {
+    display: none;
+    background: rgba(26, 26, 26, 0.95) !important;
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 25px;
+    padding: 20px !important; 
+    width: 100%;
+    max-width: 100% !important; /* Ocupa el ancho del contenedor padre */
+    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    text-align: center;
+    animation: entradaSuave 0.5s ease;
+    opacity: 1 !important;
+    
+}
+
+.menu-zona h4 {
+    font-family: 'Anton', sans-serif !important;
+    font-size: 1.2rem;
+    color: #ffd700 !important;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.menu-zona ul {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.menu-zona li {
+    margin-bottom: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0px !important;
+    color: #fff !important;
+    font-weight: 500;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.menu-zona select,
+.menu-zona button,
+.menu-zona a {
+    width: 100% !important; /* Obligamos a que ocupen el ancho de la caja */
+    max-width: 250px !important; /* Límite razonable para que no sean gigantes */
+    padding: 12px 15px !important; /* Más altos para mejor click */
+    margin: 5px auto !important; /* Espaciado entre ellos */
+    border-radius: 50px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.5) !important;
+    color: #fff !important;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.9rem !important; /* Un poquito más legible */
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block; /* Asegura que respeten el ancho */
+}
+
+.menu-zona button:hover,
+.menu-zona a:hover {
+    background: #ffd700;
+    color: #000;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255,215,0,0.3);
+}
+
+.box-oficina {
+    display: none;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-radius: 20px !important;
+    padding: 15px !important;
+    margin: 10px auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        height: auto !important;
+}
+
+#seguros {
+    display: none; /* Esto lo hace desaparecer de entrada */
+}
+/* OCULTAR EL BLOQUE DE COPA FEDERAL AL INICIO */
+#copa-federal {
+    display: none; /* Desaparece por completo del flujo visual */
+}
+
+.footer-premium {
+    position: fixed;
+    bottom: 0;
+    left: var(--sidebar-width);
+    right: 0;
+    z-index: 300;
+    background: rgba(10,10,10,0.9);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+body.layout-collapsed .footer-premium {
+    left: var(--sidebar-width-collapsed);
+}
+
+.footer-premium p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-premium .brand {
+    font-family: 'Anton', sans-serif;
+    color: #ffd700;
+}
+
+.footer-contact {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-contact a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+.footer-contact a:hover {
+    color: #ffd700;
+    transform: translateY(-2px);
+}
+
+.modal-lifepar {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    background-color: rgba(0,0,0,0.9);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Este es el cuadradito que no estás viendo */
+.modal-content {
+    background: #000000 !important;
+    border: 2px solid #ffd700 !important;
+    padding: 25px;
+    border-radius: 20px;
+    max-height: 85vh;
+    }
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 3000; display: flex; align-items: center; justify-content: center;
+}
+.modal-ventana {
+    background: white; width: 90%; max-width: 450px; border-radius: 15px; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-family: 'Quicksand', sans-serif;
+}
+.modal-header { background: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.btn-cerrar-modal { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+.modal-body { padding: 20px; max-height: 80vh; overflow-y: auto; color: #000; }
+.campo-perfil { margin-bottom: 12px; }
+.campo-perfil label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #000; }
+.seccion-clubes label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #000; }
+.campo-perfil input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; color: #000; }
+.grid-zonas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; }
+.btn-guardar-perfil { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+
+/* --- 7. ANIMACIONES --- */
+@keyframes shineHeader { 100% { left: 125%; } }
+
+@keyframes movimientoFino {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Animación de entrada */
+@keyframes entradaSuave {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes text-gradient-move { 
+    0% { background-position: 0% center; } 
+    100% { background-position: 300% center; } 
+}
+/* --- AJUSTES PARA CELULARES --- */
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 45px; /* Escondemos el sidebar en móvil por defecto */
+    }
+
+    /* Estado inicial: solo iconos */
+    .sidebar {
+        width: 45px !important;
+        left: 0 !important;
+        overflow: hidden;
+        transition: width 0.3s ease; /* Animación de apertura */
+        padding: 80px 10px 20px 10px !important;
+        background: rgba(20, 5, 26, 0.95) !important; /* Un lila muy oscuro y traslúcido */
+        overflow-y: auto !important; /* Permite scroll vertical si las opciones exceden el alto */
+        overflow-x: hidden !important; /* Evita que se mueva hacia los costados */
+        backdrop-filter: blur(10px); /* Mantiene el efecto de vidrio de la web */
+    }
+
+    /* Cuando tocamos el sidebar, se expande */
+    .sidebar.mobile-expanded {
+        width: 240px !important;
+        z-index: 3000; /* Por encima de todo */
+        font-size: 0.8rem !important; /* Achicamos el texto de los botones principales */
+        padding: 80px 10px 20px 10px !important; /* Menos aire entre botones */
+        align-items: flex-start !important; /* Centrado a la izquierda para el texto */
+    }
+    .sidebar.mobile-expanded .submenu-lista {
+        display: none !important; /* Que sigan ocultos por defecto */
+        background: rgba(0, 0, 0, 0.2);
+        width: 100%;
+    }
+
+    /* Mostramos el texto SOLO cuando está expandido */
+    .sidebar.mobile-expanded .nav-item span,
+    .sidebar.mobile-expanded .flecha {
+        display: inline-block !important;
+    }
+    /* 3. Solo mostrar el submenú si el ítem padre está activo */
+    .sidebar.mobile-expanded .nav-item.active + .submenu-lista {
+        display: flex !important;
+        flex-direction: column;
+    }
+    /* 4. Centrado de los ítems con texto */
+    .sidebar.mobile-expanded .nav-item {
+        justify-content: flex-start !important;
+        gap: 15px !important;
+        width: 100% !important;
+        padding: 12px 15px !important;
+        font-size: 0.85rem !important;
+    }
+    .sidebar.mobile-expanded .submenu-lista a {
+    font-size: 0.75rem !important; /* Submenús aún más pequeños */
+    padding: 8px 10px 8px 40px !important; /* Ajustamos la sangría */
+    }
+    /* Ajuste de iconos para que no bailen */
+    .nav-item i, .nav-item span:first-child {
+        min-width: 25px;
+        text-align: center;
+    }
+    .sidebar::-webkit-scrollbar {
+    width: 0px; /* Esconde la barra pero permite scrollear con el dedo */
+    }
+    /* Ajuste para que los iconos no se muevan al expandir */
+    .nav-item {
+        justify-content: flex-start !important; /* Mueve el contenido al inicio (izquierda) */
+    padding-left: 5px !important;            /* Controlá acá qué tan pegado al borde lo querés */
+    width: 100% !important;                  /* Asegura que el ítem ocupe todo el ancho */
+    margin-left: 0 !important;               /* Elimina márgenes externos izquierdos */
+    }
+    .header-spacer {
+        height: 10px !important; 
+    }
+  /* Ajustamos la zona derecha para que empiece donde termina el sidebar */
+    .zona-derecha {
+        margin-left: var(--sidebar-width) !important;
+        width: calc(100% - var(--sidebar-width)) !important;
+        padding: 0px !important;
+        padding-top: 80px !important;
+    }
+
+    /* HEADER: Lo hacemos más compacto para que entre todo */
+    .header-admin {
+        left: calc(var(--sidebar-width) + 10px) !important;
+        right: 10px !important;
+        top: 10px !important;
+        height: 55px;
+        padding: 0 10px;
+    }
+    .slogan { display: none !important; } /* Chau slogan en móvil */
+    
+    .logo-img { height: 30px !important; }
+    
+    .logo h1 { font-size: 1rem !important; }
+    .header-admin nav ul {
+        gap: 5px !important; /* Pegamos más los botones */
+    }
+    .header-admin nav ul li a, 
+    .btn-cerrar-sesion {
+        padding: 6px 10px !important;
+        font-size: 0.65rem !important;
+    }
+    .logo-img {
+        height: 30px !important; /* Logo más pequeño */
+    }
+
+    /* El contenedor del iframe al 100% en móvil */
+    #vista-dinamica {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    /* El iframe debe ser capaz de crecer verticalmente */
+    #vista-dinamica iframe {
+        min-height: 1800px !important; /* Forzalo a ser largo para que la tabla aparezca */
+        min-height: 1800px !important; /* Altura suficiente para mostrar el botón de enviar */
+        width: 100% !important;
+    }
+
+    /* Footer ajustado */
+    .footer-premium {
+        left: 0 !important;
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+        padding: 10px;
+    }
+
+    /* Achicamos un poco el título de bienvenida */
+    .bienvenida-seccion h2 {
+        font-size: 1.8rem !important;
+    }
+    .toggle-btn {
+    padding-left: 5px !important;  /* Ajuste fino para alinearlo con los iconos */
+    margin-left: 0 !important;     /* Elimina cualquier espacio externo */
+    width: auto !important;        /* Para que no ocupe más espacio del necesario */
+    display: flex !important;
+    justify-content: flex-start !important;
+}
+}

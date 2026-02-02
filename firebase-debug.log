@@ -1,0 +1,64 @@
+[debug] [2026-02-02T18:15:03.939Z] ----------------------------------------------------------------------
+[debug] [2026-02-02T18:15:03.941Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Noxi-PC\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --project web-lifepar --import=./firebase-export-1769700982234p3tBS2
+[debug] [2026-02-02T18:15:03.942Z] CLI Version:   15.4.0
+[debug] [2026-02-02T18:15:03.942Z] Platform:      win32
+[debug] [2026-02-02T18:15:03.942Z] Node Version:  v24.13.0
+[debug] [2026-02-02T18:15:03.942Z] Time:          Mon Feb 02 2026 15:15:03 GMT-0300 (hora estándar de Argentina)
+[debug] [2026-02-02T18:15:03.942Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-02T18:15:04.823Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-02-02T18:15:04.823Z] > authorizing via signed-in user (ligalifepar@gmail.com)
+[debug] [2026-02-02T18:15:04.891Z] java version "25.0.2" 2026-01-20 LTS
+Java(TM) SE Runtime Environment (build 25.0.2+10-LTS-69)
+
+[debug] [2026-02-02T18:15:04.891Z] Java HotSpot(TM) 64-Bit Server VM (build 25.0.2+10-LTS-69, mixed mode, sharing)
+
+[debug] [2026-02-02T18:15:04.903Z] Parsed Java major version: 25
+[info] i  emulators: Starting emulators: auth, database {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, database"}}
+[debug] [2026-02-02T18:15:04.912Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-02T18:15:04.912Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-02T18:15:04.912Z] [database] Database Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-02T18:15:04.912Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"database":[{"address":"127.0.0.1","family":"IPv4","port":9000}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-02-02T18:15:04.916Z] Write emulator hub locator at C:\Users\Noxi-PC\AppData\Local\Temp\hub-web-lifepar.json
+[debug] [2026-02-02T18:15:04.922Z] Checked if tokens are valid: false, expires at: 1770054281695
+[debug] [2026-02-02T18:15:04.922Z] Checked if tokens are valid: false, expires at: 1770054281695
+[debug] [2026-02-02T18:15:04.922Z] > refreshing access token with scopes: []
+[debug] [2026-02-02T18:15:04.923Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-02-02T18:15:04.924Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-02T18:15:05.152Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-02-02T18:15:05.153Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-02-02T18:15:05.158Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/web-lifepar [none]
+[debug] [2026-02-02T18:15:05.925Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/web-lifepar 200
+[debug] [2026-02-02T18:15:05.925Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/web-lifepar {"projectId":"web-lifepar","projectNumber":"140850288146","displayName":"WEB LIFEPAR","name":"projects/web-lifepar","resources":{"hostingSite":"web-lifepar","realtimeDatabaseInstance":"web-lifepar-default-rtdb"},"state":"ACTIVE","etag":"1_ae760adc-affa-4b43-81fa-910867f066d4"}
+[debug] [2026-02-02T18:15:05.925Z] database rules config:  [{"instance":"web-lifepar-default-rtdb","rules":"C:\\Users\\Noxi-PC\\Desktop\\WEB\\database.rules.json"}]
+[debug] [2026-02-02T18:15:05.928Z] Ignoring unsupported arg: projectId {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: projectId"}}
+[debug] [2026-02-02T18:15:05.928Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-02-02T18:15:05.928Z] Ignoring unsupported arg: rules {"metadata":{"emulator":{"name":"database"},"message":"Ignoring unsupported arg: rules"}}
+[debug] [2026-02-02T18:15:05.928Z] Starting Database Emulator with command {"binary":"java","args":["-Duser.language=en","-jar","C:\\Users\\Noxi-PC\\.cache\\firebase\\emulators\\firebase-database-emulator-v4.11.2.jar","--host","127.0.0.1","--port",9000,"--single_project_mode","Warning"],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host","single_project_mode"],"joinArgs":false,"shell":false,"port":9000} {"metadata":{"emulator":{"name":"database"},"message":"Starting Database Emulator with command {\"binary\":\"java\",\"args\":[\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Noxi-PC\\\\.cache\\\\firebase\\\\emulators\\\\firebase-database-emulator-v4.11.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",9000,\"--single_project_mode\",\"Warning\"],\"optionalArgs\":[\"port\",\"host\",\"functions_emulator_port\",\"functions_emulator_host\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":9000}"}}
+[info] i  database: Database Emulator logging to database-debug.log {"metadata":{"emulator":{"name":"database"},"message":"Database Emulator logging to \u001b[1mdatabase-debug.log\u001b[22m"}}
+[info] i  database: Importing data from C:\Users\Noxi-PC\Desktop\WEB\firebase-export-1769700982234p3tBS2\database_export\web-lifepar-default-rtdb.json {"metadata":{"emulator":{"name":"database"},"message":"Importing data from C:\\Users\\Noxi-PC\\Desktop\\WEB\\firebase-export-1769700982234p3tBS2\\database_export\\web-lifepar-default-rtdb.json"}}
+[info] i  auth: Importing config from C:\Users\Noxi-PC\Desktop\WEB\firebase-export-1769700982234p3tBS2\auth_export\config.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing config from C:\\Users\\Noxi-PC\\Desktop\\WEB\\firebase-export-1769700982234p3tBS2\\auth_export\\config.json"}}
+[info] i  auth: Importing accounts from C:\Users\Noxi-PC\Desktop\WEB\firebase-export-1769700982234p3tBS2\auth_export\accounts.json {"metadata":{"emulator":{"name":"auth"},"message":"Importing accounts from C:\\Users\\Noxi-PC\\Desktop\\WEB\\firebase-export-1769700982234p3tBS2\\auth_export\\accounts.json"}}
+[debug] [2026-02-02T18:15:12.361Z] >>> [apiv2][query] PUT http://127.0.0.1:9000/.settings/rules.json ns=web-lifepar-default-rtdb
+[debug] [2026-02-02T18:15:12.362Z] >>> [apiv2][body] PUT http://127.0.0.1:9000/.settings/rules.json "{\r\n  \"rules\": {\r\n    \".read\": true,\r\n    \".write\": true\r\n  }\r\n}"
+[debug] [2026-02-02T18:15:12.404Z] <<< [apiv2][status] PUT http://127.0.0.1:9000/.settings/rules.json 200
+[debug] [2026-02-02T18:15:12.404Z] <<< [apiv2][body] PUT http://127.0.0.1:9000/.settings/rules.json {"status":"ok"}
+[debug] [2026-02-02T18:15:12.407Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI            │
+├────────────────┼────────────────┼────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth     │
+├────────────────┼────────────────┼────────────────────────────────┤
+│ Database       │ 127.0.0.1:9000 │ http://127.0.0.1:4000/database │
+└────────────────┴────────────────┴────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

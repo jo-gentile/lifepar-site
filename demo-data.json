@@ -1,0 +1,509 @@
+{
+  "CLUBES": {
+    "jose@test_com": {
+      "AZUL": {
+        "estado": "pendiente",
+        "fecha": "19/1/2026",
+        "nombre": "AZUL"
+      },
+      "CLUB ESPAÑOL": true,
+      "LIFEPAR": {
+        "estado": "pendiente",
+        "fecha": "19/1/2026",
+        "nombre": "LIFEPAR"
+      },
+      "RIVER": {
+        "estado": "pendiente",
+        "fecha": "19/1/2026",
+        "nombre": "RIVER"
+      }
+    },
+    "patinfecab@gmail_com": {
+      "FEDERACION CABALLITO": true
+    }
+  },
+  "INSCRIPCIONES_CLINICAS": {
+    "clinica-test": {
+      "FEDERACION CABALLITO": {
+        "club": "FEDERACION CABALLITO",
+        "fecha_registro": "2026-01-26T19:12:47.261Z",
+        "id_clinica": "clinica-test",
+        "lista": [
+          {
+            "categoria": "4C",
+            "edad": "14",
+            "nombre": "NEILA GUADALUPE DALTO"
+          },
+          {
+            "categoria": "3C",
+            "edad": "13",
+            "nombre": "NATHALIA CARAT"
+          }
+        ]
+      }
+    },
+    "feb-1-3": {
+      "AZUL": {
+        "club": "AZUL",
+        "fecha_registro": "2026-01-29T17:54:19.001Z",
+        "id_clinica": "feb-1-3",
+        "lista": [
+          {
+            "categoria": "JDBDBZJ",
+            "edad": "3",
+            "nombre": "WHDJDUD"
+          },
+          {
+            "categoria": "JDJDJD",
+            "edad": "2",
+            "nombre": "HZJZJDJD"
+          }
+        ]
+      }
+    },
+    "feb-2-4": {
+      "LIFEPAR": {
+        "club": "LIFEPAR",
+        "fecha_registro": "2026-01-25T00:41:31.331Z",
+        "id_clinica": "feb-2-4",
+        "lista": [
+          {
+            "categoria": "WEGFVWE",
+            "edad": "5",
+            "nombre": "EWRFGEWRFG"
+          }
+        ]
+      }
+    },
+    "feb-5-6": {
+      "CLUB ESPAÑOL": {
+        "club": "CLUB ESPAÑOL",
+        "fecha_registro": "2026-02-01T16:28:39.328Z",
+        "id_clinica": "feb-5-6",
+        "lista": [
+          {
+            "categoria": "DNH",
+            "edad": "5",
+            "nombre": "DNJH"
+          }
+        ]
+      }
+    }
+  },
+  "ZONAS": {
+    "ZONA_1": {
+      "-OjMc6jMtERxGnalv0Cq": {
+        "DNI": "232568495",
+        "apellido": "MARTINEZ",
+        "asisteF2": true,
+        "asisteF3": true,
+        "asisteF4": true,
+        "categoria": "Avanzado",
+        "club": "RIVER",
+        "disciplina": "DANZA",
+        "divisional": "Gonzalez Molina",
+        "edadDeportiva": "22 AÑOS",
+        "fecha_de_nacimiento": "2004-05-02",
+        "fecha_registro": "2026-01-19T18:59:37.532Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "SUSANA",
+        "seguroAnual": true,
+        "seguroF2": true
+      }
+    },
+    "ZONA_2": {
+      "-OjrJ6wPb3Swm5OfuCAM": {
+        "DNI": "3156456",
+        "apellido": "TGETRGRT",
+        "categoria": "Incentivación",
+        "club": "RIVER",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "11 AÑOS",
+        "fecha_de_nacimiento": "2016-01-01",
+        "fecha_registro": "2026-01-25T22:40:06.666Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "WETGHRWERH"
+      }
+    },
+    "ZONA_4": {
+      "-OkQoWIha-sgSkTVXJ8C": {
+        "DNI": "356546",
+        "apellido": "DJNHJC",
+        "categoria": "Juvenil/Youth",
+        "club": "LIFEPAR",
+        "disciplina": "PAREJAS MIXTA",
+        "divisional": "Sub A",
+        "edadDeportiva": "26 AÑOS",
+        "fecha_de_nacimiento": "2001-01-01",
+        "fecha_registro": "2026-02-02T00:47:58.644Z",
+        "genero": "NO BINARIO",
+        "mailProfe": "jose@test.com",
+        "nombre": "DNJXHJ"
+      }
+    },
+    "ZONA_5": {
+      "-OjMhs4lfVLjlbTt1Kx4": {
+        "DNI": "2356241",
+        "F2": true,
+        "apellido": "MARIO",
+        "asisteF2": true,
+        "asisteF3": true,
+        "asisteF4": false,
+        "categoria": "3°",
+        "club": "LIFEPAR",
+        "disciplina": "LIBRE",
+        "divisional": "C",
+        "edadDeportiva": "23 AÑOS",
+        "fecha_de_nacimiento": "2003-05-05",
+        "fecha_registro": "2026-01-19T19:24:46.330Z",
+        "genero": "MASCULINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "MASACHUSET",
+        "seguroAnual": true,
+        "seguroF2": true
+      },
+      "-OjRPooPWTJjS25zBOdR": {
+        "DNI": "125433586",
+        "F2": true,
+        "apellido": "MARCON GARCIA",
+        "asisteF2": true,
+        "asisteF3": true,
+        "asisteF4": true,
+        "categoria": "Futuros Talentos",
+        "club": "AZUL",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "16 AÑOS",
+        "fecha_de_nacimiento": "2010-06-06",
+        "fecha_registro": "2026-01-20T17:19:38.420Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "CAROLINA ELIZABETH",
+        "seguroAnual": true,
+        "seguroF2": true
+      },
+      "-OjSSW1kC9Qfm0Rxng8C": {
+        "DNI": "45123658",
+        "F2": true,
+        "F4": true,
+        "apellido": "PEREZ",
+        "asisteF2": true,
+        "asisteF3": true,
+        "categoria": "Futuros Talentos",
+        "club": "AZUL",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "25 AÑOS",
+        "fecha_de_nacimiento": "2001-05-05",
+        "fecha_registro": "2026-01-20T22:11:00.954Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "BEATRIZ",
+        "seguroAnual": true,
+        "seguroF2": true
+      },
+      "-OjSScvic-s40Ig0VSJg": {
+        "DNI": "45821369",
+        "F2": true,
+        "apellido": "GARCIA",
+        "asisteF2": true,
+        "asisteF3": true,
+        "asisteF4": true,
+        "categoria": "Avanzado",
+        "club": "LIFEPAR",
+        "disciplina": "DANZA",
+        "divisional": "Gonzalez Molina",
+        "edadDeportiva": "21 AÑOS",
+        "fecha_de_nacimiento": "2006-01-01",
+        "fecha_registro": "2026-01-20T22:11:33.273Z",
+        "genero": "FEMENINO",
+        "linkDNI": "https://firebasestorage.googleapis.com/v0/b/web-lifepar.firebasestorage.app/o/documentacion%2FDNI_45821369_DANIELA%20ELIZABETH%20ROMINA.jpg?alt=media&token=cc699f97-75b7-4cda-8b05-97e5ef0955fe",
+        "linkMedico": "https://firebasestorage.googleapis.com/v0/b/web-lifepar.firebasestorage.app/o/documentacion%2FMEDICO_45821369_DANIELA%20ELIZABETH%20ROMINA.pdf?alt=media&token=17568ec1-d9c6-483f-b46b-3f2abbe4d491",
+        "mailProfe": "jose@test.com",
+        "nombre": "DANIELA ELIZABETH ROMINA",
+        "seguroAnual": true,
+        "ultima_edicion": "2026-01-26T19:54:11.039Z"
+      },
+      "-OjSVFrT0ur1xWsr2OTk": {
+        "DNI": "454512213",
+        "F2": true,
+        "F3": true,
+        "apellido": "LOPEZ",
+        "asisteF2": true,
+        "asisteF3": true,
+        "asisteF4": true,
+        "categoria": "Futuros Talentos",
+        "club": "LIFEPAR",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "26 AÑOS",
+        "fecha_de_nacimiento": "2001-01-01",
+        "fecha_registro": "2026-01-20T22:23:01.151Z",
+        "genero": "masculina",
+        "mailProfe": "jose@test.com",
+        "nombre": "CAROLINA MARTINA",
+        "seguroAnual": false,
+        "seguroF2": true
+      },
+      "-OjTUNZMyrttC4DxxWb6": {
+        "DNI": "23654156",
+        "F2": true,
+        "apellido": "LOPEZ",
+        "asisteF3": true,
+        "categoria": "Avanzado",
+        "club": "AZUL",
+        "disciplina": "DANZA",
+        "divisional": "Gonzalez Molina",
+        "edadDeportiva": "19 AÑOS",
+        "fecha_de_nacimiento": "2007-02-02",
+        "fecha_registro": "2026-01-21T02:58:47.750Z",
+        "genero": "NO BINARIO",
+        "mailProfe": "jose@test.com",
+        "nombre": "GONZALO",
+        "seguroAnual": false,
+        "seguroF2": true,
+        "seguroSD1": true,
+        "seguroSD3": true,
+        "ultima_edicion": "2026-01-26T20:07:26.821Z"
+      },
+      "-OjWbtyFxdNoR9y4ay-s": {
+        "DNI": "125433586",
+        "F2": true,
+        "apellido": "MARCON GARCIA",
+        "categoria": "Escuela Formativa",
+        "club": "RIVER",
+        "disciplina": "LIBRE",
+        "divisional": "C",
+        "edadDeportiva": "",
+        "fecha_de_nacimiento": "",
+        "fecha_registro": "2026-01-21T17:34:53.316Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "CAROLINA ELIZABETH",
+        "seguroAnual": false,
+        "seguroF2": true,
+        "ultima_edicion": "2026-01-26T19:38:52.197Z"
+      },
+      "-OjWe0II2VUwKQUrUwJj": {
+        "DNI": "125433586",
+        "F2": true,
+        "F4": true,
+        "apellido": "MARCON GARCIA",
+        "categoria": "Futuros Talentos",
+        "club": "LIFEPAR",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "17 AÑOS",
+        "fecha_de_nacimiento": "2009-12-10",
+        "fecha_registro": "2026-01-21T17:44:07.613Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "CAROLINA ELIZABETH",
+        "seguroAnual": false,
+        "seguroF2": true,
+        "seguroSD1": true,
+        "seguroSD2": true,
+        "seguroSD3": true,
+        "seguroSD4": true,
+        "ultima_edicion": "2026-01-27T16:39:40.831Z"
+      },
+      "-OjWkW-HIvq2nxeJBZEo": {
+        "DNI": "45821369",
+        "F2": true,
+        "apellido": "GARCIA",
+        "categoria": "Avanzado",
+        "club": "RIVER",
+        "disciplina": "DANZA",
+        "divisional": "Gonzalez Molina",
+        "edadDeportiva": "",
+        "fecha_de_nacimiento": "",
+        "fecha_registro": "2026-01-21T18:12:30.478Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "DANIELA ELIZABETH ROMINA",
+        "seguroAnual": true,
+        "seguroF2": true
+      },
+      "-OjrFHAQ6F_h6I2c8BU9": {
+        "DNI": "56347367",
+        "F2": true,
+        "F3": true,
+        "F4": true,
+        "apellido": "VXDFGDS",
+        "categoria": "2°",
+        "club": "LIFEPAR",
+        "disciplina": "LIBRE",
+        "divisional": "B",
+        "edadDeportiva": "21 AÑOS",
+        "fecha_de_nacimiento": "2005-05-05",
+        "fecha_registro": "2026-01-25T22:23:19.886Z",
+        "mailProfe": "jose@test.com",
+        "nombre": "GBSXFGBX",
+        "seguroAnual": true,
+        "seguroF2": true
+      },
+      "-Ojvmg0ok3UEzavsZPaJ": {
+        "DNI": "125433586",
+        "F2": true,
+        "apellido": "MARCON GARCIA",
+        "categoria": "Escuela Formativa",
+        "club": "AZUL",
+        "disciplina": "LIBRE",
+        "divisional": "C",
+        "edadDeportiva": "",
+        "fecha_de_nacimiento": "",
+        "fecha_registro": "2026-01-26T19:32:07.547Z",
+        "genero": "FEMENINO",
+        "mailProfe": "jose@test.com",
+        "nombre": "CAROLINA ELIZABETH"
+      }
+    },
+    "ZONA_6": {
+      "-OjqbgWnjeDlOVdtvHuT": {
+        "DNI": "12345612",
+        "F2": true,
+        "F3": true,
+        "F4": true,
+        "apellido": "V<FVFV",
+        "categoria": "Futuros Talentos",
+        "club": "CLUB ESPAÑOL",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "23 AÑOS",
+        "fecha_de_nacimiento": "2003-02-02",
+        "fecha_registro": "2026-01-25T19:25:59.634Z",
+        "genero": "",
+        "mailProfe": "jose@test.com",
+        "nombre": "<SVGG<V",
+        "ultima_edicion": "2026-01-26T19:39:14.802Z"
+      },
+      "-OjrAS_V560Q4B87ImZh": {
+        "DNI": "56554",
+        "F2": true,
+        "F4": true,
+        "apellido": "PEREZ GARCIA",
+        "categoria": "Futuros Talentos",
+        "club": "LIFEPAR",
+        "disciplina": "LIBRE",
+        "divisional": "D",
+        "edadDeportiva": "24 AÑOS",
+        "fecha_de_nacimiento": "2002-02-02",
+        "fecha_registro": "2026-01-25T22:02:15.911Z",
+        "mailProfe": "jose@test.com",
+        "nombre": "WTGWE",
+        "seguroAnual": true,
+        "seguroF2": true
+      }
+    }
+  },
+  "listaBlanca": {
+    "abrilgumides2025@gmail_com": true,
+    "agustina_romano@hotmail_com": true,
+    "ana_laura_segura_as@gmail_com": true,
+    "analiabm1809@gmail_com": true,
+    "anturinaldi@gmail_com": true,
+    "armentanoflorencia1@gmail_com": true,
+    "barbaravinnichuk@gmail_com": true,
+    "camibrinv@gmail_com": true,
+    "carinalujanruiz@gmail_com": true,
+    "carolinasarubo@gmail_com": true,
+    "cattolicojulieta@gmail_com": true,
+    "ceciliaroxanamedina15@gmail_com": true,
+    "claudiaespaez@gmail_com": true,
+    "cmperezfoche@gmail_com": true,
+    "daniela_chiaramoni847@gmail_com": {
+      "huellaID": "AT3-XSc55cu54_Sg650tn0lWyD4wsUGaEUZpudjrPGF1f50Tjp_NvGA9pRhH345AqU6WzexFZecV77pGDQAsrLI"
+    },
+    "danielagcastilla@gmail_com": true,
+    "delfinanerea80@gmail_com": true,
+    "diameraposo@gmail_com": true,
+    "drapatriciapila@hotmail_com": true,
+    "emilianafrancioli@hotmail_com": true,
+    "epamhlanus657@gmail_com": true,
+    "escueladepatinelparque@gmail_com": true,
+    "evascaringgi27@gmail_com": true,
+    "ferreyraluli@hotmail_com": true,
+    "flapy87@gmail_com": true,
+    "fpereyra10@gmail_com": true,
+    "geragelsi01@gmail_com": true,
+    "gestionesfleitas@gmail_com": true,
+    "giglifabio0@gmail_com": true,
+    "gisellecorrarellol@gmail_com": true,
+    "gonza05lopez@gmail_com": true,
+    "grossigisela@gmail_com": true,
+    "guadalupppe@gmail_com": true,
+    "gustavobarriolindo@gmail_com": true,
+    "iaralettieri437@gmail_com": true,
+    "indianamoggi@gmail_com": true,
+    "jose@test_com": {
+      "huellaActiva": true,
+      "huellaID": "ATKjWq856owppgVCP8dhn9HGNlMRD1rCFIbPhsiYgsynE3hUpZjdqmRubk47jbvE3P5wIkpdIAbB8fr0bho-dNI"
+    },
+    "kesca77@gmail_com": true,
+    "lagranamelanie17@gmail_com": true,
+    "laubarroso79@gmail_com": true,
+    "laubarroso@hotmail_com": true,
+    "lauracemolinari@gmail_com": true,
+    "lauralorenalion@gmail_com": true,
+    "leonardmv1981@gmail_com": true,
+    "leosanchezz102@gmail_com": true,
+    "lfd_skating_queens@gmail_com": true,
+    "lihuguido@gmail_com": true,
+    "lorena_gisela90@gmail_com": true,
+    "lorenavreynoso08@gmail_com": true,
+    "lualejerezfaj@gmail_com": true,
+    "luanacannizzo01@gmail_com": true,
+    "luciab_9814@hotmail_com": true,
+    "lucianaayelen16@gmail_com": true,
+    "mailenburgos9@gmail_com": true,
+    "maisanchez_-@outlook_com": true,
+    "mallon_andrea00@gmail_com": true,
+    "marce-molinari@hotmail_com": true,
+    "maru_zerbi@hotmail_com": true,
+    "mati04_76@hotmail_com": true,
+    "matias_deminicis90@gmail_com": true,
+    "matrecarifs@gamil_com": true,
+    "matt_demii@gmail_com": true,
+    "melanypatin2@gmail_com": true,
+    "melina_basile@hotmail_com": true,
+    "milimai_parra@hotmail_com": true,
+    "miscincoamores78@gmail_com": true,
+    "moira_202@hotmail_com": true,
+    "monge-geraldine@hotmail_com": true,
+    "nacove87@hotmail_com": true,
+    "natymarieta@gmail_com": true,
+    "normabatista2015@hotmail_com": true,
+    "nppolosamo@gmail_com": true,
+    "olilarubia6@hotmail_com": true,
+    "olimabelendaniela@gmail_com": true,
+    "palomamarlogo@gmail_com": true,
+    "paolabonaudo@hotmail_com": true,
+    "paolamontenegro640@gmail_com": true,
+    "paredesnahir218@gmail_com": true,
+    "patin_marinagenco@gmail_com": true,
+    "patinartisticocultural@gmail_com": true,
+    "patinfecab@gmail_com": true,
+    "patinyatir@gmail_com": true,
+    "pauladondi2026@gmail_com": true,
+    "realenatalia362@gmail_com": true,
+    "repe11olucas@gmail_com": true,
+    "ritaforneri26@hotmail_com": true,
+    "rociom470@gmail_com": true,
+    "rosellmeri@gmail_com": true,
+    "sabri_gal_1515@gmail_com": true,
+    "sabripatin3115@gmail_com": true,
+    "sanchezmai90@gmail_com": true,
+    "scutosantiago@gmail_com": true,
+    "thiagoguido47@gmail_com": true,
+    "ulisesgaspargallardo@hotmail_com": true,
+    "unionskate2025@gmail_com": true,
+    "uniquepatinaje@gmail_com": true,
+    "valeriacampione78@gmail_com": true,
+    "victoriagilalescio@gmail_com": true,
+    "yami_martinezyamila@gmail_com": true,
+    "zerbimariaeugenia@gmail_com": true
+  }
+}
