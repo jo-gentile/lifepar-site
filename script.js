@@ -20,6 +20,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 const storage = getStorage(app);
+const provider = new GoogleAuthProvider();
 
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     connectAuthEmulator(auth, "http://127.0.0.1:9099");
