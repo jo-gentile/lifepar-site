@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - LIFEPAR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Quicksand', sans-serif; background: #f4f4f4; padding: 20px; }
+        .perfil-container { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 500px; margin: auto; }
+        h2 { color: #333; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .campo { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
+        .zona-multiple { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; background: #fafafa; padding: 10px; border-radius: 6px; }
+        .btn-guardar { background: #28a745; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .lista-clubes { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .club-item { display: flex; justify-content: space-between; align-items: center; background: #eee; padding: 8px; margin-bottom: 5px; border-radius: 4px; }
+        .btn-eliminar { background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="perfil-container">
+    <h2>Mi Perfil</h2>
+    
+    <div class="campo">
+        <label>Nombre y Apellido (Firebase)</label>
+        <input type="text" id="p-nombre" placeholder="Cargando desde mail..." readonly>
+    </div>
+
+    <div class="campo">
+        <label>Email Principal</label>
+        <input type="email" id="p-email" readonly>
+    </div>
+
+    <div class="campo">
+        <label>Email Secundario</label>
+        <input type="email" id="p-email-sec" placeholder="ejemplo@correo.com">
+    </div>
+
+    <div class="campo">
+        <label>WhatsApp (Formato: 54911...)</label>
+        <input type="tel" id="p-whatsapp" pattern="[0-9]{10,15}" placeholder="5491112345678" required>
+    </div>
+
+    <div class="campo">
+        <label>Fecha de Cumpleaños</label>
+        <input type="date" id="p-cumple">
+    </div>
+
+    <div class="campo">
+        <label>Mis Zonas (Selección Múltiple)</label>
+        <div class="zona-multiple">
+            <label><input type="checkbox" name="zonas" value="1"> Zona 1</label>
+            <label><input type="checkbox" name="zonas" value="2"> Zona 2</label>
+            <label><input type="checkbox" name="zonas" value="3"> Zona 3</label>
+            <label><input type="checkbox" name="zonas" value="4"> Zona 4</label>
+            <label><input type="checkbox" name="zonas" value="5"> Zona 5</label>
+            <label><input type="checkbox" name="zonas" value="6"> Zona 6</label>
+        </div>
+    </div>
+
+    <div class="lista-clubes">
+        <label>Clubes Vinculados</label>
+        <div id="contenedor-clubes">
+            <div class="club-item">
+                <span>Club Atlético Patín</span>
+                <div>
+                    <button class="btn-eliminar" onclick="this.parentElement.parentElement.remove()">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-guardar" onclick="guardarPerfil()">GUARDAR CAMBIOS</button>
+</div>
+
+<script>
+    function guardarPerfil() {
+        // Aquí irá la lógica de Firebase más adelante
+        const wa = document.getElementById('p-whatsapp').value;
+        if(wa.length < 10) {
+            alert("Por favor, ingresa un WhatsApp válido");
+            return;
+        }
+        alert("Datos validados localmente. Listo para conectar con la base de datos.");
+    }
+</script>
+
+</body>
+</html>
