@@ -288,9 +288,15 @@ window.mostrarListadoAltas = async (numZona) => {
         }
 
         let patinadores = [];
+        // Chequeo si soy Admin global
+        const soyAdmin = window.parent.isAdmin; 
+
         snapshot.forEach(h => {
             const p = h.val();
-            if(p.mailProfe === mailProfe || mailProfe === 'test@test.com') patinadores.push({id: h.key, ...p});
+            // SI SOY ADMIN, VEO TODO. SI NO, SOLO MIS PANTINADORES
+            if(soyAdmin || p.mailProfe === mailProfe || mailProfe === 'test@test.com') {
+                patinadores.push({id: h.key, ...p});
+            }
         });
         patinadores.sort((a,b) => a.apellido.localeCompare(b.apellido));
 
@@ -308,7 +314,7 @@ window.mostrarListadoAltas = async (numZona) => {
         </style>
         <div class="modal-altas-cuerpo">
             <div class="btn-x-cerrar" onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'">✕</div>
-            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin:0;">PADRÓN ZONA ${numZona}</h3>
+            <h3 style="color:gold; text-align:center; font-family:'Anton'; margin:0;">PADRÓN ZONA ${numZona} ${soyAdmin ? '(VISTA ADMIN)' : ''}</h3>
             
             <input type="text" id="busqueda-patinador" class="input-busqueda" placeholder="🔍 Buscar por Apellido, Nombre o Club..." onkeyup="window.filtrarPadron()">
 
@@ -317,12 +323,13 @@ window.mostrarListadoAltas = async (numZona) => {
         patinadores.forEach(p => {
             const tieneAnual = p.seguroAnual === true;
             html += `
-                <div class="card-alta">
+                <div class="card-alta" style="${soyAdmin ? 'border-color: #ff4444;' : ''}">
                     <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer; font-size:1.2rem;">📝</button>
                     <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
                     <div class="datos-p">
                         ${p.club}<br>
                         ${p.categoria} — <span style="color:gold;">${p.edadDeportiva}</span>
+                        ${soyAdmin ? `<br><span style='color:#ff8888; font-size:0.65rem;'>Profe: ${p.mailProfe}</span>` : ''}
                     </div>
                     
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:5px;">SEGUROS</div>
@@ -479,6 +486,26 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
         const p = snapshot.val();
 
         if (p) {
+            // Guardamos el creador original temporalmente
+            window.editingPatinadorMailProfe = p.mailProfe;
+
+            // Manejo especial CLUB: Si soy admin y el club del patinador no está en mi lista, lo agrego visualmente
+            const selectClub = document.getElementById(`z${numZona}-club`);
+            if (p.club && selectClub) {
+               // Verificar si existe la opción
+               let existe = false;
+               for (let i = 0; i < selectClub.options.length; i++) {
+                   if (selectClub.options[i].value === p.club) existe = true;
+               }
+               // Si no existe, la creamos al vuelo
+               if (!existe) {
+                   const opt = document.createElement('option');
+                   opt.value = p.club;
+                   opt.innerText = p.club;
+                   selectClub.appendChild(opt);
+               }
+            }
+
             // Llenado de campos... (mantené lo que ya tenías)
             document.getElementById(`z${numZona}-club`).value = p.club || "";
             document.getElementById(`z${numZona}-disciplina`).value = p.disciplina || "";
@@ -503,18 +530,24 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
             if (!btnAct) {
                 btnAct = document.createElement('button');
                 btnAct.id = 'btn-actualizar-dinamico';
-                btnAct.style = "width:100%; margin-top:10px; background:#28a745; color:white; font-weight:bold; padding:10px; border:none; border-radius:6px; cursor:pointer;";
-                // Insertamos el botón verde debajo de la edad
-                const contenedor = document.querySelector('#contenedor-formulario-dinamico > div');
-                contenedor.appendChild(btnAct);
-            }
-            
-            btnAct.innerText = "💾 ACTUALIZAR DATOS";
-            btnAct.style.display = 'block'; // Aseguramos que se vea
-            btnAct.onclick = () => window.actualizarPatinador(numZona, idPatinador);
+    // Si soy admin, respeto el mailProfe original si existe
+    let finalMailProfe = userEmail;
+    if (window.parent.isAdmin && window.editingPatinadorMailProfe) {
+        finalMailProfe = window.editingPatinadorMailProfe;
+    }
 
-            document.getElementById('contenedor-formulario-dinamico').scrollIntoView({ behavior: 'smooth' });
-        }
+    const datosModificados = {
+        club: document.getElementById(`z${numZona}-club`).value,
+        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
+        divisional: document.getElementById(`z${numZona}-divisional`).value,
+        categoria: document.getElementById(`z${numZona}-categoria`).value,
+        genero: document.getElementById(`z${numZona}-genero`).value,
+        apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
+        nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
+        DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
+        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
+        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
+        mailProfe: finalMailProfe
     } catch (e) { console.error(e); }
 };
 

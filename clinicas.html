@@ -57,9 +57,18 @@
       border-collapse: collapse;
       margin-top: 15px;
       background: #222;
-      display: block;
-  overflow-x: auto;
-  white-space: nowrap;
+      /* Por defecto: ESTILO ESCRITORIO */
+      display: table;
+      white-space: normal;
+    }
+
+    /* SOLO PARA MÓVILES: Comportamiento de scroll horizontal */
+    @media (max-width: 768px) {
+        table {
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
     }
 
     thead { background: #333; color: gold; }

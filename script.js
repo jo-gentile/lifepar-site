@@ -1,14 +1,15 @@
 // 1. IMPORTACIÓN DE MÓDULOS
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, sendPasswordResetEmail, signOut, connectAuthEmulator } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { getDatabase, ref, get, child, update, } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { getDatabase, ref, get, child, update, connectDatabaseEmulator } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL, connectStorageEmulator } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 
 // 2. CONFIGURACIÓN DE FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyDOwn0QlyqdU3fDBEsPFuvPMzs4ylqMuQ8",
     authDomain: "web-lifepar.firebaseapp.com",
+    databaseURL: "https://web-lifepar-default-rtdb.firebaseio.com",
     projectId: "web-lifepar",
     storageBucket: "web-lifepar.firebasestorage.app",
     messagingSenderId: "140850288146",
@@ -17,13 +18,15 @@ const firebaseConfig = {
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-    connectAuthEmulator(auth, "http://127.0.0.1:9099");
-    console.log("Conectado al emulador local de Lifepar");
-}
-const provider = new GoogleAuthProvider();
 const db = getDatabase(app);
 const storage = getStorage(app);
+
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    connectAuthEmulator(auth, "http://127.0.0.1:9099");
+    connectDatabaseEmulator(db, "127.0.0.1", 9000);
+    // connectStorageEmulator(storage, "127.0.0.1", 9199); // Descomentar si usas Storage Emulator
+    console.log("Conectado al emulador local de Lifepar (Auth y DB)");
+}
 const URL_SHEET = "https://script.google.com/macros/s/AKfycbwoefOQGZ4rIlNj_XOG9UPSt7pvn1u4apuPmDUYMYepYZ5jx8pEwSyykoo7TYn9pRgWBg/exec";
 
 // 3. FUNCIONES DE INTERFAZ (DOM)

@@ -18,11 +18,33 @@ const auth = firebase.auth();
 const db = firebase.database();
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     auth.useEmulator("http://127.0.0.1:9099");
-    console.log("Conectado al emulador local de Lifepar");
+    db.useEmulator("127.0.0.1", 9000);
+    console.log("Conectado al emulador local de Lifepar (Auth y DB)");
 }
+
+// === PUENTE PARA IFRAMES (VITAL PARA COMUNICACIÓN HIJO->PADRE) ===
+window.puenteFirebase = function(accion, ruta, datos) {
+    // console.log(`[PUENTE] ${accion.toUpperCase()} -> ${ruta}`, datos); // Logger opcional
+    const referencia = db.ref(ruta);
+
+    if (accion === 'get') {
+        return referencia.once('value');
+    } else if (accion === 'update') {
+        return referencia.update(datos);
+    } else if (accion === 'set') {
+        return referencia.set(datos);
+    } else if (accion === 'push') {
+        return referencia.push(datos);
+    } else if (accion === 'remove') {
+        return referencia.remove();
+    } else {
+        return Promise.reject("Acción no válida en puenteFirebase");
+    }
+};
+
 let chequeoInicial = true;
 // Admin configuration
-const ADMIN_EMAIL = 'jo.gen86@gmail.com';
+const ADMIN_EMAIL = 'jose.gen86@gmail.com';
 let isAdmin = false;
 // When admin edits another profile, guardamos la clave del email objetivo
 let currentEditEmailKey = null;
@@ -147,35 +169,45 @@ window.mostrarClinica = function (idClinica) {
     const vista = document.getElementById("vista-dinamica");
     if (!vista) return;
 
-    vista.innerHTML = `
-        <iframe id="iframe-clinica" src="clinicas.html?id=${idClinica}" 
-            allowtransparency="true"
-            style="width:100%; border:none; background:transparent;" scrolling="no">
-        </iframe>
-    `;
+    // 1. Limpiamos el contenedor
+    vista.innerHTML = '';
 
-    setTimeout(() => {
-        const iframe = document.getElementById("iframe-clinica");
-        if (iframe) {
-            iframe.onload = () => {
-                try {
-                    // 1. Ajuste de altura (Usá el nombre de función que tengas, con o sin S)
-                    if (iframe.contentWindow && iframe.contentWindow.document.body) {
-                        iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
-                    }
+    // 2. Creamos el iframe con DOM API para controlar el evento load
+    const iframe = document.createElement('iframe');
+    iframe.id = "iframe-clinica";
+    iframe.src = `clinicas.html?id=${idClinica}`;
+    iframe.style.width = "100%";
+    iframe.style.border = "none";
+    iframe.style.background = "transparent";
+    iframe.scrolling = "no";
+    iframe.setAttribute("allowtransparency", "true");
 
-                    // 2. ORDEN DE ARRANQUE (Esto es lo que te faltaba)
-                    if (iframe.contentWindow && iframe.contentWindow.initClinica) {
-                        iframe.contentWindow.initClinica(idClinica);
-                    }
-                } catch(e) {
-                    console.error("Error en comunicación con iframe:", e);
-                    iframe.style.height = "1500px";
-                }
-            };
+    // 3. Asignamos el onload ANTES de agregarlo al DOM
+    iframe.onload = () => {
+        try {
+            console.log("✅ Iframe Clínica Cargado");
+            
+            // Ajuste de altura
+            if (iframe.contentWindow && iframe.contentWindow.document.body) {
+                iframe.style.height = iframe.contentWindow.document.body.scrollHeight + "px";
+            }
+
+            // Iniciamos la lógica interna
+            if (iframe.contentWindow && iframe.contentWindow.initClinica) {
+                iframe.contentWindow.initClinica(idClinica);
+            } else {
+                console.error("❌ No se encontró la función initClinica en el iframe");
+            }
+        } catch(e) {
+            console.error("Error en comunicación con iframe:", e);
+            iframe.style.height = "1500px";
         }
-    }, 100);
+    };
 
+    // 4. Lo agregamos al DOM
+    vista.appendChild(iframe);
+
+    // Scroll suave
     vista.scrollIntoView({ behavior: 'smooth' });
 };
 
@@ -190,22 +222,7 @@ function mostrarCopa() {
     if (box) box.style.display = 'block';
 }
 
-window.puenteFirebase = async (operacion, ruta, datos) => {
-    const dbRef = firebase.database().ref(ruta);
-    try {
-        console.log(`Ejecutando ${operacion} en: ${ruta}`);
-        switch(operacion) {
-            case 'set': return await dbRef.set(datos);
-            case 'push': return await dbRef.push(datos);
-            case 'update': return await dbRef.update(datos);
-            case 'get': return await dbRef.once('value');
-            default: throw new Error("Operación no válida");
-        }
-    } catch (error) {
-        console.error("Error en el Puente:", error);
-        throw error;
-    }
-};
+/* Duplicate puenteFirebase removed */
 // 1. La función de ajuste (se queda igual pero con una protección extra)
 function ajustarAlturaIframes(iframe) {
     try {
@@ -339,6 +356,16 @@ window.abrirPerfilUsuario = async function(emailKey) {
             document.querySelectorAll('input[name="z-perfil"]').forEach(ch => ch.checked = !!datos.zonas[ch.value]);
         }
 
+        // Cargar CLUBES del usuario objetivo
+        try {
+            const snapC = await window.puenteFirebase('get', `CLUBES/${emailKey}`);
+            const clubesData = snapC && snapC.val ? snapC.val() : (snapC && snapC.exists && snapC.exists() ? snapC.val() : null);
+            window.renderizarClubesPerfil(clubesData || {});
+        } catch (ec) {
+            console.error('Error cargando clubes de usuario:', ec);
+            window.renderizarClubesPerfil({});
+        }
+
         currentEditEmailKey = emailKey; // Guardamos para que guardarDatosPerfil actualice al usuario objetivo
 
     } catch (e) {
@@ -376,6 +403,86 @@ document.querySelectorAll('.nav-item').forEach(item => {
         }
     });
 });
+
+// --- GESTIÓN DE CLUBES EN PERFIL (CRUD TIEMPO REAL) ---
+window.renderizarClubesPerfil = function(clubesObj) {
+    const cont = document.getElementById('lista-clubes-perfil');
+    cont.innerHTML = '';
+    
+    if(!clubesObj) return; 
+
+    Object.keys(clubesObj).forEach(nombreClub => {
+        const div = document.createElement('div');
+        div.className = 'chip-club';
+        div.style.background = '#333';
+        div.style.padding = '5px 10px';
+        div.style.borderRadius = '15px';
+        div.style.border = '1px solid gold';
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = '8px';
+        div.innerHTML = `
+            <span style="color:white; font-size:0.9rem;">${nombreClub}</span>
+            <span onclick="editarClubPerfil('${nombreClub}')" 
+                style="cursor:pointer; font-size:1rem;">✏️</span>
+            <span onclick="eliminarClubPerfil('${nombreClub}')" 
+                style="cursor:pointer; color:red; font-weight:bold; font-size:1.1rem;">&times;</span>
+        `;
+        cont.appendChild(div);
+    });
+};
+
+// Función para editar el nombre del club
+window.editarClubPerfil = async function(nombreActual) {
+    const nuevoNombre = prompt("Editar nombre del club:", nombreActual);
+    if (!nuevoNombre || nuevoNombre === nombreActual) return;
+    
+    const nombreFinal = nuevoNombre.trim().toUpperCase();
+    if (!nombreFinal) return;
+
+    try {
+        const user = auth.currentUser;
+        const emailKey = (isAdmin && currentEditEmailKey) ? currentEditEmailKey : user.email.replace(/\./g, '_');
+        
+        // Obtenemos el valor actual del club (puede ser true o un objeto)
+        const snap = await window.puenteFirebase('get', `CLUBES/${emailKey}/${nombreActual}`);
+        const valorActual = snap.val();
+
+        if (valorActual) {
+            // 1. Escribimos en la nueva ubicación
+            await window.puenteFirebase('update', `CLUBES/${emailKey}`, { [nombreFinal]: valorActual });
+            
+            // 2. Borramos la vieja
+            await window.puenteFirebase('remove', `CLUBES/${emailKey}/${nombreActual}`);
+
+            // 3. Refrescar
+            const snapNew = await window.puenteFirebase('get', `CLUBES/${emailKey}`);
+            window.renderizarClubesPerfil(snapNew.val());
+        }
+    } catch (e) {
+        console.error("Error editando club:", e);
+        alert("No se pudo editar el club.");
+    }
+};
+
+window.eliminarClubPerfil = async function(nombreClub) {
+    if(!confirm(`¿Seguro que querés eliminar el club ${nombreClub}?`)) return;
+
+    try {
+        const user = auth.currentUser;
+        const emailKey = (isAdmin && currentEditEmailKey) ? currentEditEmailKey : user.email.replace(/\./g, '_');
+        
+        // Eliminar path específico
+        await window.puenteFirebase('remove', `CLUBES/${emailKey}/${nombreClub}`);
+        
+        // Refrescar
+        const snap = await window.puenteFirebase('get', `CLUBES/${emailKey}`);
+        window.renderizarClubesPerfil(snap.val());
+    } catch (e) {
+        console.error("Error eliminando club:", e);
+    }
+};
+
 function abrirPerfil() {
     document.getElementById('modal-perfil').style.display = 'flex';
 
@@ -392,6 +499,8 @@ function abrirPerfil() {
             const user = auth.currentUser;
             const rawEmail = (user && user.email) ? user.email : emailActual;
             const emailKey = rawEmail.replace(/\./g, '_');
+            
+            // 1. CARGA DE PERFIL GENERAL
             const snap = await window.puenteFirebase('get', `USUARIOS/${emailKey}/perfil`);
             if (snap && snap.exists && snap.exists()) {
                 const datos = snap.val();
@@ -405,18 +514,12 @@ function abrirPerfil() {
                         ch.checked = (datos.zonas[ch.value] === true) || (seleccionadas.indexOf(ch.value) > -1);
                     });
                 }
-                // Clubes (si vienen como objeto o array, render en lista)
-                if (datos.clubes) {
-                    const cont = document.getElementById('lista-clubes-perfil');
-                    cont.innerHTML = '';
-                    const clubesArr = Array.isArray(datos.clubes) ? datos.clubes : Object.keys(datos.clubes);
-                    clubesArr.forEach(c => {
-                        const div = document.createElement('div');
-                        div.textContent = c;
-                        cont.appendChild(div);
-                    });
-                }
             }
+
+            // 2. CARGA DE CLUBES (DESDE LA FUENTE DE VERDAD)
+            const snapClubes = await window.puenteFirebase('get', `CLUBES/${emailKey}`);
+            window.renderizarClubesPerfil(snapClubes.val());
+
         } catch (e) {
             console.warn('No se pudieron cargar datos del perfil:', e);
         }
@@ -446,21 +549,22 @@ function guardarDatosPerfil() {
                 zonas[ch.value] = true;
             });
 
-            // Clubes (simple: lista de textos dentro de #lista-clubes-perfil)
-            const clubes = {};
+            // Clubes (YA SE GESTIONAN EN TIEMPO REAL, NO NECESITAMOS GUARDARLOS AQUÍ)
+           /*  const clubes = {};
             document.querySelectorAll('#lista-clubes-perfil > div').forEach((d, i) => {
                 clubes[d.textContent.trim() || `club_${i}`] = true;
-            });
+            }); */
 
             const payload = {
                 emailSec: document.getElementById('perf-email-sec').value.trim(),
                 whatsapp: whatsapp,
                 cumple: document.getElementById('perf-cumple').value || null,
                 zonas: zonas,
-                clubes: clubes
+                // clubes: clubes // REMOVIDO
             };
             // Determinar a qué emailKey escribimos: si admin editando otro, usamos currentEditEmailKey
             const targetEmailKey = (isAdmin && currentEditEmailKey) ? currentEditEmailKey : emailKey;
+            const targetEmail = (isAdmin && currentEditEmailKey) ? targetEmailKey.replace(/_/g, '.') : user.email;
 
             await window.puenteFirebase('update', `USUARIOS/${targetEmailKey}/perfil`, payload);
 
@@ -468,7 +572,7 @@ function guardarDatosPerfil() {
             try {
                 const perfilParaProfesores = Object.assign({}, payload, {
                     nombre: document.getElementById('perf-nombre').value || user.displayName || '',
-                    email: (isAdmin && currentEditEmailKey) ? targetEmailKey.replace(/_/g, '.') : user.email
+                    email: targetEmail
                 });
                 await window.puenteFirebase('update', `PROFESORES/${targetEmailKey}`, perfilParaProfesores);
             } catch (e) {
@@ -487,23 +591,23 @@ function guardarDatosPerfil() {
             // Intentar actualizar la lista blanca (WHITELIST)
             try {
                 const nombrePerfil = document.getElementById('perf-nombre').value || user.displayName || '';
-                await window.puenteFirebase('update', `WHITELIST/${emailKey}`, {
-                    email: user.email,
+                await window.puenteFirebase('update', `WHITELIST/${targetEmailKey}`, {
+                    email: targetEmail,
                     nombre: nombrePerfil,
                     addedAt: Date.now(),
                     autoAdded: true
                 });
-                alert('Perfil guardado correctamente y agregado a la lista blanca.');
+                alert('Perfil guardado correctamente y actualizado en el sistema.');
             } catch (e) {
                 // Si no se pudo escribir (reglas de seguridad), creamos una solicitud para que el admin la apruebe
                 try {
                     await window.puenteFirebase('push', `SOLICITUDES_WHITELIST`, {
-                        email: user.email,
+                        email: targetEmail,
                         nombre: document.getElementById('perf-nombre').value || user.displayName || '',
-                        perfilPath: `USUARIOS/${emailKey}/perfil`,
+                        perfilPath: `USUARIOS/${targetEmailKey}/perfil`,
                         ts: Date.now()
                     });
-                    alert('Perfil guardado. Se envió una solicitud para agregarte a la lista blanca y será revisada por el admin.');
+                    alert('Perfil guardado. Se envió una solicitud para actualización a la lista blanca.');
                 } catch (ee) {
                     console.error('Error creando solicitud de whitelist:', ee);
                     alert('Perfil guardado, pero no se pudo notificar al administrador. Contactá soporte.');

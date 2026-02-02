@@ -54,11 +54,11 @@ async function cargarClubes() {
 function construirTabla() {
     const tbody = document.getElementById("body-tabla-clinica");
     if(!tbody) return;
-    tbody.innerHTML = "";
-
-    // Mantenemos tus 20 filas
+    
+    // Mejor rendimiento: crear una sola cadena HTML
+    let htmlFilas = "";
     for (let i = 1; i <= 20; i++) {
-        tbody.innerHTML += `
+        htmlFilas += `
             <tr>
                 <td>${i}</td>
                 <td><input class="nombre" placeholder="Nombre y Apellido"></td>
@@ -67,7 +67,7 @@ function construirTabla() {
             </tr>
         `;
     }
-    
+    tbody.innerHTML = htmlFilas;
 }
 
 async function enviarClinica() {

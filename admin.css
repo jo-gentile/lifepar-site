@@ -556,10 +556,11 @@ body.layout-collapsed .footer-premium {
 }
 .modal-header { background: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
 .btn-cerrar-modal { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-.modal-body { padding: 20px; max-height: 80vh; overflow-y: auto; }
+.modal-body { padding: 20px; max-height: 80vh; overflow-y: auto; color: #000; }
 .campo-perfil { margin-bottom: 12px; }
-.campo-perfil label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; }
-.campo-perfil input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+.campo-perfil label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #000; }
+.seccion-clubes label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; color: #000; }
+.campo-perfil input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; color: #000; }
 .grid-zonas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; }
 .btn-guardar-perfil { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
