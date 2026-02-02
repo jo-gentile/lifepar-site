@@ -13,6 +13,7 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+    <button type="button" class="perfil-btn-nav" onclick="abrirPerfil(); event.stopPropagation();" title="Mi Perfil">👤</button>
   </div>
   <nav class="nav-lateral">
     <div class="menu-seccion">
@@ -64,9 +65,9 @@
 </div>
 
 <div class="menu-seccion">
-    <a href="https://drive.google.com/drive/folders/1qPOD-vSua_zh9WP_SQomZ2r6P-kMyrkp?usp=drive_link" target="_blank"class="nav-item"></a>
-     🛡️ <span>SEGUROS</span> 
-  </a>
+    <a href="https://drive.google.com/drive/folders/1qPOD-vSua_zh9WP_SQomZ2r6P-kMyrkp?usp=drive_link" target="_blank" class="nav-item">
+      🛡️ <span>SEGUROS</span>
+    </a>
  </div>
 
 <div class="menu-seccion">
@@ -139,6 +140,53 @@
     </section>
   </main> 
 </div> 
+<div id="modal-perfil" class="modal-overlay" style="display:none;">
+    <div class="modal-ventana">
+        <div class="modal-header">
+            <h3>Mi Perfil de Entrenador</h3>
+            <button onclick="cerrarPerfil()" class="btn-cerrar-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="campo-perfil">
+                <label>Nombre y Apellido</label>
+                <input type="text" id="perf-nombre" readonly>
+            </div>
+            <div class="campo-perfil">
+                <label>Email Principal</label>
+                <input type="email" id="perf-email" readonly>
+            </div>
+            <div class="campo-perfil">
+                <label>Email Secundario</label>
+                <input type="email" id="perf-email-sec" placeholder="otro@mail.com">
+            </div>
+            <div class="campo-perfil">
+                <label>WhatsApp (Cod. País + Número)</label>
+                <input type="tel" id="perf-whatsapp" placeholder="54911..." pattern="[0-9]{10,15}">
+            </div>
+            <div class="campo-perfil">
+                <label>Fecha de Cumpleaños</label>
+                <input type="date" id="perf-cumple">
+            </div>
+            <div class="campo-perfil">
+                <label>Mis Zonas</label>
+                <div class="grid-zonas">
+                    <label><input type="checkbox" name="z-perfil" value="1"> Z1</label>
+                    <label><input type="checkbox" name="z-perfil" value="2"> Z2</label>
+                    <label><input type="checkbox" name="z-perfil" value="3"> Z3</label>
+                    <label><input type="checkbox" name="z-perfil" value="4"> Z4</label>
+                    <label><input type="checkbox" name="z-perfil" value="5"> Z5</label>
+                    <label><input type="checkbox" name="z-perfil" value="6"> Z6</label>
+                </div>
+            </div>
+            <div class="seccion-clubes">
+                <label>Clubes Vinculados</label>
+                <div id="lista-clubes-perfil">
+                    </div>
+            </div>
+            <button class="btn-guardar-perfil" onclick="guardarDatosPerfil()">GUARDAR CAMBIOS</button>
+        </div>
+    </div>
+</div>
 <footer class="footer-premium"> <p>© 2026 <span class="brand">LIFEPAR</span> - Todos los derechos reservados</p>
         <div class="footer-contact">
         <a href="https://instagram.com/ligalifepar" target="_blank">📸 @ligalifepar</a>

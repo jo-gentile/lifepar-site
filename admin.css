@@ -36,6 +36,29 @@ body {
     overflow-y: auto !important; /* Permite scroll vertical si las opciones exceden el alto */
     overflow-x: hidden !important; /* Evita que se mueva hacia los costados */
 }
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el hamburguesa y el perfil */
+    padding: 10px;
+}
+
+.perfil-btn-nav {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.perfil-btn-nav:hover {
+    transform: scale(1.1);
+    color: #28a745; /* Color verde para resaltar al pasar el mouse */
+}
 
 /* --- LIMPIEZA TOTAL DEL SIDEBAR CERRADO --- */
 .sidebar.collapsed {
@@ -43,6 +66,13 @@ body {
     padding-left: 10px !important;
     padding-right: 10px !important;
     align-items: center; /* Centramos los iconos */
+}
+
+/* Cuando el sidebar está colapsado, apilamos los botones del header verticalmente */
+.sidebar.collapsed .sidebar-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
 }
 
 /* ESCONDEMOS EL TEXTO Y LAS FLECHAS */
@@ -516,6 +546,22 @@ body.layout-collapsed .footer-premium {
     border-radius: 20px;
     max-height: 85vh;
     }
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); z-index: 3000; display: flex; align-items: center; justify-content: center;
+}
+.modal-ventana {
+    background: white; width: 90%; max-width: 450px; border-radius: 15px; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); font-family: 'Quicksand', sans-serif;
+}
+.modal-header { background: #333; color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; }
+.btn-cerrar-modal { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+.modal-body { padding: 20px; max-height: 80vh; overflow-y: auto; }
+.campo-perfil { margin-bottom: 12px; }
+.campo-perfil label { display: block; font-weight: bold; font-size: 0.85rem; margin-bottom: 4px; }
+.campo-perfil input { width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 5px; }
+.grid-zonas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; background: #f9f9f9; padding: 10px; border-radius: 5px; }
+.btn-guardar-perfil { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 15px; }
 
 /* --- 7. ANIMACIONES --- */
 @keyframes shineHeader { 100% { left: 125%; } }

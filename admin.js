@@ -21,6 +21,11 @@ if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     console.log("Conectado al emulador local de Lifepar");
 }
 let chequeoInicial = true;
+// Admin configuration
+const ADMIN_EMAIL = 'jo.gen86@gmail.com';
+let isAdmin = false;
+// When admin edits another profile, guardamos la clave del email objetivo
+let currentEditEmailKey = null;
 // 3. GESTIÓN DE SESIÓN
 // 1. Variable para evitar el rebote inmediato
 let cargandoSesion = true;
@@ -37,6 +42,31 @@ auth.onAuthStateChanged(async (user) => {
         user.displayName || "Entrenador";
     document.getElementById('display-email').innerText =
         user.email;
+
+    // Detect admin
+    isAdmin = (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+    window.isAdmin = isAdmin;
+
+    if (isAdmin) {
+        // Añadir botón rápido de Admin al header si no existe
+        try {
+            const navList = document.querySelector('.header-admin nav ul');
+            if (navList && !document.getElementById('btn-admin-panel')) {
+                const li = document.createElement('li');
+                const btn = document.createElement('button');
+                btn.id = 'btn-admin-panel';
+                btn.className = 'btn-pildora-nav';
+                btn.textContent = 'ADMIN';
+                btn.onclick = () => {
+                    if (typeof window.mostrarProfesores === 'function') window.mostrarProfesores();
+                };
+                li.appendChild(btn);
+                navList.insertBefore(li, navList.firstChild);
+            }
+        } catch (e) {
+            console.warn('No se pudo renderizar botón admin:', e);
+        }
+    }
 });
 
 
@@ -230,6 +260,92 @@ window.guardarNuevoClub = async function() {
         alert("❌ No se pudo guardar el club. Revisá la conexión.");
     }
 };
+
+// ADMIN: Mostrar lista de profesores y permitir edición (solo admin)
+window.mostrarProfesores = async function() {
+    if (!isAdmin) return alert('Acceso denegado: rol administrador requerido.');
+    try {
+        const snap = await window.puenteFirebase('get', 'PROFESORES');
+        const data = (snap && snap.val) ? snap.val() : (snap && snap.val && snap.val()) || (snap && snap.exists && snap.exists() ? snap.val() : null);
+        // Manejo compatible con DataSnapshot devuelto por .once('value')
+        let profesores = data;
+        if (!profesores && snap && typeof snap.val === 'function') profesores = snap.val();
+
+        const cont = document.getElementById('vista-dinamica');
+        cont.style.display = 'block';
+        cont.innerHTML = '<h3 style="color:#ffd700;">Listado de Profesores</h3>';
+
+        if (!profesores) {
+            cont.innerHTML += '<p>No hay profesores registrados.</p>';
+            return;
+        }
+
+        const list = document.createElement('div');
+        list.style.display = 'flex';
+        list.style.flexDirection = 'column';
+        list.style.gap = '8px';
+
+        Object.keys(profesores).forEach(key => {
+            const item = document.createElement('div');
+            item.style.display = 'flex';
+            item.style.justifyContent = 'space-between';
+            item.style.alignItems = 'center';
+            item.style.padding = '8px';
+            item.style.border = '1px solid rgba(255,255,255,0.05)';
+            item.style.borderRadius = '8px';
+            const left = document.createElement('div');
+            left.innerHTML = `<strong>${profesores[key].nombre || key}</strong><br><small>${profesores[key].email || ''}</small>`;
+            const btns = document.createElement('div');
+            const editar = document.createElement('button');
+            editar.textContent = 'Editar';
+            editar.className = 'btn-pildora-nav';
+            editar.onclick = () => abrirPerfilUsuario(key);
+            btns.appendChild(editar);
+            item.appendChild(left);
+            item.appendChild(btns);
+            list.appendChild(item);
+        });
+
+        cont.appendChild(list);
+
+    } catch (e) {
+        console.error('Error cargando profesores:', e);
+        alert('No se pudo cargar la lista de profesores. Revisá la consola.');
+    }
+};
+
+// ADMIN: Abrir modal de perfil para cualquier usuario por emailKey
+window.abrirPerfilUsuario = async function(emailKey) {
+    if (!isAdmin) return alert('Acceso denegado');
+    try {
+        // Intentamos leer en USUARIOS primero, luego PROFESORES como fallback
+        const snapU = await window.puenteFirebase('get', `USUARIOS/${emailKey}/perfil`);
+        let datos = snapU && snapU.val ? snapU.val() : (snapU && snapU.exists && snapU.exists() ? snapU.val() : null);
+        if (!datos) {
+            const snapP = await window.puenteFirebase('get', `PROFESORES/${emailKey}`);
+            datos = snapP && snapP.val ? snapP.val() : (snapP && snapP.exists && snapP.exists() ? snapP.val() : null);
+        }
+
+        // Abrir modal y rellenar
+        document.getElementById('modal-perfil').style.display = 'flex';
+        document.getElementById('perf-nombre').value = datos && datos.nombre ? datos.nombre : '';
+        document.getElementById('perf-email').value = datos && datos.email ? datos.email : emailKey.replace(/_/g, '.');
+        document.getElementById('perf-email-sec').value = datos && datos.emailSec ? datos.emailSec : '';
+        document.getElementById('perf-whatsapp').value = datos && datos.whatsapp ? datos.whatsapp : '';
+        document.getElementById('perf-cumple').value = datos && datos.cumple ? datos.cumple : '';
+
+        // Marcar zonas si vienen
+        if (datos && datos.zonas) {
+            document.querySelectorAll('input[name="z-perfil"]').forEach(ch => ch.checked = !!datos.zonas[ch.value]);
+        }
+
+        currentEditEmailKey = emailKey; // Guardamos para que guardarDatosPerfil actualice al usuario objetivo
+
+    } catch (e) {
+        console.error('Error al abrir perfil de usuario:', e);
+        alert('No se pudo abrir el perfil. Revisá la consola.');
+    }
+};
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
 
@@ -260,7 +376,149 @@ document.querySelectorAll('.nav-item').forEach(item => {
         }
     });
 });
+function abrirPerfil() {
+    document.getElementById('modal-perfil').style.display = 'flex';
 
+    // Sincroniza los datos del panel con el modal automáticamente
+    const nombreActual = document.getElementById('display-name').innerText;
+    const emailActual = document.getElementById('display-email').innerText;
+
+    document.getElementById('perf-nombre').value = nombreActual;
+    document.getElementById('perf-email').value = emailActual;
+
+    // Cargar datos guardados en Firebase para este usuario (si existen)
+    (async () => {
+        try {
+            const user = auth.currentUser;
+            const rawEmail = (user && user.email) ? user.email : emailActual;
+            const emailKey = rawEmail.replace(/\./g, '_');
+            const snap = await window.puenteFirebase('get', `USUARIOS/${emailKey}/perfil`);
+            if (snap && snap.exists && snap.exists()) {
+                const datos = snap.val();
+                if (datos.emailSec) document.getElementById('perf-email-sec').value = datos.emailSec;
+                if (datos.whatsapp) document.getElementById('perf-whatsapp').value = datos.whatsapp;
+                if (datos.cumple) document.getElementById('perf-cumple').value = datos.cumple;
+                // Zonas (array o objeto)
+                if (datos.zonas) {
+                    const seleccionadas = Array.isArray(datos.zonas) ? datos.zonas : Object.keys(datos.zonas).map(k => k);
+                    document.querySelectorAll('input[name="z-perfil"]').forEach(ch => {
+                        ch.checked = (datos.zonas[ch.value] === true) || (seleccionadas.indexOf(ch.value) > -1);
+                    });
+                }
+                // Clubes (si vienen como objeto o array, render en lista)
+                if (datos.clubes) {
+                    const cont = document.getElementById('lista-clubes-perfil');
+                    cont.innerHTML = '';
+                    const clubesArr = Array.isArray(datos.clubes) ? datos.clubes : Object.keys(datos.clubes);
+                    clubesArr.forEach(c => {
+                        const div = document.createElement('div');
+                        div.textContent = c;
+                        cont.appendChild(div);
+                    });
+                }
+            }
+        } catch (e) {
+            console.warn('No se pudieron cargar datos del perfil:', e);
+        }
+    })();
+}
+
+function cerrarPerfil() {
+    document.getElementById('modal-perfil').style.display = 'none';
+}
+
+function guardarDatosPerfil() {
+    (async () => {
+        const whatsapp = document.getElementById('perf-whatsapp').value.trim();
+        if (whatsapp !== "" && whatsapp.length < 10) {
+            alert("El número de WhatsApp debe incluir código de país y área (ej: 54911...)");
+            return;
+        }
+
+        try {
+            const user = auth.currentUser;
+            if (!user || !user.email) return alert('Sesión no detectada.');
+            const emailKey = user.email.replace(/\./g, '_');
+
+            // Recolectar zonas seleccionadas
+            const zonas = {};
+            document.querySelectorAll('input[name="z-perfil"]:checked').forEach(ch => {
+                zonas[ch.value] = true;
+            });
+
+            // Clubes (simple: lista de textos dentro de #lista-clubes-perfil)
+            const clubes = {};
+            document.querySelectorAll('#lista-clubes-perfil > div').forEach((d, i) => {
+                clubes[d.textContent.trim() || `club_${i}`] = true;
+            });
+
+            const payload = {
+                emailSec: document.getElementById('perf-email-sec').value.trim(),
+                whatsapp: whatsapp,
+                cumple: document.getElementById('perf-cumple').value || null,
+                zonas: zonas,
+                clubes: clubes
+            };
+            // Determinar a qué emailKey escribimos: si admin editando otro, usamos currentEditEmailKey
+            const targetEmailKey = (isAdmin && currentEditEmailKey) ? currentEditEmailKey : emailKey;
+
+            await window.puenteFirebase('update', `USUARIOS/${targetEmailKey}/perfil`, payload);
+
+            // Siempre intentamos también mantener un duplicado en PROFESORES para búsquedas/administración
+            try {
+                const perfilParaProfesores = Object.assign({}, payload, {
+                    nombre: document.getElementById('perf-nombre').value || user.displayName || '',
+                    email: (isAdmin && currentEditEmailKey) ? targetEmailKey.replace(/_/g, '.') : user.email
+                });
+                await window.puenteFirebase('update', `PROFESORES/${targetEmailKey}`, perfilParaProfesores);
+            } catch (e) {
+                // Si no se puede escribir en PROFESORES por reglas, creamos una solicitud administrable
+                try {
+                    await window.puenteFirebase('push', `SOLICITUDES_PROFESORES`, {
+                        target: targetEmailKey,
+                        perfilPath: `USUARIOS/${targetEmailKey}/perfil`,
+                        ts: Date.now()
+                    });
+                } catch (ee) {
+                    console.error('No se pudo crear solicitud para PROFESORES:', ee);
+                }
+            }
+
+            // Intentar actualizar la lista blanca (WHITELIST)
+            try {
+                const nombrePerfil = document.getElementById('perf-nombre').value || user.displayName || '';
+                await window.puenteFirebase('update', `WHITELIST/${emailKey}`, {
+                    email: user.email,
+                    nombre: nombrePerfil,
+                    addedAt: Date.now(),
+                    autoAdded: true
+                });
+                alert('Perfil guardado correctamente y agregado a la lista blanca.');
+            } catch (e) {
+                // Si no se pudo escribir (reglas de seguridad), creamos una solicitud para que el admin la apruebe
+                try {
+                    await window.puenteFirebase('push', `SOLICITUDES_WHITELIST`, {
+                        email: user.email,
+                        nombre: document.getElementById('perf-nombre').value || user.displayName || '',
+                        perfilPath: `USUARIOS/${emailKey}/perfil`,
+                        ts: Date.now()
+                    });
+                    alert('Perfil guardado. Se envió una solicitud para agregarte a la lista blanca y será revisada por el admin.');
+                } catch (ee) {
+                    console.error('Error creando solicitud de whitelist:', ee);
+                    alert('Perfil guardado, pero no se pudo notificar al administrador. Contactá soporte.');
+                }
+            }
+
+            // Limpiar edición específica si había
+            currentEditEmailKey = null;
+            cerrarPerfil();
+        } catch (e) {
+            console.error('Error guardando perfil:', e);
+            alert('No se pudo guardar el perfil. Revisá la conexión.');
+        }
+    })();
+}
 
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;
