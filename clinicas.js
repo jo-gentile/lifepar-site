@@ -8,7 +8,18 @@ window.initClinica = async function (idClinica) {
     // Pequeña espera para asegurar que el HTML se renderizó
     setTimeout(async () => {
         const titulo = document.getElementById("titulo-clinica");
-        if(titulo) titulo.innerText = "Inscripción: " + idClinica.replace(/-/g, " ").toUpperCase();
+        
+        // Mapeo manual para títulos bonitos
+        let nombreBonito = idClinica.toUpperCase();
+        if (idClinica.includes("feb-1-3")) nombreBonito = "FEBRERO - ZONA 1 Y 3";
+        else if (idClinica.includes("feb-2-4")) nombreBonito = "FEBRERO - ZONA 2 Y 4";
+        else if (idClinica.includes("feb-5-6")) nombreBonito = "FEBRERO - ZONA 5 Y 6";
+        else if (idClinica.includes("mar-1-3")) nombreBonito = "MARZO - ZONA 1 Y 3";
+        else if (idClinica.includes("mar-2-4")) nombreBonito = "MARZO - ZONA 2 Y 4";
+        else if (idClinica.includes("mar-5-6")) nombreBonito = "MARZO - ZONA 5 Y 6";
+        else nombreBonito = idClinica.replace(/-/g, " ").toUpperCase();
+
+        if(titulo) titulo.innerText = "INSCRIPCIÓN: " + nombreBonito;
 
         // 1. DIBUJAMOS LA TABLA
         construirTabla();
