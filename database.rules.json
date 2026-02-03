@@ -1,6 +1,42 @@
 {
   "rules": {
-    ".read": true,
-    ".write": true
+    "listaBlanca": {
+      ".read": true,
+      ".write": false
+    },
+    "CLUBES": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "INSCRIPCIONES": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "INSCRIPCIONES_CLINICAS": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "PROFESORES": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "USUARIOS": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "WHITELIST": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+    },
+    "ZONAS": {
+      ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
+      "ZONA_1": { ".indexOn": ["mailProfe"] },
+      "ZONA_2": { ".indexOn": ["mailProfe"] },
+      "ZONA_3": { ".indexOn": ["mailProfe"] },
+      "ZONA_4": { ".indexOn": ["mailProfe"] },
+      "ZONA_5": { ".indexOn": ["mailProfe"] },
+      "ZONA_6": { ".indexOn": ["mailProfe"] }
+    }
   }
 }
