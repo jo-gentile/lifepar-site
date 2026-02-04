@@ -125,6 +125,15 @@
     </div>
     <nav>
       <ul class="nav-buttons">
+        <!-- NOTIFICACIONES -->
+        <li style="position: relative;">
+            <button id="btn-notificaciones" onclick="toggleNotificacionesPanel()" class="btn-icon-nav" title="Notificaciones">
+                🔔 <span id="badge-notif" class="badge-count" style="display:none">0</span>
+            </button>
+            <div id="panel-notificaciones" class="dropdown-notificaciones" style="display: none;">
+                <iframe src="notificaciones.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </li>
         <li><a href="index.html" class="btn-pildora-nav">IR A LA WEB</a></li>
         <li><button onclick="logout()" class="btn-cerrar-sesion">CERRAR SESIÓN</button></li>
       </ul>

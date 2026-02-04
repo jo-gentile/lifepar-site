@@ -16,6 +16,11 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.database();
+
+// EXPONER VARIABLES PARA IFRAMES (Notificaciones, etc.)
+window.auth = auth;
+window.db = db;
+
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     auth.useEmulator("http://127.0.0.1:9099");
     db.useEmulator("127.0.0.1", 9000);
@@ -88,6 +93,23 @@ auth.onAuthStateChanged(async (user) => {
         } catch (e) {
             console.warn('No se pudo renderizar botón admin:', e);
         }
+    }
+
+    // --- ESCUCHA DE NOTIFICACIONES ---
+    if (user && user.uid) {
+        // Escuchar notificaciones no leídas para el badge
+        db.ref(`notificaciones/${user.uid}`).orderByChild('read').equalTo(false).on('value', snapshot => {
+            const badge = document.getElementById('badge-notif');
+            if (!badge) return;
+            
+            const count = snapshot.numChildren();
+            if (count > 0) {
+                badge.innerText = count > 99 ? '99+' : count;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        });
     }
 });
 
@@ -643,6 +665,34 @@ window.cerrarVideoTutorial = function() {
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;
 window.toggleSidebar = toggleSidebar;
+
+// --- NOTIFICACIONES ---
+window.toggleNotificacionesPanel = function() {
+    const panel = document.getElementById('panel-notificaciones');
+    
+    // Toggle visibilidad
+    if (panel.style.display === 'none' || panel.style.display === '') {
+        panel.style.display = 'block';
+        
+        // Cierra al hacer click afuera
+        setTimeout(() => {
+            document.addEventListener('click', cerrarNotifOutside);
+        }, 100);
+    } else {
+        panel.style.display = 'none';
+        document.removeEventListener('click', cerrarNotifOutside);
+    }
+};
+
+function cerrarNotifOutside(e) {
+    const panel = document.getElementById('panel-notificaciones');
+    const btn = document.getElementById('btn-notificaciones');
+    
+    if (panel && !panel.contains(e.target) && !btn.contains(e.target)) {
+        panel.style.display = 'none';
+        document.removeEventListener('click', cerrarNotifOutside);
+    }
+}
 window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;
 window.mostrarAccionesZona = mostrarAccionesZona;

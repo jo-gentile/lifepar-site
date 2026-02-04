@@ -1,0 +1,11 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "append_styles",
+			"type": "shell",
+			"command": "Add-Content -Path \"c:\\Users\\Noxi-PC\\LIFEPAR-SITE\\admin.css\" -Value \"`n/* --- NOTIFICACIONES --- */`n.btn-icon-nav {`n    background: none;`n    border: none;`n    font-size: 1.5rem;`n    cursor: pointer;`n    color: gold;`n    position: relative;`n    padding: 5px;`n    transition: transform 0.2s;`n}`n.btn-icon-nav:hover {`n    transform: scale(1.1);`n}`n`n.badge-count {`n    position: absolute;`n    top: 0;`n    right: 0;`n    background: red;`n    color: white;`n    font-size: 0.7rem;`n    font-weight: bold;`n    width: 18px;`n    height: 18px;`n    border-radius: 50%;`n    display: flex;`n    align-items: center;`n    justify-content: center;`n    border: 2px solid #000;`n}`n`n.dropdown-notificaciones {`n    position: absolute;`n    top: 100%;`n    right: -100px; /* Ajuste para móviles o pc */`n    width: 320px;`n    height: 400px;`n    background: #1a1a1a;`n    border: 1px solid #444;`n    border-radius: 8px;`n    box-shadow: 0 5px 15px rgba(0,0,0,0.5);`n    z-index: 3000;`n    overflow: hidden;`n}`n`n@media (max-width: 768px) {`n    .dropdown-notificaciones {`n        right: -50px;`n        width: 300px;`n    }`n}\"",
+			"args": []
+		}
+	]
+}

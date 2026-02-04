@@ -37,6 +37,12 @@
       "ZONA_4": { ".indexOn": ["mailProfe"] },
       "ZONA_5": { ".indexOn": ["mailProfe"] },
       "ZONA_6": { ".indexOn": ["mailProfe"] }
+    },
+    "notificaciones": {
+      "$uid": {
+        ".read": "auth != null && (auth.uid === $uid || root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists())",
+        ".write": "auth != null && (auth.uid === $uid || root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists())"
+      }
     }
   }
 }

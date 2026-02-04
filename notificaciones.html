@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 10px;
+            overflow-x: hidden;
+            /* Scrollbar styling */
+            scrollbar-width: thin;
+            scrollbar-color: #444 #121212;
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        .notif-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 4px solid #444; /* Default: read or neutral */
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(2px);
+        }
+
+        .notif-item.unread {
+            border-left-color: #28a745; /* Green for unread */
+            background: rgba(40, 167, 69, 0.1);
+        }
+
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .notif-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        .notif-body {
+            font-size: 0.9rem;
+            color: #ddd;
+            line-height: 1.4;
+        }
+
+        .no-notif {
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+            font-style: italic;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
+        
+        .badge-new {
+            background: #28a745;
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="lista-notificaciones">
+        <div class="loading">Cargando notificaciones...</div>
+    </div>
+
+    <script src="notificaciones.js"></script>
+</body>
+</html>
