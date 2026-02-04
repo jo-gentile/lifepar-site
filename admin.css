@@ -730,11 +730,14 @@ body.layout-collapsed .footer-premium {
     border: none;
     cursor: pointer;
     position: relative;
-    padding: 8px; /* Un poco mas de área de click */
+    padding: 8px; 
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .bell-icon {
