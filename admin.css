@@ -728,32 +728,49 @@ body.layout-collapsed .footer-premium {
 .btn-icon-nav {
     background: none;
     border: none;
-    font-size: 1.5rem;
     cursor: pointer;
-    color: gold;
     position: relative;
-    padding: 5px;
+    padding: 8px; /* Un poco mas de área de click */
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: transform 0.2s;
 }
+
+.bell-icon {
+    width: 28px;
+    height: 28px;
+    fill: #ffd700; /* Dorado para que combine con el tema */
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));
+}
+
 .btn-icon-nav:hover {
     transform: scale(1.1);
 }
 
+.btn-icon-nav:hover .bell-icon {
+    fill: #fff; /* Al pasar el mouse se ilumina en blanco */
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
 .badge-count {
     position: absolute;
-    top: 0;
-    right: 0;
-    background: red;
+    top: 2px;
+    right: 2px;
+    background: #ff0000; /* Rojo puro */
     color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    width: 18px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    min-width: 18px; /* Un poco más flexible si hay 2 dígitos */
     height: 18px;
-    border-radius: 50%;
+    padding: 0 4px; /* Padding lateral */
+    border-radius: 10px; /* Redondo pero ovalado si crece */
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid #000;
+    border: 2px solid #1a1a1a; /* Borde oscuro para separarlo de la campana */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    z-index: 10;
 }
 
 .dropdown-notificaciones {
