@@ -624,6 +624,22 @@ function guardarDatosPerfil() {
     })();
 }
 
+// --- REPRODUCTOR DE VIDEOS TUTORIALES ---
+window.abrirVideoTutorial = function(videoId) {
+    const modal = document.getElementById('modal-video');
+    const iframe = document.getElementById('iframe-video');
+    // Usamos la URL de embed + autoplay=1 para que arranque solo
+    iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    modal.style.display = 'flex';
+};
+
+window.cerrarVideoTutorial = function() {
+    const modal = document.getElementById('modal-video');
+    const iframe = document.getElementById('iframe-video');
+    iframe.src = ""; // Detener video
+    modal.style.display = 'none';
+};
+
 // Llamamos cada vez que agregamos un iframe
 window.ajustarAlturaIframes = ajustarAlturaIframes;
 window.toggleSidebar = toggleSidebar;
