@@ -266,6 +266,17 @@ window.calcularEdadDeportiva = (fecha, target) => {
 window.mostrarListadoAltas = async (numZona) => {
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     let contenedor = document.getElementById('contenedor-tarjetas-hijo');
+    
+    // CAPTURAR SCROLL ACTUAL (Para evitar saltos al refrescar)
+    let prevData = null;
+    let prevScroll = 0;
+    if (contenedor) {
+        prevScroll = contenedor.scrollTop;
+        if(contenedor.innerHTML.includes('modal-altas-cuerpo')) {
+            prevData = true; // Ya hay datos mostrados
+        }
+    }
+
     if(!contenedor){
         contenedor = document.createElement('div');
         contenedor.id = 'contenedor-tarjetas-hijo';
@@ -278,7 +289,10 @@ window.mostrarListadoAltas = async (numZona) => {
         justifyContent: 'center', alignItems: 'flex-start', overflowY: 'auto'
     });
 
-    contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top:50px;">⏳ Organizando Padrón...</p>';
+    // Solo mostrar "Cargando..." si es la primera vez, para no pestañear
+    if (!prevData) {
+        contenedor.innerHTML = '<p style="color:gold; text-align:center; margin-top:50px;">⏳ Organizando Padrón...</p>';
+    }
 
     try {
         const snapshot = await window.parent.puenteFirebase('get', `ZONAS/ZONA_${numZona}`, null);
@@ -322,6 +336,25 @@ window.mostrarListadoAltas = async (numZona) => {
 
         patinadores.forEach(p => {
             const tieneAnual = p.seguroAnual === true;
+            
+            // --- LOGICA DE BLOQUEO DE SEGUROS (SOLO ADMIN PUEDE DESMARCAR) ---
+            const tieneSD = p.seguroSD1 || p.seguroSD2 || p.seguroSD3 || p.seguroSD4;
+            const styleDisabled = "opacity:0.3; cursor:not-allowed; pointer-events:none;";
+            
+            // Si NO soy admin:
+            // Bloqueo si ya está marcado (no puedo quitarlo).
+            // Tambien bloqueo los contrarios para evitar contradicciones (ej: poner Anual borraría SDs ya marcados y bloqueados).
+            const bloqAnual = !soyAdmin && (tieneAnual || tieneSD);
+            const bloqSD1 = !soyAdmin && (p.seguroSD1 || tieneAnual);
+            const bloqSD2 = !soyAdmin && (p.seguroSD2 || tieneAnual);
+            const bloqSD3 = !soyAdmin && (p.seguroSD3 || tieneAnual);
+            const bloqSD4 = !soyAdmin && (p.seguroSD4 || tieneAnual);
+
+            // --- BLOQUEO FECHAS (F2, F3, F4) ---
+            const bloqF2 = !soyAdmin && p.F2 === true;
+            const bloqF3 = !soyAdmin && p.F3 === true;
+            const bloqF4 = !soyAdmin && p.F4 === true;
+
             html += `
                 <div class="card-alta" style="${soyAdmin ? 'border-color: #ff4444;' : ''}">
                     <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer; font-size:1.2rem;">📝</button>
@@ -334,30 +367,61 @@ window.mostrarListadoAltas = async (numZona) => {
                     
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:5px;">SEGUROS</div>
                     <div style="display:flex; flex-direction:column; gap:5px; margin-top:5px;">
-                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
+                        <button class="btn-f ${tieneAnual ? 'activo' : ''}" 
+                            ${bloqAnual ? `disabled style="${styleDisabled}"` : ''} 
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroAnual',this)">ANUAL</button>
                         <div style="display:flex; gap:3px;">
-                            <button class="btn-f ${p.seguroSD1 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD1',this)">SD1</button>
-                            <button class="btn-f ${p.seguroSD2 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD2',this)">SD2</button>
-                            <button class="btn-f ${p.seguroSD3 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD3',this)">SD3</button>
-                            <button class="btn-f ${p.seguroSD4 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD4',this)">SD4</button>
+                            <button class="btn-f ${p.seguroSD1 ? 'activo' : ''}" 
+                                ${bloqSD1 ? `disabled style="${styleDisabled}"` : ''} 
+                                onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD1',this)">SD1</button>
+                            <button class="btn-f ${p.seguroSD2 ? 'activo' : ''}" 
+                                ${bloqSD2 ? `disabled style="${styleDisabled}"` : ''} 
+                                onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD2',this)">SD2</button>
+                            <button class="btn-f ${p.seguroSD3 ? 'activo' : ''}" 
+                                ${bloqSD3 ? `disabled style="${styleDisabled}"` : ''} 
+                                onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD3',this)">SD3</button>
+                            <button class="btn-f ${p.seguroSD4 ? 'activo' : ''}" 
+                                ${bloqSD4 ? `disabled style="${styleDisabled}"` : ''} 
+                                onclick="window.toggleAsistencia('${numZona}','${p.id}','seguroSD4',this)">SD4</button>
                         </div>
                     </div>
 
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:8px;">FECHAS / DOCS</div>
                     <div style="display:flex; gap:3px; margin-top:5px;">
-                        <button class="btn-f ${p.F2 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
-                        <button class="btn-f ${p.F3 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
-                        <button class="btn-f ${p.F4 ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
+                        <button class="btn-f ${p.F2 ? 'activo' : ''}" 
+                            ${bloqF2 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
+                        <button class="btn-f ${p.F3 ? 'activo' : ''}" 
+                            ${bloqF3 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','F3',this)">F3</button>
+                        <button class="btn-f ${p.F4 ? 'activo' : ''}" 
+                            ${bloqF4 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
                     </div>
-                    <div style="display:flex; gap:3px; margin-top:3px;">
-                        <button class="btn-f ${p.dniFisico ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','dniFisico',this)">DNI</button>
-                        <button class="btn-f ${p.certMedico ? 'activo' : ''}" onclick="window.toggleAsistencia('${numZona}','${p.id}','certMedico',this)">CERT</button>
+                    
+                    <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:8px;">DOCUMENTACIÓN (Cargada por Padre)</div>
+                    <div style="display:flex; justify-content:space-around; align-items:center; margin-top:3px; background:#111; padding:3px; border-radius:5px;">
+                        <div style="text-align:center;">
+                            <span style="font-size:0.6rem; color:#888;">DNI</span>
+                            ${p.linkDNI ? '<span style="font-size:0.9rem; margin-left:3px;">✅</span>' : '<span style="font-size:0.9rem; margin-left:3px;">❌</span>'}
+                        </div>
+                        <div style="border-left:1px solid #333; height:15px;"></div>
+                        <div style="text-align:center;">
+                            <span style="font-size:0.6rem; color:#888;">MÉDICO</span>
+                            ${p.linkMedico ? '<span style="font-size:0.9rem; margin-left:3px;">✅</span>' : '<span style="font-size:0.9rem; margin-left:3px;">❌</span>'}
+                        </div>
                     </div>
                 </div>`;
         });
 
         html += `</div><button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="width:100%; background:gold; margin-top:20px; padding:15px; font-weight:bold; border-radius:10px; border:none; cursor:pointer; color:black;">CERRAR PADRÓN</button></div>`;
         contenedor.innerHTML = html;
+        
+        // RESTAURAR SCROLL si existia
+        if (prevScroll > 0) {
+            contenedor.scrollTop = prevScroll;
+        }
+
     } catch (e) { console.error(e); }
 };
 
@@ -368,9 +432,10 @@ window.enviarCargaPatinador = async (numZona) => {
     const fechaValor = selectorFecha ? selectorFecha.value : "1"; 
 
     let marcaAsistencia = {};
-    if (fechaValor === "2") marcaAsistencia.asisteF2 = true;
-    if (fechaValor === "3") marcaAsistencia.asisteF3 = true;
-    if (fechaValor === "4") marcaAsistencia.asisteF4 = true;
+    // Asignación automática: marca F2/F3/F4 en la ficha según la fecha activa
+    if (fechaValor === "2") marcaAsistencia.F2 = true;
+    if (fechaValor === "3") marcaAsistencia.F3 = true;
+    if (fechaValor === "4") marcaAsistencia.F4 = true;
 
 const datos = {
   ...marcaAsistencia,
