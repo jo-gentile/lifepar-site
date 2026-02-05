@@ -178,21 +178,23 @@ window.solicitarPermisoNotificaciones = function() {
 };
 
 function registrarTokenFCM() {
-    // FIX: Vincular SW explícitamente y esperar a que esté listo
+    // FIX v2: Pasar registro directo a getToken (useServiceWorker no existe en compat v9+)
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.ready.then((reg) => {
-             messaging.useServiceWorker(reg);
              
-             messaging.getToken({ vapidKey: 'BMfRwr6XK64vBMZ7rzSz4S2X_D5egRXkm-varhjSLcOAVEPE627F7GJSN-1_s_WNdETrmlFbjMqMVbK1x18Y5qs' })
+             messaging.getToken({ 
+                 vapidKey: 'BMfRwr6XK64vBMZ7rzSz4S2X_D5egRXkm-varhjSLcOAVEPE627F7GJSN-1_s_WNdETrmlFbjMqMVbK1x18Y5qs',
+                 serviceWorkerRegistration: reg
+             })
              .then((currentToken) => {
                  if (currentToken) {
                      const user = auth.currentUser;
                      if (user) {
                          const emailKey = user.email.replace(/\./g, '_');
-                         // Log claro para confirmar
-                         console.log("FCM Token obtenido y vinculado:", currentToken);
+                         console.log("FCM Token obtenido:", currentToken);
                          
                          db.ref(`USUARIOS/${emailKey}/fcmTokens/${currentToken.replace(/\./g, '_')}`).set(true)
+                             .then(() => console.log("Token guardado en BD exitosamente"))
                              .catch(e => console.error("Error guardando token en DB:", e));
                      }
                  } else {
