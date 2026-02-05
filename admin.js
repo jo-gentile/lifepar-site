@@ -183,7 +183,7 @@ function lanzarNotificacionNativa(titulo, cuerpo) {
                 registration.showNotification(titulo, {
                     body: cuerpo,
                     icon: "img/logo.png",
-                    badge: "img/logo.png", // Intenta usar el logo como badge (blanco/transparente funciona mejor)
+                    badge: "img/badge-icon.png", // Icono monocromático para barra de estado
                     tag: "lifepar-notif", 
                     vibrate: [200, 100, 200]
                 });
@@ -193,7 +193,7 @@ function lanzarNotificacionNativa(titulo, cuerpo) {
             const n = new Notification(titulo, {
                 body: cuerpo,
                 icon: "img/logo.png",
-                badge: "img/logo.png",
+                badge: "img/badge-icon.png",
                 tag: titulo + cuerpo 
             });
             n.onclick = function() {
