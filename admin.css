@@ -808,3 +808,12 @@ body.layout-collapsed .footer-premium {
         max-width: 350px;
     }
 }
+/* FIX NOTIFICACIONES DESBORDADAS */
+.header-admin {
+    overflow: visible !important;
+}
+.header-admin::after {
+    border-radius: 50px; /* Para que el brillo respete los bordes aunque overflow sea visible */
+    overflow: hidden;
+    clip-path: inset(0 0 0 0 round 50px); /* Asegura recorte del brillo */
+}
