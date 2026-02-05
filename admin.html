@@ -114,6 +114,25 @@
           <iframe id="iframe-video" width="100%" height="100%" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border-radius:13px;"></iframe>
       </div>
   </div>
+
+  <!-- MODAL OBLIGATORIO DE NOTIFICACIONES -->
+  <div id="modal-force-notif" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:10000; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:20px;">
+      <div style="max-width:500px; background:#1a1a1a; padding:40px; border-radius:20px; border: 2px solid gold; box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);">
+          <div style="font-size:3rem; margin-bottom:20px;">🔔</div>
+          <h2 style="color:white; margin-bottom:15px;">Activación Requerida</h2>
+          <p style="color:#ddd; margin-bottom:30px; line-height:1.6;">
+              Para utilizar el Panel de Entrenadores, es <b>obligatorio</b> activar las notificaciones.<br>
+              Así te enterarás al instante de nuevas fechas, archivos y zonas.
+          </p>
+          <button onclick="solicitarPermisoNotificaciones()" class="btn-pildora-nav" style="font-size:1.1rem; padding:15px 30px; width:100%;">
+              ACTIVAR AHORA
+          </button>
+          <p id="msg-bloqueado" style="display:none; color:#ff4444; margin-top:20px; font-size:0.9rem;">
+              ⚠️ Has bloqueado las notificaciones anteriormente.<br>
+              Haz clic en el candadito 🔒 junto a la URL arriba a la izquierda y selecciona "Restablecer permisos" o "Permitir". Luego recarga la página.
+          </p>
+      </div>
+  </div>
   
   <header class="header-admin">
     <div class="logo">

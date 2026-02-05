@@ -56,6 +56,8 @@ let currentEditEmailKey = null;
 // 3. GESTIÓN DE SESIÓN
 // 1. Variable para evitar el rebote inmediato
 let cargandoSesion = true;
+// Para no notificar lo que ya estaba cargado al abrir
+const sessionStart = Date.now(); 
 
 let validandoBiometria = true;
 
@@ -64,6 +66,10 @@ auth.onAuthStateChanged(async (user) => {
         window.location.href = "index.html";
         return;
     }
+
+    // --- CHECK SISTEMA DE NOTIFICACIONES OBLIGATORIO ---
+    verificarEstadoNotificaciones();
+    // ---------------------------------------------------
 
     document.getElementById('display-name').innerText =
         user.displayName || "Entrenador";
@@ -105,7 +111,7 @@ auth.onAuthStateChanged(async (user) => {
 
     // --- ESCUCHA DE NOTIFICACIONES ---
     if (user && user.uid) {
-        // Escuchar notificaciones no leídas para el badge
+        // Escuchar notificaciones no leídas para el badge Y ALERTAS DE CHROME
         db.ref(`notificaciones/${user.uid}`).orderByChild('read').equalTo(false).on('value', snapshot => {
             const badge = document.getElementById('badge-notif');
             if (!badge) return;
@@ -114,12 +120,78 @@ auth.onAuthStateChanged(async (user) => {
             if (count > 0) {
                 badge.innerText = count > 99 ? '99+' : count;
                 badge.style.display = 'flex';
+
+                // --- DISPARAR NOTIFICACIÓN DE CHROME ---
+                // Iteramos para ver si alguna es NUEVA (llegó después de abrir la web)
+                snapshot.forEach(child => {
+                    const notif = child.val();
+                    // Si el mensaje tiene timestamp mayor al inicio de sesión Y no fue notificado en esta sesión aun
+                    // (Comparar con sessionStart evita que suenen las viejas al refrescar)
+                    if (notif.timestamp && notif.timestamp > sessionStart) {
+                        lanzarNotificacionNativa(notif.titulo || "Nueva Notificación", notif.mensaje || "Tienes un mensaje en LIFEPAR.");
+                    }
+                });
+
             } else {
                 badge.style.display = 'none';
             }
         });
     }
 });
+
+// --- LÓGICA DE NOTIFICACIONES NATIVAS ---
+
+function verificarEstadoNotificaciones() {
+    if (!("Notification" in window)) {
+        // El navegador no soporta, no bloqueamos pero avisamos (opcional)
+        return;
+    }
+
+    if (Notification.permission !== 'granted') {
+        // MOSTRAR MODAL DE BLOQUEO
+        document.getElementById('modal-force-notif').style.display = 'flex';
+        
+        // Si ya está denegado explícitamente, mostrar ayuda
+        if (Notification.permission === 'denied') {
+            document.getElementById('msg-bloqueado').style.display = 'block';
+        }
+    } else {
+        // Todo ok
+        document.getElementById('modal-force-notif').style.display = 'none';
+    }
+}
+
+window.solicitarPermisoNotificaciones = function() {
+    Notification.requestPermission().then(permission => {
+        if (permission === "granted") {
+            document.getElementById('modal-force-notif').style.display = 'none';
+            new Notification("¡Hola!", {
+                body: "Las notificaciones de LIFEPAR están activas.",
+                icon: "img/logo.png"
+            });
+        } else if (permission === "denied") {
+            document.getElementById('msg-bloqueado').style.display = 'block';
+        }
+    });
+};
+
+function lanzarNotificacionNativa(titulo, cuerpo) {
+    if (Notification.permission === "granted") {
+        // Evitamos spammear la misma notificación muchas veces si el listener rebota
+        // Usamos un tag único basado en el titulo para no repetir
+        const n = new Notification(titulo, {
+            body: cuerpo,
+            icon: "img/logo.png",
+            tag: titulo + cuerpo // Evita duplicados en android
+        });
+        
+        n.onclick = function() {
+            window.focus(); // Trae la ventana al frente
+            toggleNotificacionesPanel(); // Abre el panelito
+            this.close();
+        };
+    }
+}
 
 
 // Función de salida: cierra la sesión de Firebase
