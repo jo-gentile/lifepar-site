@@ -22,7 +22,10 @@
     },
     "USUARIOS": {
       ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
-      ".write": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()"
+      "$user_key": {
+        ".write": "auth != null && ($user_key === auth.token.email.replace('.', '_') || root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists())",
+        ".read": "auth != null && ($user_key === auth.token.email.replace('.', '_') || root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists())"
+      }
     },
     "WHITELIST": {
       ".read": "auth != null && root.child('listaBlanca').child(auth.token.email.replace('.', '_')).exists()",
