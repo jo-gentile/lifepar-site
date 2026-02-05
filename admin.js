@@ -177,19 +177,29 @@ window.solicitarPermisoNotificaciones = function() {
 
 function lanzarNotificacionNativa(titulo, cuerpo) {
     if (Notification.permission === "granted") {
-        // Evitamos spammear la misma notificación muchas veces si el listener rebota
-        // Usamos un tag único basado en el titulo para no repetir
-        const n = new Notification(titulo, {
-            body: cuerpo,
-            icon: "img/logo.png",
-            tag: titulo + cuerpo // Evita duplicados en android
-        });
-        
-        n.onclick = function() {
-            window.focus(); // Trae la ventana al frente
-            toggleNotificacionesPanel(); // Abre el panelito
-            this.close();
-        };
+        // Intento usar ServiceWorker si está disponible (Mejor para móviles)
+        if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.ready.then(registration => {
+                registration.showNotification(titulo, {
+                    body: cuerpo,
+                    icon: "img/logo.png",
+                    tag: "lifepar-notif", // Tag único o genérico
+                    vibrate: [200, 100, 200]
+                });
+            });
+        } else {
+            // Fallback: API clásica de escritorio
+            const n = new Notification(titulo, {
+                body: cuerpo,
+                icon: "img/logo.png",
+                tag: titulo + cuerpo 
+            });
+            n.onclick = function() {
+                window.focus(); 
+                toggleNotificacionesPanel(); 
+                this.close();
+            };
+        }
     }
 }
 
@@ -776,3 +786,9 @@ function cerrarNotifOutside(e) {
 window.toggleArbol = toggleArbol;
 window.mostrarCopa = mostrarCopa;
 window.mostrarAccionesZona = mostrarAccionesZona;
+// Registro de Service Worker para asegurar funcionamiento en segundo plano y m�vil
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+        console.log('SW registrado para notificaciones:', reg.scope);
+    });
+}
