@@ -69,24 +69,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             window.parent.db.ref(`notificaciones/${uid}/${notif.id}`).update({ read: true });
         }
 
-        // 2. Acción según tipo
-        if (notif.tipo === 'link' && notif.url) {
-            // Abrir en nueva pestaña o en la misma según configuración
-            // Por defecto links externos suelen ir en nueva pestaña
-            // El usuario pidió: "que abra drive publico o bien para que se abra en la misma web"
+        // 2. Acción según tipo: Validamos que REALMENTE sea un link y no espacios vacíos
+        if (notif.tipo === 'link' && notif.url && notif.url.trim().length > 3) {
             
-            // Si es un enlace interno (no empieza con http), intentar navegar en el padre?
-            // Si es drive, _blank.
-            
-            if (notif.url.includes('drive.google.com') || notif.target === '_blank') {
+            // Si es un enlace a Google Drive o externo, abrir en pestaña nueva
+            if (notif.url.includes('drive.google.com') || notif.url.startsWith('http')) {
                 window.open(notif.url, '_blank');
             } else {
-                // Navegación interna o mismo tab
-                // Si queremos cambiar la página principal:
+                // Navegación interna (dentro de la misma pestaña)
                  window.parent.location.href = notif.url; 
             }
-        } else if (notif.tipo === 'texto') {
-            // Solo lectura, ya se marcó como leído
-        }
+        } 
+        // Si es 'texto' o el link es demasiado corto/vacío, no hace nada más (solo marca leído).
     }
 });
