@@ -69,6 +69,14 @@ auth.onAuthStateChanged(async (user) => {
         user.displayName || "Entrenador";
     document.getElementById('display-email').innerText =
         user.email;
+    
+    // AUTO-UPDATE: Guardar UID en DB para permitir notificaciones masivas desde Sheets
+    // Esto vincula el email (que tiene las zonas) con el UID (necesario para notificar)
+    const emailKey = user.email.replace(/\./g, '_');
+    db.ref(`USUARIOS/${emailKey}`).update({ 
+        uid: user.uid,
+        email: user.email
+    }).catch(err => console.log("Actualizando UID silencioso:", err));
 
     // Detect admin
     isAdmin = (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
