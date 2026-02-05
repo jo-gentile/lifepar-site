@@ -59,10 +59,35 @@ label {
   color: white; 
   border: 1px solid gold; 
   border-radius: 4px; 
-  padding: 3px 6px; 
-  height: 26px; 
-  font-size: 12px;
+  padding: 8px; /* Más espacio interno = mejor lectura */
+  height: auto; /* Altura automática para que no corte el texto */
+  min-height: 40px; /* Tamaño mínimo amigable para dedos */
+  font-size: 14px; /* Un poco más grande para evitar zoom en iPhone */
   width: 100%;
+  box-sizing: border-box; /* Asegura que el padding no desborde */
+  appearance: none; /* Uniformiza el estilo en móviles */
+  -webkit-appearance: none;
+}
+
+/* Flechita personalizada para el select (ya que quitamos la nativa) */
+#contenedor-formulario-dinamico select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22gold%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px auto;
+}
+
+@media (max-width: 480px) {
+    #contenedor-formulario-dinamico select {
+        font-size: 11px !important; /* Letra más chica para que entre todo */
+        padding: 5px !important; /* Menos relleno para aprovechar espacio */
+        white-space: normal; /* Permite que el texto fluya si es necesario */
+    }
+    
+    /* Evitar que el label ocupe mucho */
+    #contenedor-formulario-dinamico h4 {
+        font-size: 0.8rem !important;
+    }
 }
 
 /* Bloques flex (select + candado) */

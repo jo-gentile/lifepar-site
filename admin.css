@@ -225,7 +225,7 @@ body {
     justify-content: space-between;
     padding: 0 30px;
     box-sizing: border-box;
-    
+    overflow: hidden; /* Mantiene el brillo DENTRO del borde */
 }
 
 /* Ajuste del Header colapsado */
@@ -242,6 +242,14 @@ body.layout-collapsed .header-admin {
     height: 100%;
     background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     animation: shineHeader 45s infinite;
+    pointer-events: none; /* EL BRILLO SERÁ FANTASMA: Se ve pero no bloquea clics */
+    z-index: 1; /* Fondo decorativo */
+}
+
+/* Aseguramos que el contenido esté por encima del brillo */
+.header-admin > * {
+    position: relative;
+    z-index: 2;
 }
 
 /* --- 4. LOGO Y TIPOGRAFÍA --- */
