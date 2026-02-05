@@ -16,6 +16,7 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.database();
+const messaging = firebase.messaging(); // INICIALIZAR MESSAGING
 
 // EXPONER VARIABLES PARA IFRAMES (Notificaciones, etc.)
 window.auth = auth;
@@ -143,21 +144,20 @@ auth.onAuthStateChanged(async (user) => {
 
 function verificarEstadoNotificaciones() {
     if (!("Notification" in window)) {
-        // El navegador no soporta, no bloqueamos pero avisamos (opcional)
         return;
     }
 
-    if (Notification.permission !== 'granted') {
-        // MOSTRAR MODAL DE BLOQUEO
-        document.getElementById('modal-force-notif').style.display = 'flex';
-        
-        // Si ya está denegado explícitamente, mostrar ayuda
-        if (Notification.permission === 'denied') {
-            document.getElementById('msg-bloqueado').style.display = 'block';
-        }
-    } else {
-        // Todo ok
+    if (Notification.permission === 'granted') {
+        // SI YA TIENE PERMISO, REGISTRAMOS EL TOKEN SILENCIOSAMENTE
+        registrarTokenFCM();
         document.getElementById('modal-force-notif').style.display = 'none';
+    } else if (Notification.permission !== 'denied') {
+        // SI NO TIENE PERMISO PERO NO ESTA BLOQUEADO, MOSTRAR MODAL
+        document.getElementById('modal-force-notif').style.display = 'flex';
+    } else {
+        // BLOQUEADO
+        document.getElementById('modal-force-notif').style.display = 'flex';
+        document.getElementById('msg-bloqueado').style.display = 'block';
     }
 }
 
@@ -165,6 +165,8 @@ window.solicitarPermisoNotificaciones = function() {
     Notification.requestPermission().then(permission => {
         if (permission === "granted") {
             document.getElementById('modal-force-notif').style.display = 'none';
+            registrarTokenFCM(); // AQUÍ PEDIMOS EL TOKEN AL SERVIDOR
+            
             new Notification("¡Hola!", {
                 body: "Las notificaciones de LIFEPAR están activas.",
                 icon: "img/logo.png"
@@ -174,6 +176,41 @@ window.solicitarPermisoNotificaciones = function() {
         }
     });
 };
+
+function registrarTokenFCM() {
+    // FIX: Vincular SW explícitamente y esperar a que esté listo
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.ready.then((reg) => {
+             messaging.useServiceWorker(reg);
+             
+             messaging.getToken({ vapidKey: 'BMfRwr6XK64vBMZ7rzSz4S2X_D5egRXkm-varhjSLcOAVEPE627F7GJSN-1_s_WNdETrmlFbjMqMVbK1x18Y5qs' })
+             .then((currentToken) => {
+                 if (currentToken) {
+                     const user = auth.currentUser;
+                     if (user) {
+                         const emailKey = user.email.replace(/\./g, '_');
+                         // Log claro para confirmar
+                         console.log("FCM Token obtenido y vinculado:", currentToken);
+                         
+                         db.ref(`USUARIOS/${emailKey}/fcmTokens/${currentToken.replace(/\./g, '_')}`).set(true)
+                             .catch(e => console.error("Error guardando token en DB:", e));
+                     }
+                 } else {
+                    console.log('No token available.');
+                 }
+             }).catch((err) => {
+                 console.log('Error Token FCM:', err);
+             });
+        });
+    }
+
+    // Escuchar mensajes en primer plano (Foreground)
+    messaging.onMessage((payload) => {
+        console.log("Mensaje recibido en foreground: ", payload);
+        const { title, body } = payload.notification || payload.data || {};
+        lanzarNotificacionNativa(title, body);
+    });
+}
 
 function lanzarNotificacionNativa(titulo, cuerpo) {
     if (Notification.permission === "granted") {
