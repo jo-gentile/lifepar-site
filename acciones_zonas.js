@@ -27,7 +27,7 @@ const MAPA_COMPETENCIA = {
     "LIBRE": {
         "A": ["Nacional A", "Elite"],
         "B": ["1°", "2°", "3°", "Promocional"],
-        "C": ["1°", "2°", "3°", "4°", "5°", "Escuela Formativa"],
+        "C": ["1°", "2°", "3°", "4°", "5°", "Pre-5°", "Escuela Formativa"],
         "D": ["Principiantes A", "Principiantes B", "Incentivación", "Futuros Talentos"]
     },
     "FREE DANCE": {
