@@ -27,7 +27,7 @@ const MAPA_COMPETENCIA = {
     "LIBRE": {
         "A": ["Nacional A", "Elite"],
         "B": ["1°", "2°", "3°", "Promocional"],
-        "C": ["1°", "2°", "3°", "4°", "5°", "Pre-5°", "Escuela Formativa"],
+        "C": ["1°", "2°", "3°", "4°", "5°", "Escuela Formativa"],
         "D": ["Principiantes A", "Principiantes B", "Incentivación", "Futuros Talentos"]
     },
     "FREE DANCE": {
@@ -357,7 +357,10 @@ window.mostrarListadoAltas = async (numZona) => {
 
             html += `
                 <div class="card-alta" style="${soyAdmin ? 'border-color: #ff4444;' : ''}">
-                    <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="position:absolute; top:10px; right:10px; background:none; border:none; cursor:pointer; font-size:1.2rem;">📝</button>
+                    <div style="position:absolute; top:8px; right:8px; display:flex; gap:4px;">
+                        <button onclick="window.abrirEditorPatinador('${numZona}','${p.id}')" style="background:none; border:none; cursor:pointer; font-size:1.1rem;">📝</button>
+                        ${soyAdmin ? `<button onclick="window.eliminarPatinadorZona('${numZona}','${p.id}')" style="background:none; border:none; cursor:pointer; font-size:1.1rem;">🗑️</button>` : ''}
+                    </div>
                     <div class="nombre-p">${p.apellido}, ${p.nombre}</div>
                     <div class="datos-p">
                         ${p.club}<br>
@@ -423,6 +426,19 @@ window.mostrarListadoAltas = async (numZona) => {
         }
 
     } catch (e) { console.error(e); }
+};
+
+window.eliminarPatinadorZona = async (numZona, idPatinador) => {
+    if (!window.parent.isAdmin) return alert('Acceso denegado: solo admin.');
+    if (!confirm('¿Confirmas eliminar este patinador de la zona?')) return;
+    try {
+        await window.parent.puenteFirebase('remove', `ZONAS/ZONA_${numZona}/${idPatinador}`);
+        alert('Patinador eliminado correctamente.');
+        window.mostrarListadoAltas(numZona);
+    } catch (e) {
+        console.error('Error eliminando patinador', e);
+        alert('No se pudo eliminar el patinador.');
+    }
 };
 
 // --- 5. GUARDAR DATOS (USANDO PUENTE) ---
