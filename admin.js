@@ -471,6 +471,23 @@ window.mostrarProfesores = async function() {
             editar.className = 'btn-pildora-nav';
             editar.onclick = () => abrirPerfilUsuario(key);
             btns.appendChild(editar);
+            if (isAdmin) {
+                const eliminar = document.createElement('button');
+                eliminar.textContent = 'Eliminar patinador';
+                eliminar.className = 'btn-pildora-nav';
+                eliminar.onclick = async () => {
+                    if (confirm('¿Estás seguro de eliminar este patinador?')) {
+                        try {
+                            await window.puenteFirebase('remove', `PROFESORES/${key}`);
+                            alert('Patinador eliminado exitosamente.');
+                            window.mostrarProfesores();
+                        } catch (e) {
+                            alert('Error al eliminar el patinador.');
+                        }
+                    }
+                };
+                btns.appendChild(eliminar);
+            }
             item.appendChild(left);
             item.appendChild(btns);
             list.appendChild(item);
