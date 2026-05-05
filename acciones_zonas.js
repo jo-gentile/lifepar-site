@@ -1,6 +1,6 @@
 // Captura la zona de la URL (ej: ?zona=1)
 const urlParams = new URLSearchParams(window.location.search);
-window.zonaActivaNum = urlParams.get('zona'); 
+window.zonaActivaNum = urlParams.get('zona');
 
 // Si por alguna razón la URL no tiene la zona, intentamos recuperarla del título
 if (!window.zonaActivaNum) {
@@ -8,7 +8,7 @@ if (!window.zonaActivaNum) {
     if (titulo) window.zonaActivaNum = titulo.innerText.replace(/[^0-9]/g, '');
 }
 // --- 1. SISTEMA DE CANDADOS (LOCKS) ---
-window.toggleLock = function(btn, idCampo) {
+window.toggleLock = function (btn, idCampo) {
     const campo = document.getElementById(idCampo);
     if (!campo) return;
     if (campo.disabled) {
@@ -66,9 +66,9 @@ const MAPA_COMPETENCIA = {
     "PAREJAS MIXTA": {
         "Roberto Rodriguez": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
         "Gonzalez Molina": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
-        "Sub B" : ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
-        "Sub A" :["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil/Youth", "Junior", "Senior"],
-        "WS" : ["Junior", "Senior"]
+        "Sub B": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil", "Junior", "Senior"],
+        "Sub A": ["Tots", "Mini Infantil", "Infantiles", "Cadete", "Juvenil/Youth", "Junior", "Senior"],
+        "WS": ["Junior", "Senior"]
     },
     "IN LINE": {
         "C": ["Basico", "Preliminar"],
@@ -77,10 +77,10 @@ const MAPA_COMPETENCIA = {
     },
 };
 
-window.actualizarCascada = function(nivel, numZona) {
+window.actualizarCascada = function (nivel, numZona) {
     const disc = document.getElementById(`z${numZona}-disciplina`).value;
-    const div  = document.getElementById(`z${numZona}-divisional`);
-    const cat  = document.getElementById(`z${numZona}-categoria`);
+    const div = document.getElementById(`z${numZona}-divisional`);
+    const cat = document.getElementById(`z${numZona}-categoria`);
 
     if (nivel === 'disciplina') {
         div.innerHTML = '<option value="">DIVISIONAL...</option>';
@@ -103,11 +103,11 @@ window.actualizarCascada = function(nivel, numZona) {
     }
 };
 
-window.abrirFormularioCarga = async function(numZona) {
+window.abrirFormularioCarga = async function (numZona) {
     const zonaReal = numZona || window.zonaActivaNum;
     const contenedor = document.getElementById('contenedor-formulario-dinamico');
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
+
     if (!userEmail) return alert("⚠️ No se detectó sesión.");
     if (contenedor.style.display === 'flex') { contenedor.style.display = 'none'; return; }
 
@@ -118,11 +118,11 @@ window.abrirFormularioCarga = async function(numZona) {
         const emailKey = userEmail.replace(/\./g, '_');
         const snapshot = await window.parent.puenteFirebase('get', `CLUBES/${emailKey}`, null);
         const clubesData = (snapshot && typeof snapshot.val === 'function') ? snapshot.val() : null;
-        
+
         let opcionesClub = clubesData ? Object.keys(clubesData).map(key => `<option value="${key}">${key}</option>`).join('') : '<option value="">Sin clubes asociados</option>';
 
-// Bloque a insertar en el innerHTML de tu función abrirFormularioCarga
-contenedor.innerHTML = `
+        // Bloque a insertar en el innerHTML de tu función abrirFormularioCarga
+        contenedor.innerHTML = `
 <div style="background: rgba(0,0,0,0.85); border: 1px solid gold; border-radius: 15px; padding: 12px; width: 95%; max-width: 560px; margin: auto;">
 
   <h4 style="color: gold; text-align: center; font-family: 'Anton'; margin-bottom: 10px;">
@@ -235,16 +235,16 @@ contenedor.innerHTML = `
     } catch (e) { console.error(e); }
 };
 
-window.limpiarCamposPostCarga = function(numZona) {
+window.limpiarCamposPostCarga = function (numZona) {
     // Listado de todos los IDs que pueden tener datos
     const campos = [
-        'club', 'disciplina', 'divisional', 'categoria', 
+        'club', 'disciplina', 'divisional', 'categoria',
         'apellido', 'nombre', 'DNI', 'nacimiento', 'edad'
     ];
 
     campos.forEach(id => {
         const el = document.getElementById(`z${numZona}-${id}`);
-        
+
         // REGLA: Solo limpia si el campo existe y NO está bloqueado (disabled)
         if (el && !el.disabled) {
             // Si es un select, vuelve a la primera opción, si es input, vacía el texto
@@ -266,18 +266,18 @@ window.calcularEdadDeportiva = (fecha, target) => {
 window.mostrarListadoAltas = async (numZona) => {
     const mailProfe = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     let contenedor = document.getElementById('contenedor-tarjetas-hijo');
-    
+
     // CAPTURAR SCROLL ACTUAL (Para evitar saltos al refrescar)
     let prevData = null;
     let prevScroll = 0;
     if (contenedor) {
         prevScroll = contenedor.scrollTop;
-        if(contenedor.innerHTML.includes('modal-altas-cuerpo')) {
+        if (contenedor.innerHTML.includes('modal-altas-cuerpo')) {
             prevData = true; // Ya hay datos mostrados
         }
     }
 
-    if(!contenedor){
+    if (!contenedor) {
         contenedor = document.createElement('div');
         contenedor.id = 'contenedor-tarjetas-hijo';
         document.body.appendChild(contenedor);
@@ -303,16 +303,16 @@ window.mostrarListadoAltas = async (numZona) => {
 
         let patinadores = [];
         // Chequeo si soy Admin global
-        const soyAdmin = window.parent.isAdmin; 
+        const soyAdmin = window.parent.isAdmin;
 
         snapshot.forEach(h => {
             const p = h.val();
             // SI SOY ADMIN, VEO TODO. SI NO, SOLO MIS PANTINADORES
-            if(soyAdmin || p.mailProfe === mailProfe || mailProfe === 'test@test.com') {
-                patinadores.push({id: h.key, ...p});
+            if (soyAdmin || p.mailProfe === mailProfe || mailProfe === 'test@test.com') {
+                patinadores.push({ id: h.key, ...p });
             }
         });
-        patinadores.sort((a,b) => a.apellido.localeCompare(b.apellido));
+        patinadores.sort((a, b) => a.apellido.localeCompare(b.apellido));
 
         let html = `
         <style>
@@ -336,11 +336,11 @@ window.mostrarListadoAltas = async (numZona) => {
 
         patinadores.forEach(p => {
             const tieneAnual = p.seguroAnual === true;
-            
+
             // --- LOGICA DE BLOQUEO DE SEGUROS (SOLO ADMIN PUEDE DESMARCAR) ---
             const tieneSD = p.seguroSD1 || p.seguroSD2 || p.seguroSD3 || p.seguroSD4;
             const styleDisabled = "opacity:0.3; cursor:not-allowed; pointer-events:none;";
-            
+
             // Si NO soy admin:
             // Bloqueo si ya está marcado (no puedo quitarlo).
             // Tambien bloqueo los contrarios para evitar contradicciones (ej: poner Anual borraría SDs ya marcados y bloqueados).
@@ -354,6 +354,14 @@ window.mostrarListadoAltas = async (numZona) => {
             const bloqF2 = !soyAdmin && p.F2 === true;
             const bloqF3 = !soyAdmin && p.F3 === true;
             const bloqF4 = !soyAdmin && p.F4 === true;
+
+            const bloqCR1 = !soyAdmin && p.CR1 === true;
+            const bloqCR2 = !soyAdmin && p.CR2 === true;
+            const bloqCR3 = !soyAdmin && p.CR3 === true;
+            const bloqCR4 = !soyAdmin && p.CR4 === true;
+
+            const bloqCopaOpenFederal = !soyAdmin && p.COPA_OPEN_FEDERAL === true;
+            const bloqCopaInterzonas = !soyAdmin && p.COPA_INTERZONAS === true;
 
             html += `
                 <div class="card-alta" style="${soyAdmin ? 'border-color: #ff4444;' : ''}">
@@ -389,8 +397,7 @@ window.mostrarListadoAltas = async (numZona) => {
                         </div>
                     </div>
 
-                    <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:8px;">FECHAS / DOCS</div>
-                    <div style="display:flex; gap:3px; margin-top:5px;">
+                                        <div style="display:flex; gap:3px; margin-top:5px;">
                         <button class="btn-f ${p.F2 ? 'activo' : ''}" 
                             ${bloqF2 ? `disabled style="${styleDisabled}"` : ''}
                             onclick="window.toggleAsistencia('${numZona}','${p.id}','F2',this)">F2</button>
@@ -400,6 +407,30 @@ window.mostrarListadoAltas = async (numZona) => {
                         <button class="btn-f ${p.F4 ? 'activo' : ''}" 
                             ${bloqF4 ? `disabled style="${styleDisabled}"` : ''}
                             onclick="window.toggleAsistencia('${numZona}','${p.id}','F4',this)">F4</button>
+                    </div>
+
+                    <div style="display:flex; gap:3px; margin-top:5px;">
+                        <button class="btn-f ${p.CR1 ? 'activo' : ''}" 
+                            ${bloqCR1 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','CR1',this)">CR1</button>
+                        <button class="btn-f ${p.CR2 ? 'activo' : ''}" 
+                            ${bloqCR2 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','CR2',this)">CR2</button>
+                        <button class="btn-f ${p.CR3 ? 'activo' : ''}" 
+                            ${bloqCR3 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','CR3',this)">CR3</button>
+                        <button class="btn-f ${p.CR4 ? 'activo' : ''}" 
+                            ${bloqCR4 ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','CR4',this)">CR4</button>
+                    </div>
+
+                    <div style="display:flex; gap:3px; margin-top:5px;">
+                        <button class="btn-f ${p.COPA_OPEN_FEDERAL ? 'activo' : ''}" 
+                            ${bloqCopaOpenFederal ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','COPA_OPEN_FEDERAL',this)">COPA OPEN FEDERAL</button>
+                        <button class="btn-f ${p.COPA_INTERZONAS ? 'activo' : ''}" 
+                            ${bloqCopaInterzonas ? `disabled style="${styleDisabled}"` : ''}
+                            onclick="window.toggleAsistencia('${numZona}','${p.id}','COPA_INTERZONAS',this)">COPA INTERZONAS</button>
                     </div>
                     
                     <div style="font-size:0.6rem; color:gold; border-top:1px solid #333; padding-top:5px; margin-top:8px;">DOCUMENTACIÓN (Cargada por Padre)</div>
@@ -419,7 +450,7 @@ window.mostrarListadoAltas = async (numZona) => {
 
         html += `</div><button onclick="document.getElementById('contenedor-tarjetas-hijo').style.display='none'" style="width:100%; background:gold; margin-top:20px; padding:15px; font-weight:bold; border-radius:10px; border:none; cursor:pointer; color:black;">CERRAR PADRÓN</button></div>`;
         contenedor.innerHTML = html;
-        
+
         // RESTAURAR SCROLL si existia
         if (prevScroll > 0) {
             contenedor.scrollTop = prevScroll;
@@ -445,7 +476,7 @@ window.eliminarPatinadorZona = async (numZona, idPatinador) => {
 window.enviarCargaPatinador = async (numZona) => {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
     const selectorFecha = document.getElementById('selectorFechaActiva');
-    const fechaValor = selectorFecha ? selectorFecha.value : "1"; 
+    const fechaValor = selectorFecha ? selectorFecha.value : "1";
 
     let marcaAsistencia = {};
     // Asignación automática: marca F2/F3/F4 en la ficha según la fecha activa
@@ -453,30 +484,30 @@ window.enviarCargaPatinador = async (numZona) => {
     if (fechaValor === "3") marcaAsistencia.F3 = true;
     if (fechaValor === "4") marcaAsistencia.F4 = true;
 
-const datos = {
-  ...marcaAsistencia,
-  club: document.getElementById(`z${numZona}-club`).value,
-  disciplina: document.getElementById(`z${numZona}-disciplina`).value,
-  divisional: document.getElementById(`z${numZona}-divisional`).value,
-  categoria: document.getElementById(`z${numZona}-categoria`).value,
-  genero: document.getElementById(`z${numZona}-genero`).value,
-  apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
-  nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
-  DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
-  fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
-  edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
-  mailProfe: userEmail
-};
+    const datos = {
+        ...marcaAsistencia,
+        club: document.getElementById(`z${numZona}-club`).value,
+        disciplina: document.getElementById(`z${numZona}-disciplina`).value,
+        divisional: document.getElementById(`z${numZona}-divisional`).value,
+        categoria: document.getElementById(`z${numZona}-categoria`).value,
+        genero: document.getElementById(`z${numZona}-genero`).value,
+        apellido: document.getElementById(`z${numZona}-apellido`).value.trim().toUpperCase(),
+        nombre: document.getElementById(`z${numZona}-nombre`).value.trim().toUpperCase(),
+        DNI: document.getElementById(`z${numZona}-DNI`).value.trim(),
+        fecha_de_nacimiento: document.getElementById(`z${numZona}-nacimiento`).value,
+        edadDeportiva: document.getElementById(`z${numZona}-edad`).value,
+        mailProfe: userEmail
+    };
 
     if (!datos.apellido || !datos.nombre || !datos.DNI) return alert("⚠️ Completa Apellido, Nombre y DNI.");
 
     try {
         // Usamos el nombre exacto del puente que pusimos en admin.js
-        await window.parent.puenteFirebase('push', `ZONAS/ZONA_${numZona}`, { 
-            ...datos, 
-            fecha_registro: new Date().toISOString() 
+        await window.parent.puenteFirebase('push', `ZONAS/ZONA_${numZona}`, {
+            ...datos,
+            fecha_registro: new Date().toISOString()
         });
-        
+
         alert("✅ ¡Registro guardado con éxito!");
         limpiarCamposPostCarga(numZona);
     } catch (error) {
@@ -498,7 +529,7 @@ window.toggleAsistencia = async (numZona, id, campo, boton) => {
         actualizaciones['seguroSD2'] = false;
         actualizaciones['seguroSD3'] = false;
         actualizaciones['seguroSD4'] = false;
-    } 
+    }
     else if (campo.startsWith('seguroSD') && nuevoEstado === true) {
         // Si pongo cualquier Diario (SD), apago el Anual
         actualizaciones['seguroAnual'] = false;
@@ -512,19 +543,19 @@ window.toggleAsistencia = async (numZona, id, campo, boton) => {
     }
 };
 // --- 6. CONEXIÓN CON EL HTML (BOTONES) ---
-window.ejecutarCargaConFecha = function() {
+window.ejecutarCargaConFecha = function () {
     const selector = document.getElementById('selectorFechaActiva');
     const fecha = selector ? selector.value : "1";
     // Llama a la función que ya tenés en el punto 3
-    window.abrirFormularioCarga(window.zonaActivaNum, fecha); 
+    window.abrirFormularioCarga(window.zonaActivaNum, fecha);
 };
 
-window.ejecutarModalClubes = function() {
+window.ejecutarModalClubes = function () {
     const modal = document.getElementById('ModalClub');
-    if(modal) modal.style.display = 'flex';
+    if (modal) modal.style.display = 'flex';
 };
 
-window.guardarNuevoClub = async function() {
+window.guardarNuevoClub = async function () {
     // Corregimos el ID para que sea igual al de tu HTML
     const input = document.getElementById('nuevo-club-nombre');
     const nombreClub = input ? input.value.trim().toUpperCase() : "";
@@ -541,11 +572,11 @@ window.guardarNuevoClub = async function() {
         });
 
         alert("✅ Club '" + nombreClub + "' guardado correctamente.");
-        
+
         // Limpiar y cerrar
         input.value = "";
         window.cerrarModalClubes();
-        
+
         // Refrescar el selector de inscripción
         if (typeof window.abrirFormularioCarga === 'function') {
             window.abrirFormularioCarga(window.zonaActivaNum);
@@ -555,9 +586,9 @@ window.guardarNuevoClub = async function() {
         alert("❌ Error al guardar el club.");
     }
 };
-window.abrirEditorPatinador = async function(numZona, idPatinador) {
+window.abrirEditorPatinador = async function (numZona, idPatinador) {
     document.getElementById('contenedor-tarjetas-hijo').style.display = 'none';
-    
+
     if (document.getElementById('contenedor-formulario-dinamico').style.display !== 'flex') {
         await window.abrirFormularioCarga(numZona);
     }
@@ -573,18 +604,18 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
             // Manejo especial CLUB: Si soy admin y el club del patinador no está en mi lista, lo agrego visualmente
             const selectClub = document.getElementById(`z${numZona}-club`);
             if (p.club && selectClub) {
-               // Verificar si existe la opción
-               let existe = false;
-               for (let i = 0; i < selectClub.options.length; i++) {
-                   if (selectClub.options[i].value === p.club) existe = true;
-               }
-               // Si no existe, la creamos al vuelo
-               if (!existe) {
-                   const opt = document.createElement('option');
-                   opt.value = p.club;
-                   opt.innerText = p.club;
-                   selectClub.appendChild(opt);
-               }
+                // Verificar si existe la opción
+                let existe = false;
+                for (let i = 0; i < selectClub.options.length; i++) {
+                    if (selectClub.options[i].value === p.club) existe = true;
+                }
+                // Si no existe, la creamos al vuelo
+                if (!existe) {
+                    const opt = document.createElement('option');
+                    opt.value = p.club;
+                    opt.innerText = p.club;
+                    selectClub.appendChild(opt);
+                }
             }
 
             // Llenado de campos... (mantené lo que ya tenías)
@@ -616,9 +647,9 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
                 const contenedor = document.querySelector('#contenedor-formulario-dinamico > div');
                 contenedor.appendChild(btnAct);
             }
-            
+
             btnAct.innerText = "💾 ACTUALIZAR DATOS";
-            btnAct.style.display = 'block'; 
+            btnAct.style.display = 'block';
             btnAct.onclick = () => window.actualizarPatinador(numZona, idPatinador);
 
             document.getElementById('contenedor-formulario-dinamico').scrollIntoView({ behavior: 'smooth' });
@@ -627,9 +658,9 @@ window.abrirEditorPatinador = async function(numZona, idPatinador) {
 };
 
 // Función para guardar los cambios
-window.actualizarPatinador = async function(numZona, idPatinador) {
+window.actualizarPatinador = async function (numZona, idPatinador) {
     const userEmail = sessionStorage.getItem('userEmail') || localStorage.getItem('userEmail');
-    
+
     // Si soy admin, respeto el mailProfe original si existe
     let finalMailProfe = userEmail;
     if (window.parent.isAdmin && window.editingPatinadorMailProfe) {
@@ -653,11 +684,11 @@ window.actualizarPatinador = async function(numZona, idPatinador) {
 
     try {
         await window.parent.puenteFirebase('update', `ZONAS/ZONA_${numZona}/${idPatinador}`, datosModificados);
-        
+
         // Ocultamos formulario y botón verde
         document.getElementById('contenedor-formulario-dinamico').style.display = 'none';
         document.getElementById('btn-actualizar-dinamico').style.display = 'none';
-        
+
         // Mostramos el cohete de nuevo
         const btnCargarOriginal = document.querySelector(`#contenedor-formulario-dinamico button[onclick^="enviarCargaPatinador"]`);
         if (btnCargarOriginal) btnCargarOriginal.style.display = 'block';
@@ -667,11 +698,11 @@ window.actualizarPatinador = async function(numZona, idPatinador) {
 
         // Volvemos a las tarjetas
         setTimeout(() => { window.mostrarListadoAltas(numZona); }, 300);
-    } catch (e) { 
-        alert("❌ Error al actualizar."); 
+    } catch (e) {
+        alert("❌ Error al actualizar.");
     }
 }; // <--- ASEGURATE DE QUE ESTA LLAVE ESTÉ
-window.filtrarPadron = function() {
+window.filtrarPadron = function () {
     const input = document.getElementById('busqueda-patinador');
     const filtro = input.value.toUpperCase();
     const tarjetas = document.querySelectorAll('.card-alta');
